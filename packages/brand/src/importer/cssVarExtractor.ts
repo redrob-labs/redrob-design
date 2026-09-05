@@ -1,4 +1,3 @@
-import { readFile } from 'node:fs/promises';
 import type { DesignToken } from '../shared/index.ts';
 
 type TokenType = DesignToken['type'];
@@ -95,6 +94,3 @@ export function extractFromCssVarsSource(source: string): DesignToken[] {
   return tokens;
 }
 
-export async function extractFromCssVars(filePath: string): Promise<DesignToken[]> {
-  return extractFromCssVarsSource(await readFile(filePath, 'utf-8'));
-}

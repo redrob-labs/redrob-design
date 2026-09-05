@@ -26,7 +26,7 @@ import {
   syncDeckTokens,
   TOKEN_BLOCK_CLOSE,
   TOKEN_BLOCK_OPEN,
-} from './index.ts';
+} from './node.ts';
 
 const resourceRaw = readFileSync(redrobBrandResourcePath(), 'utf8');
 const tokensCss = readFileSync(path.join(repoRoot(), 'packages/brand/src/tokens.css'), 'utf8');

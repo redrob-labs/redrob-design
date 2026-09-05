@@ -3,7 +3,7 @@ import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'bun:test';
-import { extractFromCssVars } from './cssVarExtractor.ts';
+import { extractFromCssVars } from './node.ts';
 
 const __dir = dirname(fileURLToPath(import.meta.url));
 const FIXTURE = resolve(__dir, '__fixtures__/tokens.css');

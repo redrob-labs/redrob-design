@@ -1,4 +1,3 @@
-import { readFile } from 'node:fs/promises';
 import type { DesignToken } from '../shared/index.ts';
 
 // Matches a JS/TS object key that starts a nested block or a leaf value.
@@ -296,6 +295,3 @@ export function extractFromTailwindConfigSource(source: string): DesignToken[] {
   return extractFromV3Config(source);
 }
 
-export async function extractFromTailwindConfig(filePath: string): Promise<DesignToken[]> {
-  return extractFromTailwindConfigSource(await readFile(filePath, 'utf-8'));
-}

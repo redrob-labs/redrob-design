@@ -17,6 +17,12 @@
     },
     "./tokens.css": "./src/tokens.css",
     "./fonts": "./src/fonts.ts",
+    "./node": {
+      "bun": "./src/node.ts",
+      "types": "./dist/node.d.ts",
+      "import": "./dist/node.js",
+      "default": "./dist/node.js"
+    },
     "./preset": {
       "bun": "./src/preset.ts",
       "types": "./dist/preset.d.ts",

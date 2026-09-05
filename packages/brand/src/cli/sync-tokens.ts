@@ -9,7 +9,7 @@
  */
 
 import { readFile, writeFile } from 'node:fs/promises';
-import { DECKS, deckSourcePath, loadRedrobBrandTokens, syncDeckTokens } from '../index.ts';
+import { DECKS, deckSourcePath, loadRedrobBrandTokens, syncDeckTokens } from '../node.ts';
 
 async function main(): Promise<void> {
   const tokens = await loadRedrobBrandTokens();
