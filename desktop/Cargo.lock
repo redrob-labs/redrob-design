@@ -3256,32 +3256,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "open_pencil"
-version = "0.14.0"
-dependencies = [
- "fix-path-env",
- "font-kit",
- "keyring",
- "reqwest 0.12.28",
- "serde",
- "serde_json",
- "tauri",
- "tauri-build",
- "tauri-plugin-clipboard-manager",
- "tauri-plugin-dialog",
- "tauri-plugin-fs",
- "tauri-plugin-opener",
- "tauri-plugin-process",
- "tauri-plugin-shell",
- "tauri-plugin-single-instance",
- "tauri-plugin-updater",
- "tauri-plugin-wdio-webdriver",
- "which",
- "zip 2.4.2",
- "zstd",
-]
-
-[[package]]
 name = "openssl-probe"
 version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3792,6 +3766,32 @@ dependencies = [
  "getrandom 0.2.17",
  "libredox",
  "thiserror 2.0.20",
+]
+
+[[package]]
+name = "redrob_design"
+version = "0.14.0"
+dependencies = [
+ "fix-path-env",
+ "font-kit",
+ "keyring",
+ "reqwest 0.12.28",
+ "serde",
+ "serde_json",
+ "tauri",
+ "tauri-build",
+ "tauri-plugin-clipboard-manager",
+ "tauri-plugin-dialog",
+ "tauri-plugin-fs",
+ "tauri-plugin-opener",
+ "tauri-plugin-process",
+ "tauri-plugin-shell",
+ "tauri-plugin-single-instance",
+ "tauri-plugin-updater",
+ "tauri-plugin-wdio-webdriver",
+ "which",
+ "zip 2.4.2",
+ "zstd",
 ]
 
 [[package]]

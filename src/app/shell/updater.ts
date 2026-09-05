@@ -47,11 +47,19 @@ export function scheduleStartupUpdateCheck(messages: Ref<UpdaterMessages>) {
 
 async function runUpdateCheck(silent: boolean, messages: Ref<UpdaterMessages>) {
   try {
-    const [{ check }, { confirm, message }, { relaunch }] = await Promise.all([
+    const [{ check }, { confirm, message }, { relaunch }, { invoke }] = await Promise.all([
       import('@tauri-apps/plugin-updater'),
       import('@tauri-apps/plugin-dialog'),
-      import('@tauri-apps/plugin-process')
+      import('@tauri-apps/plugin-process'),
+      import('@tauri-apps/api/core')
     ])
+
+    // Desktop builds without an update feed do not register the updater plugin at
+    // all, so ask the shell before invoking a command that would not exist.
+    if (!(await invoke<boolean>('updater_available'))) {
+      if (!silent) toast.warning(messages.value.unavailable)
+      return
+    }
 
     const update = await check()
     const t = messages.value

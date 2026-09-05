@@ -116,10 +116,52 @@ fn startup_open_paths() -> Vec<PathBuf> {
     open_paths_from_args(std::env::args().skip(1).collect(), &cwd)
 }
 
+/// Whether the bundled configuration carries a `plugins.updater` section.
+///
+/// `tauri_plugin_updater` deserializes that section while it initializes and
+/// aborts app startup when it is missing, so registration and configuration have
+/// to agree. Keeping the decision in one place means adding the section is the
+/// only step needed to turn in-app updates back on.
+fn updater_configured(config: &tauri::Config) -> bool {
+    config.plugins.0.contains_key("updater")
+}
+
+/// Lets the frontend tell "no update feed in this build" apart from a failed
+/// update check, without parsing IPC error strings.
+#[tauri::command]
+fn updater_available(app: tauri::AppHandle) -> bool {
+    updater_configured(app.config())
+}
+
+/// Imports the login shell's `PATH` so GUI launches can find user-installed CLIs
+/// (agent binaries, the MCP server) that a desktop session does not inherit.
+///
+/// `fix_path_env::fix()` shells out to an interactive login shell. When the app is
+/// started from a terminal that shell competes for the controlling TTY and
+/// SIGTTIN/SIGTTOU stops the whole process group before the window ever opens. A
+/// terminal launch already inherits the shell `PATH`, so the fix is only needed
+/// — and only safe — when no standard stream is a TTY.
+fn import_login_shell_path() {
+    #[cfg(unix)]
+    {
+        use std::io::IsTerminal;
+
+        if std::io::stdin().is_terminal()
+            || std::io::stdout().is_terminal()
+            || std::io::stderr().is_terminal()
+        {
+            return;
+        }
+    }
+
+    let _ = fix_path_env::fix();
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    let _ = fix_path_env::fix();
+    import_login_shell_path();
 
+    let context = tauri::generate_context!();
     let mut builder = tauri::Builder::default();
 
     #[cfg(feature = "native-test")]
@@ -135,6 +177,10 @@ pub fn run() {
         builder = builder.plugin(tauri_plugin_single_instance::init(|app, args, cwd| {
             queue_open_paths(app, open_paths_from_args(args, Path::new(&cwd)));
         }));
+    }
+
+    if updater_configured(context.config()) {
+        builder = builder.plugin(tauri_plugin_updater::Builder::new().build());
     }
 
     builder
@@ -153,14 +199,14 @@ pub fn run() {
             set_recent_files,
             native_menu_checked,
             set_native_menu_checked,
-            take_pending_open
+            take_pending_open,
+            updater_available
         ])
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_clipboard_manager::init())
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_shell::init())
-        .plugin(tauri_plugin_updater::Builder::new().build())
         .plugin(tauri_plugin_process::init())
         .on_menu_event(|app, event| {
             handle_menu_event(app, event.id().0.as_str());
@@ -169,7 +215,7 @@ pub fn run() {
             queue_open_paths(app.handle(), startup_open_paths());
             Ok(install_app_menu(app.handle(), &[])?)
         })
-        .build(tauri::generate_context!())
+        .build(context)
         .expect("error while building tauri application")
         .run(|_app, event| match event {
             #[cfg(target_os = "macos")]

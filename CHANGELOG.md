@@ -39,6 +39,8 @@
 
 ### Fixed
 
+- Start the desktop app again instead of aborting at launch when no in-app update feed is configured, and report updates as unavailable in those builds.
+- Open the desktop window when the app is launched from a terminal instead of leaving the process suspended before the window appears.
 - Prevent the stock photo tool from replacing text, lines, structural layers, or containers with content while supporting closed shape geometry.
 - Preserve explicit text alignment metadata on imported Figma vectors across save and reload.
 

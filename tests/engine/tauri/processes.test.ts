@@ -129,19 +129,34 @@ describe('Tauri updater helper', () => {
     const calls: string[] = []
     await mockTauriIPC((cmd) => {
       calls.push(cmd)
+      if (cmd === 'updater_available') return true
       if (cmd === 'plugin:updater|check') return null
       return null
     })
 
     await checkForAppUpdate({ silent: true, messages })
 
-    expect(calls).toEqual(['plugin:updater|check'])
+    expect(calls).toEqual(['updater_available', 'plugin:updater|check'])
+  })
+
+  test('reports updates as unavailable when the shell did not register the plugin', async () => {
+    const calls: string[] = []
+    await mockTauriIPC((cmd) => {
+      calls.push(cmd)
+      if (cmd === 'updater_available') return false
+      return null
+    })
+
+    await checkForAppUpdate({ messages })
+
+    expect(calls).toEqual(['updater_available'])
   })
 
   test('confirms, installs, and relaunches available Tauri updates', async () => {
     const calls: Array<{ cmd: string; args: unknown }> = []
     await mockTauriIPC((cmd, args) => {
       calls.push({ cmd, args })
+      if (cmd === 'updater_available') return true
       if (cmd === 'plugin:updater|check') {
         return {
           rid: 9,
@@ -167,17 +182,18 @@ describe('Tauri updater helper', () => {
     await checkForAppUpdate({ messages })
 
     expect(calls.map((call) => call.cmd)).toEqual([
+      'updater_available',
       'plugin:updater|check',
       'plugin:dialog|message',
       'plugin:updater|download_and_install',
       'plugin:dialog|message',
       'plugin:process|restart'
     ])
-    expect(calls[1]?.args).toMatchObject({
+    expect(calls[2]?.args).toMatchObject({
       title: 'Update available',
       kind: 'info',
       buttons: 'OkCancel'
     })
-    expect(calls[2]?.args).toMatchObject({ rid: 9 })
+    expect(calls[3]?.args).toMatchObject({ rid: 9 })
   })
 })
