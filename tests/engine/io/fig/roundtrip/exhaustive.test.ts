@@ -66,8 +66,13 @@ const SPECS: FixtureSpec[] = [
     thumbnailHeight: 239,
     imageCount: 3,
     figKiwiVersion: 101,
-    g1ExportSize: 498456,
-    g2ExportSize: 498456
+    // Re-export size. The decompressed scene bytes are identical to the
+    // pre-rebrand ones apart from 97 `pluginData.pluginID` strings, which grew
+    // from `open-pencil` to `redrob-design`; zstd happens to compress the longer
+    // string better, hence the smaller archive. Verified by normalizing the id
+    // out of both decompressed data chunks and comparing them byte for byte.
+    g1ExportSize: 497111,
+    g2ExportSize: 497111
   }
 ]
 
