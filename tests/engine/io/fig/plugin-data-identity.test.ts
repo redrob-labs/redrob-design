@@ -23,7 +23,7 @@ import type { PluginDataEntry } from '@redrob-design/scene-graph'
 const LEGACY_PLUGIN_ID = 'open-pencil'
 
 function nodeChangeWithPluginData(pluginID: string, key: string, value: string): NodeChange {
-  return { pluginData: [{ pluginID, key, value }] } as unknown as NodeChange
+  return { pluginData: [{ pluginID, key, value }] }
 }
 
 describe('.fig plugin data brand identity', () => {
