@@ -265,12 +265,14 @@ export class ACPChatTransport implements ChatTransport<UIMessage> {
 
     const connection = new ClientSideConnection((_agent: Agent) => clientImpl, stream)
     const { getAutomationAuthToken } = await import('@/app/automation/mcp/spawn')
-    let automationAuthToken: string | null
+    // Design MCP automation is optional for ACP chat: a missing/unhealthy MCP
+    // server must not kill the Redrob Code session before the model can reply.
+    let automationAuthToken: string | null = null
+    let includeBuiltInMCP = true
     try {
       automationAuthToken = await getAutomationAuthToken()
-    } catch (e) {
-      await child.kill().catch(() => undefined)
-      throw startupError(e, this.agentDef)
+    } catch {
+      includeBuiltInMCP = false
     }
 
     try {
@@ -287,7 +289,10 @@ export class ACPChatTransport implements ChatTransport<UIMessage> {
     try {
       sessionResult = await connection.newSession({
         cwd: this.cwd,
-        mcpServers: await buildACPMCPServers({ authorizationToken: automationAuthToken })
+        mcpServers: await buildACPMCPServers({
+          authorizationToken: automationAuthToken,
+          includeBuiltIn: includeBuiltInMCP
+        })
       })
     } catch (e) {
       await child.kill().catch(() => undefined)

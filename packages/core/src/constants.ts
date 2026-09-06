@@ -230,18 +230,40 @@ export function redrobCodeMissingMessage(reason?: string): string {
 }
 
 /**
+ * Map Vite `VITE_*` build embeds (and plain overrides) onto the Redrob Code
+ * env keys {@link resolveRedrobCodeCommand} understands.
+ *
+ * Exported for unit tests: Tauri production webviews must not rely on
+ * `'env' in import.meta`, which stays false even when Vite inlined
+ * `import.meta.env` into the bundle.
+ */
+export function redrobCodeEnvFromMeta(meta: RedrobCodeEnv): RedrobCodeEnv {
+  return {
+    REDROB_CODE_BIN: meta.REDROB_CODE_BIN ?? meta.VITE_REDROB_CODE_BIN,
+    REDROB_CODE_DEV_ROOT: meta.REDROB_CODE_DEV_ROOT ?? meta.VITE_REDROB_CODE_DEV_ROOT,
+    REDROB_CODE_BUN: meta.REDROB_CODE_BUN ?? meta.VITE_REDROB_CODE_BUN
+  }
+}
+
+/**
  * The ambient environment used to resolve the built-in Redrob Code command at
  * module load. Reads `import.meta.env` (Vite build-time / renderer) first, then
  * `process.env` (bun/node), so an override configured either way is honored.
+ *
+ * Important: access `import.meta.env` directly. Guarding with
+ * `'env' in import.meta` fails in Tauri production webviews — Vite inlines the
+ * env object, but the runtime `import.meta` object has no `env` property — so
+ * `VITE_REDROB_CODE_DEV_ROOT` would be ignored and the agent would fall back to
+ * spawning `redrob` from PATH.
  */
 function ambientRedrobCodeEnv(): RedrobCodeEnv {
   const env: RedrobCodeEnv = {}
-  if ('env' in import.meta) {
-    const meta = import.meta.env as RedrobCodeEnv
-    env.REDROB_CODE_BIN = meta.REDROB_CODE_BIN ?? meta.VITE_REDROB_CODE_BIN
-    env.REDROB_CODE_DEV_ROOT = meta.REDROB_CODE_DEV_ROOT ?? meta.VITE_REDROB_CODE_DEV_ROOT
-    env.REDROB_CODE_BUN = meta.REDROB_CODE_BUN ?? meta.VITE_REDROB_CODE_BUN
-  }
+  // Read `import.meta.env` defensively: Vite's ambient type declares `env` as
+  // always present, but a Tauri production webview's runtime `import.meta` has
+  // no `env` property, so the value is genuinely nullable at runtime.
+  const metaRecord = import.meta as unknown
+  const meta = (metaRecord as { env?: RedrobCodeEnv }).env
+  if (meta) Object.assign(env, redrobCodeEnvFromMeta(meta))
   const proc = typeof process === 'undefined' ? undefined : (process.env as RedrobCodeEnv)
   if (proc) {
     env.REDROB_CODE_BIN ??= proc.REDROB_CODE_BIN

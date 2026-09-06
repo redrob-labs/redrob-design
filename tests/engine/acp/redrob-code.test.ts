@@ -9,7 +9,8 @@ import {
   REDROB_CODE_INSTALL_COMMAND,
   REDROB_CODE_PROVIDER_ID,
   redrobCodeMissingMessage,
-  resolveRedrobCodeCommand
+  resolveRedrobCodeCommand,
+  redrobCodeEnvFromMeta
 } from '@redrob-design/core/constants'
 
 import { missingCommandMessage } from '@/app/ai/acp/transport'
@@ -191,5 +192,44 @@ describe('Tauri shell capability allows spawning the Redrob Code engine', () => 
     const redrob = allow.find((a) => a.name === 'redrob')
     expect(redrob).toBeDefined()
     expect(redrob?.cmd).toBe('redrob')
+  })
+
+  test('the DEV_ROOT bun command the transport spawns is allowlisted', () => {
+    // Source checkouts resolve to `bun run …/index.ts acp`. Without a matching
+    // shell:allow-spawn entry, Tauri rejects the spawn before the engine starts.
+    const resolved = resolveRedrobCodeCommand({ REDROB_CODE_DEV_ROOT: '/src/redrob-code' })
+    expect(resolved.command).toBe('bun')
+    expect(resolved.source).toBe('REDROB_CODE_DEV_ROOT')
+
+    const allow = shellSpawnAllow()
+    const bun = allow.find((a) => a.name === 'bun')
+    expect(bun).toBeDefined()
+    expect(bun?.cmd).toBe('bun')
+  })
+})
+
+describe('redrobCodeEnvFromMeta', () => {
+  test('maps VITE_REDROB_CODE_DEV_ROOT onto REDROB_CODE_DEV_ROOT for resolve', () => {
+    // Mirrors the Vite-inlined import.meta.env shape. The ambient loader must
+    // apply this mapping even when `'env' in import.meta` is false (Tauri).
+    const mapped = redrobCodeEnvFromMeta({
+      VITE_REDROB_CODE_DEV_ROOT: '/agent/repos/redrob-code'
+    })
+    expect(mapped.REDROB_CODE_DEV_ROOT).toBe('/agent/repos/redrob-code')
+    expect(resolveRedrobCodeCommand(mapped)).toEqual({
+      command: 'bun',
+      args: ['run', '/agent/repos/redrob-code/packages/redrob/src/index.ts', 'acp'],
+      source: 'REDROB_CODE_DEV_ROOT'
+    })
+  })
+
+  test('prefers plain REDROB_CODE_* keys over VITE_ aliases', () => {
+    const mapped = redrobCodeEnvFromMeta({
+      REDROB_CODE_BIN: '/opt/redrob',
+      VITE_REDROB_CODE_BIN: '/ignored',
+      VITE_REDROB_CODE_DEV_ROOT: '/ignored-root'
+    })
+    expect(mapped.REDROB_CODE_BIN).toBe('/opt/redrob')
+    expect(mapped.REDROB_CODE_DEV_ROOT).toBe('/ignored-root')
   })
 })

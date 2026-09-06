@@ -57,11 +57,16 @@
       "identifier": "shell:allow-spawn",
       "allow": [
         { "name": "redrob", "cmd": "redrob", "args": true },
+        { "name": "bun", "cmd": "bun", "args": true },
         { "name": "claude-agent-acp", "cmd": "claude-agent-acp", "args": true },
         { "name": "codex-acp", "cmd": "codex-acp", "args": true },
         { "name": "gemini", "cmd": "gemini", "args": true },
-        { "name": "redrobdesign-mcp-http", "cmd": "redrobdesign-mcp-http", "args": true },
-        { "name": "redrobdesign-harness", "cmd": "redrobdesign-harness", "args": false },
+        {
+          "name": "redrob-design-mcp-http",
+          "cmd": "redrob-design-mcp-http",
+          "args": true
+        },
+        { "name": "redrob-design-harness", "cmd": "redrob-design-harness", "args": false },
         { "name": "cmd", "cmd": "cmd", "args": true }
       ]
     },

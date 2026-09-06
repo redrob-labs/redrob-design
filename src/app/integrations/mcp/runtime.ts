@@ -9,6 +9,8 @@ import { enabledMCPConnections } from './store'
 import type { MCPConnection } from './types'
 export type BuiltInMCPServerOptions = {
   authorizationToken: string | null
+  /** When false, omit the in-app design MCP (e.g. automation binary missing). */
+  includeBuiltIn?: boolean
 }
 
 export function builtInMCPServer(options: BuiltInMCPServerOptions): McpServer {
@@ -46,5 +48,6 @@ async function externalMCPServer(connection: MCPConnection): Promise<McpServer> 
 
 export async function buildACPMCPServers(options: BuiltInMCPServerOptions): Promise<McpServer[]> {
   const external = await Promise.all(enabledMCPConnections.value.map(externalMCPServer))
+  if (options.includeBuiltIn === false) return external
   return [builtInMCPServer(options), ...external]
 }
