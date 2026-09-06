@@ -15,6 +15,35 @@ afterEach(async () => {
 })
 
 describe('Tauri process helpers', () => {
+  test('omits shell env so ACP children inherit the host process environment', async () => {
+    const calls: Array<{ cmd: string; args: unknown }> = []
+    await mockTauriIPC((cmd, args) => {
+      calls.push({ cmd, args })
+      if (cmd === 'plugin:shell|spawn') {
+        expect(args).toMatchObject({
+          program: 'agent-cli',
+          args: ['acp'],
+          options: { encoding: 'raw' }
+        })
+        expect(args).not.toMatchObject({ options: { env: expect.anything() } })
+        const options = (args as { options?: Record<string, unknown> }).options ?? {}
+        expect(Object.hasOwn(options, 'env')).toBe(false)
+        return 51
+      }
+      return null
+    })
+
+    const process = await spawnACPProcess({
+      command: 'agent-cli',
+      args: ['acp'],
+      logId: 'env-inherit',
+      destroying: () => false,
+      onUnexpectedClose: vi.fn()
+    })
+    await process.child.kill()
+    expect(calls.map((call) => call.cmd)).toEqual(['plugin:shell|spawn', 'plugin:shell|kill'])
+  })
+
   test('spawns ACP processes and streams stdout/stdin through plugin-shell', async () => {
     let onEvent: ((event: unknown) => void) | null = null
     const calls: Array<{ cmd: string; args: unknown }> = []
@@ -24,8 +53,9 @@ describe('Tauri process helpers', () => {
         expect(args).toMatchObject({
           program: 'agent-cli',
           args: ['--stdio'],
-          options: { encoding: 'raw', env: {} }
+          options: { encoding: 'raw' }
         })
+        expect(Object.hasOwn((args as { options: object }).options, 'env')).toBe(false)
         onEvent = (args as { onEvent: { onmessage: (event: unknown) => void } }).onEvent.onmessage
         return 42
       }
@@ -67,8 +97,9 @@ describe('Tauri process helpers', () => {
         expect(args).toMatchObject({
           program: 'cmd',
           args: ['/c', 'agent-cli', '--stdio'],
-          options: { encoding: 'raw', env: {} }
+          options: { encoding: 'raw' }
         })
+        expect(Object.hasOwn((args as { options: object }).options, 'env')).toBe(false)
         return 44
       }
       return null

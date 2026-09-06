@@ -260,10 +260,27 @@ function ambientRedrobCodeEnv(): RedrobCodeEnv {
   const env: RedrobCodeEnv = {}
   // Read `import.meta.env` defensively: Vite's ambient type declares `env` as
   // always present, but a Tauri production webview's runtime `import.meta` has
-  // no `env` property, so the value is genuinely nullable at runtime.
+  // no `env` property — and Node loading this module via vite.config also has
+  // no `env` — so the value is genuinely nullable at runtime.
   const metaRecord = import.meta as unknown
   const meta = (metaRecord as { env?: RedrobCodeEnv }).env
   if (meta) Object.assign(env, redrobCodeEnvFromMeta(meta))
+  // Direct member reads so Vite `define` replacements of
+  // `import.meta.env.VITE_REDROB_CODE_*` are honored. Copying the env object
+  // alone can miss keys that were only inlined as member-expression replaces.
+  // Always go through the nullable `meta` object — never bare
+  // `import.meta.env.VITE_*` — so loading this file from vite.config (where
+  // `import.meta.env` is undefined) does not throw.
+  if (meta) {
+    const defined = redrobCodeEnvFromMeta({
+      VITE_REDROB_CODE_BIN: meta.VITE_REDROB_CODE_BIN,
+      VITE_REDROB_CODE_DEV_ROOT: meta.VITE_REDROB_CODE_DEV_ROOT,
+      VITE_REDROB_CODE_BUN: meta.VITE_REDROB_CODE_BUN
+    })
+    env.REDROB_CODE_BIN ??= defined.REDROB_CODE_BIN
+    env.REDROB_CODE_DEV_ROOT ??= defined.REDROB_CODE_DEV_ROOT
+    env.REDROB_CODE_BUN ??= defined.REDROB_CODE_BUN
+  }
   const proc = typeof process === 'undefined' ? undefined : (process.env as RedrobCodeEnv)
   if (proc) {
     env.REDROB_CODE_BIN ??= proc.REDROB_CODE_BIN

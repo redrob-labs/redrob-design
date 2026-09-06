@@ -23,8 +23,8 @@
       "allow": [
         { "path": "$HOME/Library/Application Support/RedrobDesign/mcp.json" },
         { "path": "$LOCALDATA/RedrobDesign/mcp.json" },
-        { "path": "$RUNTIME/redrobdesign/mcp.json" },
-        { "path": "$HOME/.redrobdesign/mcp.json" }
+        { "path": "$RUNTIME/redrob-design/mcp.json" },
+        { "path": "$HOME/.redrob-design/mcp.json" }
       ]
     },
     {
@@ -36,8 +36,8 @@
       "allow": [
         { "path": "$HOME/Library/Application Support/RedrobDesign/mcp.json" },
         { "path": "$LOCALDATA/RedrobDesign/mcp.json" },
-        { "path": "$RUNTIME/redrobdesign/mcp.json" },
-        { "path": "$HOME/.redrobdesign/mcp.json" }
+        { "path": "$RUNTIME/redrob-design/mcp.json" },
+        { "path": "$HOME/.redrob-design/mcp.json" }
       ]
     },
     {

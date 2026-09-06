@@ -205,6 +205,11 @@ export class ACPChatTransport implements ChatTransport<UIMessage> {
             sessionId,
             prompt: [{ type: 'text', text: promptText }]
           })
+          .then(() => {
+            // ACP prompt resolution is the turn boundary: close the chat stream so
+            // the UI leaves the streaming/submitted state after tool+text updates.
+            return finish('stop')
+          })
           .catch((e) => {
             recordACPTransportFailure({
               operation: 'message',

@@ -20,6 +20,32 @@ import { createDevServerOptions } from './vite/server'
 const host = process.env.TAURI_DEV_HOST
 const automationRoute = devAutomationRoute(process.env.PORTLESS_URL, AUTOMATION_HTTP_PORT)
 
+// Bake Redrob Code engine resolution into the webview bundle. Vite only exposes
+// `VITE_*` keys on `import.meta.env` by default, and Tauri production webviews
+// cannot read the host process env — so without this, `ACP_AGENTS` falls back
+// to PATH `redrob` even when `REDROB_CODE_DEV_ROOT` is set for the desktop
+// process. Prefer explicit `VITE_*` overrides, then the unprefixed host keys
+// used by cloud/dev launchers.
+const redrobCodeDevRoot =
+  process.env.VITE_REDROB_CODE_DEV_ROOT || process.env.REDROB_CODE_DEV_ROOT || ''
+// Shell capabilities allowlist `cmd: "bun"` by bare name. An absolute
+// `REDROB_CODE_BUN` from the host would fail the Tauri spawn scope check, so
+// collapse path-shaped values to the allowlisted command and rely on PATH.
+const redrobCodeBunRaw =
+  process.env.VITE_REDROB_CODE_BUN || process.env.REDROB_CODE_BUN || ''
+const redrobCodeBun = redrobCodeBunRaw.includes('/') || redrobCodeBunRaw.includes('\\')
+  ? 'bun'
+  : redrobCodeBunRaw
+const redrobCodeBin = process.env.VITE_REDROB_CODE_BIN || process.env.REDROB_CODE_BIN || ''
+
+// Promote onto `process.env.VITE_*` BEFORE Vite snapshots `import.meta.env`.
+// Defining individual `import.meta.env.VITE_*` member expressions does not
+// populate a copied `import.meta.env` object (see ambientRedrobCodeEnv), so
+// the env-plugin path is what actually reaches ACP_AGENTS.
+if (redrobCodeDevRoot) process.env.VITE_REDROB_CODE_DEV_ROOT = redrobCodeDevRoot
+if (redrobCodeBun) process.env.VITE_REDROB_CODE_BUN = redrobCodeBun
+if (redrobCodeBin) process.env.VITE_REDROB_CODE_BIN = redrobCodeBin
+
 export default defineConfig(async ({ command }) => ({
   resolve: {
     alias: createRedrobAliases(__dirname)

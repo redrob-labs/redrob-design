@@ -23,9 +23,11 @@ export async function spawnACPProcess({
 }: ACPProcessOptions) {
   const { Command } = await import('@tauri-apps/plugin-shell')
   const resolved = resolvePlatformCommand(commandName, args)
+  // Omit `env` so the child inherits the host process environment.
+  // Tauri shell treats `env: null` as clear, and `env: {}` as inherit+overlay;
+  // omitting keeps secrets in the host process instead of re-passing them from the renderer.
   const command = Command.create(resolved.command, resolved.args, {
-    encoding: 'raw',
-    env: {}
+    encoding: 'raw'
   })
 
   const stdoutChunks: Uint8Array[] = []
