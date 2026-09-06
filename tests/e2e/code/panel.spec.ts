@@ -44,8 +44,8 @@ async function selectSource(label: string) {
 
 test('inactive Code tab defers JSX generation for large selections', async () => {
   const selectionDuration = await editor.page.evaluate(async () => {
-    const store = window.openPencil?.getStore?.()
-    if (!store) throw new Error('OpenPencil store not initialized')
+    const store = window.redrobDesign?.getStore?.()
+    if (!store) throw new Error('RedrobDesign store not initialized')
     const ids: string[] = []
     for (let frameIndex = 0; frameIndex < 50; frameIndex++) {
       const frame = store.graph.createNode('FRAME', store.state.currentPageId, {

@@ -13,7 +13,7 @@ export const EXPORT_FORMATS: ExportFormatId[] = ['png', 'jpg', 'webp', 'svg', 'p
 
 export type ExportPanelTarget = 'selection' | 'page'
 
-const OPEN_PENCIL_PLUGIN_ID = 'open-pencil'
+const REDROB_DESIGN_PLUGIN_ID = 'redrob-design'
 const EXPORT_SETTINGS_PLUGIN_KEY = 'exportSettings'
 
 // Re-exported from core so the UI and the .fig file-format boundary share one
@@ -109,13 +109,13 @@ function syncExportSettingsPluginData(
 ): PluginDataEntry[] {
   const withoutExportSettings = pluginData.filter(
     (entry) =>
-      !(entry.pluginId === OPEN_PENCIL_PLUGIN_ID && entry.key === EXPORT_SETTINGS_PLUGIN_KEY)
+      !(entry.pluginId === REDROB_DESIGN_PLUGIN_ID && entry.key === EXPORT_SETTINGS_PLUGIN_KEY)
   )
   if (settings.length === 0) return withoutExportSettings
   return [
     ...withoutExportSettings,
     {
-      pluginId: OPEN_PENCIL_PLUGIN_ID,
+      pluginId: REDROB_DESIGN_PLUGIN_ID,
       key: EXPORT_SETTINGS_PLUGIN_KEY,
       value: JSON.stringify(settings)
     }

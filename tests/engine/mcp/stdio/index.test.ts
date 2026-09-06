@@ -20,7 +20,7 @@ import {
 const AUTH_TOKEN = 'test-stdio-token'
 const NO_DOCUMENT_AUTH_TOKEN = 'test-stdio-no-document-token'
 const isUnix = process.platform !== 'win32'
-const SOCKET_DIR = join(tmpdir(), `openpencil-test-stdio-${process.pid}`)
+const SOCKET_DIR = join(tmpdir(), `redrobdesign-test-stdio-${process.pid}`)
 const SOCKET_PATH = isUnix ? join(SOCKET_DIR, 'mcp.sock') : null
 
 async function createStdioClient(socketPath: string, authToken: string | null) {
@@ -28,22 +28,22 @@ async function createStdioClient(socketPath: string, authToken: string | null) {
   const { StdioClientTransport } = await import('@modelcontextprotocol/sdk/client/stdio.js')
   const env: Record<string, string> = {}
   for (const [key, value] of Object.entries(process.env)) {
-    if (!key.startsWith('OPENPENCIL_MCP_') && value !== undefined) {
+    if (!key.startsWith('REDROB_DESIGN_MCP_') && value !== undefined) {
       env[key] = value
     }
   }
-  if (process.env.OPENPENCIL_MCP_DISCOVERY_PATH) {
-    env.OPENPENCIL_MCP_DISCOVERY_PATH = process.env.OPENPENCIL_MCP_DISCOVERY_PATH
+  if (process.env.REDROB_DESIGN_MCP_DISCOVERY_PATH) {
+    env.REDROB_DESIGN_MCP_DISCOVERY_PATH = process.env.REDROB_DESIGN_MCP_DISCOVERY_PATH
   }
   env.PATH = process.env.PATH ?? ''
-  // Only set OPENPENCIL_MCP_SOCKET when a socket path exists.
+  // Only set REDROB_DESIGN_MCP_SOCKET when a socket path exists.
   // An empty string on Windows would break the stdio bridge's transport
   // discovery (it would try to connect to an empty socket path).
   if (socketPath) {
-    env.OPENPENCIL_MCP_SOCKET = socketPath
+    env.REDROB_DESIGN_MCP_SOCKET = socketPath
   }
   if (authToken) {
-    env.OPENPENCIL_MCP_AUTH_TOKEN = authToken
+    env.REDROB_DESIGN_MCP_AUTH_TOKEN = authToken
   }
   const transport = new StdioClientTransport({
     command: 'bun',

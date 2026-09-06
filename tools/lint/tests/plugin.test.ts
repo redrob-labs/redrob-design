@@ -25,7 +25,7 @@ async function lint(
   rules: Record<string, string>,
   relativePath = 'fixture.ts'
 ): Promise<Diagnostic[]> {
-  const directory = await mkdtemp(join(tmpdir(), 'open-pencil-lint-'))
+  const directory = await mkdtemp(join(tmpdir(), 'redrob-design-lint-'))
   temporaryDirectories.push(directory)
   const sourcePath = join(directory, relativePath)
   const configPath = join(directory, 'oxlint.json')
@@ -75,7 +75,7 @@ async function runRule(ruleName: string, source: string, filename: string): Prom
 }
 
 function ruleDiagnostics(diagnostics: Diagnostic[], rule: string): Diagnostic[] {
-  return diagnostics.filter((diagnostic) => diagnostic.code === `open-pencil(${rule})`)
+  return diagnostics.filter((diagnostic) => diagnostic.code === `redrob-design(${rule})`)
 }
 
 afterEach(async () => {
@@ -86,7 +86,7 @@ afterEach(async () => {
 
 describe('no-conditional-object-spreads', () => {
   const rule = 'no-conditional-object-spreads'
-  const rules = { [`open-pencil/${rule}`]: 'error' }
+  const rules = { [`redrob-design/${rule}`]: 'error' }
 
   test('accepts a simple one-property projection', async () => {
     const diagnostics = await lint(
@@ -118,7 +118,7 @@ describe('AST-backed rules', () => {
     const rule = 'no-unknown-record-double-cast'
     const diagnostics = await lint(
       'export const result = value as unknown as Record< string, unknown >',
-      { [`open-pencil/${rule}`]: 'error' }
+      { [`redrob-design/${rule}`]: 'error' }
     )
     expect(ruleDiagnostics(diagnostics, rule)).toHaveLength(1)
   })
@@ -130,7 +130,7 @@ describe('AST-backed rules', () => {
         'interface First { handler: (value: string) => number; enabled: boolean }',
         'interface Second { handler: (value: number) => number; enabled: boolean }'
       ].join('\n'),
-      { [`open-pencil/${rule}`]: 'error' }
+      { [`redrob-design/${rule}`]: 'error' }
     )
     expect(ruleDiagnostics(diagnostics, rule)).toHaveLength(0)
   })

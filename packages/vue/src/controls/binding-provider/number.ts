@@ -2,7 +2,7 @@ import type { Editor } from '@redrob-design/core/editor'
 import { randomHex } from '@redrob-design/core/random'
 import type { VariableCollection } from '@redrob-design/scene-graph'
 
-import { useOpenPencilBindingProvider } from '#vue/controls/binding-provider/open-pencil'
+import { useRedrobDesignBindingProvider } from '#vue/controls/binding-provider/redrob-design'
 import type { BindingTarget } from '#vue/controls/binding-provider/types'
 
 const FALLBACK_NUMBER_VARIABLE_NAME = 'New number'
@@ -55,7 +55,7 @@ function setNumberVariableValue(editor: Editor, variableId: string, value: numbe
 }
 
 export function useNumberBindingProvider() {
-  return useOpenPencilBindingProvider<number>({
+  return useRedrobDesignBindingProvider<number>({
     type: 'FLOAT',
     resolve: (editor, variableId) => editor.resolveNumberVariable(variableId),
     create: createAndBindNumberVariable,

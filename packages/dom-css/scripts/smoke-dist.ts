@@ -25,13 +25,13 @@ const document: DesignDocument = {
       type: 'element',
       tagName: 'article',
       attrs: { class: 'card' },
-      children: [{ type: 'text', text: 'OpenPencil' }]
+      children: [{ type: 'text', text: 'RedrobDesign' }]
     }
   ]
 }
 
 const html = serializeHTML(document)
-if (!html.includes('OpenPencil')) {
+if (!html.includes('RedrobDesign')) {
   throw new Error('Expected built serializeHTML() to emit document text')
 }
 
@@ -40,7 +40,7 @@ if (!css.includes('.w-80')) {
   throw new Error('Expected built compileTailwindCSS() to emit Tailwind utility CSS')
 }
 
-const graph = await htmlToSceneGraph('<article class="card">OpenPencil</article>', {
+const graph = await htmlToSceneGraph('<article class="card">RedrobDesign</article>', {
   cssText: '.card { display: flex; width: 320px; }',
   runtime: createHeadlessCSSRuntime()
 })
@@ -51,7 +51,7 @@ if (card?.type !== 'FRAME' || card.width !== 320) {
 }
 
 const jsxDocument = await jsxToDesignDocument(
-  jsx('article', { class: 'card', children: 'OpenPencil' })
+  jsx('article', { class: 'card', children: 'RedrobDesign' })
 )
 if (jsxDocument.children[0]?.type !== 'element') {
   throw new Error('Expected built JSX helpers to produce DesignDOM elements')

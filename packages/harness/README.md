@@ -11,7 +11,7 @@ The first backend uses AI SDK `HarnessAgent`, Pi, and local `just-bash`. Pi runs
 - JSONL stdio sidecar transport.
 - Pi + `just-bash` backend.
 
-The package is installed as an optional companion CLI for the desktop application. It is not bundled into every Tauri build; install `@redrob-design/harness` globally to make the `openpencil-harness` command available. Credentials are supplied to the companion process at runtime and are never written to resume-state storage.
+The package is installed as an optional companion CLI for the desktop application. It is not bundled into every Tauri build; install `@redrob-design/harness` globally to make the `redrobdesign-harness` command available. Credentials are supplied to the companion process at runtime and are never written to resume-state storage.
 
 ## Local sandbox limitation
 

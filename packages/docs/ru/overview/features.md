@@ -115,7 +115,7 @@ redrob-design eval design.fig -c "..."     # Figma Plugin API
 **Веб-приложение:** [app.redrob.design](https://app.redrob.design), установка как PWA и интерфейс для сенсорных экранов.
 
 ```sh
-brew install open-pencil/tap/open-pencil
+brew install redrob-design/tap/redrob-design
 ```
 
 ## Резервная загрузка Google Fonts

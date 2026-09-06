@@ -37,7 +37,7 @@ export interface FigPopulationWorkerTelemetry {
 
 function emitTelemetry(detail: FigPopulationWorkerTelemetry): void {
   if (typeof globalThis.dispatchEvent !== 'function') return
-  globalThis.dispatchEvent(new CustomEvent('openpencil:fig-population-worker', { detail }))
+  globalThis.dispatchEvent(new CustomEvent('redrobdesign:fig-population-worker', { detail }))
 }
 
 export function registerFigPopulationWorker(

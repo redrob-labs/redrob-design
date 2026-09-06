@@ -8,8 +8,8 @@ test('editing section labels preserve dark and light label presentation', async 
     { id: 'light-section', y: 400, color: { r: 0.92, g: 0.82, b: 0.38, a: 1 } }
   ] as const
   await editor.page.evaluate((items) => {
-    const store = window.openPencil?.getStore?.()
-    if (!store) throw new Error('OpenPencil store not initialized')
+    const store = window.redrobDesign?.getStore?.()
+    if (!store) throw new Error('RedrobDesign store not initialized')
     for (const item of items) {
       store.graph.createNode('SECTION', store.state.currentPageId, {
         id: item.id,
@@ -49,8 +49,8 @@ test('editing section labels preserve dark and light label presentation', async 
 
 test('double-clicking a section title renames it inline', async () => {
   await editor.page.evaluate(() => {
-    const store = window.openPencil?.getStore?.()
-    if (!store) throw new Error('OpenPencil store not initialized')
+    const store = window.redrobDesign?.getStore?.()
+    if (!store) throw new Error('RedrobDesign store not initialized')
     const pageId = store.state.currentPageId
     store.graph.createNode('SECTION', pageId, {
       id: 'section-inline-rename',
@@ -80,7 +80,7 @@ test('double-clicking a section title renames it inline', async () => {
   await expect
     .poll(() =>
       editor.page.evaluate(
-        () => window.openPencil?.getStore?.().graph.getNode('section-inline-rename')?.name
+        () => window.redrobDesign?.getStore?.().graph.getNode('section-inline-rename')?.name
       )
     )
     .toBe('Primitives')

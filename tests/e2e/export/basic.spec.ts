@@ -34,8 +34,8 @@ function exportButton() {
 async function createRectangles(count: number, settings: unknown[][] = []) {
   const ids = await page.evaluate(
     ({ count: nodeCount, settingsByNode }) => {
-      const store = window.openPencil?.getStore?.()
-      if (!store) throw new Error('OpenPencil store not initialized')
+      const store = window.redrobDesign?.getStore?.()
+      if (!store) throw new Error('RedrobDesign store not initialized')
       for (const node of store.graph.getChildren(store.state.currentPageId)) {
         store.graph.deleteNode(node.id)
       }
@@ -63,8 +63,8 @@ async function createRectangles(count: number, settings: unknown[][] = []) {
 
 async function selectedExportSettings() {
   return page.evaluate(() => {
-    const store = window.openPencil?.getStore?.()
-    if (!store) throw new Error('OpenPencil store not initialized')
+    const store = window.redrobDesign?.getStore?.()
+    if (!store) throw new Error('RedrobDesign store not initialized')
     return [...store.state.selectedIds].map((id) => store.graph.getNode(id)?.exportSettings ?? [])
   })
 }
@@ -184,8 +184,8 @@ async function forceBlobDownload() {
 // actually exportable, then attach the export settings under test.
 async function createExportableRect(settings: { scale: number; format: string }[]) {
   await page.evaluate((nodeSettings) => {
-    const store = window.openPencil?.getStore?.()
-    if (!store) throw new Error('OpenPencil store not initialized')
+    const store = window.redrobDesign?.getStore?.()
+    if (!store) throw new Error('RedrobDesign store not initialized')
     for (const node of store.graph.getChildren(store.state.currentPageId)) {
       store.graph.deleteNode(node.id)
     }

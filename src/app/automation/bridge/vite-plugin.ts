@@ -32,19 +32,19 @@ export function createAutomationEnvironment(
   const { authToken, baseEnv, configuration, corsOrigin, discoveryPath, httpPort, socketPath } =
     options
   const childEnv = { ...baseEnv }
-  delete childEnv.OPENPENCIL_MCP_SOCKET
-  delete childEnv.OPENPENCIL_MCP_AUTH_TOKEN
+  delete childEnv.REDROB_DESIGN_MCP_SOCKET
+  delete childEnv.REDROB_DESIGN_MCP_AUTH_TOKEN
   const environment: NodeJS.ProcessEnv = {
     ...childEnv,
     PORT: String(httpPort),
-    OPENPENCIL_MCP_TCP: '1',
-    OPENPENCIL_MCP_AUTH_TOKEN: configuration.authenticationEnabled ? (authToken ?? '') : '',
-    OPENPENCIL_MCP_CORS_ORIGIN: corsOrigin,
-    OPENPENCIL_MCP_ROOT: configuration.rootDirectory.trim() || process.cwd(),
-    OPENPENCIL_MCP_DISABLED_TOOLS: serializeDisabledTools(configuration.disabledTools)
+    REDROB_DESIGN_MCP_TCP: '1',
+    REDROB_DESIGN_MCP_AUTH_TOKEN: configuration.authenticationEnabled ? (authToken ?? '') : '',
+    REDROB_DESIGN_MCP_CORS_ORIGIN: corsOrigin,
+    REDROB_DESIGN_MCP_ROOT: configuration.rootDirectory.trim() || process.cwd(),
+    REDROB_DESIGN_MCP_DISABLED_TOOLS: serializeDisabledTools(configuration.disabledTools)
   }
-  if (socketPath) environment.OPENPENCIL_MCP_SOCKET = socketPath
-  if (discoveryPath) environment.OPENPENCIL_MCP_DISCOVERY_PATH = discoveryPath
+  if (socketPath) environment.REDROB_DESIGN_MCP_SOCKET = socketPath
+  if (discoveryPath) environment.REDROB_DESIGN_MCP_DISCOVERY_PATH = discoveryPath
   return environment
 }
 
@@ -185,7 +185,7 @@ export function automationPlugin(
   }
 
   async function startChild(): Promise<void> {
-    const runtimeDir = join(tmpdir(), 'open-pencil-mcp', safeRuntimeId(options.runtimeId))
+    const runtimeDir = join(tmpdir(), 'redrob-design-mcp', safeRuntimeId(options.runtimeId))
     await mkdir(runtimeDir, { recursive: true, mode: 0o700 })
     const socketPath = platformHasUnixSockets() ? join(runtimeDir, 'mcp.sock') : null
     const discoveryPath = join(runtimeDir, 'mcp.json')
@@ -242,7 +242,7 @@ export function automationPlugin(
   }
 
   return {
-    name: 'open-pencil-automation',
+    name: 'redrob-design-automation',
     async configureServer(server) {
       server.middlewares.use(DEV_MCP_RESTART_PATH, (request, response, next) => {
         if (request.method !== 'POST') {

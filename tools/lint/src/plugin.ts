@@ -403,8 +403,8 @@ import {
   noComponentRootSiblingFolder,
   noUselessPassThroughWrappers,
   noFunctionAliasImports,
-  noDirectOpenPencilBrowserStore,
-  noDirectOpenPencilWindowInternals,
+  noDirectRedrobDesignBrowserStore,
+  noDirectRedrobDesignWindowInternals,
   noBunGlobalsInCli,
   noTopLevelPrefixedTestFiles,
   noSiblingDomainPrefixedFiles
@@ -417,7 +417,7 @@ import {
 } from '#lint/rules/typescript.ts'
 
 const plugin = {
-  meta: { name: 'open-pencil' },
+  meta: { name: 'redrob-design' },
   rules: {
     'no-inline-named-types': noInlineNamedTypes,
     'no-import-type-annotations': noImportTypeAnnotations,
@@ -468,8 +468,8 @@ const plugin = {
     'no-function-type': noFunctionType,
     'no-reflect-delete-global-this-outside-tests': noReflectDeleteGlobalThisOutsideTests,
     'no-core-browser-globals': noCoreBrowserGlobals,
-    'no-direct-open-pencil-window-internals': noDirectOpenPencilWindowInternals,
-    'no-direct-open-pencil-browser-store': noDirectOpenPencilBrowserStore,
+    'no-direct-redrob-design-window-internals': noDirectRedrobDesignWindowInternals,
+    'no-direct-redrob-design-browser-store': noDirectRedrobDesignBrowserStore,
     'no-direct-graph-emitter-subscriptions': noDirectGraphEmitterSubscriptions,
     'no-on-unmounted-in-composition-roots': noOnUnmountedInCompositionRoots,
     'no-composable-state-wrappers': noComposableStateWrappers,

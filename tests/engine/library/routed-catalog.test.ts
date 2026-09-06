@@ -68,7 +68,7 @@ describe('routed library catalog', () => {
       name: 'Design system',
       graph: graph()
     })
-    const key = `open-pencil/libraries/design-system/revisions/${published.manifest.revisionId}.json`
+    const key = `redrob-design/libraries/design-system/revisions/${published.manifest.revisionId}.json`
     const bytes = objects.values.get(key)
     if (!bytes) throw new Error('Expected remote revision')
     objects.values.set(

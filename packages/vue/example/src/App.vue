@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { createEditor, type Tool } from '@redrob-design/core/editor'
 import {
-  OpenPencilProvider,
+  RedrobDesignProvider,
   CanvasRoot,
   CanvasSurface,
   LayerTree,
@@ -27,7 +27,7 @@ const TOOL_LIST: Tool[] = [
 </script>
 
 <template>
-  <OpenPencilProvider :editor="editor">
+  <RedrobDesignProvider :editor="editor">
     <div class="layout">
       <ToolbarRoot>
         <div class="toolbar">
@@ -97,7 +97,7 @@ const TOOL_LIST: Tool[] = [
         </div>
       </div>
     </div>
-  </OpenPencilProvider>
+  </RedrobDesignProvider>
 </template>
 
 <style>

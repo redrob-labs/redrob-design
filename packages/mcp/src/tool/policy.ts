@@ -33,7 +33,7 @@ export function serializeDisabledTools(names: readonly string[]): string {
 
 export function readToolPolicyFromEnv(env: NodeJS.ProcessEnv = process.env): ToolPolicy {
   return {
-    allowEval: env.OPENPENCIL_MCP_EVAL === '1',
-    disabledTools: parseDisabledTools(env.OPENPENCIL_MCP_DISABLED_TOOLS)
+    allowEval: env.REDROB_DESIGN_MCP_EVAL === '1',
+    disabledTools: parseDisabledTools(env.REDROB_DESIGN_MCP_DISABLED_TOOLS)
   }
 }

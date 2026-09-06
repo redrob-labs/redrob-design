@@ -36,7 +36,7 @@ redrob-design export design.fig -f html --css tailwind    # фрагмент HTM
 redrob-design export design.fig -f jsx --style tailwind
 ```
 
-Параметр `--style openpencil` выбирает собственный формат JSX Redrob Design. Подробнее — в разделе [Рендерер JSX](../jsx-renderer).
+Параметр `--style redrobdesign` выбирает собственный формат JSX Redrob Design. Подробнее — в разделе [Рендерер JSX](../jsx-renderer).
 
 ## HTML
 

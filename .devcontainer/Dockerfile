@@ -18,17 +18,17 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* \
     && git lfs install --system \
     && install -d -o bun -g bun \
-        /workspace/open-pencil/node_modules \
-        /workspace/open-pencil/packages/scene-graph/node_modules \
-        /workspace/open-pencil/packages/pen/node_modules \
-        /workspace/open-pencil/packages/kiwi/node_modules \
-        /workspace/open-pencil/packages/fig/node_modules \
-        /workspace/open-pencil/packages/core/node_modules \
-        /workspace/open-pencil/packages/dom-css/node_modules \
-        /workspace/open-pencil/packages/vue/node_modules \
-        /workspace/open-pencil/packages/cli/node_modules \
-        /workspace/open-pencil/packages/mcp/node_modules \
-        /workspace/open-pencil/packages/docs/node_modules \
-        /workspace/open-pencil/tools/docs/node_modules
+        /workspace/redrob-design/node_modules \
+        /workspace/redrob-design/packages/scene-graph/node_modules \
+        /workspace/redrob-design/packages/pen/node_modules \
+        /workspace/redrob-design/packages/kiwi/node_modules \
+        /workspace/redrob-design/packages/fig/node_modules \
+        /workspace/redrob-design/packages/core/node_modules \
+        /workspace/redrob-design/packages/dom-css/node_modules \
+        /workspace/redrob-design/packages/vue/node_modules \
+        /workspace/redrob-design/packages/cli/node_modules \
+        /workspace/redrob-design/packages/mcp/node_modules \
+        /workspace/redrob-design/packages/docs/node_modules \
+        /workspace/redrob-design/tools/docs/node_modules
 
 USER bun

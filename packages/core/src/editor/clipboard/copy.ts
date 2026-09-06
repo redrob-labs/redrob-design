@@ -1,6 +1,6 @@
 import type { SceneNode } from '@redrob-design/scene-graph'
 
-import { buildFigmaClipboardHTML, buildOpenPencilClipboardHTML } from '#core/clipboard'
+import { buildFigmaClipboardHTML, buildRedrobDesignClipboardHTML } from '#core/clipboard'
 import type { EditorContext } from '#core/editor/types'
 
 export function createClipboardCopyActions(ctx: EditorContext) {
@@ -8,7 +8,7 @@ export function createClipboardCopyActions(ctx: EditorContext) {
     if (selectedNodes.length === 0) return
 
     const names = selectedNodes.map((n) => n.name).join('\n')
-    clipboardData.setData('text/html', buildOpenPencilClipboardHTML(selectedNodes, ctx.graph))
+    clipboardData.setData('text/html', buildRedrobDesignClipboardHTML(selectedNodes, ctx.graph))
     clipboardData.setData('text/plain', names)
 
     const html = await buildFigmaClipboardHTML(selectedNodes, ctx.graph)

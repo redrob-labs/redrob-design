@@ -45,7 +45,7 @@ Output:
 </div>
 ```
 
-Also supports `--style openpencil` for the native JSX format (see [JSX Renderer](../jsx-renderer)).
+Also supports `--style redrobdesign` for the native JSX format (see [JSX Renderer](../jsx-renderer)).
 
 ## HTML Export
 

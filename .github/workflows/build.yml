@@ -139,7 +139,7 @@ jobs:
             pack_if_new "$dir"
           done
           ls -la .npm-packages
-          for tarball in .npm-packages/open-pencil-*.tgz; do
+          for tarball in .npm-packages/redrob-design-*.tgz; do
             echo "Contents of $tarball"
             tar -tf "$tarball" | sed -n '1,60p' || true
           done
@@ -155,7 +155,7 @@ jobs:
               echo "${name}@${version} already published, skipping"
             else
               local tarball
-              tarball=$(cd .npm-packages && ls open-pencil-$(basename "$dir")-${version}.tgz)
+              tarball=$(cd .npm-packages && ls redrob-design-$(basename "$dir")-${version}.tgz)
               npm publish "./.npm-packages/${tarball}" --access public --provenance
             fi
           }

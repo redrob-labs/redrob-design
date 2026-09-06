@@ -55,11 +55,11 @@ describe('Kiwi schema runtime', () => {
 
     const codec = compileSchema(schema) as ItemCodec
 
-    const encoded = codec.encodeItem({ id: 42, name: 'OpenPencil', kind: 'CARD', tags: ['kiwi'] })
+    const encoded = codec.encodeItem({ id: 42, name: 'RedrobDesign', kind: 'CARD', tags: ['kiwi'] })
     expect(encoded.length).toBeGreaterThan(0)
     expect(codec.decodeItem(encoded)).toEqual({
       id: 42,
-      name: 'OpenPencil',
+      name: 'RedrobDesign',
       kind: 'CARD',
       tags: ['kiwi']
     })

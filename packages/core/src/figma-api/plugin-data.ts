@@ -1,11 +1,18 @@
 import type { SceneGraph, SceneNode } from '@redrob-design/scene-graph'
 
-export const OPEN_PENCIL_PLUGIN_DATA_NAMESPACE = 'open-pencil'
+export const REDROB_DESIGN_PLUGIN_DATA_NAMESPACE = 'redrob-design'
+// Legacy compatibility wire value: plugin data authored by pre-rebrand
+// OpenPencil builds used this namespace. Accepted on read so existing documents
+// keep their app-owned plugin data; new writes use the redrob-design namespace.
+const LEGACY_PLUGIN_DATA_NAMESPACE = 'open-pencil'
 
 type PluginDataEntry = SceneNode['pluginData'][number]
 
-export function isOpenPencilPluginData(entry: PluginDataEntry): boolean {
-  return entry.pluginId === OPEN_PENCIL_PLUGIN_DATA_NAMESPACE
+export function isRedrobDesignPluginData(entry: PluginDataEntry): boolean {
+  return (
+    entry.pluginId === REDROB_DESIGN_PLUGIN_DATA_NAMESPACE ||
+    entry.pluginId === LEGACY_PLUGIN_DATA_NAMESPACE
+  )
 }
 
 function encodedSharedKey(entry: PluginDataEntry, namespace: string): string | null {
@@ -21,20 +28,20 @@ function isEncodedSharedPluginData(entry: PluginDataEntry): boolean {
 function matchesSharedPluginData(entry: PluginDataEntry, namespace: string, key: string): boolean {
   const encodedKey = encodedSharedKey(entry, namespace)
   if (encodedKey !== null) return encodedKey === key
-  if (isOpenPencilPluginData(entry)) return false
+  if (isRedrobDesignPluginData(entry)) return false
   return entry.pluginId === namespace && entry.key === key
 }
 
 function sharedPluginDataKey(entry: PluginDataEntry, namespace: string): string | null {
   const encodedKey = encodedSharedKey(entry, namespace)
   if (encodedKey !== null) return encodedKey
-  if (isOpenPencilPluginData(entry)) return null
+  if (isRedrobDesignPluginData(entry)) return null
   return entry.pluginId === namespace ? entry.key : null
 }
 
 export function getPluginData(node: SceneNode, key: string): string {
   return (
-    node.pluginData.find((entry) => isOpenPencilPluginData(entry) && entry.key === key)?.value ?? ''
+    node.pluginData.find((entry) => isRedrobDesignPluginData(entry) && entry.key === key)?.value ?? ''
   )
 }
 
@@ -45,17 +52,17 @@ export function setPluginData(
   value: string
 ): void {
   const pluginData = node.pluginData.filter(
-    (entry) => !(isOpenPencilPluginData(entry) && entry.key === key)
+    (entry) => !(isRedrobDesignPluginData(entry) && entry.key === key)
   )
   if (value !== '') {
-    pluginData.push({ pluginId: OPEN_PENCIL_PLUGIN_DATA_NAMESPACE, key, value })
+    pluginData.push({ pluginId: REDROB_DESIGN_PLUGIN_DATA_NAMESPACE, key, value })
   }
   graph.updateNode(node.id, { pluginData })
 }
 
 export function getPluginDataKeys(node: SceneNode): string[] {
   return node.pluginData
-    .filter((entry) => isOpenPencilPluginData(entry) && !isEncodedSharedPluginData(entry))
+    .filter((entry) => isRedrobDesignPluginData(entry) && !isEncodedSharedPluginData(entry))
     .map((entry) => entry.key)
 }
 

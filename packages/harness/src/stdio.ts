@@ -12,9 +12,9 @@ import { HarnessSessionService } from '#harness/service'
 import { FileResumeStateStore } from '#harness/session-store'
 
 const stateRoot =
-  process.env.OPENPENCIL_HARNESS_STATE_DIR ?? join(homedir(), '.open-pencil', 'harness-sessions')
-const agentDir = process.env.OPENPENCIL_HARNESS_AGENT_DIR
-const apiKey = process.env.OPENPENCIL_HARNESS_API_KEY
+  process.env.REDROB_DESIGN_HARNESS_STATE_DIR ?? join(homedir(), '.redrob-design', 'harness-sessions')
+const agentDir = process.env.REDROB_DESIGN_HARNESS_AGENT_DIR
+const apiKey = process.env.REDROB_DESIGN_HARNESS_API_KEY
 const backendOptions: PiHarnessBackendOptions = {}
 if (agentDir) backendOptions.agentDir = agentDir
 if (apiKey) backendOptions.apiKey = apiKey

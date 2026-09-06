@@ -8,9 +8,9 @@ description: Consulter pages, objets, hiérarchies, variables et formats des doc
 La CLI permet de comprendre la structure d’un fichier sans ouvrir l’éditeur.
 
 ```sh
-bun open-pencil info design.fig
-bun open-pencil pages design.fig
-bun open-pencil tree design.fig
+bun redrob-design info design.fig
+bun redrob-design pages design.fig
+bun redrob-design tree design.fig
 ```
 
 ## Résumé
@@ -26,8 +26,8 @@ bun open-pencil tree design.fig
 `find` recherche par nom, type ou autres critères.
 
 ```sh
-bun open-pencil find design.fig --name Button
-bun open-pencil find design.fig --type TEXT
+bun redrob-design find design.fig --name Button
+bun redrob-design find design.fig --type TEXT
 ```
 
 ## Afficher un objet
@@ -47,7 +47,7 @@ bun open-pencil find design.fig --type TEXT
 Les commandes de consultation acceptent `--json`, adapté à `jq`, la CI et aux programmes qui nécessitent une sortie stable et exploitable par une machine.
 
 ```sh
-bun open-pencil pages design.fig --json | jq '.[].name'
+bun redrob-design pages design.fig --json | jq '.[].name'
 ```
 
-Utilisez `bun open-pencil --help` ou ajoutez `--help` à une sous-commande pour voir toutes les options.
+Utilisez `bun redrob-design --help` ou ajoutez `--help` à une sous-commande pour voir toutes les options.

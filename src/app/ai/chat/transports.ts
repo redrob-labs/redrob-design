@@ -217,7 +217,7 @@ export function createChatSessionManager({
         instructions: SYSTEM_PROMPT,
         mcpServers: await buildPiMCPServers()
       },
-      { OPENPENCIL_HARNESS_API_KEY: apiKey }
+      { REDROB_DESIGN_HARNESS_API_KEY: apiKey }
     )
     harnessTransportInstance = transport
     return transport as ChatTransport<UIMessage>

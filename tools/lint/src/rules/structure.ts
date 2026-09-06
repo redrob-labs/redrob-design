@@ -262,17 +262,17 @@ const noFunctionAliasImports = {
   }
 } satisfies RuleDefinition
 
-const noDirectOpenPencilBrowserStore = {
+const noDirectRedrobDesignBrowserStore = {
   meta: {
     docs: {
-      description: 'Disallow direct window.openPencil.store access'
+      description: 'Disallow direct window.redrobDesign.store access'
     }
   },
   create(context) {
-    function isOpenPencilMember(node: TSESTree.Expression): boolean {
+    function isRedrobDesignMember(node: TSESTree.Expression): boolean {
       return (
         node?.type === 'MemberExpression' &&
-        staticPropertyName(node.property) === 'openPencil' &&
+        staticPropertyName(node.property) === 'redrobDesign' &&
         ((node.object?.type === 'Identifier' && node.object.name === 'window') ||
           (node.object?.type === 'Identifier' && node.object.name === 'globalThis'))
       )
@@ -281,32 +281,42 @@ const noDirectOpenPencilBrowserStore = {
     return {
       MemberExpression(node) {
         if (staticPropertyName(node.property) !== 'store') return
-        if (!isOpenPencilMember(node.object)) return
+        if (!isRedrobDesignMember(node.object)) return
         context.report({
           node,
           message:
-            'Use window.openPencil.getStore() instead of accessing window.openPencil.store directly.'
+            'Use window.redrobDesign.getStore() instead of accessing window.redrobDesign.store directly.'
         })
       }
     }
   }
 } satisfies RuleDefinition
 
-const noDirectOpenPencilWindowInternals = {
+const noDirectRedrobDesignWindowInternals = {
   meta: {
     docs: {
-      description: 'Disallow direct access to private OpenPencil window internals'
+      description: 'Disallow direct access to private RedrobDesign window internals'
     }
   },
   create(context) {
+    // Sanctioned owners of private window internals: the browser store bridge,
+    // the test store helper, and the native-test event recorder that installs
+    // and reads its own recorder global.
+    const file = normalizedFilename(context)
+    const allowedFiles = [
+      '/src/app/browser-bridge.ts',
+      '/tests/helpers/store.ts',
+      '/tests/helpers/tauri/event-recorder.ts'
+    ]
+    if (allowedFiles.some((suffix) => file.endsWith(suffix))) return {}
     return {
       MemberExpression(node) {
         const name = staticPropertyName(node.property)
-        if (!name?.startsWith('__OPEN_PENCIL')) return
+        if (!name?.startsWith('__REDROB_DESIGN')) return
         context.report({
           node,
           message:
-            'Do not access window.__OPEN_PENCIL* directly. Use src/app/browser-bridge.ts or tests/helpers/store.ts instead.'
+            'Do not access window.__REDROB_DESIGN* directly. Use src/app/browser-bridge.ts or tests/helpers/store.ts instead.'
         })
       }
     }
@@ -367,8 +377,8 @@ export {
   noComponentRootSiblingFolder,
   noUselessPassThroughWrappers,
   noFunctionAliasImports,
-  noDirectOpenPencilBrowserStore,
-  noDirectOpenPencilWindowInternals,
+  noDirectRedrobDesignBrowserStore,
+  noDirectRedrobDesignWindowInternals,
   noBunGlobalsInCli,
   noTopLevelPrefixedTestFiles,
   noSiblingDomainPrefixedFiles

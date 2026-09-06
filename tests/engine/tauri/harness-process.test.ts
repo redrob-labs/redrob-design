@@ -20,7 +20,7 @@ describe('Harness sidecar process', () => {
           args: [],
           options: {
             encoding: 'raw',
-            env: { OPENPENCIL_HARNESS_API_KEY: 'secret' }
+            env: { REDROB_DESIGN_HARNESS_API_KEY: 'secret' }
           }
         })
         onEvent = (args as { onEvent: { onmessage: (event: unknown) => void } }).onEvent.onmessage
@@ -30,7 +30,7 @@ describe('Harness sidecar process', () => {
     })
 
     const process = await spawnHarnessProcess({
-      environment: { OPENPENCIL_HARNESS_API_KEY: 'secret' },
+      environment: { REDROB_DESIGN_HARNESS_API_KEY: 'secret' },
       onUnexpectedClose: () => undefined
     })
     await process.send({ id: 'one', method: 'service.shutdown' })

@@ -372,7 +372,7 @@ export async function buildFigmaClipboardHTML(
     sessionID: 0,
     ackID: 0,
     pasteID: randomInt(),
-    pasteFileKey: 'openpencil',
+    pasteFileKey: 'redrobdesign',
     nodeChanges
   }
 
@@ -385,7 +385,7 @@ export async function buildFigmaClipboardHTML(
   const bufferB64 = encodeBase64(figKiwiBinary)
 
   const meta: FigmaClipboardMeta = {
-    fileKey: 'openpencil',
+    fileKey: 'redrobdesign',
     pasteID: msg.pasteID as number,
     dataType: 'scene'
   }
@@ -399,8 +399,8 @@ export async function buildFigmaClipboardHTML(
 }
 
 export {
-  buildOpenPencilClipboardHTML,
-  parseOpenPencilClipboard,
-  type OpenPencilClipboardData,
+  buildRedrobDesignClipboardHTML,
+  parseRedrobDesignClipboard,
+  type RedrobDesignClipboardData,
   type TextPictureBuilder
-} from './clipboard/openpencil'
+} from './clipboard/redrob-design'

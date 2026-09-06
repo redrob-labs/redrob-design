@@ -25,6 +25,7 @@ const noDirectStorageAccess = {
       '/src/app/cache/index.ts',
       '/src/app/settings/credentials/storage.ts',
       '/src/app/shell/layout-storage.ts',
+      '/src/app/storage/legacy-prefix-migration.ts',
       '/packages/vue/src/i18n/locale.ts'
     ]
     if (allowedFiles.some((suffix) => file.endsWith(suffix))) return {}

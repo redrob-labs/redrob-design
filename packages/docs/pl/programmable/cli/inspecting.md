@@ -13,7 +13,7 @@ npm install -g @redrob-design/cli
 # albo
 bun add -g @redrob-design/cli
 # albo
-brew install open-pencil/tap/open-pencil
+brew install redrob-design/tap/redrob-design
 ```
 :::
 
@@ -74,7 +74,7 @@ redrob-design node design.fig --id 1:23
 ## Strony i zmienne
 
 ```sh
-openpencil pages design.fig
+redrobdesign pages design.fig
 redrob-design variables design.fig
 ```
 

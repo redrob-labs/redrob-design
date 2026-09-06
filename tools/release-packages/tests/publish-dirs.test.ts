@@ -10,7 +10,7 @@ import {
 } from '../src/publish-dirs'
 
 async function fixtureRoot() {
-  const root = join(tmpdir(), `open-pencil-release-packages-${crypto.randomUUID()}`)
+  const root = join(tmpdir(), `redrob-design-release-packages-${crypto.randomUUID()}`)
   await mkdir(join(root, 'packages/example/dist'), { recursive: true })
   await writeFile(join(root, 'packages/example/dist/index.js'), 'export {}\n')
   await writeFile(

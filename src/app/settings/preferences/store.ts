@@ -26,7 +26,7 @@ export const DEFAULT_APP_PREFERENCES: Readonly<AppPreferences> = {
   rendering: { canvasMode: 'retained' }
 }
 
-const STORAGE_KEY = 'open-pencil:preferences:v1'
+const STORAGE_KEY = 'redrob-design:preferences:v1'
 
 function booleanOrDefault(value: unknown, fallback: boolean): boolean {
   return typeof value === 'boolean' ? value : fallback

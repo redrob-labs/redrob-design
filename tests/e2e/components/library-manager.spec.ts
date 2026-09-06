@@ -10,8 +10,8 @@ test('library manager scopes populated updates and does not mutate on discovery'
   await canvas.waitForInit()
 
   const source = await page.evaluate(() => {
-    const store = window.openPencil?.getStore?.()
-    if (!store) throw new Error('OpenPencil store not initialized')
+    const store = window.redrobDesign?.getStore?.()
+    if (!store) throw new Error('RedrobDesign store not initialized')
     const pageNode = store.graph.getNode(store.state.currentPageId)
     if (!pageNode) throw new Error('Current page missing')
     const component = store.graph.createNode('COMPONENT', pageNode.id, {
@@ -62,7 +62,7 @@ test('library manager scopes populated updates and does not mutate on discovery'
   await expect(publish.getByLabel('Library ID')).toBeHidden()
   await page.keyboard.press('Escape')
   await page.keyboard.press('ControlOrMeta+KeyN')
-  await expect.poll(() => page.evaluate(() => !!window.openPencil?.getStore?.())).toBe(true)
+  await expect.poll(() => page.evaluate(() => !!window.redrobDesign?.getStore?.())).toBe(true)
 
   await page.getByTestId('left-panel-assets-tab').click()
   await page.getByRole('button', { name: 'Manage libraries' }).click()
@@ -83,8 +83,8 @@ test('library manager scopes populated updates and does not mutate on discovery'
     .click()
 
   await page.evaluate(() => {
-    const store = window.openPencil?.getStore?.()
-    if (!store) throw new Error('OpenPencil store not initialized')
+    const store = window.redrobDesign?.getStore?.()
+    if (!store) throw new Error('RedrobDesign store not initialized')
     const instances = [...store.graph.getAllNodes()].filter((node) => node.type === 'INSTANCE')
     if (instances.some((instance) => !instance.componentId))
       throw new Error('Inserted instance missing')
@@ -97,8 +97,8 @@ test('library manager scopes populated updates and does not mutate on discovery'
 
   await page.getByTestId('tabbar-tab').nth(0).click()
   await page.evaluate(({ buttonId, cardId }) => {
-    const store = window.openPencil?.getStore?.()
-    if (!store) throw new Error('OpenPencil store not initialized')
+    const store = window.redrobDesign?.getStore?.()
+    if (!store) throw new Error('RedrobDesign store not initialized')
     store.graph.updateNode(buttonId, {
       width: 144,
       height: 48,
@@ -161,15 +161,15 @@ test('library manager scopes populated updates and does not mutate on discovery'
   )
   await expect(manager.getByText('Button updated')).toBeVisible()
   const before = await page.evaluate(() => {
-    const store = window.openPencil?.getStore?.()
-    if (!store) throw new Error('OpenPencil store not initialized')
+    const store = window.redrobDesign?.getStore?.()
+    if (!store) throw new Error('RedrobDesign store not initialized')
     return [...store.graph.getAllNodes()].map((node) => node.id)
   })
   await expect(manager.getByTestId('library-update-instance-count')).toHaveText('Instances: 1')
   expect(
     await page.evaluate(() => {
-      const store = window.openPencil?.getStore?.()
-      if (!store) throw new Error('OpenPencil store not initialized')
+      const store = window.redrobDesign?.getStore?.()
+      if (!store) throw new Error('RedrobDesign store not initialized')
       return [...store.graph.getAllNodes()].map((node) => node.id)
     })
   ).toEqual(before)
@@ -179,8 +179,8 @@ test('library manager scopes populated updates and does not mutate on discovery'
   await page.keyboard.press('Escape')
 
   const instances = await page.evaluate(() => {
-    const store = window.openPencil?.getStore?.()
-    if (!store) throw new Error('OpenPencil store not initialized')
+    const store = window.redrobDesign?.getStore?.()
+    if (!store) throw new Error('RedrobDesign store not initialized')
     const ids = [...store.graph.getAllNodes()]
       .filter((node) => {
         if (node.type !== 'INSTANCE' || !node.componentId) return false
@@ -198,8 +198,8 @@ test('library manager scopes populated updates and does not mutate on discovery'
   await page.keyboard.press('Escape')
   await expect(updateMenuItem).toBeHidden()
   const reviewOrigin = await page.evaluate(() => {
-    const store = window.openPencil?.getStore?.()
-    if (!store) throw new Error('OpenPencil store not initialized')
+    const store = window.redrobDesign?.getStore?.()
+    if (!store) throw new Error('RedrobDesign store not initialized')
     return {
       pageId: store.state.currentPageId,
       selectedIds: [...store.state.selectedIds],
@@ -222,8 +222,8 @@ test('library manager scopes populated updates and does not mutate on discovery'
     animations: 'disabled'
   })
   await page.evaluate(async () => {
-    const store = window.openPencil?.getStore?.()
-    if (!store) throw new Error('OpenPencil store not initialized')
+    const store = window.redrobDesign?.getStore?.()
+    if (!store) throw new Error('RedrobDesign store not initialized')
     const otherPage = store.graph.getPages().find((page) => page.id !== store.state.currentPageId)
     if (otherPage) await store.switchPage(otherPage.id)
     store.clearSelection()
@@ -236,7 +236,7 @@ test('library manager scopes populated updates and does not mutate on discovery'
   await expect
     .poll(() =>
       page.evaluate(() => {
-        const store = window.openPencil?.getStore?.()
+        const store = window.redrobDesign?.getStore?.()
         if (!store) return null
         return {
           pageId: store.state.currentPageId,
@@ -252,31 +252,31 @@ test('library manager scopes populated updates and does not mutate on discovery'
   await updateMenuItem.click()
   await expect(instanceUpdate).toBeHidden()
   const mixedComponents = await page.evaluate((ids) => {
-    const store = window.openPencil?.getStore?.()
-    if (!store) throw new Error('OpenPencil store not initialized')
+    const store = window.redrobDesign?.getStore?.()
+    if (!store) throw new Error('RedrobDesign store not initialized')
     return ids.map((id) => store.graph.getNode(id)?.componentId)
   }, instances)
   expect(new Set(mixedComponents).size).toBe(2)
 
   await page.evaluate((id) => {
-    const store = window.openPencil?.getStore?.()
-    if (!store) throw new Error('OpenPencil store not initialized')
+    const store = window.redrobDesign?.getStore?.()
+    if (!store) throw new Error('RedrobDesign store not initialized')
     store.select([id])
   }, instances[1])
   await expect(instanceUpdate).toBeVisible()
 
   await page.keyboard.press('ControlOrMeta+KeyZ')
   const undoneComponents = await page.evaluate((ids) => {
-    const store = window.openPencil?.getStore?.()
-    if (!store) throw new Error('OpenPencil store not initialized')
+    const store = window.redrobDesign?.getStore?.()
+    if (!store) throw new Error('RedrobDesign store not initialized')
     return ids.map((id) => store.graph.getNode(id)?.componentId)
   }, instances)
   expect(new Set(undoneComponents).size).toBe(1)
 
   await page.keyboard.press('ControlOrMeta+Shift+KeyZ')
   const redoneComponents = await page.evaluate((ids) => {
-    const store = window.openPencil?.getStore?.()
-    if (!store) throw new Error('OpenPencil store not initialized')
+    const store = window.redrobDesign?.getStore?.()
+    if (!store) throw new Error('RedrobDesign store not initialized')
     return ids.map((id) => store.graph.getNode(id)?.componentId)
   }, instances)
   expect(new Set(redoneComponents).size).toBe(2)

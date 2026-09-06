@@ -25,7 +25,7 @@ if (!manifestPath) {
   process.exit(1)
 }
 const manifest = readVisualOracleManifest(manifestPath)
-const outputDir = resolve(values.output ?? manifest.output ?? '/tmp/open-pencil-document-oracle')
+const outputDir = resolve(values.output ?? manifest.output ?? '/tmp/redrob-design-document-oracle')
 mkdirSync(outputDir, { recursive: true })
 const bytes = await Bun.file(resolve(manifest.document)).bytes()
 const browser = await chromium.launch({ headless: !values.headed })
@@ -46,9 +46,9 @@ try {
     `${manifest.appURL}${manifest.appURL.includes('?') ? '&' : '?'}test&no-chrome&no-rulers&navigation-benchmark`
   )
   await page.locator('[data-test-id="canvas-element"][data-ready="1"]').waitFor({ timeout: 30_000 })
-  await page.evaluate((path) => window.openPencil?.openFile?.(path), documentPath)
+  await page.evaluate((path) => window.redrobDesign?.openFile?.(path), documentPath)
   await page.waitForFunction(
-    () => window.openPencil?.getStore?.().state.preparation == null,
+    () => window.redrobDesign?.getStore?.().state.preparation == null,
     undefined,
     {
       timeout: 120_000
@@ -72,8 +72,8 @@ async function compareTarget(page: Page, target: VisualOracleTarget) {
   const targetDir = `${outputDir}/${stem}`
   mkdirSync(targetDir, { recursive: true })
   const figmaPath = `${targetDir}/figma.png`
-  const openPencilPath = `${targetDir}/openpencil.png`
-  const normalizedPath = `${targetDir}/openpencil-normalized.png`
+  const redrobDesignPath = `${targetDir}/redrobdesign.png`
+  const normalizedPath = `${targetDir}/redrobdesign-normalized.png`
   const diffPath = `${targetDir}/diff.png`
   const heatmapPath = `${targetDir}/heatmap.png`
   const scale = target.scale ?? 1
@@ -81,7 +81,7 @@ async function compareTarget(page: Page, target: VisualOracleTarget) {
     await $`figma-use export node ${target.figmaNodeId} --output ${figmaPath} --scale ${String(scale)}`.quiet()
   }
 
-  const metadata = await captureOpenPencilTarget(page, target, openPencilPath, scale)
+  const metadata = await captureRedrobDesignTarget(page, target, redrobDesignPath, scale)
   if (metadata.pageRoots < (target.minimumPageRoots ?? 1)) {
     throw new Error(
       `${target.page} has ${metadata.pageRoots} roots; expected at least ${target.minimumPageRoots ?? 1}`
@@ -95,10 +95,10 @@ async function compareTarget(page: Page, target: VisualOracleTarget) {
   }
 
   const figmaSize = await imageSize(figmaPath)
-  const openPencilSize = await imageSize(openPencilPath)
-  const comparePath = figmaSize === openPencilSize ? openPencilPath : normalizedPath
+  const redrobDesignSize = await imageSize(redrobDesignPath)
+  const comparePath = figmaSize === redrobDesignSize ? redrobDesignPath : normalizedPath
   if (comparePath === normalizedPath) {
-    await $`magick ${openPencilPath} -background none -gravity northwest -extent ${figmaSize} ${normalizedPath}`.quiet()
+    await $`magick ${redrobDesignPath} -background none -gravity northwest -extent ${figmaSize} ${normalizedPath}`.quiet()
   }
   const fuzz = target.fuzz ?? '2%'
   const difference =
@@ -117,7 +117,7 @@ async function compareTarget(page: Page, target: VisualOracleTarget) {
   const metrics = {
     target,
     figmaSize,
-    openPencilSize,
+    redrobDesignSize,
     metadata,
     fuzz,
     differentPixels: pixels,
@@ -129,7 +129,7 @@ async function compareTarget(page: Page, target: VisualOracleTarget) {
   return metrics
 }
 
-async function captureOpenPencilTarget(
+async function captureRedrobDesignTarget(
   page: Page,
   target: VisualOracleTarget,
   outputPath: string,
@@ -137,21 +137,21 @@ async function captureOpenPencilTarget(
 ) {
   const metadata = await page.evaluate(
     async ({ target, scale }) => {
-      const store = window.openPencil?.getStore?.()
-      if (!store) throw new Error('OpenPencil store unavailable')
+      const store = window.redrobDesign?.getStore?.()
+      if (!store) throw new Error('RedrobDesign store unavailable')
       const pageNode = store.graph.getPages().find((candidate) => candidate.name === target.page)
-      if (!pageNode) throw new Error(`OpenPencil page missing: ${target.page}`)
+      if (!pageNode) throw new Error(`RedrobDesign page missing: ${target.page}`)
       await store.switchPage(pageNode.id)
       const pageRoots = store.graph.getChildren(pageNode.id)
-      const node = target.openPencilNodeId
-        ? store.graph.getNode(target.openPencilNodeId)
+      const node = target.redrobDesignNodeId
+        ? store.graph.getNode(target.redrobDesignNodeId)
         : store.graph
             .getAllNodes()
             .find(
               (candidate) => candidate.name === target.node && candidate.parentId === pageNode.id
             )
       if (!node || node.parentId !== pageNode.id) {
-        throw new Error(`OpenPencil node missing from page: ${target.page} / ${target.node}`)
+        throw new Error(`RedrobDesign node missing from page: ${target.page} / ${target.node}`)
       }
       const position = store.graph.getAbsolutePosition(node.id)
       const viewportWidth = 1280
@@ -165,7 +165,7 @@ async function captureOpenPencilTarget(
           requestAnimationFrame(() => resolveFrame())
         })
       })
-      await window.openPencil?.test?.navigation?.waitForSettlement()
+      await window.redrobDesign?.test?.navigation?.waitForSettlement()
       return {
         pageId: pageNode.id,
         nodeId: node.id,

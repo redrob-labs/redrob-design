@@ -18,7 +18,7 @@ describe('@redrob-design/dom-css JSX', () => {
   it('converts JSX elements into DesignDOM documents', async () => {
     const document = await jsxToDesignDocument(
       <article class="card" data-id="card-1" style={{ width: '320px', backgroundColor: 'white' }}>
-        <CardTitle>OpenPencil</CardTitle>
+        <CardTitle>RedrobDesign</CardTitle>
         <p style="font-size: 14px; line-height: 20px">Design with JSX-shaped DOM.</p>
       </article>
     )
@@ -37,7 +37,7 @@ describe('@redrob-design/dom-css JSX', () => {
   it('runs JSX through CSS runtime styles before scene graph conversion', async () => {
     const graph = await jsxToSceneGraph(
       <article class="card">
-        <h1 class="title">OpenPencil</h1>
+        <h1 class="title">RedrobDesign</h1>
       </article>,
       {
         runtime: createHeadlessCSSRuntime(),
@@ -78,7 +78,7 @@ describe('@redrob-design/dom-css JSX', () => {
     const classes = [...tailwindCardClasses]
     const graph = await tailwindJSXToSceneGraph(
       <article class={classes.join(' ')}>
-        <h1>OpenPencil</h1>
+        <h1>RedrobDesign</h1>
       </article>,
       classes,
       { runtime: createHeadlessCSSRuntime() }

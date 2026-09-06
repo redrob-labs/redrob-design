@@ -67,7 +67,7 @@ redrob-design node [file] --id <id> [--json]
 List all pages in the document.
 
 ```sh
-openpencil pages [file] [--json]
+redrobdesign pages [file] [--json]
 ```
 
 | Option | Description |
@@ -104,7 +104,7 @@ redrob-design export [file] [options]
 | `--quality` | `-q` | Quality 0–100, JPG/WEBP only (default: 90) |
 | `--page` | | Page name (default: first page) |
 | `--node` | | Node ID to export (default: all top-level nodes) |
-| `--style` | | JSX style: `openpencil` (default), `tailwind` |
+| `--style` | | JSX style: `redrobdesign` (default), `tailwind` |
 | `--html` | | HTML mode: `fragment` (default), `standalone` |
 | `--css` | | HTML CSS output: `inline` (default), `tailwind` |
 | `--assets` | | Standalone HTML assets: `inline` (default), `external` |

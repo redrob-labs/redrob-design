@@ -18,7 +18,7 @@ import {
 } from '#tests/helpers/mcp/server'
 
 const isUnix = process.platform !== 'win32'
-const SOCKET_DIR = join(tmpdir(), `openpencil-test-server-${process.pid}`)
+const SOCKET_DIR = join(tmpdir(), `redrobdesign-test-server-${process.pid}`)
 const TEST_AUTH_TOKEN = 'test-auth-token'
 const NO_AUTH_TOKEN = null as string | null
 let testCounter = 0
@@ -34,7 +34,7 @@ function testSocketPath(): string | null {
 
 describe('MCP server CORS', () => {
   test('accepts authenticated health preflight from the configured worktree origin', async () => {
-    const origin = 'https://feature.open-pencil.localhost'
+    const origin = 'https://feature.redrob-design.localhost'
     const handle = await startServer({
       httpPort: 0,
       withTcp: true,

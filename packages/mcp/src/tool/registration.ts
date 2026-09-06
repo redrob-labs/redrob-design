@@ -67,7 +67,7 @@ export function registerTools(mcpServer: McpServer, options: RegisterToolsOption
       {
         ...toolOptions,
         annotations: toolAnnotations(descriptor.effect),
-        _meta: { 'openpencil/capabilities': descriptor.capabilities }
+        _meta: { 'redrobdesign/capabilities': descriptor.capabilities }
       },
       handler
     )

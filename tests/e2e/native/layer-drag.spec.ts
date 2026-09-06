@@ -11,8 +11,8 @@ describe('native layer dragging', () => {
   it('delivers a WebView drag sequence and reorders once', async function () {
     if (process.platform !== 'win32') this.skip()
     await browser.waitUntil(
-      async () => browser.execute(() => Boolean(window.openPencil?.getStore?.())),
-      { timeout: 30_000, timeoutMsg: 'OpenPencil editor did not initialize' }
+      async () => browser.execute(() => Boolean(window.redrobDesign?.getStore?.())),
+      { timeout: 30_000, timeoutMsg: 'RedrobDesign editor did not initialize' }
     )
     const ids = await createNativeLayerFixture()
     const source = await $(`[data-node-id="${ids.third}"] [data-test-id="layers-item"]`)

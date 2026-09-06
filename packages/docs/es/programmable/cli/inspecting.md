@@ -8,9 +8,9 @@ description: Consultar páginas, objetos, jerarquías, variables y formatos de d
 La CLI permite conocer la estructura de un archivo sin abrir el editor.
 
 ```sh
-bun open-pencil info design.fig
-bun open-pencil pages design.fig
-bun open-pencil tree design.fig
+bun redrob-design info design.fig
+bun redrob-design pages design.fig
+bun redrob-design tree design.fig
 ```
 
 ## Resumen
@@ -22,7 +22,7 @@ bun open-pencil tree design.fig
 `pages` enumera las páginas. `tree` imprime la jerarquía y puede limitar profundidad, página o número de resultados.
 
 ```sh
-bun open-pencil tree design.fig --depth 3
+bun redrob-design tree design.fig --depth 3
 ```
 
 ## Buscar objetos
@@ -30,8 +30,8 @@ bun open-pencil tree design.fig --depth 3
 `find` busca por nombre, tipo u otras condiciones.
 
 ```sh
-bun open-pencil find design.fig --name Button
-bun open-pencil find design.fig --type TEXT
+bun redrob-design find design.fig --name Button
+bun redrob-design find design.fig --type TEXT
 ```
 
 ## Ver un objeto
@@ -39,7 +39,7 @@ bun open-pencil find design.fig --type TEXT
 `node` muestra las propiedades del identificador indicado, incluidas geometría, estilo, relaciones y datos específicos de su tipo.
 
 ```sh
-bun open-pencil node design.fig 12:34
+bun redrob-design node design.fig 12:34
 ```
 
 ## Variables
@@ -47,7 +47,7 @@ bun open-pencil node design.fig 12:34
 `variables` enumera colecciones, modos, tipos y valores.
 
 ```sh
-bun open-pencil variables design.fig
+bun redrob-design variables design.fig
 ```
 
 ## Formatos
@@ -59,7 +59,7 @@ bun open-pencil variables design.fig
 Los comandos de consulta admiten `--json`, apropiado para `jq`, CI y programas que necesiten una salida estable y legible por máquinas.
 
 ```sh
-bun open-pencil pages design.fig --json | jq '.[].name'
+bun redrob-design pages design.fig --json | jq '.[].name'
 ```
 
-Usa `bun open-pencil --help` o añade `--help` a un subcomando para ver todas las opciones.
+Usa `bun redrob-design --help` o añade `--help` a un subcomando para ver todas las opciones.

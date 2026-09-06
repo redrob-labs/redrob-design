@@ -22,8 +22,8 @@ test.afterAll(async () => {
 
 async function getSelectedFill() {
   return page.evaluate(() => {
-    const store = window.openPencil?.getStore?.()
-    if (!store) throw new Error('OpenPencil store not initialized')
+    const store = window.redrobDesign?.getStore?.()
+    if (!store) throw new Error('RedrobDesign store not initialized')
     const id = [...store.state.selectedIds][0]
     if (!id) return null
     const node = store.graph.getNode(id)
@@ -33,13 +33,13 @@ async function getSelectedFill() {
 
 async function getSelectedFillOkHCL() {
   return page.evaluate(() => {
-    const store = window.openPencil?.getStore?.()
-    if (!store) throw new Error('OpenPencil store not initialized')
+    const store = window.redrobDesign?.getStore?.()
+    if (!store) throw new Error('RedrobDesign store not initialized')
     const id = [...store.state.selectedIds][0]
     if (!id) return null
     const node = store.graph.getNode(id)
     const entry = node?.pluginData.find(
-      (value) => value.pluginId === 'open-pencil' && value.key === 'okhcl'
+      (value) => value.pluginId === 'redrob-design' && value.key === 'okhcl'
     )
     if (!entry) return null
     const payload = JSON.parse(entry.value) as Partial<OkHCLPayload>

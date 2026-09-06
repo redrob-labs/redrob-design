@@ -45,7 +45,7 @@ Przykład wyniku:
 </div>
 ```
 
-Opcja `--style openpencil` wybiera własny format JSX Redrob Design. Więcej informacji znajduje się na stronie [JSX renderer](../jsx-renderer).
+Opcja `--style redrobdesign` wybiera własny format JSX Redrob Design. Więcej informacji znajduje się na stronie [JSX renderer](../jsx-renderer).
 
 ## HTML
 

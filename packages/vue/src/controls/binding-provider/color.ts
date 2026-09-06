@@ -3,7 +3,7 @@ import { randomHex } from '@redrob-design/core/random'
 import type { VariableCollection } from '@redrob-design/scene-graph'
 import type { Color } from '@redrob-design/scene-graph/primitives'
 
-import { useOpenPencilBindingProvider } from '#vue/controls/binding-provider/open-pencil'
+import { useRedrobDesignBindingProvider } from '#vue/controls/binding-provider/redrob-design'
 import type { BindingTarget } from '#vue/controls/binding-provider/types'
 
 const FALLBACK_COLOR_VARIABLE_NAME = 'New color'
@@ -59,7 +59,7 @@ export function setColorVariableValue(editor: Editor, variableId: string, value:
 }
 
 export function useColorBindingProvider() {
-  return useOpenPencilBindingProvider<Color>({
+  return useRedrobDesignBindingProvider<Color>({
     type: 'COLOR',
     resolve: (editor, variableId) => editor.resolveColorVariable(variableId),
     create: createAndBindColorVariable,

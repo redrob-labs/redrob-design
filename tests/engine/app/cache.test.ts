@@ -28,7 +28,7 @@ describe('app cache', () => {
 
     await writeCacheText('providers/models', 'cached')
 
-    expect(storage.get('open-pencil:cache:v1:providers/models')).toBe('cached')
+    expect(storage.get('redrob-design:cache:v1:providers/models')).toBe('cached')
     await expect(readCacheText('providers/models')).resolves.toBe('cached')
   })
 

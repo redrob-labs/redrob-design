@@ -11,7 +11,7 @@ The CLI lets you explore design documents without opening the editor. Every comm
 ```sh
 npm install -g @redrob-design/cli
 # or
-brew install open-pencil/tap/open-pencil
+brew install redrob-design/tap/redrob-design
 ```
 :::
 
@@ -128,7 +128,7 @@ redrob-design node design.fig --id 1:23
 List all pages in the document:
 
 ```sh
-openpencil pages design.fig
+redrobdesign pages design.fig
 ```
 
 ## Variables

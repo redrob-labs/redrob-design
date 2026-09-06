@@ -23,8 +23,8 @@
       "allow": [
         { "path": "$HOME/Library/Application Support/RedrobDesign/mcp.json" },
         { "path": "$LOCALDATA/RedrobDesign/mcp.json" },
-        { "path": "$RUNTIME/openpencil/mcp.json" },
-        { "path": "$HOME/.openpencil/mcp.json" }
+        { "path": "$RUNTIME/redrobdesign/mcp.json" },
+        { "path": "$HOME/.redrobdesign/mcp.json" }
       ]
     },
     {
@@ -36,8 +36,8 @@
       "allow": [
         { "path": "$HOME/Library/Application Support/RedrobDesign/mcp.json" },
         { "path": "$LOCALDATA/RedrobDesign/mcp.json" },
-        { "path": "$RUNTIME/openpencil/mcp.json" },
-        { "path": "$HOME/.openpencil/mcp.json" }
+        { "path": "$RUNTIME/redrobdesign/mcp.json" },
+        { "path": "$HOME/.redrobdesign/mcp.json" }
       ]
     },
     {
@@ -59,8 +59,8 @@
         { "name": "claude-agent-acp", "cmd": "claude-agent-acp", "args": true },
         { "name": "codex-acp", "cmd": "codex-acp", "args": true },
         { "name": "gemini", "cmd": "gemini", "args": true },
-        { "name": "openpencil-mcp-http", "cmd": "openpencil-mcp-http", "args": true },
-        { "name": "openpencil-harness", "cmd": "openpencil-harness", "args": false },
+        { "name": "redrobdesign-mcp-http", "cmd": "redrobdesign-mcp-http", "args": true },
+        { "name": "redrobdesign-harness", "cmd": "redrobdesign-harness", "args": false },
         { "name": "cmd", "cmd": "cmd", "args": true }
       ]
     },

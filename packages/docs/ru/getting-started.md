@@ -8,7 +8,7 @@ Redrob Design работает прямо в браузере и не требу
 
 ## Приложение для компьютера
 
-Готовые версии для macOS, Windows и Linux опубликованы на [странице релизов](https://github.com/open-pencil/open-pencil/releases/latest).
+Готовые версии для macOS, Windows и Linux опубликованы на [странице релизов](https://github.com/redrob-design/redrob-design/releases/latest).
 
 | Платформа | Файл |
 |----------|------|
@@ -21,7 +21,7 @@ Redrob Design работает прямо в браузере и не требу
 ## Установка в macOS через Homebrew
 
 ```sh
-brew install open-pencil/tap/open-pencil
+brew install redrob-design/tap/redrob-design
 ```
 
 Команда устанавливает последнюю подписанную версию для компьютеров Mac с Apple Silicon или процессором Intel. Homebrew tap обновляется при каждом релизе.
@@ -36,8 +36,8 @@ brew install open-pencil/tap/open-pencil
 ### Установка
 
 ```sh
-git clone https://github.com/open-pencil/open-pencil.git
-cd open-pencil
+git clone https://github.com/redrob-design/redrob-design.git
+cd redrob-design
 bun install
 ```
 

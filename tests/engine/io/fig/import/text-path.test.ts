@@ -230,7 +230,7 @@ describe('TEXT_PATH raw payload round-trip (synthetic)', () => {
     })
     node.source.fig.rawNodeFields = {
       vectorData: {
-        vectorNetworkBlob: { __openPencilFigmaBlob: networkBlob },
+        vectorNetworkBlob: { __redrobDesignFigmaBlob: networkBlob },
         normalizedSize: { x: 100, y: 100 }
       },
       textPathStart: { tValue: 0.3, forward: false }

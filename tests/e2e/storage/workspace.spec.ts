@@ -18,7 +18,7 @@ test('configured storage lists previews through ranges before opening the docume
         body: `<ListBucketResult>
           <IsTruncated>false</IsTruncated>
           <Contents>
-            <Key>open_pencil_storage/canvases/remote-1.fig</Key>
+            <Key>redrob_design_storage/canvases/remote-1.fig</Key>
             <LastModified>2026-01-02T03:04:05.000Z</LastModified>
             <Size>${fixture.byteLength}</Size>
           </Contents>

@@ -23,13 +23,24 @@ interface SerializedClipboardNode extends JSONObject {
 
 type ClipboardNode = SceneNode & { children?: ClipboardNode[] }
 
-export interface OpenPencilClipboardData {
+export interface RedrobDesignClipboardData {
   nodes: Array<SceneNode & { children?: SceneNode[] }>
   images: Map<string, Uint8Array>
 }
 
-export function parseOpenPencilClipboard(html: string): OpenPencilClipboardData | null {
-  const match = html.match(/<!--\(openpencil\)(.*?)\(\/openpencil\)-->/s)
+// Current on-the-wire clipboard marker written by this app.
+const CLIPBOARD_MARKER = 'redrobdesign'
+const CLIPBOARD_FORMAT = 'redrobdesign/v1'
+// Legacy compatibility wire values: clipboard payloads copied by pre-rebrand
+// OpenPencil builds still carry these markers. The legacy HTML comment marker
+// is accepted by the parser's fallback regex below; the legacy format tag is
+// accepted here. Never written. Kept isolated so paste from older copies works.
+const LEGACY_CLIPBOARD_FORMAT = 'openpencil/v1'
+
+export function parseRedrobDesignClipboard(html: string): RedrobDesignClipboardData | null {
+  const match =
+    html.match(/<!--\(redrobdesign\)(.*?)\(\/redrobdesign\)-->/s) ??
+    html.match(/<!--\(openpencil\)(.*?)\(\/openpencil\)-->/s)
   if (!match) return null
 
   try {
@@ -41,7 +52,10 @@ export function parseOpenPencilClipboard(html: string): OpenPencilClipboardData 
       bytes = raw
     }
     const decoded = JSON.parse(new TextDecoder().decode(bytes))
-    if (decoded.format === 'openpencil/v1' && Array.isArray(decoded.nodes)) {
+    if (
+      (decoded.format === CLIPBOARD_FORMAT || decoded.format === LEGACY_CLIPBOARD_FORMAT) &&
+      Array.isArray(decoded.nodes)
+    ) {
       const nodes = restoreNodeData(decoded.nodes as SerializedClipboardNode[])
       const images = new Map<string, Uint8Array>()
       if (decoded.images && typeof decoded.images === 'object') {
@@ -107,7 +121,7 @@ function collectImageHashes(nodes: SceneNode[], graph: SceneGraph): Set<string> 
   return hashes
 }
 
-export function buildOpenPencilClipboardHTML(
+export function buildRedrobDesignClipboardHTML(
   nodes: SceneNode[],
   graph: SceneGraph,
   textPictureBuilder?: TextPictureBuilder
@@ -120,12 +134,12 @@ export function buildOpenPencilClipboardHTML(
     if (bytes) images[hash] = encodeBase64(bytes)
   }
   const data = {
-    format: 'openpencil/v1',
+    format: CLIPBOARD_FORMAT,
     nodes: nodeTree,
     images
   }
   const compressed = deflateSync(new TextEncoder().encode(JSON.stringify(data)))
-  return `<!--(openpencil)${encodeBase64(compressed)}(/openpencil)-->`
+  return `<!--(${CLIPBOARD_MARKER})${encodeBase64(compressed)}(/${CLIPBOARD_MARKER})-->`
 }
 
 function collectNodeTree(

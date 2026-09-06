@@ -7,7 +7,7 @@ test('current selection toggles and remains visible in history', async ({
   configuredChat: chat
 }) => {
   const nodeId = await chat.page.evaluate(() => {
-    const store = window.openPencil?.getStore?.()
+    const store = window.redrobDesign?.getStore?.()
     if (!store) throw new Error('Store not available')
     const node = store.graph.createNode('RECTANGLE', store.state.currentPageId, {
       name: 'Pinned hero'
@@ -64,7 +64,7 @@ test('sent images and text appear immediately in history', async ({ configuredCh
 
 test('node context stays hidden when combined with an image', async ({ configuredChat: chat }) => {
   await chat.page.evaluate(() => {
-    const store = window.openPencil?.getStore?.()
+    const store = window.redrobDesign?.getStore?.()
     if (!store) throw new Error('Store not available')
     const node = store.graph.createNode('RECTANGLE', store.state.currentPageId, { name: 'Card' })
     store.select([node.id])

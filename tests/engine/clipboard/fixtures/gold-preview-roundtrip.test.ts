@@ -3,10 +3,10 @@ import { readFileSync } from 'node:fs'
 
 import {
   buildFigmaClipboardHTML,
-  buildOpenPencilClipboardHTML,
+  buildRedrobDesignClipboardHTML,
   importClipboardNodes,
   parseFigmaClipboard,
-  parseOpenPencilClipboard,
+  parseRedrobDesignClipboard,
   readFigFile,
   initCodec,
   type SceneNode,
@@ -43,10 +43,10 @@ describe('gold-preview.fig clipboard roundtrip', () => {
     { timeout: HEAVY_TEST_TIMEOUT_MS }
   )
 
-  it('OpenPencil format: zero property differences', () => {
-    const html = buildOpenPencilClipboardHTML(topLevelNodes, graph)
-    const parsed = parseOpenPencilClipboard(html)
-    const clipboard = expectDefined(parsed, 'OpenPencil clipboard')
+  it('RedrobDesign format: zero property differences', () => {
+    const html = buildRedrobDesignClipboardHTML(topLevelNodes, graph)
+    const parsed = parseRedrobDesignClipboard(html)
+    const clipboard = expectDefined(parsed, 'RedrobDesign clipboard')
 
     const origAll = flatten(graph, pageId)
 
@@ -77,8 +77,8 @@ describe('gold-preview.fig clipboard roundtrip', () => {
     expect(diffs).toBe(0)
   })
 
-  it('OpenPencil format: compressed data is under 1MB', () => {
-    const html = buildOpenPencilClipboardHTML(topLevelNodes, graph)
+  it('RedrobDesign format: compressed data is under 1MB', () => {
+    const html = buildRedrobDesignClipboardHTML(topLevelNodes, graph)
     expect(html.length).toBeLessThan(5 * 1024 * 1024)
   })
 

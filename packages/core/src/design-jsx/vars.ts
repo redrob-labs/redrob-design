@@ -1,6 +1,6 @@
 import type { Color } from '@redrob-design/scene-graph/primitives'
 
-const VAR_SYMBOL = Symbol.for('open-pencil.variable')
+const VAR_SYMBOL = Symbol.for('redrob-design.variable')
 
 export type VarDef =
   | string

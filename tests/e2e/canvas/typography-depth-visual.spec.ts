@@ -4,8 +4,8 @@ const editor = useEditorSetupWithClear('/?test&no-chrome&no-rulers')
 
 test('text case vertical alignment and ending truncation', async () => {
   await editor.page.evaluate(() => {
-    const store = window.openPencil?.getStore?.()
-    if (!store) throw new Error('OpenPencil store not initialized')
+    const store = window.redrobDesign?.getStore?.()
+    if (!store) throw new Error('RedrobDesign store not initialized')
     const pageId = store.state.currentPageId
     const cases = [
       { label: 'uppercase text', textCase: 'UPPER' as const, vertical: 'TOP' as const },

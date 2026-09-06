@@ -6,7 +6,7 @@ test.beforeAll(async () => {
   await editor.page.context().grantPermissions(['clipboard-read', 'clipboard-write'])
 })
 
-test('browser menu copy writes rich and plain OpenPencil clipboard formats', async () => {
+test('browser menu copy writes rich and plain RedrobDesign clipboard formats', async () => {
   await editor.canvas.clearCanvas()
   await editor.canvas.drawRect(100, 100, 120, 80)
   await editor.canvas.waitForRender()
@@ -33,8 +33,8 @@ test('browser menu copy writes rich and plain OpenPencil clipboard formats', asy
   expect(clipboard.plainText).not.toBe('')
 
   const before = await editor.page.evaluate(() => {
-    const store = window.openPencil?.getStore?.()
-    if (!store) throw new Error('OpenPencil store not initialized')
+    const store = window.redrobDesign?.getStore?.()
+    if (!store) throw new Error('RedrobDesign store not initialized')
     return store.graph.getChildren(store.state.currentPageId).length
   })
   await editor.page.getByTestId('menubar-edit').click()
@@ -42,8 +42,8 @@ test('browser menu copy writes rich and plain OpenPencil clipboard formats', asy
   await expect
     .poll(() =>
       editor.page.evaluate(() => {
-        const store = window.openPencil?.getStore?.()
-        if (!store) throw new Error('OpenPencil store not initialized')
+        const store = window.redrobDesign?.getStore?.()
+        if (!store) throw new Error('RedrobDesign store not initialized')
         return store.graph.getChildren(store.state.currentPageId).length
       })
     )

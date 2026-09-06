@@ -289,7 +289,7 @@ function buildServerContext(options: ServerOptions) {
     disabledTools: [...new Set(options.disabledTools)]
   }
   const mcpRoot = options.mcpRoot ?? null
-  // Auto-generated so all transports require auth by default. Override via OPENPENCIL_MCP_AUTH_TOKEN or authToken option.
+  // Auto-generated so all transports require auth by default. Override via REDROB_DESIGN_MCP_AUTH_TOKEN or authToken option.
   // Pass authToken: null explicitly to disable auth entirely.
   const authToken =
     options.authToken === undefined ? randomBytes(16).toString('hex') : options.authToken
@@ -304,7 +304,7 @@ function buildServerContext(options: ServerOptions) {
     process.stderr.write(
       `WARNING: MCP server is running without authentication on TCP port ${httpPort}. ` +
         'Any local process can interact with the server. ' +
-        'Set OPENPENCIL_MCP_AUTH_TOKEN to enable auth, or use PORT=0 for socket-only transport.\n'
+        'Set REDROB_DESIGN_MCP_AUTH_TOKEN to enable auth, or use PORT=0 for socket-only transport.\n'
     )
   }
 

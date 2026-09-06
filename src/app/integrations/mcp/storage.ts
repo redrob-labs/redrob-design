@@ -3,7 +3,7 @@ import { ref } from 'vue'
 
 import { IS_BROWSER } from '@redrob-design/core/constants'
 
-const MCP_CONNECTION_SETTINGS_KEY = 'open-pencil:mcp-connections'
+const MCP_CONNECTION_SETTINGS_KEY = 'redrob-design:mcp-connections'
 
 const connectionSettings = !IS_BROWSER
   ? ref<unknown>(null)

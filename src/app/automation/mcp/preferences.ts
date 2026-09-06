@@ -3,9 +3,9 @@ import { ref } from 'vue'
 
 import type { ToolDescriptor, ToolEffect } from '@redrob-design/mcp/tools'
 
-const DISABLED_TOOLS_STORAGE_KEY = 'open-pencil:mcp:disabled-tools'
-const ROOT_DIRECTORY_STORAGE_KEY = 'open-pencil:mcp:root-directory'
-const AUTHENTICATION_ENABLED_STORAGE_KEY = 'open-pencil:mcp:authentication-enabled'
+const DISABLED_TOOLS_STORAGE_KEY = 'redrob-design:mcp:disabled-tools'
+const ROOT_DIRECTORY_STORAGE_KEY = 'redrob-design:mcp:root-directory'
+const AUTHENTICATION_ENABLED_STORAGE_KEY = 'redrob-design:mcp:authentication-enabled'
 
 export const configurableMCPTools = ref<ToolDescriptor[]>([])
 

@@ -13,7 +13,7 @@ npm install -g @redrob-design/cli
 # oder
 bun add -g @redrob-design/cli
 # oder
-brew install open-pencil/tap/open-pencil
+brew install redrob-design/tap/redrob-design
 ```
 :::
 
@@ -47,7 +47,7 @@ Attributnamen wie `fontSize`, `layoutMode` und `strokeWeight` entsprechen der AP
 
 ```sh
 redrob-design node design.fig --id 1:23
-openpencil pages design.fig
+redrobdesign pages design.fig
 redrob-design variables design.fig
 ```
 

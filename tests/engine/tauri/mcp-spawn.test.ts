@@ -134,11 +134,11 @@ describe('Tauri MCP spawning', () => {
           options: {
             env: {
               PORT: '7600',
-              OPENPENCIL_MCP_AUTH_TOKEN: expect.any(String),
-              OPENPENCIL_MCP_CORS_ORIGIN: 'tauri://localhost',
-              OPENPENCIL_MCP_TCP: '1',
-              OPENPENCIL_MCP_ROOT: '/mock/home',
-              OPENPENCIL_MCP_APP_TIMEOUT_MS: '30000'
+              REDROB_DESIGN_MCP_AUTH_TOKEN: expect.any(String),
+              REDROB_DESIGN_MCP_CORS_ORIGIN: 'tauri://localhost',
+              REDROB_DESIGN_MCP_TCP: '1',
+              REDROB_DESIGN_MCP_ROOT: '/mock/home',
+              REDROB_DESIGN_MCP_APP_TIMEOUT_MS: '30000'
             }
           }
         })

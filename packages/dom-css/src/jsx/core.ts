@@ -1,6 +1,6 @@
 import type { DesignDocument, DesignNode, DesignStyleDeclaration } from '../types'
 
-export const Fragment = Symbol.for('open-pencil.dom-css.fragment')
+export const Fragment = Symbol.for('redrob-design.dom-css.fragment')
 
 type JSXComponent = (props: JSXElementProps) => JSXChild
 export type JSXTag = string | JSXComponent | typeof Fragment

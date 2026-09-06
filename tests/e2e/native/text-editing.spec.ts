@@ -9,8 +9,8 @@ import { withNativeEventRecorder } from '#tests/helpers/tauri/event-recorder'
 describe('native text editing', () => {
   it('commits ordinary WebView input exactly once', async () => {
     await browser.waitUntil(
-      async () => browser.execute(() => Boolean(window.openPencil?.getStore?.())),
-      { timeout: 30_000, timeoutMsg: 'OpenPencil editor did not initialize' }
+      async () => browser.execute(() => Boolean(window.redrobDesign?.getStore?.())),
+      { timeout: 30_000, timeoutMsg: 'RedrobDesign editor did not initialize' }
     )
     await createNativeTextFixture('Replace me')
     const textarea = await $('textarea[aria-hidden="true"]')

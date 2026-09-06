@@ -1,6 +1,6 @@
 # Figma Feature Matrix
 
-Feature-by-feature comparison of Figma Design capabilities with Open Pencil's current implementation status.
+Feature-by-feature comparison of Figma Design capabilities with Redrob Design's current implementation status.
 
 ::: tip Status Legend
 ✅ Supported — feature works end-to-end · 🟡 Partial — core behavior exists, some sub-features missing · 🔲 Not yet implemented

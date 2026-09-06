@@ -32,8 +32,8 @@ test.describe.serial('large-document performance', () => {
       await canvas.waitForRender()
 
       await page.evaluate(() => {
-        const store = window.openPencil?.getStore?.()
-        if (!store) throw new Error('OpenPencil store not initialized')
+        const store = window.redrobDesign?.getStore?.()
+        if (!store) throw new Error('RedrobDesign store not initialized')
         const originalHitTest = store.graph.hitTest.bind(store.graph)
         let calls = 0
         let totalMs = 0
@@ -64,10 +64,10 @@ test.describe.serial('large-document performance', () => {
       })
 
       const result = await page.evaluate((profile): Promise<TimingSummary> => {
-        const store = window.openPencil?.getStore?.()
-        if (!store) throw new Error('OpenPencil store not initialized')
+        const store = window.redrobDesign?.getStore?.()
+        if (!store) throw new Error('RedrobDesign store not initialized')
         const renderer = store.renderer
-        if (!renderer) throw new Error('OpenPencil renderer not initialized')
+        if (!renderer) throw new Error('RedrobDesign renderer not initialized')
         const graph = store.graph
         const iterations = 50
 

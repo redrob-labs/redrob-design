@@ -326,7 +326,7 @@ export type {
 export {
   provideBindingProvider,
   useBindingProvider,
-  useOpenPencilBindingProvider,
+  useRedrobDesignBindingProvider,
   useNumberBindingProvider,
   useColorBindingProvider
 } from '#vue/controls/binding-provider'
@@ -336,7 +336,7 @@ export type {
   BindingState,
   BindingTarget,
   BoundEditPolicy,
-  OpenPencilBindingProviderOptions
+  RedrobDesignBindingProviderOptions
 } from '#vue/controls/binding-provider'
 export {
   NumberFieldRoot,

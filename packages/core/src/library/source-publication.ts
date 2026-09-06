@@ -1,7 +1,7 @@
 import type { SceneGraph } from '@redrob-design/scene-graph'
 
 export const SOURCE_LIBRARY_PUBLICATION_PLUGIN_KEY = 'sourceLibraryPublication'
-const OPEN_PENCIL_PLUGIN_ID = 'open-pencil'
+const REDROB_DESIGN_PLUGIN_ID = 'redrob-design'
 
 export interface SourceLibraryPublication {
   libraryId: string
@@ -25,7 +25,7 @@ export function readSourceLibraryPublication(graph: SceneGraph): SourceLibraryPu
   const root = graph.getNode(graph.rootId)
   const entry = root?.pluginData.find(
     (item) =>
-      item.pluginId === OPEN_PENCIL_PLUGIN_ID && item.key === SOURCE_LIBRARY_PUBLICATION_PLUGIN_KEY
+      item.pluginId === REDROB_DESIGN_PLUGIN_ID && item.key === SOURCE_LIBRARY_PUBLICATION_PLUGIN_KEY
   )
   if (!entry) return null
   try {
@@ -47,12 +47,12 @@ export function writeSourceLibraryPublication(
       ...root.pluginData.filter(
         (entry) =>
           !(
-            entry.pluginId === OPEN_PENCIL_PLUGIN_ID &&
+            entry.pluginId === REDROB_DESIGN_PLUGIN_ID &&
             entry.key === SOURCE_LIBRARY_PUBLICATION_PLUGIN_KEY
           )
       ),
       {
-        pluginId: OPEN_PENCIL_PLUGIN_ID,
+        pluginId: REDROB_DESIGN_PLUGIN_ID,
         key: SOURCE_LIBRARY_PUBLICATION_PLUGIN_KEY,
         value: JSON.stringify(publication)
       }

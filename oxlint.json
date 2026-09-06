@@ -137,8 +137,8 @@
     ],
     "vue/require-default-export": "error",
     "vue/require-typed-ref": "error",
-    "open-pencil/no-import-type-annotations": "error",
-    "open-pencil/no-inline-named-types": [
+    "redrob-design/no-import-type-annotations": "error",
+    "redrob-design/no-inline-named-types": [
       "error",
       {
         "Vector": "x:number,y:number",
@@ -148,76 +148,76 @@
         "Matrix": "m00:number,m01:number,m02:number,m10:number,m11:number,m12:number"
       }
     ],
-    "open-pencil/no-structuredclone-scene-arrays": "error",
-    "open-pencil/no-vue-style-blocks": "error",
-    "open-pencil/no-native-title-attributes-in-vue": "error",
-    "open-pencil/no-hardcoded-tip-labels-in-vue": "error",
-    "open-pencil/no-raw-svg-in-app-vue-templates": "error",
-    "open-pencil/no-ui-helper-calls-in-vue-templates": "error",
-    "open-pencil/no-large-property-section-components": "error",
-    "open-pencil/no-raw-test-id-string-props": "error",
-    "open-pencil/no-dynamic-data-test-id-in-vue": "error",
-    "open-pencil/no-test-id-helper-bind-in-vue": "error",
-    "open-pencil/no-invalid-test-id-attributes": "error",
-    "open-pencil/no-raw-test-id-selectors-in-tests": "error",
-    "open-pencil/no-generated-test-id-literals": "error",
-    "open-pencil/no-browser-side-effects-in-vue": "error",
-    "open-pencil/no-document-query-selector-in-vue": "error",
-    "open-pencil/no-direct-selection-tool-state-mutation": "error",
-    "open-pencil/no-math-random": "error",
-    "open-pencil/no-hardcoded-color-constants": "error",
-    "open-pencil/no-hand-rolled-color": "error",
-    "open-pencil/no-raw-console-format": "off",
-    "open-pencil/no-silent-catch": "error",
-    "open-pencil/no-typeof-window-check": "error",
-    "open-pencil/no-vue-self-package-imports": "error",
-    "open-pencil/no-cross-package-source-imports": "error",
-    "open-pencil/no-app-imports-in-packages": "error",
-    "open-pencil/no-core-framework-imports": "error",
-    "open-pencil/no-direct-storage-access": "error",
-    "open-pencil/no-deep-parent-relative-imports": "error",
-    "open-pencil/no-broad-double-cast": "error",
-    "open-pencil/no-unknown-record-double-cast": "error",
-    "open-pencil/no-broad-unknown-type-assertions": "error",
-    "open-pencil/no-local-json-object-aliases": "error",
-    "open-pencil/no-duplicate-type-shapes": "error",
-    "open-pencil/no-ts-suppression-comments": "error",
-    "open-pencil/no-reflect-delete-global-this-outside-tests": "error",
-    "open-pencil/no-core-browser-globals": "error",
-    "open-pencil/no-direct-open-pencil-window-internals": "error",
-    "open-pencil/no-direct-open-pencil-browser-store": "error",
-    "open-pencil/no-function-alias-imports": "error",
-    "open-pencil/max-composition-root-lines": [
+    "redrob-design/no-structuredclone-scene-arrays": "error",
+    "redrob-design/no-vue-style-blocks": "error",
+    "redrob-design/no-native-title-attributes-in-vue": "error",
+    "redrob-design/no-hardcoded-tip-labels-in-vue": "error",
+    "redrob-design/no-raw-svg-in-app-vue-templates": "error",
+    "redrob-design/no-ui-helper-calls-in-vue-templates": "error",
+    "redrob-design/no-large-property-section-components": "error",
+    "redrob-design/no-raw-test-id-string-props": "error",
+    "redrob-design/no-dynamic-data-test-id-in-vue": "error",
+    "redrob-design/no-test-id-helper-bind-in-vue": "error",
+    "redrob-design/no-invalid-test-id-attributes": "error",
+    "redrob-design/no-raw-test-id-selectors-in-tests": "error",
+    "redrob-design/no-generated-test-id-literals": "error",
+    "redrob-design/no-browser-side-effects-in-vue": "error",
+    "redrob-design/no-document-query-selector-in-vue": "error",
+    "redrob-design/no-direct-selection-tool-state-mutation": "error",
+    "redrob-design/no-math-random": "error",
+    "redrob-design/no-hardcoded-color-constants": "error",
+    "redrob-design/no-hand-rolled-color": "error",
+    "redrob-design/no-raw-console-format": "off",
+    "redrob-design/no-silent-catch": "error",
+    "redrob-design/no-typeof-window-check": "error",
+    "redrob-design/no-vue-self-package-imports": "error",
+    "redrob-design/no-cross-package-source-imports": "error",
+    "redrob-design/no-app-imports-in-packages": "error",
+    "redrob-design/no-core-framework-imports": "error",
+    "redrob-design/no-direct-storage-access": "error",
+    "redrob-design/no-deep-parent-relative-imports": "error",
+    "redrob-design/no-broad-double-cast": "error",
+    "redrob-design/no-unknown-record-double-cast": "error",
+    "redrob-design/no-broad-unknown-type-assertions": "error",
+    "redrob-design/no-local-json-object-aliases": "error",
+    "redrob-design/no-duplicate-type-shapes": "error",
+    "redrob-design/no-ts-suppression-comments": "error",
+    "redrob-design/no-reflect-delete-global-this-outside-tests": "error",
+    "redrob-design/no-core-browser-globals": "error",
+    "redrob-design/no-direct-redrob-design-window-internals": "error",
+    "redrob-design/no-direct-redrob-design-browser-store": "error",
+    "redrob-design/no-function-alias-imports": "error",
+    "redrob-design/max-composition-root-lines": [
       "error",
       {
         "max": 260
       }
     ],
-    "open-pencil/no-core-parent-relative-imports": "error",
-    "open-pencil/no-mcp-parent-relative-imports": "error",
-    "open-pencil/no-vue-parent-relative-imports": "error",
-    "open-pencil/no-cli-parent-relative-imports": "error",
-    "open-pencil/no-mcp-core-barrel-imports": "error",
-    "open-pencil/no-cli-core-barrel-imports": "error",
-    "open-pencil/no-script-core-barrel-imports": "error",
-    "open-pencil/no-core-self-package-imports": "error",
-    "open-pencil/no-inline-prompt-constants": "error",
-    "open-pencil/no-app-vue-core-barrel-imports": "error",
-    "open-pencil/no-direct-graph-emitter-subscriptions": "error",
-    "open-pencil/no-on-unmounted-in-composition-roots": "error",
-    "open-pencil/no-composable-state-wrappers": "error",
-    "open-pencil/prefer-vueuse-intervals": "error",
-    "open-pencil/prefer-vueuse-timeouts": "error",
-    "open-pencil/vue-component-file-pascal-case": "error",
-    "open-pencil/component-namespace-casing": "error",
-    "open-pencil/no-mixed-case-acronym-identifiers": "error",
-    "open-pencil/non-component-source-directories-kebab-case": "error",
-    "open-pencil/no-component-root-sibling-folder": "error",
-    "open-pencil/no-flat-kiwi-modules": "error",
-    "open-pencil/no-bun-globals-in-cli": "error",
-    "open-pencil/no-top-level-prefixed-test-files": "error",
-    "open-pencil/no-conditional-object-spreads": "error",
-    "open-pencil/no-sibling-domain-prefixed-files": "error",
+    "redrob-design/no-core-parent-relative-imports": "error",
+    "redrob-design/no-mcp-parent-relative-imports": "error",
+    "redrob-design/no-vue-parent-relative-imports": "error",
+    "redrob-design/no-cli-parent-relative-imports": "error",
+    "redrob-design/no-mcp-core-barrel-imports": "error",
+    "redrob-design/no-cli-core-barrel-imports": "error",
+    "redrob-design/no-script-core-barrel-imports": "error",
+    "redrob-design/no-core-self-package-imports": "error",
+    "redrob-design/no-inline-prompt-constants": "error",
+    "redrob-design/no-app-vue-core-barrel-imports": "error",
+    "redrob-design/no-direct-graph-emitter-subscriptions": "error",
+    "redrob-design/no-on-unmounted-in-composition-roots": "error",
+    "redrob-design/no-composable-state-wrappers": "error",
+    "redrob-design/prefer-vueuse-intervals": "error",
+    "redrob-design/prefer-vueuse-timeouts": "error",
+    "redrob-design/vue-component-file-pascal-case": "error",
+    "redrob-design/component-namespace-casing": "error",
+    "redrob-design/no-mixed-case-acronym-identifiers": "error",
+    "redrob-design/non-component-source-directories-kebab-case": "error",
+    "redrob-design/no-component-root-sibling-folder": "error",
+    "redrob-design/no-flat-kiwi-modules": "error",
+    "redrob-design/no-bun-globals-in-cli": "error",
+    "redrob-design/no-top-level-prefixed-test-files": "error",
+    "redrob-design/no-conditional-object-spreads": "error",
+    "redrob-design/no-sibling-domain-prefixed-files": "error",
     "array-callback-return": "error",
     "block-scoped-var": "error",
     "default-case-last": "error",
@@ -423,9 +423,9 @@
         "tools/lint/tests/**/*.ts"
       ],
       "rules": {
-        "open-pencil/no-generated-test-id-literals": "off",
-        "open-pencil/no-hardcoded-color-constants": "off",
-        "open-pencil/no-mixed-case-acronym-identifiers": "off"
+        "redrob-design/no-generated-test-id-literals": "off",
+        "redrob-design/no-hardcoded-color-constants": "off",
+        "redrob-design/no-mixed-case-acronym-identifiers": "off"
       }
     },
     {
@@ -434,7 +434,7 @@
         "packages/*/src/**/*.ts"
       ],
       "rules": {
-        "open-pencil/no-useless-pass-through-wrappers": "error"
+        "redrob-design/no-useless-pass-through-wrappers": "error"
       }
     },
     {
@@ -471,7 +471,7 @@
         "packages/cli/src/commands/**"
       ],
       "rules": {
-        "open-pencil/no-raw-console-format": "error"
+        "redrob-design/no-raw-console-format": "error"
       }
     },
     {
@@ -498,7 +498,7 @@
         "packages/scene-graph/src/constants.ts"
       ],
       "rules": {
-        "open-pencil/no-hardcoded-color-constants": "off"
+        "redrob-design/no-hardcoded-color-constants": "off"
       }
     },
     {
@@ -506,7 +506,7 @@
         "packages/scene-graph/src/index.ts"
       ],
       "rules": {
-        "open-pencil/no-direct-graph-emitter-subscriptions": "off"
+        "redrob-design/no-direct-graph-emitter-subscriptions": "off"
       }
     },
     {
@@ -523,11 +523,11 @@
         "packages/brand/src/**"
       ],
       "rules": {
-        "open-pencil/no-mixed-case-acronym-identifiers": "off",
-        "open-pencil/no-hardcoded-color-constants": "off",
-        "open-pencil/no-broad-double-cast": "off",
-        "open-pencil/no-broad-unknown-type-assertions": "off",
-        "open-pencil/no-useless-pass-through-wrappers": "off",
+        "redrob-design/no-mixed-case-acronym-identifiers": "off",
+        "redrob-design/no-hardcoded-color-constants": "off",
+        "redrob-design/no-broad-double-cast": "off",
+        "redrob-design/no-broad-unknown-type-assertions": "off",
+        "redrob-design/no-useless-pass-through-wrappers": "off",
         "unicorn/consistent-existence-index-check": "off",
         "unicorn/prefer-string-starts-ends-with": "off",
         "typescript/no-unnecessary-type-assertion": "off",
@@ -543,7 +543,7 @@
         "src/app/i18n/design-tokens/**"
       ],
       "rules": {
-        "open-pencil/no-mixed-case-acronym-identifiers": "off"
+        "redrob-design/no-mixed-case-acronym-identifiers": "off"
       }
     }
   ],

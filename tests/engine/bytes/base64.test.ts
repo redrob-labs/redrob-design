@@ -16,7 +16,7 @@ describe('Base64 byte helpers', () => {
   })
 
   test('encode and decode Unicode text as UTF-8', () => {
-    const text = 'OpenPencil — Привет 🎨'
+    const text = 'RedrobDesign — Привет 🎨'
     expect(decodeBase64Text(encodeBase64Text(text))).toBe(text)
   })
 

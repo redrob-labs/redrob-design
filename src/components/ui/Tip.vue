@@ -7,7 +7,7 @@ import { useTooltipUI } from '@/components/ui/tooltip'
 const TOOLTIP_OPEN_DELAY_MS = 400
 const TOOLTIP_SIDE_OFFSET = 4
 const TOOLTIP_VIEWPORT_PADDING = 8
-const TOOLTIP_CLAIM_EVENT = 'open-pencil:tooltip-claim'
+const TOOLTIP_CLAIM_EVENT = 'redrob-design:tooltip-claim'
 
 type TooltipSide = 'top' | 'bottom' | 'left' | 'right'
 

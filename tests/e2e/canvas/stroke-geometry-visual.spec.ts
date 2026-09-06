@@ -4,8 +4,8 @@ const editor = useEditorSetupWithClear('/?test&no-chrome&no-rulers')
 
 test('stroke caps joins and miter limits', async () => {
   await editor.page.evaluate(() => {
-    const store = window.openPencil?.getStore?.()
-    if (!store) throw new Error('OpenPencil store not initialized')
+    const store = window.redrobDesign?.getStore?.()
+    if (!store) throw new Error('RedrobDesign store not initialized')
     const pageId = store.state.currentPageId
     const color = { r: 0.23, g: 0.51, b: 0.96, a: 1 }
     const caps = ['NONE', 'ROUND', 'SQUARE'] as const

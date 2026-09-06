@@ -10,8 +10,8 @@ import { WEB_APP_ORIGIN } from '@/constants'
 
 describe('cloud S3 CORS helpers', () => {
   test('builds XML with required methods and wildcard headers', () => {
-    const xml = buildCORSConfigurationXML(['https://app.openpencil.dev', 'http://localhost:1420'])
-    expect(xml).toContain('<AllowedOrigin>https://app.openpencil.dev</AllowedOrigin>')
+    const xml = buildCORSConfigurationXML(['https://app.redrobdesign.dev', 'http://localhost:1420'])
+    expect(xml).toContain('<AllowedOrigin>https://app.redrobdesign.dev</AllowedOrigin>')
     expect(xml).toContain('<AllowedOrigin>http://localhost:1420</AllowedOrigin>')
     expect(xml).toContain('<AllowedMethod>GET</AllowedMethod>')
     expect(xml).toContain('<AllowedMethod>PUT</AllowedMethod>')
@@ -27,13 +27,13 @@ describe('cloud S3 CORS helpers', () => {
   })
 
   test('builds AWS console JSON', () => {
-    const json = JSON.parse(buildCORSConfigurationJSON(['https://app.openpencil.dev'])) as Array<{
+    const json = JSON.parse(buildCORSConfigurationJSON(['https://app.redrobdesign.dev'])) as Array<{
       AllowedOrigins: string[]
       AllowedMethods: string[]
       AllowedHeaders: string[]
     }>
     expect(json).toHaveLength(1)
-    expect(json[0]?.AllowedOrigins).toContain('https://app.openpencil.dev')
+    expect(json[0]?.AllowedOrigins).toContain('https://app.redrobdesign.dev')
     expect(json[0]?.AllowedMethods).toEqual(
       expect.arrayContaining(['GET', 'PUT', 'POST', 'DELETE', 'HEAD'])
     )

@@ -10,8 +10,8 @@ async function expectCanvas(name: string): Promise<void> {
 
 test('first edit replaces baked missing-font glyphs with visible live substitution', async () => {
   const textId = await editor.page.evaluate(() => {
-    const store = window.openPencil?.getStore?.()
-    if (!store?.renderer) throw new Error('OpenPencil renderer not initialized')
+    const store = window.redrobDesign?.getStore?.()
+    if (!store?.renderer) throw new Error('RedrobDesign renderer not initialized')
     const pageId = store.state.currentPageId
     const node = store.graph.createNode('TEXT', pageId, {
       name: 'Missing font text',
@@ -48,7 +48,7 @@ test('first edit replaces baked missing-font glyphs with visible live substituti
   })
 
   await editor.page.waitForFunction((id) => {
-    const store = window.openPencil?.getStore?.()
+    const store = window.redrobDesign?.getStore?.()
     const node = store?.graph.getNode(id)
     return node ? store?.renderer?.nodeFontReadiness(node) === 'substituted' : false
   }, textId)
@@ -61,7 +61,7 @@ test('first edit replaces baked missing-font glyphs with visible live substituti
   await expectCanvas('missing-font-live-substitution-after-first-edit')
 
   const edited = await editor.page.evaluate((id) => {
-    const store = window.openPencil?.getStore?.()
+    const store = window.redrobDesign?.getStore?.()
     const node = store?.graph.getNode(id)
     return node?.type === 'TEXT'
       ? {

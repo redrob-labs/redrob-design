@@ -3,9 +3,9 @@ import { describe, expect, test } from 'bun:test'
 import { deflateSync } from 'fflate'
 
 import {
-  buildOpenPencilClipboardHTML,
+  buildRedrobDesignClipboardHTML,
   FigmaAPI,
-  parseOpenPencilClipboard,
+  parseRedrobDesignClipboard,
   SceneGraph
 } from '@redrob-design/core'
 import type { SceneNode } from '@redrob-design/core'
@@ -48,7 +48,7 @@ describe('clipboard roundtrip with images', () => {
 
   test('migrates legacy flat instance overrides', () => {
     const legacy = {
-      format: 'openpencil/v1',
+      format: 'redrobdesign/v1',
       nodes: [
         {
           id: 'instance',
@@ -61,8 +61,8 @@ describe('clipboard roundtrip with images', () => {
     }
     const encoded = encodeBase64(deflateSync(new TextEncoder().encode(JSON.stringify(legacy))))
     const parsed = expectDefined(
-      parseOpenPencilClipboard(`<!--(openpencil)${encoded}(/openpencil)-->`),
-      'OpenPencil clipboard'
+      parseRedrobDesignClipboard(`<!--(redrobdesign)${encoded}(/redrobdesign)-->`),
+      'RedrobDesign clipboard'
     )
     const instance = parsed.nodes[0]
 
@@ -84,8 +84,8 @@ describe('clipboard roundtrip with images', () => {
     setInstanceOverride(instance.instanceOverrides, instance.id, child.id, 'text', 'Custom')
 
     const parsed = expectDefined(
-      parseOpenPencilClipboard(buildOpenPencilClipboardHTML([instance], graph)),
-      'OpenPencil clipboard'
+      parseRedrobDesignClipboard(buildRedrobDesignClipboardHTML([instance], graph)),
+      'RedrobDesign clipboard'
     )
     const pasted = parsed.nodes[0]
 
@@ -99,10 +99,10 @@ describe('clipboard roundtrip with images', () => {
   test('round-trips image bytes through clipboard', () => {
     const { graph, node, imageHash, imageBytes } = graphWithImageNode()
 
-    const html = buildOpenPencilClipboardHTML([node], graph)
-    const parsed = parseOpenPencilClipboard(html)
+    const html = buildRedrobDesignClipboardHTML([node], graph)
+    const parsed = parseRedrobDesignClipboard(html)
 
-    const clipboard = expectDefined(parsed, 'OpenPencil clipboard')
+    const clipboard = expectDefined(parsed, 'RedrobDesign clipboard')
     expect(clipboard.images.size).toBe(1)
     expect(clipboard.images.get(imageHash)).toEqual(imageBytes)
   })
@@ -110,10 +110,10 @@ describe('clipboard roundtrip with images', () => {
   test('preserves imageHash on the fill', () => {
     const { graph, node, imageHash } = graphWithImageNode()
 
-    const html = buildOpenPencilClipboardHTML([node], graph)
-    const parsed = parseOpenPencilClipboard(html)
+    const html = buildRedrobDesignClipboardHTML([node], graph)
+    const parsed = parseRedrobDesignClipboard(html)
 
-    const fill = expectDefined(parsed, 'OpenPencil clipboard').nodes[0]?.fills[0]
+    const fill = expectDefined(parsed, 'RedrobDesign clipboard').nodes[0]?.fills[0]
     expect(fill.type).toBe('IMAGE')
     expect(fill.imageHash).toBe(imageHash)
   })
@@ -159,10 +159,10 @@ describe('clipboard roundtrip with images', () => {
       ]
     })
 
-    const html = buildOpenPencilClipboardHTML([node1, node2], graph)
-    const parsed = parseOpenPencilClipboard(html)
+    const html = buildRedrobDesignClipboardHTML([node1, node2], graph)
+    const parsed = parseRedrobDesignClipboard(html)
 
-    const clipboard = expectDefined(parsed, 'OpenPencil clipboard')
+    const clipboard = expectDefined(parsed, 'RedrobDesign clipboard')
     expect(clipboard.images.size).toBe(2)
     expect(clipboard.images.get(hash1)).toEqual(bytes1)
     expect(clipboard.images.get(hash2)).toEqual(bytes2)
@@ -178,10 +178,10 @@ describe('clipboard roundtrip with images', () => {
       fills: [{ type: 'SOLID', color: { r: 1, g: 0, b: 0, a: 1 }, opacity: 1, visible: true }]
     })
 
-    const html = buildOpenPencilClipboardHTML([node], graph)
-    const parsed = parseOpenPencilClipboard(html)
+    const html = buildRedrobDesignClipboardHTML([node], graph)
+    const parsed = parseRedrobDesignClipboard(html)
 
-    expect(expectDefined(parsed, 'OpenPencil clipboard').images.size).toBe(0)
+    expect(expectDefined(parsed, 'RedrobDesign clipboard').images.size).toBe(0)
   })
 
   test('child node image hashes are collected', () => {
@@ -209,10 +209,10 @@ describe('clipboard roundtrip with images', () => {
       ]
     })
 
-    const html = buildOpenPencilClipboardHTML([frame], graph)
-    const parsed = parseOpenPencilClipboard(html)
+    const html = buildRedrobDesignClipboardHTML([frame], graph)
+    const parsed = parseRedrobDesignClipboard(html)
 
-    const clipboard = expectDefined(parsed, 'OpenPencil clipboard')
+    const clipboard = expectDefined(parsed, 'RedrobDesign clipboard')
     expect(clipboard.images.size).toBe(1)
     expect(clipboard.images.get(hash)).toEqual(bytes)
   })

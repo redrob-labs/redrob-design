@@ -6,12 +6,12 @@ import { join } from 'node:path'
 import { parseFigFile } from '@redrob-design/core/io'
 import type { SceneNode } from '@redrob-design/scene-graph'
 
-import { runOpenPencilCLI } from '#tests/helpers/cli'
+import { runRedrobDesignCLI } from '#tests/helpers/cli'
 
 setDefaultTimeout(30_000)
 
 async function createFixture() {
-  const dir = await mkdtemp(join(tmpdir(), 'open-pencil-import-cli-'))
+  const dir = await mkdtemp(join(tmpdir(), 'redrob-design-import-cli-'))
   const htmlPath = join(dir, 'card.html')
   const cssPath = join(dir, 'card.css')
 
@@ -56,7 +56,7 @@ test('import CLI writes DesignDOM JSON output', async () => {
   const { htmlPath, cssPath, dir } = await createFixture()
   const output = join(dir, 'card.json')
 
-  const { stdout, stderr, exitCode } = await runOpenPencilCLI([
+  const { stdout, stderr, exitCode } = await runRedrobDesignCLI([
     'import',
     htmlPath,
     '--css',
@@ -81,7 +81,7 @@ test('import CLI writes DesignDOM JSON output', async () => {
 })
 
 test('import CLI reads embedded HTML styles without a sidecar CSS file', async () => {
-  const dir = await mkdtemp(join(tmpdir(), 'open-pencil-import-cli-embedded-'))
+  const dir = await mkdtemp(join(tmpdir(), 'redrob-design-import-cli-embedded-'))
   const htmlPath = join(dir, 'embedded.html')
   const output = join(dir, 'embedded.json')
 
@@ -98,7 +98,7 @@ test('import CLI reads embedded HTML styles without a sidecar CSS file', async (
     </html>`
   )
 
-  const { stdout, stderr, exitCode } = await runOpenPencilCLI([
+  const { stdout, stderr, exitCode } = await runRedrobDesignCLI([
     'import',
     htmlPath,
     '--format',
@@ -122,7 +122,7 @@ test('import CLI writes a .fig that core IO can import', async () => {
   const { htmlPath, cssPath, dir } = await createFixture()
   const output = join(dir, 'card.fig')
 
-  const { stdout, stderr, exitCode } = await runOpenPencilCLI([
+  const { stdout, stderr, exitCode } = await runRedrobDesignCLI([
     'import',
     htmlPath,
     '--css',
@@ -148,7 +148,7 @@ test('import CLI writes a .fig that core IO can import', async () => {
 })
 
 test('import CLI compiles Tailwind candidates before import', async () => {
-  const dir = await mkdtemp(join(tmpdir(), 'open-pencil-import-cli-tailwind-'))
+  const dir = await mkdtemp(join(tmpdir(), 'redrob-design-import-cli-tailwind-'))
   const htmlPath = join(dir, 'tailwind.html')
   const output = join(dir, 'tailwind.json')
   const classes = ['flex', 'flex-col', 'gap-2', 'w-60', 'p-6', 'rounded-xl', 'bg-white']
@@ -158,7 +158,7 @@ test('import CLI compiles Tailwind candidates before import', async () => {
     `<article class="${classes.join(' ')}"><h1 class="text-2xl">Tailwind card</h1></article>`
   )
 
-  const { stdout, stderr, exitCode } = await runOpenPencilCLI([
+  const { stdout, stderr, exitCode } = await runRedrobDesignCLI([
     'import',
     htmlPath,
     '--tailwind',

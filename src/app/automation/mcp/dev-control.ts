@@ -1,4 +1,4 @@
-export const DEV_MCP_RESTART_PATH = '/__openpencil/mcp/restart'
+export const DEV_MCP_RESTART_PATH = '/__redrobdesign/mcp/restart'
 
 const MAX_ROOT_DIRECTORY_LENGTH = 4_096
 const MAX_DISABLED_TOOL_COUNT = 512

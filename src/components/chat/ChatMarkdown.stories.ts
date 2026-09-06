@@ -27,7 +27,7 @@ export const Prose: Story = {
   args: {
     content: `# Compact heading
 
-A paragraph with **bold text**, *emphasis*, and [a link](https://openpencil.dev).
+A paragraph with **bold text**, *emphasis*, and [a link](https://redrobdesign.dev).
 
 ## Smaller heading
 

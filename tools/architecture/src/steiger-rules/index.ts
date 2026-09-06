@@ -23,7 +23,7 @@ import {
 } from './support.ts'
 
 const preferDomainFoldersOverFilenamePrefixes: Rule = {
-  name: 'open-pencil/prefer-domain-folders-over-filename-prefixes',
+  name: 'redrob-design/prefer-domain-folders-over-filename-prefixes',
   check(root) {
     const diagnostics: Diagnostic[] = []
     for (const folder of collectFolders(root)) {
@@ -51,7 +51,7 @@ const preferDomainFoldersOverFilenamePrefixes: Rule = {
 }
 
 const scriptsAreEntrypointShims = createTextRule(
-  'open-pencil/scripts-are-entrypoint-shims',
+  'redrob-design/scripts-are-entrypoint-shims',
   (sourceRel, content) => {
     if (!sourceRel.startsWith('scripts/')) return []
     if (/^#!\/usr\/bin\/env bun\s+import ['"]\.\.\/tools\/[^'"]+['"]\s*;?$/u.test(content.trim()))
@@ -67,7 +67,7 @@ const scriptsAreEntrypointShims = createTextRule(
 const TOOL_LAYOUT_MESSAGE =
   'Tool files must live under tools/<domain>/src/** or tools/<domain>/tests/*.test.ts.'
 
-const strictToolsLayout = createFileRule('open-pencil/strict-tools-layout', (sourceRel) => {
+const strictToolsLayout = createFileRule('redrob-design/strict-tools-layout', (sourceRel) => {
   if (!sourceRel.startsWith('tools/') || !TEXT_EXTENSIONS.has(path.extname(sourceRel))) return null
   if (sourceRel === 'tools/test.ts') return null
   const [, domain, segment] = sourceRel.split('/')
@@ -79,7 +79,7 @@ const strictToolsLayout = createFileRule('open-pencil/strict-tools-layout', (sou
 })
 
 const strictTestFilePlacement = createFileRule(
-  'open-pencil/strict-test-file-placement',
+  'redrob-design/strict-test-file-placement',
   (sourceRel) => {
     if (!sourceRel.startsWith('tests/')) return null
     if (!TEXT_EXTENSIONS.has(path.extname(sourceRel))) return null
@@ -135,7 +135,7 @@ const ENGINE_TEST_DOMAIN_REDIRECTS: Array<{
 ]
 
 const noMisplacedEngineTestDomainPaths = createFileRule(
-  'open-pencil/no-misplaced-engine-test-domain-paths',
+  'redrob-design/no-misplaced-engine-test-domain-paths',
   (sourceRel) => {
     const redirect = ENGINE_TEST_DOMAIN_REDIRECTS.find(({ from }) => sourceRel.startsWith(from))
     if (redirect) {
@@ -149,7 +149,7 @@ const noMisplacedEngineTestDomainPaths = createFileRule(
 )
 
 const noKitchenSinkEngineBasicTests: Rule = {
-  name: 'open-pencil/no-kitchen-sink-engine-basic-tests',
+  name: 'redrob-design/no-kitchen-sink-engine-basic-tests',
   check(root) {
     const diagnostics: Diagnostic[] = []
     for (const file of collectFiles(root)) {
@@ -172,7 +172,7 @@ const noKitchenSinkEngineBasicTests: Rule = {
 }
 
 const noEngineOnlyAssertionsInE2E = createImportRule(
-  'open-pencil/no-engine-only-assertions-in-e2e',
+  'redrob-design/no-engine-only-assertions-in-e2e',
   (sourceRel, specifier, resolved) => {
     if (!sourceRel.startsWith('tests/e2e/')) return null
     if (specifier === 'bun:test' || resolved?.startsWith('tests/engine/')) {
@@ -183,7 +183,7 @@ const noEngineOnlyAssertionsInE2E = createImportRule(
 )
 
 const noE2EImportsInEngineTests = createImportRule(
-  'open-pencil/no-e2e-imports-in-engine-tests',
+  'redrob-design/no-e2e-imports-in-engine-tests',
   (sourceRel, _specifier, resolved) => {
     if (!sourceRel.startsWith('tests/engine/')) return null
     if (resolved?.startsWith('tests/e2e/')) {
@@ -194,7 +194,7 @@ const noE2EImportsInEngineTests = createImportRule(
 )
 
 const noRootMarkdownClutter = createFileRule(
-  'open-pencil/no-root-markdown-clutter',
+  'redrob-design/no-root-markdown-clutter',
   (sourceRel) => {
     if (sourceRel.includes('/')) return null
     if (!sourceRel.endsWith('.md')) return null
@@ -204,7 +204,7 @@ const noRootMarkdownClutter = createFileRule(
 )
 
 const noPrototypeOrGeneratedImports = createImportRule(
-  'open-pencil/no-prototype-or-generated-imports',
+  'redrob-design/no-prototype-or-generated-imports',
   (sourceRel, _specifier, resolved) => {
     if (!resolved) return null
     if (resolved.startsWith('scratch/')) {
@@ -225,7 +225,7 @@ const noPrototypeOrGeneratedImports = createImportRule(
 )
 
 const noPropertyPanelImportsInCanvas = createImportRule(
-  'open-pencil/no-property-panel-imports-in-canvas',
+  'redrob-design/no-property-panel-imports-in-canvas',
   (sourceRel, _specifier, resolved) => {
     const isCanvasSurface =
       sourceRel === 'src/components/EditorCanvas.vue' ||
@@ -241,7 +241,7 @@ const noPropertyPanelImportsInCanvas = createImportRule(
 )
 
 const noAppImportsInWorkspacePackages = createImportRule(
-  'open-pencil/no-app-imports-in-workspace-packages',
+  'redrob-design/no-app-imports-in-workspace-packages',
   (sourceRel, specifier, resolved) => {
     const isWorkspacePackage = /^packages\/[^/]+\/src\//.test(sourceRel)
     if (isWorkspacePackage && (specifier.startsWith('@/') || resolved?.startsWith('src/'))) {
@@ -252,7 +252,7 @@ const noAppImportsInWorkspacePackages = createImportRule(
 )
 
 const noPackageInternalsInApp = createImportRule(
-  'open-pencil/no-package-internals-in-app',
+  'redrob-design/no-package-internals-in-app',
   (sourceRel, specifier, resolved) => {
     if (!sourceRel.startsWith('src/')) return null
     if (
@@ -269,7 +269,7 @@ const noPackageInternalsInApp = createImportRule(
 )
 
 const noForeignPackageLocalAliases = createImportRule(
-  'open-pencil/no-foreign-package-local-aliases',
+  'redrob-design/no-foreign-package-local-aliases',
   (sourceRel, specifier) => {
     if (sourceRel.startsWith('scripts/') || sourceRel.startsWith('tests/')) return null
     for (const [alias, owner] of Object.entries(PACKAGE_ALIAS_OWNERS)) {
@@ -282,7 +282,7 @@ const noForeignPackageLocalAliases = createImportRule(
 )
 
 const noAppImportsComponentsOrViews = createImportRule(
-  'open-pencil/no-app-imports-components-or-views',
+  'redrob-design/no-app-imports-components-or-views',
   (sourceRel, _specifier, resolved) => {
     if (!sourceRel.startsWith('src/app/')) return null
     const importsAppComponent =
@@ -295,7 +295,7 @@ const noAppImportsComponentsOrViews = createImportRule(
 )
 
 const noComponentsImportViews = createImportRule(
-  'open-pencil/no-components-import-views',
+  'redrob-design/no-components-import-views',
   (sourceRel, _specifier, resolved) => {
     if (!sourceRel.startsWith('src/components/')) return null
     if (resolved?.startsWith('src/views/')) {
@@ -306,7 +306,7 @@ const noComponentsImportViews = createImportRule(
 )
 
 const noNonUIImportsInSharedUI = createImportRule(
-  'open-pencil/no-non-ui-imports-in-shared-ui',
+  'redrob-design/no-non-ui-imports-in-shared-ui',
   (sourceRel, _specifier, resolved) => {
     if (!sourceRel.startsWith('src/components/ui/')) return null
     if (resolved?.startsWith('src/components/') && !resolved.startsWith('src/components/ui/')) {
@@ -317,7 +317,7 @@ const noNonUIImportsInSharedUI = createImportRule(
 )
 
 const noViewsImportedOutsideEntry = createImportRule(
-  'open-pencil/no-views-imported-outside-entry',
+  'redrob-design/no-views-imported-outside-entry',
   (sourceRel, _specifier, resolved) => {
     if (!resolved?.startsWith('src/views/')) return null
     if (sourceRel === 'src/App.vue' || sourceRel === 'src/main.ts' || sourceRel === 'src/router.ts')
@@ -327,7 +327,7 @@ const noViewsImportedOutsideEntry = createImportRule(
 )
 
 const noAppImportsInSharedUI = createImportRule(
-  'open-pencil/no-app-imports-in-shared-ui',
+  'redrob-design/no-app-imports-in-shared-ui',
   (sourceRel, _specifier, resolved) => {
     if (!sourceRel.startsWith('src/components/ui/')) return null
     if (resolved?.startsWith('src/app/')) {
@@ -338,7 +338,7 @@ const noAppImportsInSharedUI = createImportRule(
 )
 
 const noPropertyPanelInternalsOutsidePanel = createImportRule(
-  'open-pencil/no-property-panel-internals-outside-panel',
+  'redrob-design/no-property-panel-internals-outside-panel',
   (sourceRel, _specifier, resolved) => {
     if (!resolved?.startsWith('src/components/properties/')) return null
     if (sourceRel.startsWith('src/components/properties/')) return null
@@ -350,7 +350,7 @@ const noPropertyPanelInternalsOutsidePanel = createImportRule(
 const MACOS_MODIFIER_GLYPH_PATTERN = /[⌘⌥⌃]/u
 
 const noHardcodedMacOSShortcutGlyphs = createTextRule(
-  'open-pencil/no-hardcoded-macos-shortcut-glyphs',
+  'redrob-design/no-hardcoded-macos-shortcut-glyphs',
   (sourceRel, content) => {
     if (!sourceRel.endsWith('.vue')) return []
     const diagnostics: Array<{ message: string; line?: number; column?: number }> = []
@@ -396,7 +396,7 @@ const SHARED_TEST_ID_ALLOWLIST = new Set([
 ])
 
 const noProductionTestIdsInSharedLayers = createTextRule(
-  'open-pencil/no-production-test-ids-in-shared-layers',
+  'redrob-design/no-production-test-ids-in-shared-layers',
   (sourceRel, content) => {
     const inSharedLayer =
       sourceRel.startsWith('src/components/ui/') ||
@@ -420,7 +420,7 @@ const noProductionTestIdsInSharedLayers = createTextRule(
 )
 
 const noNativeTitleAttributesInVue = createTextRule(
-  'open-pencil/no-native-title-attributes-in-vue',
+  'redrob-design/no-native-title-attributes-in-vue',
   (sourceRel, content) => {
     if (
       !sourceRel.endsWith('.vue') ||
@@ -449,7 +449,7 @@ const noNativeTitleAttributesInVue = createTextRule(
 const SHORTCUT_LABEL_PATTERN = /(?:Shift|Ctrl|Alt|Option|Cmd|Command|⌘|⇧|⌥|⌃)\s*[+)\w]/u
 
 const noShortcutTextInLabels = createTextRule(
-  'open-pencil/no-shortcut-text-in-labels',
+  'redrob-design/no-shortcut-text-in-labels',
   (sourceRel, content) => {
     if (
       sourceRel !== 'packages/vue/src/i18n/messages.ts' &&
@@ -477,7 +477,7 @@ const noShortcutTextInLabels = createTextRule(
 )
 
 const noUIImportsInCore = createImportRule(
-  'open-pencil/no-ui-imports-in-core',
+  'redrob-design/no-ui-imports-in-core',
   (sourceRel, specifier) => {
     if (!sourceRel.startsWith('packages/core/src/')) return null
     if (
@@ -493,8 +493,8 @@ const noUIImportsInCore = createImportRule(
   }
 )
 
-export const openPencilArchitecturePlugin = {
-  meta: { name: 'open-pencil-architecture', version: '0.0.0' },
+export const redrobDesignArchitecturePlugin = {
+  meta: { name: 'redrob-design-architecture', version: '0.0.0' },
   ruleDefinitions: [
     preferDomainFoldersOverFilenamePrefixes,
     noCrossPackageReexportShims,

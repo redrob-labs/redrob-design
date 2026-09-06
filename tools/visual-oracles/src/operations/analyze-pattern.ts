@@ -35,11 +35,11 @@ const { values: opts } = parseArgs({
   options: {
     figma: {
       type: 'string',
-      default: '/tmp/open-pencil-oracles/pattern-visible-source-tuned/figma.png'
+      default: '/tmp/redrob-design-oracles/pattern-visible-source-tuned/figma.png'
     },
     ours: {
       type: 'string',
-      default: '/tmp/open-pencil-oracles/pattern-visible-source-tuned/ours.png'
+      default: '/tmp/redrob-design-oracles/pattern-visible-source-tuned/ours.png'
     },
     threshold: { type: 'string', default: '10' },
     regions: { type: 'string' }
@@ -52,7 +52,7 @@ const minComponentPixels = Number(opts.threshold)
 const regions = parseRegions(opts.regions)
 
 if (!existsSync(figmaPath)) throw new Error(`Missing Figma image: ${figmaPath}`)
-if (!existsSync(oursPath)) throw new Error(`Missing OpenPencil image: ${oursPath}`)
+if (!existsSync(oursPath)) throw new Error(`Missing RedrobDesign image: ${oursPath}`)
 
 const figma = await loadImage(figmaPath)
 const ours = await loadImage(oursPath)
@@ -277,7 +277,7 @@ function nearestRowDeltas(figmaRows: RowSummary[], oursRows: RowSummary[]) {
 function rowDeltaSummary(
   rows: ReturnType<typeof pairedRowDeltas>,
   figmaRowCount: number,
-  openPencilRowCount: number
+  redrobDesignRowCount: number
 ) {
   const valid = rows.filter((row) => row.deltaY !== null && row.deltaFirstX !== null)
   if (valid.length === 0) return null
@@ -287,7 +287,7 @@ function rowDeltaSummary(
     pairedRowCount: valid.length,
     avgDeltaY: Number(avgDeltaY.toFixed(2)),
     avgDeltaFirstX: Number(avgDeltaFirstX.toFixed(2)),
-    missingOpenPencilRows: Math.max(0, figmaRowCount - openPencilRowCount),
-    extraOpenPencilRows: Math.max(0, openPencilRowCount - figmaRowCount)
+    missingRedrobDesignRows: Math.max(0, figmaRowCount - redrobDesignRowCount),
+    extraRedrobDesignRows: Math.max(0, redrobDesignRowCount - figmaRowCount)
   }
 }

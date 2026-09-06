@@ -15,8 +15,8 @@ test('preserves source publication identity across FIG save and reopen', async (
   await page.goto('/?test')
   await canvas.waitForInit()
   const componentId = await page.evaluate(() => {
-    const store = window.openPencil?.getStore?.()
-    if (!store) throw new Error('OpenPencil store not initialized')
+    const store = window.redrobDesign?.getStore?.()
+    if (!store) throw new Error('RedrobDesign store not initialized')
     const pageNode = store.graph.getNode(store.state.currentPageId)
     if (!pageNode) throw new Error('Current page missing')
     return store.graph.createNode('COMPONENT', pageNode.id, {
@@ -38,7 +38,7 @@ test('preserves source publication identity across FIG save and reopen', async (
   await page.keyboard.press('Escape')
   await expect(page.getByTestId('asset-libraries-dialog')).toBeHidden()
   const firstRevision = await page.evaluate(() => {
-    const store = window.openPencil?.getStore?.()
+    const store = window.redrobDesign?.getStore?.()
     const value = store?.graph
       .getNode(store.graph.rootId)
       ?.pluginData.find((entry) => entry.key === 'sourceLibraryPublication')?.value
@@ -57,8 +57,8 @@ test('preserves source publication identity across FIG save and reopen', async (
           close: async () => undefined
         })
       }) as FileSystemFileHandle
-    const store = window.openPencil?.getStore?.()
-    if (!store) throw new Error('OpenPencil store not initialized')
+    const store = window.redrobDesign?.getStore?.()
+    if (!store) throw new Error('RedrobDesign store not initialized')
     await store.saveFigFileAs()
     return Array.from(writes[0] ?? [])
   })
@@ -72,7 +72,7 @@ test('preserves source publication identity across FIG save and reopen', async (
   await expect
     .poll(() =>
       page.evaluate(() => {
-        const store = window.openPencil?.getStore?.()
+        const store = window.redrobDesign?.getStore?.()
         const root = store?.graph.getNode(store.graph.rootId)
         return root?.pluginData.find((entry) => entry.key === 'sourceLibraryPublication')?.value
       })
@@ -89,8 +89,8 @@ test('preserves source publication identity across FIG save and reopen', async (
   await page.keyboard.press('Escape')
 
   await page.evaluate((sourceId) => {
-    const store = window.openPencil?.getStore?.()
-    if (!store) throw new Error('OpenPencil store not initialized')
+    const store = window.redrobDesign?.getStore?.()
+    if (!store) throw new Error('RedrobDesign store not initialized')
     const component = [...store.graph.getAllNodes()].find(
       (node) => node.source.id === sourceId || node.componentKey === 'source-button'
     )
@@ -106,7 +106,7 @@ test('preserves source publication identity across FIG save and reopen', async (
   await expect(publish.getByLabel('Library ID')).toBeHidden()
 
   const secondRevision = await page.evaluate(() => {
-    const store = window.openPencil?.getStore?.()
+    const store = window.redrobDesign?.getStore?.()
     const value = store?.graph
       .getNode(store.graph.rootId)
       ?.pluginData.find((entry) => entry.key === 'sourceLibraryPublication')?.value
@@ -124,8 +124,8 @@ test('publishes, consumes, saves, and reopens a multidimensional library instanc
   await canvas.waitForInit()
 
   await page.evaluate(() => {
-    const store = window.openPencil?.getStore?.()
-    if (!store) throw new Error('OpenPencil store not initialized')
+    const store = window.redrobDesign?.getStore?.()
+    if (!store) throw new Error('RedrobDesign store not initialized')
     const pageNode = store.graph.getNode(store.state.currentPageId)
     if (!pageNode) throw new Error('Current page not found')
     const set = store.graph.createNode('COMPONENT_SET', pageNode.id, {
@@ -186,7 +186,7 @@ test('publishes, consumes, saves, and reopens a multidimensional library instanc
   await expect
     .poll(() =>
       page.evaluate(() => {
-        const store = window.openPencil?.getStore?.()
+        const store = window.redrobDesign?.getStore?.()
         return store ? [...store.graph.getAllNodes()].length : 0
       })
     )
@@ -220,8 +220,8 @@ test('publishes, consumes, saves, and reopens a multidimensional library instanc
           close: async () => undefined
         })
       }) as FileSystemFileHandle
-    const store = window.openPencil?.getStore?.()
-    if (!store) throw new Error('OpenPencil store not initialized')
+    const store = window.redrobDesign?.getStore?.()
+    if (!store) throw new Error('RedrobDesign store not initialized')
     await store.saveFigFileAs()
     return Array.from(writes[0] ?? [])
   })
@@ -242,7 +242,7 @@ test('publishes, consumes, saves, and reopens a multidimensional library instanc
   await expect
     .poll(() =>
       page.evaluate(() => {
-        const store = window.openPencil?.getStore?.()
+        const store = window.redrobDesign?.getStore?.()
         if (!store) return null
         const instance = [...store.graph.getAllNodes()].find((node) => node.type === 'INSTANCE')
         const component = instance?.componentId ? store.graph.getNode(instance.componentId) : null

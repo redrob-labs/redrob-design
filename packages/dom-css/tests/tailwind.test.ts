@@ -33,7 +33,7 @@ describe('@redrob-design/dom-css Tailwind', () => {
     const runtime = createHeadlessCSSRuntime()
     const classes = [...tailwindCardClasses]
     const document = await runtime.computeStyles(
-      runtime.parseHTML(`<article class="${classes.join(' ')}"><h1>OpenPencil</h1></article>`),
+      runtime.parseHTML(`<article class="${classes.join(' ')}"><h1>RedrobDesign</h1></article>`),
       await compileTailwindCSS(classes)
     )
     const card = document.children[0]
@@ -49,7 +49,7 @@ describe('@redrob-design/dom-css Tailwind', () => {
   it('converts Tailwind HTML to scene graph frames', async () => {
     const classes = [...tailwindInputClasses]
     const graph = await tailwindHTMLToSceneGraph(
-      `<input class="${classes.join(' ')}" value="https://openpencil.dev" />`,
+      `<input class="${classes.join(' ')}" value="https://redrobdesign.dev" />`,
       classes,
       { runtime: createHeadlessCSSRuntime() }
     )
@@ -69,7 +69,7 @@ describe('@redrob-design/dom-css Tailwind', () => {
     const runtime = createHeadlessCSSRuntime()
     const classes = [...tailwindCardClasses]
     const document = await runtime.computeStyles(
-      runtime.parseHTML(`<article class="${classes.join(' ')}"><h1>OpenPencil</h1></article>`),
+      runtime.parseHTML(`<article class="${classes.join(' ')}"><h1>RedrobDesign</h1></article>`),
       await compileTailwindCSS(classes)
     )
     const graph = designDocumentToSceneGraph(document)

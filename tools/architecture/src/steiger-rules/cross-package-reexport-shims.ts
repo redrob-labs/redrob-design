@@ -15,7 +15,7 @@ export function isCrossPackageReexportShim(sourceRel: string, content: string): 
 }
 
 export const noCrossPackageReexportShims: Rule = createTextRule(
-  'open-pencil/no-cross-package-reexport-shims',
+  'redrob-design/no-cross-package-reexport-shims',
   (sourceRel, content) =>
     isCrossPackageReexportShim(sourceRel, content)
       ? [

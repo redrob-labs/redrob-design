@@ -9,7 +9,7 @@ const oxlint = join(repositoryRoot, 'node_modules/.bin/oxlint')
 const plugin = join(repositoryRoot, 'lint/plugin.js')
 
 function lint(source: string): ReturnType<typeof Bun.spawnSync> {
-  const directory = mkdtempSync(join(tmpdir(), 'open-pencil-acronym-lint-'))
+  const directory = mkdtempSync(join(tmpdir(), 'redrob-design-acronym-lint-'))
   temporaryDirectories.push(directory)
   const config = join(directory, 'oxlint.json')
   const file = join(directory, 'fixture.ts')
@@ -17,7 +17,7 @@ function lint(source: string): ReturnType<typeof Bun.spawnSync> {
     config,
     JSON.stringify({
       jsPlugins: [plugin],
-      rules: { 'open-pencil/no-mixed-case-acronym-identifiers': 'error' }
+      rules: { 'redrob-design/no-mixed-case-acronym-identifiers': 'error' }
     })
   )
   writeFileSync(file, source)

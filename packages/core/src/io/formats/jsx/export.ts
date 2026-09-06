@@ -17,7 +17,7 @@ import {
 } from './helpers'
 import { collectTailwindClasses } from './tailwind-classes'
 
-export type JSXFormat = 'openpencil' | 'tailwind'
+export type JSXFormat = 'redrobdesign' | 'tailwind'
 
 const NODE_TYPE_TO_TAG: Partial<Record<NodeType, string>> = {
   FRAME: 'Frame',
@@ -53,7 +53,7 @@ const NODE_TYPE_TO_TW_TAG: Partial<Record<NodeType, string>> = {
   INSTANCE: 'div'
 }
 
-// --- OpenPencil format helpers ---
+// --- RedrobDesign format helpers ---
 
 function collectGridSizingProps(node: SceneNode, props: [string, unknown][]): void {
   props.push(['grid', true])
@@ -348,7 +348,7 @@ function nodeToJSX(node: SceneNode, graph: SceneGraph, indent: number, format: J
 export function sceneNodeToJSX(
   nodeId: string,
   graph: SceneGraph,
-  format: JSXFormat = 'openpencil'
+  format: JSXFormat = 'redrobdesign'
 ): string {
   const node = graph.getNode(nodeId)
   if (!node) return ''
@@ -358,7 +358,7 @@ export function sceneNodeToJSX(
 export function selectionToJSX(
   nodeIds: string[],
   graph: SceneGraph,
-  format: JSXFormat = 'openpencil'
+  format: JSXFormat = 'redrobdesign'
 ): string {
   return nodeIds
     .map((id) => sceneNodeToJSX(id, graph, format))

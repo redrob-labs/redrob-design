@@ -25,7 +25,7 @@ redrob-design export design.fig -f html --css tailwind    # HTML mit Tailwind-Kl
 redrob-design export design.fig -f jsx --style tailwind
 ```
 
-`--style openpencil` erzeugt das native JSX-Format des [JSX-Renderers](../jsx-renderer).
+`--style redrobdesign` erzeugt das native JSX-Format des [JSX-Renderers](../jsx-renderer).
 
 ## HTML
 

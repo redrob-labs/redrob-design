@@ -41,7 +41,7 @@ test('general snapping preferences persist and apply to editor sessions', async 
   await pixelGrid.click()
   await expect
     .poll(() =>
-      page.evaluate(() => window.openPencil?.getStore?.().state.snappingPreferences ?? null)
+      page.evaluate(() => window.redrobDesign?.getStore?.().state.snappingPreferences ?? null)
     )
     .toEqual({ geometry: false, objects: false, pixelGrid: false })
 
@@ -53,7 +53,7 @@ test('general snapping preferences persist and apply to editor sessions', async 
   await expect(objects).not.toBeChecked()
   await expect(pixelGrid).not.toBeChecked()
   await expect(
-    page.evaluate(() => window.openPencil?.getStore?.().state.snappingPreferences ?? null)
+    page.evaluate(() => window.redrobDesign?.getStore?.().state.snappingPreferences ?? null)
   ).resolves.toEqual({ geometry: false, objects: false, pixelGrid: false })
 
   await geometry.click()
@@ -80,7 +80,7 @@ test('progressive tiled rendering preference persists and URL overrides take pre
   await expect(tiled).toBeChecked()
   await expect(
     page.evaluate(() =>
-      window.openPencil
+      window.redrobDesign
         ?.getStore?.()
         .canvasRenderers.some(
           (renderer) => renderer.tracksSceneSettlement && renderer.tiledSceneEnabled
@@ -97,7 +97,7 @@ test('progressive tiled rendering preference persists and URL overrides take pre
   ).toBeVisible()
   await expect(
     page.evaluate(() =>
-      window.openPencil
+      window.redrobDesign
         ?.getStore?.()
         .canvasRenderers.every(
           (renderer) => !renderer.tracksSceneSettlement || !renderer.tiledSceneEnabled

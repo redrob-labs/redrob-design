@@ -81,7 +81,7 @@ export function getExportOptions(formatId: string, options?: ExportOptions): unk
       quality: options?.quality
     }
   }
-  if (formatId === 'jsx') return { format: options?.jsxFormat ?? 'openpencil' }
+  if (formatId === 'jsx') return { format: options?.jsxFormat ?? 'redrobdesign' }
   return undefined
 }
 

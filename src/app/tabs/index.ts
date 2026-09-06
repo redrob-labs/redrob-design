@@ -8,7 +8,7 @@ import { populateLazyFigImportRoots } from '@redrob-design/core/kiwi'
 import { computeAllLayouts } from '@redrob-design/core/layout'
 import type { SceneGraph } from '@redrob-design/scene-graph'
 
-import { setOpenPencilStore } from '@/app/browser-bridge'
+import { setRedrobDesignStore } from '@/app/browser-bridge'
 import { describeDiagnosticError, recordStorageFailure } from '@/app/diagnostics'
 import { readFigDocument } from '@/app/document/io/fig'
 import { applyImportedDocument } from '@/app/document/io/imported-document'
@@ -139,7 +139,7 @@ function activateTab(tab: Tab) {
   activeTabId.value = tab.id
   setActiveEditorStore(tab.store)
   triggerRef(tabsRef)
-  setOpenPencilStore(tab.store)
+  setRedrobDesignStore(tab.store)
 }
 
 export function switchTab(tabId: string) {

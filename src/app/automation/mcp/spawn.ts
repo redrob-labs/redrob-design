@@ -136,8 +136,8 @@ async function computeExpectedDiscoveryPath(): Promise<string> {
  * compromised server could redirect us to a malicious path. This is mitigated
  * by the fact that the server is on localhost and was spawned by us. The
  * fallback exists because local computation can be wrong (e.g., XDG_RUNTIME_DIR
- * mismatches on Linux where the server uses `$XDG_RUNTIME_DIR/openpencil` but
- * the local computation falls back to `~/.openpencil`).
+ * mismatches on Linux where the server uses `$XDG_RUNTIME_DIR/redrobdesign` but
+ * the local computation falls back to `~/.redrobdesign`).
  */
 async function resolveDiscoveryPath(healthDiscoveryPath?: string): Promise<string> {
   const expected = await computeExpectedDiscoveryPath()
@@ -387,12 +387,12 @@ async function startMCPIfNeeded(): Promise<AutomationServerHandle | null> {
   const command = Command.create(resolved.command, resolved.args, {
     env: {
       PORT: String(AUTOMATION_HTTP_PORT),
-      OPENPENCIL_MCP_AUTH_TOKEN: authToken ?? '',
-      OPENPENCIL_MCP_CORS_ORIGIN: window.location.origin,
-      OPENPENCIL_MCP_TCP: '1',
-      OPENPENCIL_MCP_ROOT: mcpRoot,
-      OPENPENCIL_MCP_APP_TIMEOUT_MS: String(MCP_APP_ATTACH_TIMEOUT_MS),
-      OPENPENCIL_MCP_DISABLED_TOOLS: serializeDisabledTools(disabledMCPTools.value)
+      REDROB_DESIGN_MCP_AUTH_TOKEN: authToken ?? '',
+      REDROB_DESIGN_MCP_CORS_ORIGIN: window.location.origin,
+      REDROB_DESIGN_MCP_TCP: '1',
+      REDROB_DESIGN_MCP_ROOT: mcpRoot,
+      REDROB_DESIGN_MCP_APP_TIMEOUT_MS: String(MCP_APP_ATTACH_TIMEOUT_MS),
+      REDROB_DESIGN_MCP_DISABLED_TOOLS: serializeDisabledTools(disabledMCPTools.value)
     }
   })
 
@@ -481,7 +481,7 @@ export async function spawnMCPIfNeeded(): Promise<AutomationServerHandle | null>
 }
 
 /**
- * Returns the user's home directory. Used as the default OPENPENCIL_MCP_ROOT
+ * Returns the user's home directory. Used as the default REDROB_DESIGN_MCP_ROOT
  * so file-scoped tools operate on paths inside ~, which is writable and
  * matches user expectations. Throws if the Tauri path plugin is unavailable
  * — this function is only invoked under !import.meta.env.DEV && isTauri(),

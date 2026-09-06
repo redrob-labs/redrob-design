@@ -27,7 +27,7 @@ import Tip from '@/components/ui/Tip.vue'
 
 const emit = defineEmits<{ 'new-document': [] }>()
 const { panels, locale, storage, files, common, settings } = useI18n()
-const view = useLocalStorage<'grid' | 'list'>('open-pencil:home-files-view', 'grid')
+const view = useLocalStorage<'grid' | 'list'>('redrob-design:home-files-view', 'grid')
 const query = ref('')
 const openError = ref<string | null>(null)
 const storageConfigured = ref(storagePreferencesComplete(activeStorageProviderID.value))

@@ -8,7 +8,7 @@ Jeśli chcesz zbudować własny produkt na bazie Redrob Design, a nie tylko korz
 
 ## Aplikacja na komputer
 
-Gotowe wersje dla macOS, Windows i Linux są dostępne na [stronie wydań](https://github.com/open-pencil/open-pencil/releases/latest).
+Gotowe wersje dla macOS, Windows i Linux są dostępne na [stronie wydań](https://github.com/redrob-design/redrob-design/releases/latest).
 
 | Platforma | Plik |
 |-----------|------|
@@ -21,7 +21,7 @@ Gotowe wersje dla macOS, Windows i Linux są dostępne na [stronie wydań](https
 ## Instalacja w macOS przez Homebrew
 
 ```sh
-brew install open-pencil/tap/open-pencil
+brew install redrob-design/tap/redrob-design
 ```
 
 Polecenie instaluje najnowszą podpisaną wersję dla komputerów Mac z Apple Silicon lub procesorem Intel. Homebrew tap jest aktualizowany przy każdym wydaniu.
@@ -36,8 +36,8 @@ Polecenie instaluje najnowszą podpisaną wersję dla komputerów Mac z Apple Si
 ### Instalacja
 
 ```sh
-git clone https://github.com/open-pencil/open-pencil.git
-cd open-pencil
+git clone https://github.com/redrob-design/redrob-design.git
+cd redrob-design
 bun install
 ```
 

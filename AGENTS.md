@@ -1,4 +1,4 @@
-# OpenPencil
+# RedrobDesign
 
 Vue 3 + CanvasKit (Skia WASM) + Yoga WASM design editor. Tauri v2 desktop, also runs in browser.
 
@@ -24,9 +24,9 @@ The root Tauri/Vite app lives in `src/`; app services and state belong under `sr
 
 ### Public package exports
 
-Across package/app boundaries, import the owning package's public exports—never workspace internals or forwarding-only shims. `@open-pencil/scene-graph` owns graph types and primitives; `@open-pencil/kiwi` owns low-level Kiwi/FIG helpers; `@open-pencil/core` provides the compatibility barrel plus targeted subpaths listed in `packages/core/package.json`.
+Across package/app boundaries, import the owning package's public exports—never workspace internals or forwarding-only shims. `@redrob-design/scene-graph` owns graph types and primitives; `@redrob-design/kiwi` owns low-level Kiwi/FIG helpers; `@redrob-design/core` provides the compatibility barrel plus targeted subpaths listed in `packages/core/package.json`.
 
-CanvasKit runtime loading is centralized in `@open-pencil/core/canvaskit`. Headless raster export may dynamically load `canvaskit-wasm/full`; elsewhere prefer `import type` and pass CanvasKit in.
+CanvasKit runtime loading is centralized in `@redrob-design/core/canvaskit`. Headless raster export may dynamically load `canvaskit-wasm/full`; elsewhere prefer `import type` and pass CanvasKit in.
 
 ### Editor architecture
 
@@ -44,7 +44,7 @@ The app editor session (`src/app/editor/session/create.ts`) is a Vue wrapper aro
 
 Headless SDK fields compose variable/token binding through `BindingProvider` and the `BindableValue` primitives in `packages/vue/src/controls/binding-provider/` and `packages/vue/src/primitives/BindableValue/`. Keep numeric interaction in `NumberField`; providers own binding lookup, mutation, and undo batching.
 
-Property-panel anatomy in `packages/vue/src/primitives/PropertySection/`, `SegmentedControl/`, and `PropertyList/` is controlled and editor-agnostic. Connect PropertyList events to OpenPencil selection and undo through `useEditorPropertyList()` or an app adapter; never call `useEditor()` from these primitives.
+Property-panel anatomy in `packages/vue/src/primitives/PropertySection/`, `SegmentedControl/`, and `PropertyList/` is controlled and editor-agnostic. Connect PropertyList events to RedrobDesign selection and undo through `useEditorPropertyList()` or an app adapter; never call `useEditor()` from these primitives.
 
 ### Settings and credentials
 
@@ -60,17 +60,17 @@ App dialogs compose the Reka-backed components under `src/components/ui/dialog/`
 
 ## Commands
 
-- `bun run dev:portless` — preferred browser server at `https://open-pencil.localhost`; worktrees use `https://<branch>.open-pencil.localhost`.
+- `bun run dev:portless` — preferred browser server at `https://redrob-design.localhost`; worktrees use `https://<branch>.redrob-design.localhost`.
 - `bun run dev` — fixed `http://localhost:1420` server for Playwright, Tauri, and Dev Containers.
 - `bun run check` — complete build, lint, type, architecture, docs, package, dependency, security, tooling, and duplication gate.
 - `bun run format` — format and sort imports.
 - `bun run test:unit` / `bun run test` — engine/unit and Playwright suites.
 - `bun run tauri dev` — desktop app with hot reload.
-- `bun open-pencil --help` — current CLI command list.
+- `bun redrob-design --help` — current CLI command list.
 
 ## Git worktrees and development servers
 
-Prefer `dev:portless`, especially in worktrees. It assigns branch-specific app and `mcp.open-pencil` sibling URLs with isolated runtime discovery. Use fixed-port `dev` only for Playwright, Tauri, and Dev Container flows.
+Prefer `dev:portless`, especially in worktrees. It assigns branch-specific app and `mcp.redrob-design` sibling URLs with isolated runtime discovery. Use fixed-port `dev` only for Playwright, Tauri, and Dev Container flows.
 
 ## Releases & CI
 
@@ -109,7 +109,7 @@ Use Conventional Commits (`feat`, `fix`, `refactor`, `perf`, `docs`, `test`, `bu
 
 ## ACP and collaboration
 
-- Harness agents live in the optional `@open-pencil/harness` Node companion. Keep it backend-neutral, persist only opaque non-secret resume state, expose the bounded JSONL protocol, and never bundle a JavaScript runtime into Tauri. Pi's in-memory `just-bash` cannot recover across process restarts.
+- Harness agents live in the optional `@redrob-design/harness` Node companion. Keep it backend-neutral, persist only opaque non-secret resume state, expose the bounded JSONL protocol, and never bundle a JavaScript runtime into Tauri. Pi's in-memory `just-bash` cannot recover across process restarts.
 - ACP transport lives under `src/app/ai/acp/**`; provider definitions in `packages/core/src/constants.ts`; profiles in `src/app/ai/models/**`. Keep provider connections, reusable profiles, and role assignments separate, and resolve credentials lazily.
 - ACP process changes require checking `desktop/capabilities/**`.
 - Collaboration lives under `src/app/collab/**` and uses Trystero, Yjs, and awareness; preserve crypto-safe room IDs and peer cleanup.
@@ -132,7 +132,7 @@ Private tooling belongs under `tools/<domain>/{src,tests}`, with kebab-case doma
 
 - Use `@/` for app cross-directory imports. Package aliases are `#vue/*`, `#cli/*`, `#dom-css/*`, `#mcp/*`, and `#core/*`; prefer clear relative imports nearby.
 - No `any`, non-null assertions, or `Math.random()`; use precise types, guards, and `crypto.getRandomValues()`.
-- Reuse named types and primitives from `@open-pencil/scene-graph`; do not respell `Color`, `Vector`, `SceneNode`, `Effect`, `Fill`, or `Stroke` shapes.
+- Reuse named types and primitives from `@redrob-design/scene-graph`; do not respell `Color`, `Vector`, `SceneNode`, `Effect`, `Fill`, or `Stroke` shapes.
 - Window API declarations belong in `src/global.d.ts` or `packages/core/src/global.d.ts`.
 - Use `culori` for color conversion and existing dependencies before custom implementations.
 - Prefer VueUse for common browser, event, focus, clipboard, storage, and timer behavior, but keep one-shot rAF or explicit service-owned timers when clearer.
@@ -171,7 +171,7 @@ Keep responsibilities distinct: engine tests cover state contracts, Playwright b
 - Section/frame title text never scales — render at fixed font size, ellipsize to fit
 - Rulers are rendered on the canvas (not DOM), with selection range badges that don't overlap tick numbers
 - Remote cursors: Figma-style colored arrows with white border + name pill, rendered in screen space
-- Pixel-affecting renderer features need committed visual coverage, not just mock/geometry assertions. Add or update a Playwright canvas snapshot for changes to fills, gradients, images, blend modes, masks, boolean geometry, corners, strokes, shadows, blur, text rendering, or demo showcase scenes. Use targeted snapshot updates such as `bunx playwright test tests/e2e/canvas/renderer-visuals.spec.ts --project=openpencil --update-snapshots` and then rerun the same test without `--update-snapshots`.
+- Pixel-affecting renderer features need committed visual coverage, not just mock/geometry assertions. Add or update a Playwright canvas snapshot for changes to fills, gradients, images, blend modes, masks, boolean geometry, corners, strokes, shadows, blur, text rendering, or demo showcase scenes. Use targeted snapshot updates such as `bunx playwright test tests/e2e/canvas/renderer-visuals.spec.ts --project=redrobdesign --update-snapshots` and then rerun the same test without `--update-snapshots`.
 
 ## Scene graph
 
@@ -216,11 +216,11 @@ Keep responsibilities distinct: engine tests cover state contracts, Playwright b
 
 ## File format
 
-- Kiwi schema/runtime/codec/container helpers live in `@open-pencil/kiwi`; complete archive parsing and SceneGraph conversion live in `@open-pencil/fig`; Core owns format-neutral orchestration, runtime fonts/workers, and thumbnails.
+- Kiwi schema/runtime/codec/container helpers live in `@redrob-design/kiwi`; complete archive parsing and SceneGraph conversion live in `@redrob-design/fig`; Core owns format-neutral orchestration, runtime fonts/workers, and thumbnails.
 - Vector networks use the reverse-engineered `vectorNetworkBlob`; codecs live under `packages/core/src/vector/` and types in Scene Graph.
 - File System Access APIs are browser APIs, not Tauri-only. Keep Safari download fallback and defer `revokeObjectURL`.
 - Detect desktop with `IS_TAURI`, never ad-hoc `__TAURI_INTERNALS__` checks.
-- Browser FIG export uses fflate/`@open-pencil/fig`; Tauri uses `build_fig_file`.
+- Browser FIG export uses fflate/`@redrob-design/fig`; Tauri uses `build_fig_file`.
 - Changes to `.fig` behavior require round-trip validation in Figma. Fixtures under `tests/fixtures/*.fig` use Git LFS; use normal `git push` when they change.
 
 ## Tauri

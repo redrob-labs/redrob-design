@@ -12,12 +12,12 @@ describe('parseListObjectsV2Xml', () => {
     const xml = `<?xml version="1.0"?>
 <ListBucketResult>
   <Contents>
-    <Key>open_pencil_storage/canvases/a1.fig</Key>
+    <Key>redrob_design_storage/canvases/a1.fig</Key>
     <LastModified>2026-01-02T03:04:05.000Z</LastModified>
     <Size>12</Size>
   </Contents>
   <Contents>
-    <Key>open_pencil_storage/canvases/a1.meta.json</Key>
+    <Key>redrob_design_storage/canvases/a1.meta.json</Key>
     <LastModified>2026-01-02T03:04:06.000Z</LastModified>
     <Size>40</Size>
   </Contents>
@@ -30,7 +30,7 @@ describe('parseListObjectsV2Xml', () => {
 
     const listed = parseListObjectsV2XML(xml)
     expect(listed).toHaveLength(3)
-    expect(listed[0]?.key).toBe('open_pencil_storage/canvases/a1.fig')
+    expect(listed[0]?.key).toBe('redrob_design_storage/canvases/a1.fig')
     expect(listed[0]?.lastModified).toBe('2026-01-02T03:04:05.000Z')
     expect(listed[0]?.size).toBe(12)
 
@@ -41,9 +41,9 @@ describe('parseListObjectsV2Xml', () => {
   })
 
   test('decodes entities and reads namespaced pagination fields', () => {
-    const xml = `<s3:ListBucketResult xmlns:s3="urn:s3"><s3:Contents><s3:Key>open_pencil_storage/canvases/a&amp;b.fig</s3:Key><s3:Size>1</s3:Size></s3:Contents><s3:IsTruncated>true</s3:IsTruncated><s3:NextContinuationToken>a&amp;b</s3:NextContinuationToken></s3:ListBucketResult>`
+    const xml = `<s3:ListBucketResult xmlns:s3="urn:s3"><s3:Contents><s3:Key>redrob_design_storage/canvases/a&amp;b.fig</s3:Key><s3:Size>1</s3:Size></s3:Contents><s3:IsTruncated>true</s3:IsTruncated><s3:NextContinuationToken>a&amp;b</s3:NextContinuationToken></s3:ListBucketResult>`
     const page = parseListObjectsV2Page(xml)
-    expect(page.objects[0]?.key).toBe('open_pencil_storage/canvases/a&b.fig')
+    expect(page.objects[0]?.key).toBe('redrob_design_storage/canvases/a&b.fig')
     expect(page.isTruncated).toBe(true)
     expect(page.nextContinuationToken).toBe('a&b')
   })

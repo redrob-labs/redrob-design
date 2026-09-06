@@ -51,7 +51,7 @@ describe('tauriFetch', () => {
       captured = args as InvokeArgs
       return {
         status: 201,
-        headers: [{ name: 'x-open-pencil', value: 'ok' }],
+        headers: [{ name: 'x-redrob-design', value: 'ok' }],
         body: [...new TextEncoder().encode('OK')]
       }
     })
@@ -64,7 +64,7 @@ describe('tauriFetch', () => {
 
     if (!captured) throw new Error('Expected proxy_http_request to be invoked')
     expect(response.status).toBe(201)
-    expect(response.headers.get('x-open-pencil')).toBe('ok')
+    expect(response.headers.get('x-redrob-design')).toBe('ok')
     expect(await response.text()).toBe('OK')
     expect(captured.request.url).toBe('https://example.test/check')
     expect(captured.request.method).toBe('POST')

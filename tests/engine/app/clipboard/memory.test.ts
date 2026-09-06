@@ -39,7 +39,7 @@ describe('in-memory clipboard', () => {
     expect(hasInMemoryClipboardHTML()).toBe(false)
     expect(getInMemoryClipboardHTML()).toBe('')
 
-    const sampleHTML = '<!--(openpencil)test-->'
+    const sampleHTML = '<!--(redrobdesign)test-->'
     setInMemoryClipboardHTML(sampleHTML)
 
     expect(getInMemoryClipboardHTML('unrelated')).toBe('')
@@ -99,7 +99,7 @@ describe('in-memory clipboard', () => {
   })
 
   test('browser clipboard does not paste cached design data over unrelated current HTML', async () => {
-    setInMemoryClipboardHTML('<!--(openpencil)cached(/openpencil)-->')
+    setInMemoryClipboardHTML('<!--(redrobdesign)cached(/redrobdesign)-->')
     const store = createEditorStore()
     const paste = mock(async () => undefined)
     store.pasteFromHTML = paste
@@ -113,7 +113,7 @@ describe('in-memory clipboard', () => {
   })
 
   test('browser clipboard rejects a successful plain-text-only read over stale memory', async () => {
-    setInMemoryClipboardHTML('<!--(openpencil)cached(/openpencil)-->', 'cached')
+    setInMemoryClipboardHTML('<!--(redrobdesign)cached(/redrobdesign)-->', 'cached')
     const store = createEditorStore()
     const paste = mock(async () => undefined)
     store.pasteFromHTML = paste

@@ -3,8 +3,8 @@
 ## Setup
 
 ```bash
-git clone https://github.com/open-pencil/open-pencil.git
-cd open-pencil
+git clone https://github.com/redrob-design/redrob-design.git
+cd redrob-design
 bun install
 ```
 
@@ -56,7 +56,7 @@ bun run test         # Playwright browser E2E and visual regression
 
 ## Project structure
 
-OpenPencil is a Bun monorepo. Stable ownership boundaries are:
+RedrobDesign is a Bun monorepo. Stable ownership boundaries are:
 
 - `packages/scene-graph`, `pen`, `kiwi`, and `fig` — framework-neutral document models and format layers.
 - `packages/core` — renderer, layout, editor core, Figma API, tools, and app-facing document I/O.
@@ -65,7 +65,7 @@ OpenPencil is a Bun monorepo. Stable ownership boundaries are:
 - `src/app` — app services, state, and integrations; `src/components` and `src/views` — app UI and views.
 - `packages/docs` — the published VitePress site.
 
-See [`AGENTS.md`](./AGENTS.md) for canonical package ownership and architecture rules, and [Architecture](https://openpencil.dev/development/architecture) for the public overview.
+See [`AGENTS.md`](./AGENTS.md) for canonical package ownership and architecture rules, and [Architecture](https://redrobdesign.dev/development/architecture) for the public overview.
 
 ## Codebase fit
 

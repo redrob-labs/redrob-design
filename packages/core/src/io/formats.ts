@@ -351,7 +351,7 @@ export const jsxFormat: IOFormatAdapter = {
     quality: false
   },
   async exportContent(request, options?: JSXExportOptions): Promise<ExportResult> {
-    const format = options?.format ?? 'openpencil'
+    const format = options?.format ?? 'redrobdesign'
     const nodeId = ensureSingleNode(request.target)
     let data = ''
     if (nodeId) {

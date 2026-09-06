@@ -3,10 +3,10 @@ import { computed, ref } from 'vue'
 
 export type DiagnosticsRetention = 100 | 500 | 1000
 
-const diagnosticsEnabled = useLocalStorage('open-pencil:diagnostics-enabled', true)
-const usageEnabled = useLocalStorage('open-pencil:usage-enabled', true)
+const diagnosticsEnabled = useLocalStorage('redrob-design:diagnostics-enabled', true)
+const usageEnabled = useLocalStorage('redrob-design:usage-enabled', true)
 const diagnosticsRetention = useLocalStorage<DiagnosticsRetention>(
-  'open-pencil:diagnostics-retention',
+  'redrob-design:diagnostics-retention',
   500,
   { serializer: { read: (value) => normalizeRetention(value), write: String } }
 )

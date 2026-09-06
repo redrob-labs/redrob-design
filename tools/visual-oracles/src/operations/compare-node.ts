@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 /**
- * Visual comparison pipeline: Figma vs OpenPencil renderer.
+ * Visual comparison pipeline: Figma vs RedrobDesign renderer.
  *
  * Copy an element in Figma, then run:
  *   bun tools/visual-oracles/src/cli.ts compare node [--scale 2] [--output /tmp/visual-compare]
@@ -10,7 +10,7 @@
  *
  * Outputs:
  *   figma.png  — exported from real Figma
- *   ours.png   — rendered by OpenPencil headless SkiaRenderer
+ *   ours.png   — rendered by RedrobDesign headless SkiaRenderer
  *   diff.png   — visual diff (red = changed pixels)
  */
 
@@ -68,7 +68,7 @@ async function runWithClipboard() {
   if (!parsed) bail('Clipboard has no Figma data. Copy an element in Figma first.')
   console.log(`   ${parsed.nodes.length} node changes, ${parsed.blobs.length} blobs`)
 
-  console.log('🖼️  Rendering with OpenPencil…')
+  console.log('🖼️  Rendering with RedrobDesign…')
   await renderOurs(html)
 
   console.log('🎨 Pasting into Figma & exporting…')
@@ -102,7 +102,7 @@ async function runWithNodeId(nodeId: string) {
   const parsed = await parseFigmaClipboard(html)
   if (!parsed) bail('Clipboard has no Figma data after copy')
 
-  console.log('🖼️  Rendering with OpenPencil…')
+  console.log('🖼️  Rendering with RedrobDesign…')
   await renderOurs(html)
 
   await diff()
@@ -219,8 +219,8 @@ async function diff() {
   const alphaMetrics = opts['alpha-diff'] ? await diffAlpha(compareOursPath, total) : null
   const metrics = {
     figmaSize,
-    openPencilSize: oursSize,
-    comparedOpenPencilPath: compareOursPath,
+    redrobDesignSize: oursSize,
+    comparedRedrobDesignPath: compareOursPath,
     resized: Boolean(opts.resize && figmaSize !== oursSize),
     normalized: figmaSize !== oursSize,
     differentPixels: diffPixels,

@@ -25,7 +25,7 @@ Install the MCP package and register it with Claude Code:
 
 ```sh
 npm install -g @redrob-design/mcp
-claude mcp add --scope user open-pencil -- redrob-design-mcp
+claude mcp add --scope user redrob-design -- redrob-design-mcp
 ```
 
 Check the connection:
@@ -39,7 +39,7 @@ Claude Code asks before using each MCP tool unless you allow the server's tools.
 ```json
 {
   "permissions": {
-    "allow": ["mcp__open-pencil__*"]
+    "allow": ["mcp__redrob-design__*"]
   }
 }
 ```
@@ -49,7 +49,7 @@ This is narrower than `--permission-mode bypassPermissions`, which skips prompts
 Example prompt:
 
 ```text
-Use the open-pencil MCP server to inspect the current page and create a small hero section on the canvas.
+Use the redrob-design MCP server to inspect the current page and create a small hero section on the canvas.
 ```
 
 ### Other MCP clients
@@ -59,7 +59,7 @@ Add to your MCP config (for example `.cursor/mcp.json`):
 ```json
 {
   "mcpServers": {
-    "open-pencil": {
+    "redrob-design": {
       "command": "redrob-design-mcp"
     }
   }
@@ -72,9 +72,9 @@ Or run from source without installing:
 ```json [Bun]
 {
   "mcpServers": {
-    "open-pencil": {
+    "redrob-design": {
       "command": "bun",
-      "args": ["/path/to/open-pencil/packages/mcp/src/stdio.ts"]
+      "args": ["/path/to/redrob-design/packages/mcp/src/stdio.ts"]
     }
   }
 }
@@ -82,9 +82,9 @@ Or run from source without installing:
 ```json [Node.js]
 {
   "mcpServers": {
-    "open-pencil": {
+    "redrob-design": {
       "command": "npx",
-      "args": ["tsx", "/path/to/open-pencil/packages/mcp/src/stdio.ts"]
+      "args": ["tsx", "/path/to/redrob-design/packages/mcp/src/stdio.ts"]
     }
   }
 }
@@ -107,10 +107,10 @@ Security defaults:
 - TCP binds to `127.0.0.1` and uses port 7600 by default.
 - Authentication is enabled by default with a generated token stored in the private discovery file.
 - `eval` is disabled.
-- File operations are limited to `OPENPENCIL_MCP_ROOT` (defaults to the current working directory) and reject symlink escapes.
-- CORS is disabled by default; set `OPENPENCIL_MCP_CORS_ORIGIN` to allow one origin.
+- File operations are limited to `REDROB_DESIGN_MCP_ROOT` (defaults to the current working directory) and reject symlink escapes.
+- CORS is disabled by default; set `REDROB_DESIGN_MCP_CORS_ORIGIN` to allow one origin.
 
-Set `PORT=0` to disable TCP on macOS and Linux. Windows requires TCP. Set `OPENPENCIL_MCP_SOCKET` to override the Unix socket path, or `OPENPENCIL_MCP_DISCOVERY_PATH` to override the discovery file location. To provide a stable token, set `OPENPENCIL_MCP_AUTH_TOKEN`; an explicitly empty value disables authentication and should only be used with a trusted local socket.
+Set `PORT=0` to disable TCP on macOS and Linux. Windows requires TCP. Set `REDROB_DESIGN_MCP_SOCKET` to override the Unix socket path, or `REDROB_DESIGN_MCP_DISCOVERY_PATH` to override the discovery file location. To provide a stable token, set `REDROB_DESIGN_MCP_AUTH_TOKEN`; an explicitly empty value disables authentication and should only be used with a trusted local socket.
 
 Endpoints are available over both active transports:
 
@@ -135,7 +135,7 @@ Most tools accept optional `document_id` and `page_id` fields. Pass them explici
 Teach your AI coding agent to use Redrob Design tools:
 
 ```sh
-npx skills add open-pencil/skills@open-pencil
+npx skills add redrob-design/skills@redrob-design
 ```
 
 Works with Claude Code, Cursor, Windsurf, Codex, and any agent that supports [skills](https://skills.sh). The skill covers the CLI, MCP tools, JSX rendering, eval, and the running app's automation bridge.

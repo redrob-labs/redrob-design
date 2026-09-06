@@ -1,27 +1,27 @@
 {
   "$schema": "https://raw.githubusercontent.com/devcontainers/spec/main/schemas/devContainer.base.schema.json",
-  "name": "OpenPencil",
+  "name": "RedrobDesign",
   "build": {
     "dockerfile": "Dockerfile",
     "context": "."
   },
-  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace/open-pencil,type=bind,consistency=cached",
-  "workspaceFolder": "/workspace/open-pencil",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace/redrob-design,type=bind,consistency=cached",
+  "workspaceFolder": "/workspace/redrob-design",
   "remoteUser": "bun",
   "updateRemoteUserUID": true,
   "mounts": [
-    "source=open-pencil-root-modules-${devcontainerId},target=/workspace/open-pencil/node_modules,type=volume",
-    "source=open-pencil-scene-graph-modules-${devcontainerId},target=/workspace/open-pencil/packages/scene-graph/node_modules,type=volume",
-    "source=open-pencil-pen-modules-${devcontainerId},target=/workspace/open-pencil/packages/pen/node_modules,type=volume",
-    "source=open-pencil-kiwi-modules-${devcontainerId},target=/workspace/open-pencil/packages/kiwi/node_modules,type=volume",
-    "source=open-pencil-fig-modules-${devcontainerId},target=/workspace/open-pencil/packages/fig/node_modules,type=volume",
-    "source=open-pencil-core-modules-${devcontainerId},target=/workspace/open-pencil/packages/core/node_modules,type=volume",
-    "source=open-pencil-dom-css-modules-${devcontainerId},target=/workspace/open-pencil/packages/dom-css/node_modules,type=volume",
-    "source=open-pencil-vue-modules-${devcontainerId},target=/workspace/open-pencil/packages/vue/node_modules,type=volume",
-    "source=open-pencil-cli-modules-${devcontainerId},target=/workspace/open-pencil/packages/cli/node_modules,type=volume",
-    "source=open-pencil-mcp-modules-${devcontainerId},target=/workspace/open-pencil/packages/mcp/node_modules,type=volume",
-    "source=open-pencil-docs-modules-${devcontainerId},target=/workspace/open-pencil/packages/docs/node_modules,type=volume",
-    "source=open-pencil-docs-tool-modules-${devcontainerId},target=/workspace/open-pencil/tools/docs/node_modules,type=volume"
+    "source=redrob-design-root-modules-${devcontainerId},target=/workspace/redrob-design/node_modules,type=volume",
+    "source=redrob-design-scene-graph-modules-${devcontainerId},target=/workspace/redrob-design/packages/scene-graph/node_modules,type=volume",
+    "source=redrob-design-pen-modules-${devcontainerId},target=/workspace/redrob-design/packages/pen/node_modules,type=volume",
+    "source=redrob-design-kiwi-modules-${devcontainerId},target=/workspace/redrob-design/packages/kiwi/node_modules,type=volume",
+    "source=redrob-design-fig-modules-${devcontainerId},target=/workspace/redrob-design/packages/fig/node_modules,type=volume",
+    "source=redrob-design-core-modules-${devcontainerId},target=/workspace/redrob-design/packages/core/node_modules,type=volume",
+    "source=redrob-design-dom-css-modules-${devcontainerId},target=/workspace/redrob-design/packages/dom-css/node_modules,type=volume",
+    "source=redrob-design-vue-modules-${devcontainerId},target=/workspace/redrob-design/packages/vue/node_modules,type=volume",
+    "source=redrob-design-cli-modules-${devcontainerId},target=/workspace/redrob-design/packages/cli/node_modules,type=volume",
+    "source=redrob-design-mcp-modules-${devcontainerId},target=/workspace/redrob-design/packages/mcp/node_modules,type=volume",
+    "source=redrob-design-docs-modules-${devcontainerId},target=/workspace/redrob-design/packages/docs/node_modules,type=volume",
+    "source=redrob-design-docs-tool-modules-${devcontainerId},target=/workspace/redrob-design/tools/docs/node_modules,type=volume"
   ],
   "postCreateCommand": "if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then git lfs pull; fi && bun install --frozen-lockfile",
   "containerEnv": {
@@ -30,7 +30,7 @@
   "forwardPorts": [1420],
   "portsAttributes": {
     "1420": {
-      "label": "OpenPencil web editor",
+      "label": "RedrobDesign web editor",
       "onAutoForward": "notify"
     }
   }

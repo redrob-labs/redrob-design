@@ -10,13 +10,13 @@ const reversal = JSON.parse(
 ) as { wheel: RecordedWheelSample[] }
 
 async function waitForTiledSettlement() {
-  await editor.page.evaluate(() => window.openPencil?.test?.navigation?.waitForSettlement())
+  await editor.page.evaluate(() => window.redrobDesign?.test?.navigation?.waitForSettlement())
 }
 
 async function setLargeBlurRadius(radius: number) {
   await editor.page.evaluate((nextRadius) => {
-    const store = window.openPencil?.getStore?.()
-    if (!store) throw new Error('OpenPencil store not initialized')
+    const store = window.redrobDesign?.getStore?.()
+    if (!store) throw new Error('RedrobDesign store not initialized')
     const node = [...store.graph.getAllNodes()].find(
       (candidate) =>
         candidate.name === 'Group' &&
@@ -64,10 +64,10 @@ async function replayReversal() {
 test('large blur remains seamless after tiled mutation and zoom reversal', async () => {
   test.setTimeout(120_000)
   await editor.page.evaluate(() =>
-    window.openPencil?.openFile?.('/tests/fixtures/gold-preview.fig')
+    window.redrobDesign?.openFile?.('/tests/fixtures/gold-preview.fig')
   )
   await editor.page.waitForFunction(() => {
-    const store = window.openPencil?.getStore?.()
+    const store = window.redrobDesign?.getStore?.()
     return (
       store != null &&
       !store.state.loading &&
@@ -81,8 +81,8 @@ test('large blur remains seamless after tiled mutation and zoom reversal', async
     )
   })
   await editor.page.evaluate(() => {
-    const store = window.openPencil?.getStore?.()
-    if (!store) throw new Error('OpenPencil store not initialized')
+    const store = window.redrobDesign?.getStore?.()
+    if (!store) throw new Error('RedrobDesign store not initialized')
     store.zoomToFit()
   })
   await waitForTiledSettlement()

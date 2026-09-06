@@ -17,7 +17,7 @@ import type {
 
 import type { LibraryObjectStore } from '@/app/integrations/storage'
 
-const PREFIX = 'open-pencil/libraries'
+const PREFIX = 'redrob-design/libraries'
 const textDecoder = new TextDecoder()
 const textEncoder = new TextEncoder()
 
@@ -29,17 +29,17 @@ function revisionKey(libraryId: string, revisionId: string): string {
   return `${PREFIX}/${libraryId}/revisions/${revisionId}.json`
 }
 
-const MAP_TAG = 'openpencil/map'
+const MAP_TAG = 'redrobdesign/map'
 
 interface EncodedMap {
-  $openPencilType: typeof MAP_TAG
+  $redrobDesignType: typeof MAP_TAG
   entries: unknown[]
 }
 
 function isEncodedMap(value: object): value is EncodedMap {
   return (
-    '$openPencilType' in value &&
-    value.$openPencilType === MAP_TAG &&
+    '$redrobDesignType' in value &&
+    value.$redrobDesignType === MAP_TAG &&
     'entries' in value &&
     Array.isArray(value.entries)
   )
@@ -50,13 +50,13 @@ function isMap(value: unknown): value is Map<unknown, unknown> {
 }
 
 function isMarkerShapedObject(value: object): boolean {
-  return '$openPencilType' in value
+  return '$redrobDesignType' in value
 }
 
 function encodeValue(value: unknown): unknown {
   if (isMap(value)) {
     return {
-      $openPencilType: MAP_TAG,
+      $redrobDesignType: MAP_TAG,
       entries: [...value].map(([key, entry]) => [encodeValue(key), encodeValue(entry)])
     }
   }
@@ -67,7 +67,7 @@ function encodeValue(value: unknown): unknown {
       Object.entries(value).map(([key, entry]) => [key, encodeValue(entry)])
     )
     return isMarkerShapedObject(value)
-      ? { $openPencilType: 'openpencil/object', value: encoded }
+      ? { $redrobDesignType: 'redrobdesign/object', value: encoded }
       : encoded
   }
   return value
@@ -77,8 +77,8 @@ function decodeValue(value: unknown): unknown {
   if (Array.isArray(value)) return value.map(decodeValue)
   if (value && typeof value === 'object') {
     if (
-      '$openPencilType' in value &&
-      value.$openPencilType === 'openpencil/object' &&
+      '$redrobDesignType' in value &&
+      value.$redrobDesignType === 'redrobdesign/object' &&
       'value' in value &&
       value.value &&
       typeof value.value === 'object' &&

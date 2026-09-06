@@ -15,7 +15,7 @@ const config: StorybookConfig = {
   viteFinal(config) {
     const excludedPluginPrefixes = [
       'copy-canvaskit-wasm',
-      'open-pencil-automation',
+      'redrob-design-automation',
       'vite-plugin-pwa'
     ]
 

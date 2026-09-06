@@ -1,6 +1,6 @@
-# OpenPencil Copilot instructions
+# RedrobDesign Copilot instructions
 
-OpenPencil is a Bun workspace for a Vue 3 + CanvasKit design editor with Tauri desktop support.
+RedrobDesign is a Bun workspace for a Vue 3 + CanvasKit design editor with Tauri desktop support.
 
 ## Pull request requirements
 

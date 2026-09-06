@@ -19,7 +19,7 @@ import { computed } from 'vue'
  * `@/app/recent-files/store`).
  */
 
-const DESIGN_SYSTEM_STORAGE_KEY = 'open-pencil:design-system'
+const DESIGN_SYSTEM_STORAGE_KEY = 'redrob-design:design-system'
 
 /** Caps mirror the `StoredDesignSystem` schema so the summary always validates. */
 const MAX_SOURCE_FILES = 24

@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test'
 
-import { buildOpenPencilClipboardHTML } from '@redrob-design/core/clipboard'
+import { buildRedrobDesignClipboardHTML } from '@redrob-design/core/clipboard'
 import { createEditor } from '@redrob-design/core/editor'
 import type { Editor } from '@redrob-design/core/editor'
 
@@ -14,7 +14,7 @@ function copiedRectangleHTML(name = 'Pasted') {
     width: 20,
     height: 20
   })
-  return buildOpenPencilClipboardHTML([pasted], source.graph)
+  return buildRedrobDesignClipboardHTML([pasted], source.graph)
 }
 
 function copiedFrameHTML() {
@@ -34,7 +34,7 @@ function copiedFrameHTML() {
     width: 10,
     height: 12
   })
-  return buildOpenPencilClipboardHTML([frame], source.graph)
+  return buildRedrobDesignClipboardHTML([frame], source.graph)
 }
 
 function createTarget(editor: Editor, parentId = editor.state.currentPageId) {
@@ -48,7 +48,7 @@ function createTarget(editor: Editor, parentId = editor.state.currentPageId) {
 }
 
 describe('paste to replace', () => {
-  test('replaces selected nodes with pasted OpenPencil nodes', async () => {
+  test('replaces selected nodes with pasted RedrobDesign nodes', async () => {
     const html = copiedRectangleHTML()
     const editor = createEditor()
     const pageId = editor.state.currentPageId

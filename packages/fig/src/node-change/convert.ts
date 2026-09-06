@@ -20,7 +20,7 @@ import {
   extractTextPathBox,
   extractPluginData,
   extractPluginRelaunchData,
-  getOpenPencilPluginValue,
+  getRedrobDesignPluginValue,
   LAYOUT_DIRECTION_PLUGIN_KEY,
   NODE_TYPE_PLUGIN_KEY,
   TEXT_DIRECTION_PLUGIN_KEY
@@ -371,7 +371,7 @@ function convertTextProps(nc: NodeChange, blobs: Uint8Array[]): TextProps {
     fontFeatures: convertFontFeatures(nc),
     textTruncation: (nc.textTruncation as string) === 'ENDING' ? 'ENDING' : 'DISABLED',
     textDirection:
-      (getOpenPencilPluginValue(nc, TEXT_DIRECTION_PLUGIN_KEY) as
+      (getRedrobDesignPluginValue(nc, TEXT_DIRECTION_PLUGIN_KEY) as
         | SceneNode['textDirection']
         | null) || 'AUTO',
     derivedLayout: nc.derivedTextData?.layoutSize
@@ -479,7 +479,7 @@ function convertLayoutProps(
     itemReverseZIndex: (nc.stackReverseZIndex ?? false) as boolean,
     strokesIncludedInLayout: (nc.strokesIncludedInLayout ?? false) as boolean,
     layoutDirection:
-      (getOpenPencilPluginValue(nc, LAYOUT_DIRECTION_PLUGIN_KEY) as
+      (getRedrobDesignPluginValue(nc, LAYOUT_DIRECTION_PLUGIN_KEY) as
         | SceneNode['layoutDirection']
         | null) || 'AUTO',
     ...(derivedLayout ? { derivedLayout } : {})
@@ -576,7 +576,7 @@ function resolveNodeType(nc: NodeChange): NodeType | 'DOCUMENT' | 'VARIABLE' {
   const nodeType = mapNodeType(nc.type)
   if (
     (nodeType === 'FRAME' && isComponentSet(nc)) ||
-    getOpenPencilPluginValue(nc, NODE_TYPE_PLUGIN_KEY) === 'COMPONENT_SET'
+    getRedrobDesignPluginValue(nc, NODE_TYPE_PLUGIN_KEY) === 'COMPONENT_SET'
   ) {
     return 'COMPONENT_SET'
   }
@@ -681,7 +681,7 @@ export function nodeChangeToProps(
   // See path/text-layout.ts — expand the layout box before node creation so
   // clipsContent parents don't shave overflowing path lettering at first paint.
   expandPathTextLayoutBox(props, textPathData)
-  // A saved OpenPencil doc carries the true textPathBox (reflow may have
+  // A saved RedrobDesign doc carries the true textPathBox (reflow may have
   // scaled it); the expand-time reconstruction is only right for pristine
   // Figma exports. Plugin box is in pre-expansion local coords — expand's
   // shift is textPathBox.x/y by construction, so re-home it.
@@ -986,7 +986,7 @@ export function sortChildren(
 }
 
 interface PreservedFigmaBlob {
-  __openPencilFigmaBlob: Uint8Array
+  __redrobDesignFigmaBlob: Uint8Array
 }
 
 function preserveFigmaPayloadBlobs(value: unknown, blobs: Uint8Array[]): unknown {
@@ -1001,7 +1001,7 @@ function preserveFigmaPayloadBlobs(value: unknown, blobs: Uint8Array[]): unknown
         result[key] = child
       } else {
         result[key] = {
-          __openPencilFigmaBlob:
+          __redrobDesignFigmaBlob:
             blob instanceof Uint8Array
               ? blob
               : new Uint8Array(Object.values(blob as Record<string, number>))

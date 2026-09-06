@@ -15,7 +15,7 @@ const configDir = dirname(fileURLToPath(import.meta.url))
 const docsRoot = dirname(configDir)
 const packagesRoot = dirname(docsRoot)
 const repoRoot = dirname(packagesRoot)
-const fastBuild = process.env.OPENPENCIL_DOCS_FAST_BUILD === '1'
+const fastBuild = process.env.REDROB_DESIGN_DOCS_FAST_BUILD === '1'
 
 const llmsPlugin = llmstxt({
   domain: BASE,

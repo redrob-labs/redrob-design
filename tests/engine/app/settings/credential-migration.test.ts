@@ -45,24 +45,24 @@ describe('legacy credential migration', () => {
   test('verifies encrypted destinations before removing plaintext keys', async () => {
     const storage = new TestStorage()
     const store = new MemoryCredentialStore()
-    storage.setItem('open-pencil:openrouter-api-key', 'old-openrouter-key')
-    storage.setItem('open-pencil:ai-key:anthropic', 'anthropic-key')
-    storage.setItem('open-pencil:pexels-api-key', 'pexels-key')
+    storage.setItem('redrob-design:openrouter-api-key', 'old-openrouter-key')
+    storage.setItem('redrob-design:ai-key:anthropic', 'anthropic-key')
+    storage.setItem('redrob-design:pexels-api-key', 'pexels-key')
 
     expect(await migrateLegacyCredentials(storage, store)).toBeTrue()
     expect(await store.read(providerCredentialRef('openrouter'))).toBe('old-openrouter-key')
     expect(await store.read(providerCredentialRef('anthropic'))).toBe('anthropic-key')
     expect(await store.read(PEXELS_CREDENTIAL)).toBe('pexels-key')
-    expect(storage.getItem('open-pencil:openrouter-api-key')).toBeNull()
-    expect(storage.getItem('open-pencil:ai-key:anthropic')).toBeNull()
-    expect(storage.getItem('open-pencil:pexels-api-key')).toBeNull()
+    expect(storage.getItem('redrob-design:openrouter-api-key')).toBeNull()
+    expect(storage.getItem('redrob-design:ai-key:anthropic')).toBeNull()
+    expect(storage.getItem('redrob-design:pexels-api-key')).toBeNull()
   })
 
   test('retains plaintext when the destination is unavailable', async () => {
     const storage = new TestStorage()
-    storage.setItem('open-pencil:ai-key:openrouter', 'keep-me')
+    storage.setItem('redrob-design:ai-key:openrouter', 'keep-me')
 
     expect(await migrateLegacyCredentials(storage, new UnavailableCredentialStore())).toBeFalse()
-    expect(storage.getItem('open-pencil:ai-key:openrouter')).toBe('keep-me')
+    expect(storage.getItem('redrob-design:ai-key:openrouter')).toBe('keep-me')
   })
 })

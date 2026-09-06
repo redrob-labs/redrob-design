@@ -20,31 +20,31 @@ if (process.argv.includes('--help') || process.argv.includes('-h')) {
       `Options:\n` +
       `  --help, -h    Show this help message\n\n` +
       `Environment variables:\n` +
-      `  OPENPENCIL_MCP_SOCKET        Override socket path (auto-discovered from discovery file when unset)\n` +
-      `  OPENPENCIL_MCP_AUTH_TOKEN    Bearer token for RPC auth\n` +
-      `  OPENPENCIL_MCP_ROOT          Allowed directory for file-scoped tools\n` +
+      `  REDROB_DESIGN_MCP_SOCKET        Override socket path (auto-discovered from discovery file when unset)\n` +
+      `  REDROB_DESIGN_MCP_AUTH_TOKEN    Bearer token for RPC auth\n` +
+      `  REDROB_DESIGN_MCP_ROOT          Allowed directory for file-scoped tools\n` +
       `                               (default: home directory on Windows, cwd elsewhere)\n` +
-      `  OPENPENCIL_MCP_EVAL          Set to 1 to enable the eval tool\n` +
-      `  OPENPENCIL_MCP_DISABLED_TOOLS Comma-separated tool names to omit; defaults to the app setting\n`
+      `  REDROB_DESIGN_MCP_EVAL          Set to 1 to enable the eval tool\n` +
+      `  REDROB_DESIGN_MCP_DISABLED_TOOLS Comma-separated tool names to omit; defaults to the app setting\n`
   )
   process.exit(0)
 }
 
 const toolPolicy: ToolPolicy = {
-  allowEval: process.env.OPENPENCIL_MCP_EVAL === '1',
+  allowEval: process.env.REDROB_DESIGN_MCP_EVAL === '1',
   disabledTools:
-    process.env.OPENPENCIL_MCP_DISABLED_TOOLS === undefined
+    process.env.REDROB_DESIGN_MCP_DISABLED_TOOLS === undefined
       ? ((await readDiscoveryFile())?.disabledTools ?? [])
-      : parseDisabledTools(process.env.OPENPENCIL_MCP_DISABLED_TOOLS)
+      : parseDisabledTools(process.env.REDROB_DESIGN_MCP_DISABLED_TOOLS)
 }
-const mcpRoot = resolveMCPRoot(process.env.OPENPENCIL_MCP_ROOT)
+const mcpRoot = resolveMCPRoot(process.env.REDROB_DESIGN_MCP_ROOT)
 // Auth token: undefined → auto-discover from discovery file, empty string →
 // disable auth, whitespace-only → reject (same fail-fast as index.ts to catch
 // misconfiguration), otherwise → use the trimmed value.
-const rawAuthToken = process.env.OPENPENCIL_MCP_AUTH_TOKEN
+const rawAuthToken = process.env.REDROB_DESIGN_MCP_AUTH_TOKEN
 if (rawAuthToken !== undefined && rawAuthToken !== '' && rawAuthToken.trim() === '') {
   process.stderr.write(
-    'Error: OPENPENCIL_MCP_AUTH_TOKEN is whitespace-only. Set a real token, or use an empty string to disable auth.\n'
+    'Error: REDROB_DESIGN_MCP_AUTH_TOKEN is whitespace-only. Set a real token, or use an empty string to disable auth.\n'
   )
   process.exit(1)
 }
@@ -55,7 +55,7 @@ function resolveAuthToken(raw: string | undefined): string | null | undefined {
 }
 const authToken = resolveAuthToken(rawAuthToken)
 
-// OPENPENCIL_MCP_SOCKET is intentionally NOT forwarded as an explicit socketPath.
+// REDROB_DESIGN_MCP_SOCKET is intentionally NOT forwarded as an explicit socketPath.
 // The bridge reads the socket path from the discovery file (whose `socketPath`
 // field records the override) via auto-discovery. Treating the env var as an
 // explicit pin would prevent the bridge from following discovery updates after

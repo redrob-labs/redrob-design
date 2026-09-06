@@ -33,7 +33,7 @@ type NativeTestStore = {
 
 declare global {
   interface Window {
-    openPencil?: {
+    redrobDesign?: {
       getStore?: () => NativeTestStore
     }
   }

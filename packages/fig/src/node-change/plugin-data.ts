@@ -13,7 +13,16 @@ import type { Rect } from '@redrob-design/scene-graph/primitives'
 import { readEffectiveFigmaRawField } from '../source-metadata'
 import { resolveVariableConsumptionEntry } from './variable-bindings'
 
-export const OPEN_PENCIL_PLUGIN_ID = 'open-pencil'
+export const REDROB_DESIGN_PLUGIN_ID = 'redrob-design'
+// Legacy compatibility wire value: `.fig` files written by pre-rebrand
+// OpenPencil builds tagged plugin data with this pluginId. Accepted on read so
+// existing documents keep their OpenPencil-authored plugin data; new writes use
+// REDROB_DESIGN_PLUGIN_ID. Isolated here as the only place the old id appears.
+const LEGACY_PLUGIN_ID = 'open-pencil'
+
+function isRedrobDesignPluginId(pluginId: string): boolean {
+  return pluginId === REDROB_DESIGN_PLUGIN_ID || pluginId === LEGACY_PLUGIN_ID
+}
 export const TEXT_DIRECTION_PLUGIN_KEY = 'textDirection'
 export const LAYOUT_DIRECTION_PLUGIN_KEY = 'layoutDirection'
 export const NODE_TYPE_PLUGIN_KEY = 'nodeType'
@@ -36,9 +45,9 @@ export function upsertPluginData(
   value: string
 ): void {
   const pluginData = node.pluginData.filter(
-    (entry) => !(entry.pluginId === OPEN_PENCIL_PLUGIN_ID && entry.key === key)
+    (entry) => !(isRedrobDesignPluginId(entry.pluginId) && entry.key === key)
   )
-  pluginData.push({ pluginId: OPEN_PENCIL_PLUGIN_ID, key, value })
+  pluginData.push({ pluginId: REDROB_DESIGN_PLUGIN_ID, key, value })
   node.pluginData = pluginData
 }
 
@@ -47,7 +56,7 @@ export function applyExportSettingsPluginData(
 ): void {
   if (node.exportSettings.length === 0) return
   if (
-    !hasOpenPencilExportSettingsPluginData(node.pluginData) &&
+    !hasRedrobDesignExportSettingsPluginData(node.pluginData) &&
     Array.isArray(readEffectiveFigmaRawField(node, 'exportSettings'))
   ) {
     return
@@ -56,7 +65,7 @@ export function applyExportSettingsPluginData(
 }
 
 /**
- * textPathBox is OpenPencil-only state (the node-local rect the TEXT_PATH
+ * textPathBox is RedrobDesign-only state (the node-local rect the TEXT_PATH
  * layout path maps onto, after import-time box expansion and resize scaling).
  * The Kiwi schema has no home for it, and reconstructing it from an expanded,
  * resized node is ambiguous — persist it as plugin data so save/reopen keeps
@@ -71,7 +80,7 @@ export function applyTextPathBoxPluginData(node: {
 }
 
 export function extractTextPathBox(nc: NodeChange): Rect | null {
-  const value = getOpenPencilPluginValue(nc, TEXT_PATH_BOX_PLUGIN_KEY)
+  const value = getRedrobDesignPluginValue(nc, TEXT_PATH_BOX_PLUGIN_KEY)
   if (!value) return null
   try {
     const parsed = JSON.parse(value) as Partial<Rect> | null
@@ -92,9 +101,9 @@ export function extractTextPathBox(nc: NodeChange): Rect | null {
   }
 }
 
-function hasOpenPencilExportSettingsPluginData(pluginData: PluginDataEntry[]): boolean {
+function hasRedrobDesignExportSettingsPluginData(pluginData: PluginDataEntry[]): boolean {
   return pluginData.some(
-    (entry) => entry.pluginId === OPEN_PENCIL_PLUGIN_ID && entry.key === EXPORT_SETTINGS_PLUGIN_KEY
+    (entry) => isRedrobDesignPluginId(entry.pluginId) && entry.key === EXPORT_SETTINGS_PLUGIN_KEY
   )
 }
 
@@ -116,7 +125,7 @@ function parseBoundVariablesPluginValue(value: string | null): Record<string, st
 
 export function extractBoundVariables(nc: NodeChange): Record<string, string> {
   const bindings = parseBoundVariablesPluginValue(
-    getOpenPencilPluginValue(nc, BOUND_VARIABLES_PLUGIN_KEY)
+    getRedrobDesignPluginValue(nc, BOUND_VARIABLES_PLUGIN_KEY)
   )
   for (const entry of nc.variableConsumptionMap?.entries ?? []) {
     const binding = resolveVariableConsumptionEntry(entry)
@@ -183,7 +192,7 @@ function extractNativeConstraintScale(constraint: unknown): number {
 
 export function extractExportSettings(nc: NodeChange): ExportSetting[] {
   const pluginSettings = parseExportSettingsPluginValue(
-    getOpenPencilPluginValue(nc, EXPORT_SETTINGS_PLUGIN_KEY)
+    getRedrobDesignPluginValue(nc, EXPORT_SETTINGS_PLUGIN_KEY)
   )
   if (pluginSettings) return pluginSettings
 
@@ -209,7 +218,7 @@ export function extractPluginData(nc: NodeChange): PluginDataEntry[] {
 }
 
 export function extractLibrarySource(nc: NodeChange): SceneNode['librarySource'] {
-  const value = getOpenPencilPluginValue(nc, LIBRARY_SOURCE_PLUGIN_KEY)
+  const value = getRedrobDesignPluginValue(nc, LIBRARY_SOURCE_PLUGIN_KEY)
   if (!value) return null
   try {
     const parsed = JSON.parse(value) as unknown
@@ -246,14 +255,14 @@ export function applyLibrarySourcePluginData(node: SceneNode): void {
   } else {
     node.pluginData = node.pluginData.filter(
       (entry) =>
-        !(entry.pluginId === OPEN_PENCIL_PLUGIN_ID && entry.key === LIBRARY_SOURCE_PLUGIN_KEY)
+        !(isRedrobDesignPluginId(entry.pluginId) && entry.key === LIBRARY_SOURCE_PLUGIN_KEY)
     )
   }
 }
 
-export function getOpenPencilPluginValue(nc: NodeChange, key: string): string | null {
+export function getRedrobDesignPluginValue(nc: NodeChange, key: string): string | null {
   return (
-    nc.pluginData?.find((entry) => entry.pluginID === OPEN_PENCIL_PLUGIN_ID && entry.key === key)
+    nc.pluginData?.find((entry) => isRedrobDesignPluginId(entry.pluginID) && entry.key === key)
       ?.value ?? null
   )
 }

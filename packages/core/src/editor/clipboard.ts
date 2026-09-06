@@ -4,7 +4,7 @@ import type { Vector } from '@redrob-design/scene-graph/primitives'
 import {
   importClipboardNodes,
   parseFigmaClipboard,
-  parseOpenPencilClipboard
+  parseRedrobDesignClipboard
 } from '#core/clipboard'
 import { computeAllLayouts } from '#core/layout'
 
@@ -85,9 +85,9 @@ export function createClipboardActions(ctx: EditorContext) {
   }
 
   async function pasteFromHTML(html: string, cursorPos?: Vector, options: PasteOptions = {}) {
-    const openPencil = parseOpenPencilClipboard(html)
-    if (openPencil) {
-      const created = pasteOpenPencilNodes(openPencil.nodes, openPencil.images, cursorPos, options)
+    const redrobDesign = parseRedrobDesignClipboard(html)
+    if (redrobDesign) {
+      const created = pasteRedrobDesignNodes(redrobDesign.nodes, redrobDesign.images, cursorPos, options)
       await fontActions.loadFontsForNodes(created)
       return
     }
@@ -126,7 +126,7 @@ export function createClipboardActions(ctx: EditorContext) {
     }
   }
 
-  function pasteOpenPencilNodes(
+  function pasteRedrobDesignNodes(
     nodes: Array<SceneNode & { children?: SceneNode[] }>,
     images: Map<string, Uint8Array>,
     cursorPos?: Vector,

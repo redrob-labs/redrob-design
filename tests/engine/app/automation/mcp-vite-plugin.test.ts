@@ -16,7 +16,7 @@ describe('MCP Vite development server', () => {
   test('passes an explicit empty auth token when authentication is disabled', () => {
     const env = createAutomationEnvironment({
       authToken: 'development-token',
-      baseEnv: { OPENPENCIL_MCP_AUTH_TOKEN: 'inherited-token' },
+      baseEnv: { REDROB_DESIGN_MCP_AUTH_TOKEN: 'inherited-token' },
       configuration: {
         authenticationEnabled: false,
         rootDirectory: '/designs',
@@ -25,13 +25,13 @@ describe('MCP Vite development server', () => {
       corsOrigin: 'http://localhost:1420',
       discoveryPath: '/tmp/mcp.json',
       httpPort: 7600,
-      socketPath: '/tmp/open-pencil.sock'
+      socketPath: '/tmp/redrob-design.sock'
     })
 
-    expect(env.OPENPENCIL_MCP_AUTH_TOKEN).toBe('')
-    expect(env.OPENPENCIL_MCP_ROOT).toBe('/designs')
-    expect(env.OPENPENCIL_MCP_DISABLED_TOOLS).toBe('eval,delete_node')
-    expect(env.OPENPENCIL_MCP_DISCOVERY_PATH).toBe('/tmp/mcp.json')
+    expect(env.REDROB_DESIGN_MCP_AUTH_TOKEN).toBe('')
+    expect(env.REDROB_DESIGN_MCP_ROOT).toBe('/designs')
+    expect(env.REDROB_DESIGN_MCP_DISABLED_TOOLS).toBe('eval,delete_node')
+    expect(env.REDROB_DESIGN_MCP_DISCOVERY_PATH).toBe('/tmp/mcp.json')
   })
 
   test('normalizes and validates typed disabled tool configuration', () => {
@@ -88,15 +88,15 @@ describe('MCP Vite development server', () => {
   test('waits through transient Portless responses until MCP is healthy', async () => {
     const statuses = [404, 404, 200]
     const requests: string[] = []
-    await waitForAutomationHealth('wss://feature.mcp.open-pencil.localhost', async (input) => {
+    await waitForAutomationHealth('wss://feature.mcp.redrob-design.localhost', async (input) => {
       requests.push(String(input))
       return new Response(null, { status: statuses.shift() ?? 500 })
     })
 
     expect(requests).toEqual([
-      'https://feature.mcp.open-pencil.localhost/health',
-      'https://feature.mcp.open-pencil.localhost/health',
-      'https://feature.mcp.open-pencil.localhost/health'
+      'https://feature.mcp.redrob-design.localhost/health',
+      'https://feature.mcp.redrob-design.localhost/health',
+      'https://feature.mcp.redrob-design.localhost/health'
     ])
   })
 

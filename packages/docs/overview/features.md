@@ -82,7 +82,7 @@ npm install -g @redrob-design/mcp
 ```json
 {
   "mcpServers": {
-    "open-pencil": {
+    "redrob-design": {
       "command": "redrob-design-mcp"
     }
   }
@@ -132,7 +132,7 @@ P2P via WebRTC — no server required. Share a link and edit together.
 **Homebrew:**
 
 ```sh
-brew install open-pencil/tap/open-pencil
+brew install redrob-design/tap/redrob-design
 ```
 
 ## Google Fonts Fallback

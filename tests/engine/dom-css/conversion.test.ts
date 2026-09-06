@@ -171,7 +171,7 @@ describe('@redrob-design/dom-css conversion', () => {
   it('converts Tailwind HTML through generated CSS to a scene graph', async () => {
     const classes = [...tailwindCardClasses]
     const graph = await tailwindHTMLToSceneGraph(
-      `<article class="${classes.join(' ')}"><h1>OpenPencil</h1></article>`,
+      `<article class="${classes.join(' ')}"><h1>RedrobDesign</h1></article>`,
       classes,
       { runtime: createHeadlessCSSRuntime() }
     )
@@ -201,7 +201,7 @@ describe('@redrob-design/dom-css conversion', () => {
 
     const title = card ? graph.getChildren(card.id)[0] : undefined
     expect(title?.type).toBe('TEXT')
-    expect(title?.text).toBe('OpenPencil')
+    expect(title?.text).toBe('RedrobDesign')
     expect(title?.fontSize).toBe(24)
     expect(title?.fontWeight).toBe(700)
   })
@@ -234,7 +234,7 @@ describe('@redrob-design/dom-css conversion', () => {
 
     const roundTrip = sceneGraphToDesignDocument(graph)
     const html = serializeHTML(roundTrip)
-    expect(html).toContain('OpenPencil')
+    expect(html).toContain('RedrobDesign')
     expect(html).toContain('Design with code-shaped CSS.')
     expect(html).toContain('box-shadow')
   })
@@ -510,10 +510,10 @@ describe('@redrob-design/dom-css conversion', () => {
     const document = await runtime.computeStyles(
       runtime.parseHTML(`
         <nav class="${navClasses.join(' ')}">
-          <span>OpenPencil</span>
+          <span>RedrobDesign</span>
           <span class="${badgeClasses.join(' ')}">Beta</span>
         </nav>
-        <input class="${inputClasses.join(' ')}" value="https://openpencil.dev" />
+        <input class="${inputClasses.join(' ')}" value="https://redrobdesign.dev" />
       `),
       await compileTailwindCSS(classes)
     )
@@ -550,7 +550,7 @@ describe('@redrob-design/dom-css conversion', () => {
     const runtime = createHeadlessCSSRuntime()
     const classes = [...tailwindCardClasses]
     const document = await runtime.computeStyles(
-      runtime.parseHTML(`<article class="${classes.join(' ')}"><h1>OpenPencil</h1></article>`),
+      runtime.parseHTML(`<article class="${classes.join(' ')}"><h1>RedrobDesign</h1></article>`),
       await compileTailwindCSS(classes)
     )
     const graph = designDocumentToSceneGraph(document)
@@ -583,7 +583,7 @@ describe('@redrob-design/dom-css conversion', () => {
     expect(card.inlineStyle?.width).toBe('320px')
     expect(card.inlineStyle?.display).toBe('flex')
     expect(card.inlineStyle?.['flex-direction']).toBe('column')
-    expect(card.attrs['data-open-pencil-node-id']).toBeTruthy()
+    expect(card.attrs['data-redrob-design-node-id']).toBeTruthy()
 
     const title = card.children[0]
     expect(title?.type).toBe('element')

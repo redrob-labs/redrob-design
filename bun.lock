@@ -2,7 +2,7 @@
   "lockfileVersion": 1,
   "workspaces": {
     "": {
-      "name": "open-pencil-app",
+      "name": "redrob-design-app",
       "dependencies": {
         "@ai-sdk/anthropic": "^4.0.39",
         "@ai-sdk/deepseek": "^3.0.28",
@@ -161,7 +161,7 @@
       "name": "@redrob-design/cli",
       "version": "0.14.0",
       "bin": {
-        "openpencil": "./bin/openpencil.js",
+        "redrobdesign": "./bin/redrobdesign.js",
       },
       "dependencies": {
         "@redrob-design/core": "workspace:*",
@@ -277,7 +277,7 @@
       "name": "@redrob-design/harness",
       "version": "0.14.0",
       "bin": {
-        "openpencil-harness": "./dist/stdio.mjs",
+        "redrobdesign-harness": "./dist/stdio.mjs",
       },
       "dependencies": {
         "@ai-sdk/harness": "1.0.74",
@@ -306,8 +306,8 @@
       "name": "@redrob-design/mcp",
       "version": "0.14.0",
       "bin": {
-        "openpencil-mcp": "./dist/stdio.mjs",
-        "openpencil-mcp-http": "./dist/index.mjs",
+        "redrobdesign-mcp": "./dist/stdio.mjs",
+        "redrobdesign-mcp-http": "./dist/index.mjs",
       },
       "dependencies": {
         "@hono/node-server": "^1.19.17",

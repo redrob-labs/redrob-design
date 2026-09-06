@@ -5,7 +5,7 @@ import type { InstanceNodeChange } from '@redrob-design/fig/instance-overrides'
 import {
   applyStyleRefsToFields,
   ENABLED_LIBRARIES_PLUGIN_KEY,
-  getOpenPencilPluginValue,
+  getRedrobDesignPluginValue,
   guidToString,
   importCanvasGuides,
   nodeChangeToProps,
@@ -60,7 +60,7 @@ function applyImportedDocumentMetadata(graph: SceneGraph, docNc: NodeChange | un
     : []
   rootNode.source.fig.rawNodeFields.strokeJoin = docNc.strokeJoin
   rootNode.source.fig.rawNodeFields.strokeWeight = docNc.strokeWeight
-  const bindings = getOpenPencilPluginValue(docNc, ENABLED_LIBRARIES_PLUGIN_KEY)
+  const bindings = getRedrobDesignPluginValue(docNc, ENABLED_LIBRARIES_PLUGIN_KEY)
   if (!bindings) return
   try {
     const parsed = JSON.parse(bindings) as unknown

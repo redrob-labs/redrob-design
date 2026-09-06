@@ -2,7 +2,7 @@ import { useFileDialog } from '@vueuse/core'
 
 import { BUILTIN_IO_FORMATS, IORegistry } from '@redrob-design/core/io'
 
-import { setOpenPencilOpenFileHandler } from '@/app/browser-bridge'
+import { setRedrobDesignOpenFileHandler } from '@/app/browser-bridge'
 import { resolveBrowserFileURL } from '@/app/document/io/browser'
 import { notificationMessages } from '@/app/i18n/notifications'
 import { rememberRecentFile } from '@/app/recent-files'
@@ -42,7 +42,7 @@ fileDialog.onChange((files) => {
 })
 
 if (IS_BROWSER && 'window' in globalThis) {
-  setOpenPencilOpenFileHandler(async (path: string) => {
+  setRedrobDesignOpenFileHandler(async (path: string) => {
     const resourceURL = resolveBrowserFileURL(path)
     const response = await fetch(resourceURL)
     const blob = await response.blob()

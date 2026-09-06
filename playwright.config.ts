@@ -26,13 +26,13 @@ export default defineConfig({
   },
   projects: [
     {
-      name: 'openpencil',
+      name: 'redrobdesign',
       testDir: './tests/e2e',
       testIgnore: '**/native/**',
       fullyParallel: false
     },
     {
-      name: 'openpencil-webkit',
+      name: 'redrobdesign-webkit',
       testDir: './tests/e2e',
       testMatch: [
         '**/*.webkit.spec.ts',

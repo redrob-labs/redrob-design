@@ -260,7 +260,7 @@ describe('@redrob-design/dom-css conversion', () => {
     const document = sceneGraphToDesignDocument(graph)
     const html = serializeHTML(document)
 
-    expect(html).toContain('OpenPencil')
+    expect(html).toContain('RedrobDesign')
     expect(html).toContain('box-shadow')
   })
 
@@ -314,7 +314,7 @@ describe('@redrob-design/dom-css conversion', () => {
 
     expect(image.fills[0]).toBeUndefined()
     expect(image.pluginData).toContainEqual({
-      pluginId: 'open-pencil-dom-css',
+      pluginId: 'redrob-design-dom-css',
       key: 'image-source-url',
       value: 'https://example.com/hero.png'
     })

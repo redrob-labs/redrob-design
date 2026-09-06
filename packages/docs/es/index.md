@@ -13,10 +13,10 @@ hero:
       link: https://app.redrob.design/demo
     - theme: alt
       text: Descargar
-      link: https://github.com/open-pencil/open-pencil/releases/latest
+      link: https://github.com/redrob-design/redrob-design/releases/latest
     - theme: alt
       text: GitHub
-      link: https://github.com/open-pencil/open-pencil
+      link: https://github.com/redrob-design/redrob-design
 
 features:
   - icon: 📂

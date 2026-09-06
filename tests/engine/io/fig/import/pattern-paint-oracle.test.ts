@@ -42,8 +42,8 @@ interface PaintOracle {
         pairedRowCount: number
         avgDeltaY: number
         avgDeltaFirstX: number
-        missingOpenPencilRows: number
-        extraOpenPencilRows: number
+        missingRedrobDesignRows: number
+        extraRedrobDesignRows: number
       }
     >
   }

@@ -6,7 +6,7 @@ import { AUTOMATION_HTTP_PORT } from '@redrob-design/core/constants'
 import { devAutomationRoute } from '../src/app/automation/bridge/portless-route'
 import { automationPlugin } from '../src/app/automation/bridge/vite-plugin'
 
-const devAutomationAuthToken = process.env.OPENPENCIL_DEV_TOKEN ?? randomUUID()
+const devAutomationAuthToken = process.env.REDROB_DESIGN_DEV_TOKEN ?? randomUUID()
 
 export function localAutomationToken(command: string): string | null {
   return command === 'serve' ? devAutomationAuthToken : null

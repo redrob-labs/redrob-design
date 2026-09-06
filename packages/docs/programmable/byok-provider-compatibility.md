@@ -201,7 +201,7 @@ genuinely declined.
 
 Only `"none"` actually eliminated reasoning on Scaleway; `"low"` had no measurable effect.
 Redrob Design cannot send this today — see
-[#454](https://github.com/open-pencil/open-pencil/issues/454).
+[#454](https://github.com/redrob-design/redrob-design/issues/454).
 
 ### Known issue: reasoning models and the connection test
 

@@ -19,9 +19,9 @@ self.onmessage = ({ data }) => {
     if (type === __fragment) return normalizedChildren
     return { type, props: normalizedProps, children: normalizedChildren }
   }
-  const helper = (name) => (...args) => ({ __openPencilHelper: name, args })
+  const helper = (name) => (...args) => ({ __redrobDesignHelper: name, args })
   const helperRuntime = (name) => {
-    if (name === 'defineVars') return (vars) => Object.fromEntries(Object.entries(vars).map(([key, value]) => [key, { __openPencilHelper: 'designVar', args: [value] }]))
+    if (name === 'defineVars') return (vars) => Object.fromEntries(Object.entries(vars).map(([key, value]) => [key, { __redrobDesignHelper: 'designVar', args: [value] }]))
     return helper(name)
   }
   const names = Object.keys(elements)
@@ -101,21 +101,21 @@ export function sandboxDocument({ elements, helpers, limits }: SandboxDocumentOp
   const workers = new Map()
   addEventListener('message', (event) => {
     const message = event.data
-    if (!message || message.type !== 'open-pencil-design-jsx-run') return
+    if (!message || message.type !== 'redrob-design-design-jsx-run') return
     const worker = new Worker(workerURL)
     workers.set(message.id, worker)
     worker.onmessage = ({ data }) => {
-      parent.postMessage({ type: 'open-pencil-design-jsx-result', ...data }, '*')
+      parent.postMessage({ type: 'redrob-design-design-jsx-result', ...data }, '*')
       worker.terminate()
       workers.delete(message.id)
     }
     worker.onerror = () => {
-      parent.postMessage({ type: 'open-pencil-design-jsx-result', id: message.id, ok: false, error: 'Design JSX execution failed.' }, '*')
+      parent.postMessage({ type: 'redrob-design-design-jsx-result', id: message.id, ok: false, error: 'Design JSX execution failed.' }, '*')
       worker.terminate()
       workers.delete(message.id)
     }
     worker.postMessage({ id: message.id, code: message.code, elements: ${escapedElements}, helpers: ${escapedHelpers}, limits: ${escapedLimits} })
   })
-  parent.postMessage({ type: 'open-pencil-design-jsx-ready' }, '*')
+  parent.postMessage({ type: 'redrob-design-design-jsx-ready' }, '*')
   </script></body></html>`
 }

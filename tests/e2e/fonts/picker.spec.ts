@@ -8,8 +8,8 @@ async function openTypographyForText(page: Page) {
   await canvas.waitForInit()
 
   return page.evaluate(() => {
-    const store = window.openPencil?.getStore?.()
-    if (!store) throw new Error('OpenPencil store not initialized')
+    const store = window.redrobDesign?.getStore?.()
+    if (!store) throw new Error('RedrobDesign store not initialized')
     const id = store.createShape('TEXT', 120, 120, 240, 40)
     store.updateNode(id, { characters: 'Font picker smoke' })
     store.select([id])
@@ -25,7 +25,7 @@ async function searchFonts(page: Page, query: string) {
   await page.getByRole('combobox', { name: 'Search fonts…' }).fill(query)
 }
 
-async function installGoogleFontsMock(page: Page, families = ['Inter', 'OpenPencil Google Font']) {
+async function installGoogleFontsMock(page: Page, families = ['Inter', 'RedrobDesign Google Font']) {
   await page.addInitScript((googleFamilies) => {
     const win = window as Window & {
       __googleFontsFetchCount?: number
@@ -39,7 +39,7 @@ async function installGoogleFontsMock(page: Page, families = ['Inter', 'OpenPenc
       if (typeof input === 'string') url = input
       else if (input instanceof URL) url = input.href
       else url = input.url
-      if (url.startsWith('https://fonts.openpencil.test/')) {
+      if (url.startsWith('https://fonts.redrobdesign.test/')) {
         win.__googleFontPreviewFetchCount = (win.__googleFontPreviewFetchCount ?? 0) + 1
         return new Response(new ArrayBuffer(8), { status: 200 })
       }
@@ -59,7 +59,7 @@ async function installGoogleFontsMock(page: Page, families = ['Inter', 'OpenPenc
       if (url.startsWith('https://fonts.googleapis.com/css2')) {
         const family = new URL(url).searchParams.get('family')?.split(':')[0] ?? 'Inter'
         return new Response(
-          `@font-face { font-family: '${family}'; font-style: normal; font-weight: 400; src: url(https://fonts.openpencil.test/${encodeURIComponent(family)}.ttf) format('truetype'); }`,
+          `@font-face { font-family: '${family}'; font-style: normal; font-weight: 400; src: url(https://fonts.redrobdesign.test/${encodeURIComponent(family)}.ttf) format('truetype'); }`,
           { status: 200, headers: { 'content-type': 'text/css' } }
         )
       }
@@ -81,9 +81,9 @@ test('font picker selects local fonts without browser web-font access', async ({
           style: 'Regular'
         },
         {
-          family: 'OpenPencil Local Font',
-          fullName: 'OpenPencil Local Font Regular',
-          postscriptName: 'OpenPencilLocalFont-Regular',
+          family: 'RedrobDesign Local Font',
+          fullName: 'RedrobDesign Local Font Regular',
+          postscriptName: 'RedrobDesignLocalFont-Regular',
           style: 'Regular'
         }
       ]
@@ -92,23 +92,23 @@ test('font picker selects local fonts without browser web-font access', async ({
 
   const textId = await openTypographyForText(page)
   await openFontPicker(page)
-  await searchFonts(page, 'OpenPencil Local Font')
+  await searchFonts(page, 'RedrobDesign Local Font')
 
   await expect(
-    page.getByTestId('font-picker-item').filter({ hasText: 'OpenPencil Local Font' })
+    page.getByTestId('font-picker-item').filter({ hasText: 'RedrobDesign Local Font' })
   ).toBeVisible()
-  await page.getByTestId('font-picker-item').filter({ hasText: 'OpenPencil Local Font' }).click()
+  await page.getByTestId('font-picker-item').filter({ hasText: 'RedrobDesign Local Font' }).click()
 
-  await expect(page.getByTestId('font-picker-trigger')).toContainText('OpenPencil Local Font')
+  await expect(page.getByTestId('font-picker-trigger')).toContainText('RedrobDesign Local Font')
   await expect
     .poll(async () =>
       page.evaluate((id) => {
-        const store = window.openPencil?.getStore?.()
+        const store = window.redrobDesign?.getStore?.()
         const node = store?.graph.getNode(id)
         return node?.type === 'TEXT' ? node.fontFamily : null
       }, textId)
     )
-    .toBe('OpenPencil Local Font')
+    .toBe('RedrobDesign Local Font')
   expect(
     await page.evaluate(
       () => (window as Window & { __googleFontsFetchCount?: number }).__googleFontsFetchCount
@@ -132,7 +132,7 @@ test('font picker keeps bundled fonts when local and web fonts are unavailable',
     page.getByTestId('font-picker-item').filter({ hasText: /^Interbundled$/ })
   ).toBeVisible()
   await expect(
-    page.getByTestId('font-picker-item').filter({ hasText: 'OpenPencil Google Font' })
+    page.getByTestId('font-picker-item').filter({ hasText: 'RedrobDesign Google Font' })
   ).toHaveCount(0)
   expect(
     await page.evaluate(
@@ -160,7 +160,7 @@ test('font picker keeps bundled fonts when local font permission is rejected', a
     page.getByTestId('font-picker-item').filter({ hasText: /^Interbundled$/ })
   ).toBeVisible()
   await expect(
-    page.getByTestId('font-picker-item').filter({ hasText: 'OpenPencil Google Font' })
+    page.getByTestId('font-picker-item').filter({ hasText: 'RedrobDesign Google Font' })
   ).toHaveCount(0)
   expect(
     await page.evaluate(

@@ -4,7 +4,7 @@ import type { SceneNode } from '@redrob-design/core'
 import { applyPadding, isVarRef, type VarContext } from '@redrob-design/pen'
 
 /**
- * Regression test for open-pencil/open-pencil#201
+ * Regression test for redrob-design/redrob-design#201
  *
  * Design token variables ($--spacing-lg etc.) in padding and gap fields
  * must be resolved to numeric values before reaching yoga-layout.

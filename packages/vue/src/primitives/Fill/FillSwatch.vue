@@ -45,7 +45,7 @@ const slotProps = computed(() => ({
     :data-fill-type="effectiveFill.type"
     :data-fill-category="category"
     :data-transparent="transparent ? '' : undefined"
-    :style="{ '--open-pencil-fill-swatch-background': background }"
+    :style="{ '--redrob-design-fill-swatch-background': background }"
     role="img"
     aria-roledescription="fill swatch"
     data-slot="swatch"

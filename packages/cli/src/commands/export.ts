@@ -21,7 +21,7 @@ import { loadDocument, populateDocumentPage, populateWholeDocument } from '#cli/
 const io = new IORegistry(BUILTIN_IO_FORMATS)
 const RASTER_FORMATS = ['PNG', 'JPG', 'WEBP']
 const ALL_FORMATS = new Set([...RASTER_FORMATS, 'SVG', 'PDF', 'PPTX', 'JSX', 'FIG', 'HTML'])
-const JSX_STYLES = new Set(['openpencil', 'tailwind'])
+const JSX_STYLES = new Set(['redrobdesign', 'tailwind'])
 const HTML_STYLES = new Set(['inline', 'tailwind'])
 const HTML_MODES = new Set(['fragment', 'standalone'])
 const HTML_ASSETS = new Set(['inline', 'external'])
@@ -302,8 +302,8 @@ export default defineCommand({
     },
     style: {
       type: 'string',
-      description: 'JSX style: openpencil or tailwind (default: openpencil)',
-      default: 'openpencil'
+      description: 'JSX style: redrobdesign or tailwind (default: redrobdesign)',
+      default: 'redrobdesign'
     },
     html: {
       type: 'string',
@@ -345,7 +345,7 @@ export default defineCommand({
     }
 
     if (format === 'JSX' && !JSX_STYLES.has(args.style)) {
-      printError(`Invalid JSX style "${args.style}". Use openpencil or tailwind.`)
+      printError(`Invalid JSX style "${args.style}". Use redrobdesign or tailwind.`)
       process.exit(1)
     }
 

@@ -12,7 +12,7 @@ import {
 } from './css-values'
 import type { DesignDocument, DesignNode, DesignStyleDeclaration } from './types'
 
-const DOM_CSS_PLUGIN_ID = 'open-pencil-dom-css'
+const DOM_CSS_PLUGIN_ID = 'redrob-design-dom-css'
 const IMAGE_SOURCE_URL_KEY = 'image-source-url'
 
 export interface SceneGraphToDesignOptions {
@@ -222,7 +222,7 @@ function attrsForNode(
   includeSourceIds: boolean
 ): Record<string, string> {
   const attrs: Record<string, string> = includeSourceIds
-    ? { 'data-open-pencil-node-id': node.id }
+    ? { 'data-redrob-design-node-id': node.id }
     : {}
   const sourceURL = imageSourceURL(node)
   if (sourceURL) attrs.src = sourceURL

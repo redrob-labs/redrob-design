@@ -56,7 +56,7 @@ const generatedJSX = useSceneComputed(() => {
   return selectionToJSX(
     ids,
     store.graph,
-    source.value === 'tailwind-jsx' ? 'tailwind' : 'openpencil'
+    source.value === 'tailwind-jsx' ? 'tailwind' : 'redrobdesign'
   )
 })
 
@@ -191,7 +191,7 @@ async function changeSource(next: CodeSource): Promise<void> {
 function generatedFor(next: Exclude<CodeSource, 'html-css'>): string {
   const ids = [...store.state.selectedIds]
   if (ids.length === 0) return starterSourceFor(next)
-  return selectionToJSX(ids, store.graph, next === 'tailwind-jsx' ? 'tailwind' : 'openpencil')
+  return selectionToJSX(ids, store.graph, next === 'tailwind-jsx' ? 'tailwind' : 'redrobdesign')
 }
 
 watch(

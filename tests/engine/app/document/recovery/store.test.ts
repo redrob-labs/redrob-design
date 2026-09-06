@@ -9,7 +9,7 @@ const bytes = new Uint8Array([1, 2, 3, 4])
 describe('document recovery store', () => {
   beforeEach(async () => {
     await new Promise<void>((resolve) => {
-      const request = indexedDB.deleteDatabase('open-pencil-recovery')
+      const request = indexedDB.deleteDatabase('redrob-design-recovery')
       request.onsuccess = () => resolve()
       request.onerror = () => resolve()
       request.onblocked = () => resolve()

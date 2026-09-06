@@ -112,7 +112,7 @@ function isLayerNode(value: unknown): value is LayerNode {
 
 function toLayerNode(value: unknown): LayerNode {
   if (isLayerNode(value)) return value
-  throw new Error('[open-pencil] Invalid layer tree item')
+  throw new Error('[redrob-design] Invalid layer tree item')
 }
 
 function layerTextContent(value: unknown): string {

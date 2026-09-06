@@ -24,7 +24,7 @@ export async function handleExport(target: AutomationTarget, args: unknown): Pro
 export async function handleExportJSX(target: AutomationTarget, args: unknown): Promise<unknown> {
   const store = target.store
   const jsxArgs = args as { nodeIds?: string[]; style?: string } | undefined
-  const style = (jsxArgs?.style ?? 'openpencil') as 'openpencil' | 'tailwind'
+  const style = (jsxArgs?.style ?? 'redrobdesign') as 'redrobdesign' | 'tailwind'
   const currentPage = store.graph.getNode(target.pageId)
   const nodeIds = jsxArgs?.nodeIds ?? currentPage?.childIds ?? []
   const jsx =

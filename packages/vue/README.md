@@ -1,6 +1,6 @@
 # @redrob-design/vue
 
-Headless Vue 3 SDK for building OpenPencil-powered editors.
+Headless Vue 3 SDK for building RedrobDesign-powered editors.
 
 `@redrob-design/vue` sits on top of `@redrob-design/core` and provides:
 
@@ -103,7 +103,7 @@ dimension can switch that axis to Fixed inside the same provider transaction.
 and undo-batched multi-selection updates. `AppearanceControlsRoot`
 exposes selection-derived independent-corner presentation state so consumers do not need parallel
 expansion heuristics. `PropertyListRoot` is controlled and
-editor-agnostic; OpenPencil panels connect it to selection and undo through
+editor-agnostic; RedrobDesign panels connect it to selection and undo through
 `useEditorPropertyList()`. `useColorModel()` provides precise scene-color/Reka bridges, reactive
 RGB/HSL/HSB/OkHCL channels, extensible format state, and shared slider presentation data.
 `FillRoot` and `FillSwatch` separate fill behavior and binding-aware previews from popover

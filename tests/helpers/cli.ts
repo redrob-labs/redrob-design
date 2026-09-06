@@ -8,7 +8,7 @@ export interface CLICommandResult {
   exitCode: number
 }
 
-export async function runOpenPencilCLI(args: string[]): Promise<CLICommandResult> {
+export async function runRedrobDesignCLI(args: string[]): Promise<CLICommandResult> {
   const proc = Bun.spawn(['bun', CLI, ...args], {
     stdout: 'pipe',
     stderr: 'pipe'

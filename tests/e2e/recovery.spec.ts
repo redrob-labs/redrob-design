@@ -9,8 +9,8 @@ test('keeps an unsaved document recoverable after its tab closes', async ({ brow
   await canvas.waitForInit()
 
   await page.evaluate(async () => {
-    const store = window.openPencil?.getStore?.()
-    if (!store) throw new Error('OpenPencil store not initialized')
+    const store = window.redrobDesign?.getStore?.()
+    if (!store) throw new Error('RedrobDesign store not initialized')
     const id = store.createShape('RECTANGLE', 120, 120, 240, 140)
     await store.persistRecoveryNow()
     store.updateNode(id, { name: 'Retained recovery rectangle' })
@@ -23,7 +23,7 @@ test('keeps an unsaved document recoverable after its tab closes', async ({ brow
   await expect
     .poll(() =>
       page.evaluate(async () => {
-        const request = indexedDB.open('open-pencil-recovery')
+        const request = indexedDB.open('redrob-design-recovery')
         const database = await new Promise<IDBDatabase>((resolve, reject) => {
           request.onsuccess = () => resolve(request.result)
           request.onerror = () => reject(request.error)

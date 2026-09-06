@@ -7,7 +7,7 @@ import type { NavigationBenchmarkHooks } from '@/app/performance/navigation/hook
 import { appRuntimeConfig } from '@/app/runtime/config'
 import { IS_BROWSER } from '@/constants'
 
-export interface OpenPencilTestHooks {
+export interface RedrobDesignTestHooks {
   writeCount?: () => number
   mockHandle?: FileSystemFileHandle
   savedOpen?: Window['open']
@@ -21,31 +21,31 @@ export interface OpenPencilTestHooks {
   }
 }
 
-export interface OpenPencilWindowAPI {
+export interface RedrobDesignWindowAPI {
   getStore?: () => EditorStore
   setChatTransport?: (factory: () => ChatTransport<UIMessage>) => void
   openFile?: (path: string) => Promise<void>
-  test?: OpenPencilTestHooks
+  test?: RedrobDesignTestHooks
 }
 
 declare global {
   interface Window {
-    openPencil?: OpenPencilWindowAPI
+    redrobDesign?: RedrobDesignWindowAPI
   }
 }
 
 let activeStore: EditorStore | null = null
 
-function windowAPI(): OpenPencilWindowAPI {
-  window.openPencil ??= {}
-  window.openPencil.getStore ??= () => {
+function windowAPI(): RedrobDesignWindowAPI {
+  window.redrobDesign ??= {}
+  window.redrobDesign.getStore ??= () => {
     if (!activeStore) throw new Error('Redrob Design store not initialized')
     return activeStore
   }
-  return window.openPencil
+  return window.redrobDesign
 }
 
-export function setOpenPencilStore(store: EditorStore) {
+export function setRedrobDesignStore(store: EditorStore) {
   activeStore = store
   if (!IS_BROWSER) return
   const api = windowAPI()
@@ -76,6 +76,6 @@ export function exposeChatTransportOverride(
   windowAPI().setChatTransport = setChatTransport
 }
 
-export function setOpenPencilOpenFileHandler(openFile: (path: string) => Promise<void>) {
+export function setRedrobDesignOpenFileHandler(openFile: (path: string) => Promise<void>) {
   windowAPI().openFile = openFile
 }

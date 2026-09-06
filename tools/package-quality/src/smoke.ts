@@ -172,7 +172,7 @@ function collectPublicImportSpecifiers(packageJSON: PackageJSON): string[] {
   return specifiers
 }
 
-const tempDir = mkdtempSync(join(tmpdir(), 'open-pencil-package-smoke-'))
+const tempDir = mkdtempSync(join(tmpdir(), 'redrob-design-package-smoke-'))
 
 try {
   run(['bun', 'run', 'build:packages'])
@@ -225,7 +225,7 @@ try {
   run(['npm', 'install', '--ignore-scripts', '--no-audit', '--no-fund', ...tarballs], tempDir)
 
   // @redrob-design/mcp/stdio is a CLI entry point that creates a WebSocket
-  // connection on import. It is verified via the openpencil-mcp --help
+  // connection on import. It is verified via the redrobdesign-mcp --help
   // command below, not via import eval.
   const evalSkipSpecifiers = new Set(['@redrob-design/mcp/stdio'])
 
@@ -265,7 +265,7 @@ try {
     tempDir
   )
   nodeEval(
-    "const { htmlToSceneGraph } = await import('@redrob-design/dom-css'); const graph = await htmlToSceneGraph('<div class=card>OpenPencil</div>', { cssText: '.card { width: 320px; }' }); if (graph.getPages()[0].width !== 320) throw new Error('DOM/CSS scene graph smoke failed')",
+    "const { htmlToSceneGraph } = await import('@redrob-design/dom-css'); const graph = await htmlToSceneGraph('<div class=card>RedrobDesign</div>', { cssText: '.card { width: 320px; }' }); if (graph.getPages()[0].width !== 320) throw new Error('DOM/CSS scene graph smoke failed')",
     tempDir
   )
   nodeEval(
@@ -273,13 +273,13 @@ try {
     tempDir
   )
   nodeEval(
-    "const { jsx, jsxToDesignDocument } = await import('@redrob-design/dom-css/jsx-runtime'); const document = await jsxToDesignDocument(jsx('section', { class: 'card', style: { width: '120px' }, children: 'OpenPencil' })); const node = document.children[0]; if (node?.type !== 'element' || node.inlineStyle?.width !== '120px') throw new Error('DOM/CSS JSX runtime smoke failed')",
+    "const { jsx, jsxToDesignDocument } = await import('@redrob-design/dom-css/jsx-runtime'); const document = await jsxToDesignDocument(jsx('section', { class: 'card', style: { width: '120px' }, children: 'RedrobDesign' })); const node = document.children[0]; if (node?.type !== 'element' || node.inlineStyle?.width !== '120px') throw new Error('DOM/CSS JSX runtime smoke failed')",
     tempDir
   )
 
-  run(['node', 'node_modules/.bin/openpencil', '--help'], tempDir)
-  run(['node', 'node_modules/.bin/openpencil-mcp', '--help'], tempDir)
-  run(['node', 'node_modules/.bin/openpencil-mcp-http', '--help'], tempDir)
+  run(['node', 'node_modules/.bin/redrobdesign', '--help'], tempDir)
+  run(['node', 'node_modules/.bin/redrobdesign-mcp', '--help'], tempDir)
+  run(['node', 'node_modules/.bin/redrobdesign-mcp-http', '--help'], tempDir)
 
   console.log('Packed package smoke tests passed.')
 } finally {

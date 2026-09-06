@@ -9,7 +9,7 @@ import { getActiveEditorStoreOrNull, useActiveEditorStoreRef } from '@/app/edito
 
 export type AppTheme = 'dark' | 'light' | 'auto'
 
-const THEME_STORAGE_KEY = 'open-pencil:theme'
+const THEME_STORAGE_KEY = 'redrob-design:theme'
 const DEFAULT_THEME: AppTheme = 'dark'
 
 const theme = useLocalStorage<AppTheme>(THEME_STORAGE_KEY, DEFAULT_THEME)

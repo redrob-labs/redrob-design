@@ -8,7 +8,7 @@ description: Generare immagini, SVG, HTML e altri output senza aprire l’editor
 `export` produce il rendering di una pagina o di un oggetto da un file supportato.
 
 ```sh
-bun open-pencil export design.fig -o preview.png
+bun redrob-design export design.fig -o preview.png
 ```
 
 ## Scegliere il contenuto
@@ -29,4 +29,4 @@ L’esportazione HTML crea un documento autonomo con struttura e stili disponibi
 
 `-o` o `--output` definisce il percorso. La CLI segnala formati errati, oggetti mancanti e percorsi non validi invece di produrre risultati parziali in silenzio.
 
-Consulta `bun open-pencil export --help` per formati e opzioni disponibili.
+Consulta `bun redrob-design export --help` per formati e opzioni disponibili.
