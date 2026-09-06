@@ -1,7 +1,10 @@
 import { describe, expect, test } from 'bun:test'
 
 import { exportFigFile, initCodec, parseFigFile } from '@redrob-design/core'
-import { createLibraryRevision, discoverPublishableLibraryChanges } from '@redrob-design/core/library'
+import {
+  createLibraryRevision,
+  discoverPublishableLibraryChanges
+} from '@redrob-design/core/library'
 import { SceneGraph } from '@redrob-design/scene-graph'
 
 function source() {

@@ -13,7 +13,12 @@ import IconCopyX from '~icons/lucide/copy-x'
 import IconListCollapse from '~icons/lucide/list-collapse'
 import IconSquaresIntersect from '~icons/lucide/squares-intersect'
 
-import { editorCommandMetadata, formatShortcut, useEditorCommands, useI18n } from '@redrob-design/vue'
+import {
+  editorCommandMetadata,
+  formatShortcut,
+  useEditorCommands,
+  useI18n
+} from '@redrob-design/vue'
 import type { EditorCommandId } from '@redrob-design/vue'
 
 import Tip from '@/components/ui/Tip.vue'

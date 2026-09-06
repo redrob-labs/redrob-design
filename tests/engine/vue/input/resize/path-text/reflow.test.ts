@@ -368,7 +368,10 @@ describe('resize + export integration: real commit path clears stale raw payload
         }))
       },
       strokeGeometry: [
-        { windingRule: 'NONZERO', commandsBlob: { __redrobDesignFigmaBlob: squareGeometryBlob(256) } }
+        {
+          windingRule: 'NONZERO',
+          commandsBlob: { __redrobDesignFigmaBlob: squareGeometryBlob(256) }
+        }
       ]
     }
 

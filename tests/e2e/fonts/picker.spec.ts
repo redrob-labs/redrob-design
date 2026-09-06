@@ -25,7 +25,10 @@ async function searchFonts(page: Page, query: string) {
   await page.getByRole('combobox', { name: 'Search fonts…' }).fill(query)
 }
 
-async function installGoogleFontsMock(page: Page, families = ['Inter', 'RedrobDesign Google Font']) {
+async function installGoogleFontsMock(
+  page: Page,
+  families = ['Inter', 'RedrobDesign Google Font']
+) {
   await page.addInitScript((googleFamilies) => {
     const win = window as Window & {
       __googleFontsFetchCount?: number

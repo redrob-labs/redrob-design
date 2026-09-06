@@ -2,7 +2,11 @@ import type { Paragraph } from 'canvaskit-wasm'
 import { isEqual } from 'es-toolkit/predicate'
 
 import type { SceneNode, StyleRun } from '@redrob-design/scene-graph'
-import { copyDerivedGlyphs, copyGeometryPaths, copyStyleRuns } from '@redrob-design/scene-graph/copy'
+import {
+  copyDerivedGlyphs,
+  copyGeometryPaths,
+  copyStyleRuns
+} from '@redrob-design/scene-graph/copy'
 
 export type TextEditSizeSnapshot = Partial<Pick<SceneNode, 'width' | 'height'>>
 

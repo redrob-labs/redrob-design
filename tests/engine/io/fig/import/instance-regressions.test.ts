@@ -1,6 +1,11 @@
 import { beforeAll, describe, expect, setDefaultTimeout, test } from 'bun:test'
 
-import { computeAllLayouts, parseFigFile, type SceneGraph, type SceneNode } from '@redrob-design/core'
+import {
+  computeAllLayouts,
+  parseFigFile,
+  type SceneGraph,
+  type SceneNode
+} from '@redrob-design/core'
 
 import { computeContentBounds } from '#core/io/formats/raster/render'
 

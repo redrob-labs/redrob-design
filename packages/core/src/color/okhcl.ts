@@ -161,7 +161,11 @@ export function setNodeFillOkHCL(
 
   return {
     fills,
-    pluginData: payloads.map((value) => ({ pluginId: 'redrob-design', key: OKHCL_PLUGIN_KEY, value }))
+    pluginData: payloads.map((value) => ({
+      pluginId: 'redrob-design',
+      key: OKHCL_PLUGIN_KEY,
+      value
+    }))
   }
 }
 
@@ -189,7 +193,11 @@ export function setNodeStrokeOkHCL(
 
   return {
     strokes,
-    pluginData: payloads.map((value) => ({ pluginId: 'redrob-design', key: OKHCL_PLUGIN_KEY, value }))
+    pluginData: payloads.map((value) => ({
+      pluginId: 'redrob-design',
+      key: OKHCL_PLUGIN_KEY,
+      value
+    }))
   }
 }
 

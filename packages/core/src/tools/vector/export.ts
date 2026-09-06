@@ -12,7 +12,8 @@ export const exportSVG = defineTool({
     },
     path: {
       type: 'string',
-      description: 'Write SVG to this path instead of returning it (requires REDROB_DESIGN_MCP_ROOT)'
+      description:
+        'Write SVG to this path instead of returning it (requires REDROB_DESIGN_MCP_ROOT)'
     }
   },
   execute: async (figma, args) => {

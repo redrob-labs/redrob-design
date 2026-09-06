@@ -30,7 +30,10 @@ export function createRedrobAliases(rootDir: string) {
       find: /^@redrob-design\/scene-graph$/,
       replacement: resolve(rootDir, 'packages/scene-graph/src/index.ts')
     },
-    { find: '@redrob-design/scene-graph', replacement: resolve(rootDir, 'packages/scene-graph/src') },
+    {
+      find: '@redrob-design/scene-graph',
+      replacement: resolve(rootDir, 'packages/scene-graph/src')
+    },
     { find: /^@redrob-design\/pen$/, replacement: resolve(rootDir, 'packages/pen/src/index.ts') },
     { find: '@redrob-design/pen', replacement: resolve(rootDir, 'packages/pen/src') },
     { find: /^@redrob-design\/kiwi$/, replacement: resolve(rootDir, 'packages/kiwi/src/index.ts') },

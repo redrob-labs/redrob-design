@@ -164,15 +164,15 @@
      `Pretendard` covers an OS install, and the system stack is a last resort while the face is in
      flight rather than an alternative. */
   --font-sans:
-    "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI",
-    Roboto, "Helvetica Neue", Arial, sans-serif;
+    'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, 'Segoe UI',
+    Roboto, 'Helvetica Neue', Arial, sans-serif;
   /* A deliberate alias, not a placeholder for a future serif. There is no second display face;
      brand moments use the same family at a heavier weight and tighter tracking. */
   --font-display: var(--font-sans);
   /* Code only: editor surfaces, token values, diffs. Never UI labels or body copy. */
   --font-mono:
-    "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo,
-    Consolas, "Liberation Mono", monospace;
+    'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo,
+    Consolas, 'Liberation Mono', monospace;
 
   /* Extended type scale */
   --font-size-display-2xl: 48px;
@@ -341,7 +341,7 @@ pre,
 .mono,
 .num {
   font-family: var(--font-mono);
-  font-feature-settings: "tnum";
+  font-feature-settings: 'tnum';
 }
 
 /**

@@ -1,6 +1,5 @@
 // Adopt legacy `open-pencil:` localStorage keys before any store reads them.
 import '@/app/storage/legacy-prefix-migration'
-
 import { createHead } from '@unhead/vue/client'
 import { createApp } from 'vue'
 

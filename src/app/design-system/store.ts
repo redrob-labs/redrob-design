@@ -1,10 +1,11 @@
+import { useLocalStorage } from '@vueuse/core'
+import { computed } from 'vue'
+
 import {
   STORED_DESIGN_SYSTEM_SCHEMA_VERSION,
   StoredDesignSystem,
   type DesignToken
 } from '@redrob-design/brand'
-import { useLocalStorage } from '@vueuse/core'
-import { computed } from 'vue'
 
 /**
  * Persisted design-system store for the "Import design tokens" feature.

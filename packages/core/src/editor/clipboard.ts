@@ -87,7 +87,12 @@ export function createClipboardActions(ctx: EditorContext) {
   async function pasteFromHTML(html: string, cursorPos?: Vector, options: PasteOptions = {}) {
     const redrobDesign = parseRedrobDesignClipboard(html)
     if (redrobDesign) {
-      const created = pasteRedrobDesignNodes(redrobDesign.nodes, redrobDesign.images, cursorPos, options)
+      const created = pasteRedrobDesignNodes(
+        redrobDesign.nodes,
+        redrobDesign.images,
+        cursorPos,
+        options
+      )
       await fontActions.loadFontsForNodes(created)
       return
     }

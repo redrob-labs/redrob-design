@@ -251,8 +251,16 @@ export {
   type NearestResult,
   type NetworkNearestResult
 } from './vector/bezier'
-export { computeSelectionBounds, computeSnap, type SnapGuide } from '@redrob-design/scene-graph/snap'
-export { UndoManager, type UndoEntry, type UndoManagerOptions } from '@redrob-design/scene-graph/undo'
+export {
+  computeSelectionBounds,
+  computeSnap,
+  type SnapGuide
+} from '@redrob-design/scene-graph/snap'
+export {
+  UndoManager,
+  type UndoEntry,
+  type UndoManagerOptions
+} from '@redrob-design/scene-graph/undo'
 export { TextEditor, type TextCaret, type TextEditorState } from './text/editor'
 export {
   getStyleAt,

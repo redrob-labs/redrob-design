@@ -23,6 +23,6 @@ export const tokens = {
     'text-muted': 'var(--color-text-muted)',
     success: 'var(--color-success)',
     warning: 'var(--color-warning)',
-    error: 'var(--color-error)',
-  },
-} as const;
+    error: 'var(--color-error)'
+  }
+} as const

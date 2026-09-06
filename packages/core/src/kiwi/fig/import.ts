@@ -14,7 +14,12 @@ import {
   resolveVariableConsumptionEntry,
   setVariableColorResolver
 } from '@redrob-design/fig/node-change'
-import type { NodeChange, VariableDataValuesEntry, Color, GUID } from '@redrob-design/kiwi/fig/codec'
+import type {
+  NodeChange,
+  VariableDataValuesEntry,
+  Color,
+  GUID
+} from '@redrob-design/kiwi/fig/codec'
 import { SceneGraph } from '@redrob-design/scene-graph'
 import type {
   ComponentPropertyDefinition,

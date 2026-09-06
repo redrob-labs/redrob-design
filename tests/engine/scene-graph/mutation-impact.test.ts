@@ -1,6 +1,10 @@
 import { describe, expect, test } from 'bun:test'
 
-import { collectSceneMutation, mutationLayoutScopeIds, SceneGraph } from '@redrob-design/scene-graph'
+import {
+  collectSceneMutation,
+  mutationLayoutScopeIds,
+  SceneGraph
+} from '@redrob-design/scene-graph'
 
 function pageId(graph: SceneGraph): string {
   return graph.getPages()[0].id

@@ -129,7 +129,8 @@ try {
     )
     await page.evaluate(() => {
       const store = window.redrobDesign?.getStore?.()
-      if (!store) throw new Error('RedrobDesign store not available after opening benchmark document')
+      if (!store)
+        throw new Error('RedrobDesign store not available after opening benchmark document')
       store.zoomToFit()
     })
   } else {

@@ -13,7 +13,8 @@ export const getJSX = defineTool({
     id: { type: 'string', description: 'Node ID', required: true },
     path: {
       type: 'string',
-      description: 'Write JSX to this path instead of returning it (requires REDROB_DESIGN_MCP_ROOT)'
+      description:
+        'Write JSX to this path instead of returning it (requires REDROB_DESIGN_MCP_ROOT)'
     }
   },
   execute: (figma, { id }) => {

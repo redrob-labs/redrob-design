@@ -155,7 +155,10 @@ test('two browser peers synchronize editing, awareness, departure, and reconnect
 
     await expect
       .poll(() =>
-        guest.page.evaluate((id) => window.redrobDesign?.getStore?.().graph.getNode(id)?.name, nodeId)
+        guest.page.evaluate(
+          (id) => window.redrobDesign?.getStore?.().graph.getNode(id)?.name,
+          nodeId
+        )
       )
       .toBe('Shared rectangle')
 
@@ -169,7 +172,10 @@ test('two browser peers synchronize editing, awareness, departure, and reconnect
 
     await expect
       .poll(() =>
-        host.page.evaluate((id) => window.redrobDesign?.getStore?.().graph.getNode(id)?.name, nodeId)
+        host.page.evaluate(
+          (id) => window.redrobDesign?.getStore?.().graph.getNode(id)?.name,
+          nodeId
+        )
       )
       .toBe('Edited by Guest')
     await expect

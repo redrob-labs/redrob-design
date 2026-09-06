@@ -45,7 +45,10 @@ test('shows constraints only for eligible frame children', async ({ page }) => {
   const section = propertySection(page, 'Constraints')
   await expect(section).toBeVisible()
 
-  await page.evaluate((frameId) => window.redrobDesign?.getStore?.()?.select([frameId]), ids.frameId)
+  await page.evaluate(
+    (frameId) => window.redrobDesign?.getStore?.()?.select([frameId]),
+    ids.frameId
+  )
   await expect(section).toBeHidden()
 })
 
@@ -128,7 +131,10 @@ test('multi-selection constraint changes undo in one step', async ({ page }) => 
 
 test('resizing a frame applies child constraints', async ({ page }) => {
   const ids = await createConstrainedChildren(page)
-  await page.evaluate((frameId) => window.redrobDesign?.getStore?.()?.select([frameId]), ids.frameId)
+  await page.evaluate(
+    (frameId) => window.redrobDesign?.getStore?.()?.select([frameId]),
+    ids.frameId
+  )
   const canvas = new CanvasHelper(page)
   await canvas.waitForRender()
 

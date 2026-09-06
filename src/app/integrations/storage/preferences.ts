@@ -10,7 +10,10 @@ export const activeStorageProviderID = useLocalStorage<StorageProviderID>(
   's3-compatible'
 )
 
-const storedPreferences = useLocalStorage<StoragePreferences>('redrob-design:storage:preferences', {})
+const storedPreferences = useLocalStorage<StoragePreferences>(
+  'redrob-design:storage:preferences',
+  {}
+)
 
 export function readStoragePreferences(
   providerID: StorageProviderID

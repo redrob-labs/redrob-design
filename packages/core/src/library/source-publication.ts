@@ -25,7 +25,8 @@ export function readSourceLibraryPublication(graph: SceneGraph): SourceLibraryPu
   const root = graph.getNode(graph.rootId)
   const entry = root?.pluginData.find(
     (item) =>
-      item.pluginId === REDROB_DESIGN_PLUGIN_ID && item.key === SOURCE_LIBRARY_PUBLICATION_PLUGIN_KEY
+      item.pluginId === REDROB_DESIGN_PLUGIN_ID &&
+      item.key === SOURCE_LIBRARY_PUBLICATION_PLUGIN_KEY
   )
   if (!entry) return null
   try {

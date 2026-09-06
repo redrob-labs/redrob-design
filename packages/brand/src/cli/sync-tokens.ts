@@ -8,26 +8,27 @@
  * decks ship in this package, so the CLI is a no-op on a clean tree.
  */
 
-import { readFile, writeFile } from 'node:fs/promises';
-import { DECKS, deckSourcePath, loadRedrobBrandTokens, syncDeckTokens } from '../node.ts';
+import { readFile, writeFile } from 'node:fs/promises'
+
+import { DECKS, deckSourcePath, loadRedrobBrandTokens, syncDeckTokens } from '../node.ts'
 
 async function main(): Promise<void> {
-  const tokens = await loadRedrobBrandTokens();
-  const changed: string[] = [];
+  const tokens = await loadRedrobBrandTokens()
+  const changed: string[] = []
   for (const deck of DECKS) {
-    const file = deckSourcePath(deck);
-    const before = await readFile(file, 'utf8');
-    const after = syncDeckTokens(before, tokens);
+    const file = deckSourcePath(deck)
+    const before = await readFile(file, 'utf8')
+    const after = syncDeckTokens(before, tokens)
     if (after !== before) {
-      await writeFile(file, after, 'utf8');
-      changed.push(deck.id);
+      await writeFile(file, after, 'utf8')
+      changed.push(deck.id)
     }
   }
   process.stdout.write(
     changed.length === 0
       ? `redrob-brand (${tokens.name}): all ${DECKS.length} deck(s) already in sync\n`
-      : `redrob-brand (${tokens.name}): updated ${changed.join(', ')}\n`,
-  );
+      : `redrob-brand (${tokens.name}): updated ${changed.join(', ')}\n`
+  )
 }
 
-await main();
+await main()

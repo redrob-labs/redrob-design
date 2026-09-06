@@ -1,36 +1,36 @@
-import type { DesignToken } from '../shared/index.ts';
+import type { DesignToken } from '../shared/index.ts'
 
-type TokenType = DesignToken['type'];
+type TokenType = DesignToken['type']
 
 function inferType(prop: string, value: string): TokenType | null {
-  const p = prop.toLowerCase();
+  const p = prop.toLowerCase()
 
   // Order matters: specific shape patterns must run before broad color keywords
   // so things like `--border-radius-md` and `--text-lg` are not misclassified.
-  if (/font-size|text-size/.test(p)) return 'fontSize';
-  if (/font-family|font-sans|font-mono|font-serif|typeface/.test(p)) return 'fontFamily';
-  if (/line-height|leading/.test(p)) return 'lineHeight';
-  if (/radius|rounded|border-radius/.test(p)) return 'radius';
-  if (/shadow|elevation/.test(p)) return 'shadow';
-  if (/spacing|space|gap|padding|margin|indent|offset/.test(p)) return 'spacing';
+  if (/font-size|text-size/.test(p)) return 'fontSize'
+  if (/font-family|font-sans|font-mono|font-serif|typeface/.test(p)) return 'fontFamily'
+  if (/line-height|leading/.test(p)) return 'lineHeight'
+  if (/radius|rounded|border-radius/.test(p)) return 'radius'
+  if (/shadow|elevation/.test(p)) return 'shadow'
+  if (/spacing|space|gap|padding|margin|indent|offset/.test(p)) return 'spacing'
 
   // `--text-*` is ambiguous in Tailwind v4 (size vs color). Disambiguate by value.
   if (/^text-/.test(p)) {
-    if (looksLikeColor(value)) return 'color';
-    if (looksLikeLength(value)) return 'fontSize';
-    if (/^text-(xs|sm|base|lg|xl|\d+xl)$/.test(p)) return 'fontSize';
-    return 'color';
+    if (looksLikeColor(value)) return 'color'
+    if (looksLikeLength(value)) return 'fontSize'
+    if (/^text-(xs|sm|base|lg|xl|\d+xl)$/.test(p)) return 'fontSize'
+    return 'color'
   }
 
   if (
     /color|palette|brand|accent|fg|bg|foreground|background|fill|stroke|ring|border-color/.test(p)
   )
-    return 'color';
+    return 'color'
 
   // Value-based classifier (handles e.g. `--border-primary: #fff` after broad keywords).
-  if (looksLikeColor(value)) return 'color';
+  if (looksLikeColor(value)) return 'color'
 
-  return null;
+  return null
 }
 
 function looksLikeColor(value: string): boolean {
@@ -40,46 +40,46 @@ function looksLikeColor(value: string): boolean {
     /^hsla?\s*\(/.test(value) ||
     /^oklch\s*\(/.test(value) ||
     /^color\s*\(/.test(value)
-  );
+  )
 }
 
 function looksLikeLength(value: string): boolean {
-  return /^-?\d*\.?\d+(px|rem|em|%|vh|vw|ch|ex|pt|cm|mm|in)\b/i.test(value.trim());
+  return /^-?\d*\.?\d+(px|rem|em|%|vh|vw|ch|ex|pt|cm|mm|in)\b/i.test(value.trim())
 }
 
 // Extract all CSS custom-property declarations from `:root` or `[data-theme]`
 // blocks in the given CSS source text.
 function extractDeclarations(source: string): Array<{ prop: string; value: string }> {
-  const results: Array<{ prop: string; value: string }> = [];
+  const results: Array<{ prop: string; value: string }> = []
 
-  const blockRe = /(?::root|\[data-theme[^\]]*\])\s*\{([^}]*)\}/g;
-  const blockMatches = [...source.matchAll(blockRe)];
+  const blockRe = /(?::root|\[data-theme[^\]]*\])\s*\{([^}]*)\}/g
+  const blockMatches = [...source.matchAll(blockRe)]
 
   for (const blockMatch of blockMatches) {
-    const body = blockMatch[1];
-    if (!body) continue;
+    const body = blockMatch[1]
+    if (!body) continue
 
-    const declRe = /--([\w-]+)\s*:\s*([^;]+);/g;
-    const declMatches = [...body.matchAll(declRe)];
+    const declRe = /--([\w-]+)\s*:\s*([^;]+);/g
+    const declMatches = [...body.matchAll(declRe)]
 
     for (const dm of declMatches) {
-      const prop = dm[1]?.trim();
-      const value = dm[2]?.trim();
-      if (prop && value) results.push({ prop, value });
+      const prop = dm[1]?.trim()
+      const value = dm[2]?.trim()
+      if (prop && value) results.push({ prop, value })
     }
   }
 
-  return results;
+  return results
 }
 
 /** Extract design tokens from CSS custom-property source text. */
 export function extractFromCssVarsSource(source: string): DesignToken[] {
-  const declarations = extractDeclarations(source);
-  const tokens: DesignToken[] = [];
+  const declarations = extractDeclarations(source)
+  const tokens: DesignToken[] = []
 
   for (const { prop, value } of declarations) {
-    const tokenType = inferType(prop, value);
-    if (!tokenType) continue;
+    const tokenType = inferType(prop, value)
+    if (!tokenType) continue
 
     tokens.push({
       schemaVersion: 1,
@@ -87,10 +87,9 @@ export function extractFromCssVarsSource(source: string): DesignToken[] {
       name: prop,
       value,
       origin: 'css-vars',
-      group: prop.split('-').slice(0, 3).join('-'),
-    });
+      group: prop.split('-').slice(0, 3).join('-')
+    })
   }
 
-  return tokens;
+  return tokens
 }
-
