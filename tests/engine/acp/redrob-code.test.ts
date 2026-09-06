@@ -1,4 +1,6 @@
 import { describe, expect, test } from 'bun:test'
+import { readFileSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
 
 import {
   ACP_AGENTS,
@@ -24,7 +26,7 @@ describe('resolveRedrobCodeCommand', () => {
     const resolved = resolveRedrobCodeCommand({ REDROB_CODE_BIN: '/opt/redrob/bin/redrob' })
     expect(resolved).toEqual({
       command: '/opt/redrob/bin/redrob',
-      args: [],
+      args: ['acp'],
       source: 'REDROB_CODE_BIN'
     })
   })
@@ -39,7 +41,7 @@ describe('resolveRedrobCodeCommand', () => {
     const resolved = resolveRedrobCodeCommand({ REDROB_CODE_DEV_ROOT: '/src/redrob-code' })
     expect(resolved).toEqual({
       command: 'bun',
-      args: ['run', '/src/redrob-code/packages/redrob/src/index.ts'],
+      args: ['run', '/src/redrob-code/packages/redrob/src/index.ts', 'acp'],
       source: 'REDROB_CODE_DEV_ROOT'
     })
   })
@@ -63,13 +65,22 @@ describe('resolveRedrobCodeCommand', () => {
 
   test('defaults to the redrob binary on PATH with no env', () => {
     const resolved = resolveRedrobCodeCommand({})
-    expect(resolved).toEqual({ command: 'redrob', args: [], source: 'PATH' })
+    expect(resolved).toEqual({ command: 'redrob', args: ['acp'], source: 'PATH' })
   })
 
   test('treats blank env values as unset and falls back to PATH', () => {
     const resolved = resolveRedrobCodeCommand({ REDROB_CODE_BIN: '   ', REDROB_CODE_DEV_ROOT: '' })
     expect(resolved.source).toBe('PATH')
     expect(resolved.command).toBe('redrob')
+    expect(resolved.args).toEqual(['acp'])
+  })
+
+  test('always appends the acp subcommand so the engine speaks ACP, not the TUI', () => {
+    // A bare `redrob` invocation opens the interactive TUI; only `redrob acp`
+    // starts the stdio ACP server the transport connects to.
+    expect(resolveRedrobCodeCommand({}).args).toEqual(['acp'])
+    expect(resolveRedrobCodeCommand({ REDROB_CODE_BIN: '/opt/redrob' }).args).toEqual(['acp'])
+    expect(resolveRedrobCodeCommand({ REDROB_CODE_DEV_ROOT: '/src/x' }).args.at(-1)).toBe('acp')
   })
 })
 
@@ -129,7 +140,8 @@ describe('acp:redrob-code registration + default Design agent', () => {
     const redrobAgent = requireAgent(REDROB_CODE_AGENT_ID)
     // The sandbox has no REDROB_CODE_BIN/DEV_ROOT override, so it resolves to PATH.
     expect(redrobAgent.command).toBe('redrob')
-    expect(redrobAgent.args).toEqual([])
+    // The `acp` subcommand is what starts the stdio ACP server the transport speaks to.
+    expect(redrobAgent.args).toEqual(['acp'])
   })
 
   test('the provider ID is acp:redrob-code', () => {
@@ -147,5 +159,37 @@ describe('acp:redrob-code registration + default Design agent', () => {
     expect(role?.connection.providerID).toBe(REDROB_CODE_PROVIDER_ID)
     // ACP design agents drive the editor tools, so the profile must support tools.
     expect(role?.profile.capabilities).toContain('tools')
+  })
+})
+
+describe('Tauri shell capability allows spawning the Redrob Code engine', () => {
+  const capabilityPath = fileURLToPath(
+    new URL('../../../desktop/capabilities/default.json', import.meta.url)
+  )
+  const capability = JSON.parse(readFileSync(capabilityPath, 'utf8')) as {
+    permissions: Array<
+      string | { identifier: string; allow?: Array<{ name?: string; cmd?: string }> }
+    >
+  }
+
+  function shellSpawnAllow() {
+    const entry = capability.permissions.find(
+      (p): p is { identifier: string; allow?: Array<{ name?: string; cmd?: string }> } =>
+        typeof p === 'object' && p.identifier === 'shell:allow-spawn'
+    )
+    if (!entry?.allow) throw new Error('shell:allow-spawn permission is missing an allow list')
+    return entry.allow
+  }
+
+  test('the production redrob command the transport spawns is allowlisted', () => {
+    // resolvePlatformCommand passes the resolved command name straight through on
+    // non-Windows, so the Tauri shell scope must allow a command named "redrob".
+    const resolved = resolveRedrobCodeCommand({})
+    expect(resolved.command).toBe('redrob')
+
+    const allow = shellSpawnAllow()
+    const redrob = allow.find((a) => a.name === 'redrob')
+    expect(redrob).toBeDefined()
+    expect(redrob?.cmd).toBe('redrob')
   })
 })

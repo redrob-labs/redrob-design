@@ -56,6 +56,7 @@
     {
       "identifier": "shell:allow-spawn",
       "allow": [
+        { "name": "redrob", "cmd": "redrob", "args": true },
         { "name": "claude-agent-acp", "cmd": "claude-agent-acp", "args": true },
         { "name": "codex-acp", "cmd": "codex-acp", "args": true },
         { "name": "gemini", "cmd": "gemini", "args": true },

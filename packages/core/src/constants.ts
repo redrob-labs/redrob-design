@@ -177,28 +177,40 @@ export interface RedrobCodeCommand {
 }
 
 /**
+ * The engine subcommand that starts the ACP stdio server. Appended to every
+ * resolved Redrob Code invocation; a bare `redrob` opens the interactive TUI
+ * and never speaks ACP.
+ */
+export const REDROB_CODE_ACP_ARGS = ['acp'] as const
+
+/**
  * Locate the Redrob Code engine, mirroring the resolution the standalone engine
  * sidecar used. `REDROB_CODE_BIN` is the packaged-binary override, and
  * `REDROB_CODE_DEV_ROOT` runs a source checkout through bun; otherwise the
  * `redrob` binary is expected on PATH.
+ *
+ * Every form appends the {@link REDROB_CODE_ACP_ARGS} subcommand: the engine
+ * only speaks the Agent Client Protocol over stdio under `redrob acp`. Without
+ * it the bare `redrob` invocation launches the interactive TUI instead, so the
+ * ACP handshake never starts.
  *
  * Kept pure (env passed in) so the ACP wiring can be unit-tested without a live
  * engine or any host environment.
  */
 export function resolveRedrobCodeCommand(env: RedrobCodeEnv = {}): RedrobCodeCommand {
   const bin = env.REDROB_CODE_BIN?.trim()
-  if (bin) return { command: bin, args: [], source: 'REDROB_CODE_BIN' }
+  if (bin) return { command: bin, args: [...REDROB_CODE_ACP_ARGS], source: 'REDROB_CODE_BIN' }
 
   const devRoot = env.REDROB_CODE_DEV_ROOT?.trim()
   if (devRoot) {
     return {
       command: env.REDROB_CODE_BUN?.trim() || 'bun',
-      args: ['run', `${devRoot}/packages/redrob/src/index.ts`],
+      args: ['run', `${devRoot}/packages/redrob/src/index.ts`, ...REDROB_CODE_ACP_ARGS],
       source: 'REDROB_CODE_DEV_ROOT'
     }
   }
 
-  return { command: 'redrob', args: [], source: 'PATH' }
+  return { command: 'redrob', args: [...REDROB_CODE_ACP_ARGS], source: 'PATH' }
 }
 
 /**
