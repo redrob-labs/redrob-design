@@ -2,14 +2,6 @@ name: Build
 
 on:
   workflow_dispatch:
-    inputs:
-      platforms:
-        description: Platforms to build. Choose windows to try Authenticode without Apple secrets.
-        type: choice
-        options:
-          - all
-          - windows
-        default: all
   push:
     tags:
       - 'v*'
@@ -20,7 +12,6 @@ permissions:
 
 jobs:
   build:
-    if: github.event_name != 'workflow_dispatch' || github.event.inputs.platforms != 'windows' || startsWith(matrix.platform, 'windows')
     strategy:
       fail-fast: false
       matrix:
