@@ -1,0 +1,164 @@
+# Publish the Redrob Design desktop downloads to https://cdn.redrob.ai/design/.
+#
+# This is not a product release: no npm, no GitHub Release, no store listing,
+# just the files the Console product page links. Pushing this file is how the
+# workflow runs, which is also how a publish is requested.
+#
+# Both jobs publish from the same commit and the same version, so design/latest/
+# holds one application rather than a Linux build from one tree and a Windows
+# build from another. The keys are the ones Console hardcodes:
+#
+#   design/<version>/redrob-design-x64-<version>-setup.exe   signed, by version
+#   design/latest/redrob-design-x64-setup.exe                the link that never moves
+#   design/latest/redrob-design-x64.{AppImage,deb,rpm}
+#
+# Windows NSIS is signed with the organization Authenticode certificate
+# (WIN_CSC_LINK / WIN_CSC_KEY_PASSWORD, read by Tauri as WINDOWS_CERTIFICATE).
+# The Linux bundles are UNSIGNED: an ubuntu runner has no Linux signing
+# identity, and the download page must not imply otherwise.
+#
+# The upload is gated on the bucket and credentials being present, so an
+# unprovisioned CDN cannot redden this build. The credentials carry
+# s3:PutObject only, so a published key is verified with an HTTP GET through
+# CloudFront and a checksum comparison, never with a listing or a read.
+name: cdn
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/cdn.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    if: github.repository == 'redrob-labs/redrob-design'
+    runs-on: windows-latest
+    env:
+      # Organization secrets shared with every desktop app that ships a Windows
+      # installer. A repository secret of the same name would override them.
+      WINDOWS_CERTIFICATE: ${{ secrets.WIN_CSC_LINK }}
+      WINDOWS_CERTIFICATE_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
+      REDROB_CDN_BUCKET: ${{ vars.REDROB_CDN_BUCKET }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.REDROB_CDN_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.REDROB_CDN_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: us-east-1
+      CDN_PUBLIC_HOST: cdn.redrob.ai
+      CDN_PREFIX: design
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Require the Windows signing certificate
+        shell: pwsh
+        run: |
+          if (-not $env:WINDOWS_CERTIFICATE) { throw "Missing WIN_CSC_LINK organization secret" }
+          if (-not $env:WINDOWS_CERTIFICATE_PASSWORD) { throw "Missing WIN_CSC_KEY_PASSWORD organization secret" }
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-pc-windows-msvc
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: desktop -> target
+          key: cdn-x86_64-pc-windows-msvc
+
+      - uses: ./.github/actions/setup-bun
+
+      - name: Read the application version
+        id: version
+        shell: bash
+        run: echo "version=$(node -p "require('./desktop/tauri.conf.json').version")" >> "$GITHUB_OUTPUT"
+
+      - name: Build the signed Windows installer
+        run: bunx tauri build --target x86_64-pc-windows-msvc --bundles nsis
+
+      - name: Verify the Authenticode signature
+        shell: pwsh
+        run: |
+          $installer = Get-ChildItem -Recurse -Filter "*-setup.exe" -Path "desktop/target/x86_64-pc-windows-msvc/release/bundle" | Select-Object -First 1
+          if (-not $installer) { throw "The NSIS installer was not produced" }
+          $signature = Get-AuthenticodeSignature $installer.FullName
+          if (-not $signature.SignerCertificate) {
+            throw "The installer has no Authenticode signer certificate"
+          }
+          # A self-signed certificate is not trusted on the runner, so Status is
+          # UnknownError or NotTrusted rather than Valid. Reject only an unsigned
+          # file or a broken hash.
+          $accepted = @("Valid", "UnknownError", "NotTrusted")
+          if ($accepted -notcontains $signature.Status.ToString()) {
+            throw "Invalid Authenticode signature: $($signature.Status) ($($signature.StatusMessage))"
+          }
+          Write-Host "Signed by: $($signature.SignerCertificate.Subject) status=$($signature.Status)"
+          New-Item -ItemType Directory -Force -Path staging | Out-Null
+          Copy-Item $installer.FullName "staging/redrob-design-x64-$($env:APP_VERSION)-setup.exe"
+        env:
+          APP_VERSION: ${{ steps.version.outputs.version }}
+
+      - name: Publish to cdn.redrob.ai
+        shell: bash
+        env:
+          APP_VERSION: ${{ steps.version.outputs.version }}
+        run: bash .github/scripts/cdn-publish.sh staging
+
+  linux:
+    if: github.repository == 'redrob-labs/redrob-design'
+    runs-on: ubuntu-22.04
+    env:
+      REDROB_CDN_BUCKET: ${{ vars.REDROB_CDN_BUCKET }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.REDROB_CDN_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.REDROB_CDN_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: us-east-1
+      CDN_PUBLIC_HOST: cdn.redrob.ai
+      CDN_PREFIX: design
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-unknown-linux-gnu
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: desktop -> target
+          key: cdn-x86_64-unknown-linux-gnu
+
+      - name: Install the Linux bundle dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf rpm
+
+      - uses: ./.github/actions/setup-bun
+
+      - name: Read the application version
+        id: version
+        run: echo "version=$(node -p "require('./desktop/tauri.conf.json').version")" >> "$GITHUB_OUTPUT"
+
+      - name: Build the Linux bundles (unsigned)
+        run: bunx tauri build --target x86_64-unknown-linux-gnu --bundles appimage,deb,rpm
+
+      # Tauri names its bundles from productName, which carries a space and the
+      # distribution's own arch spelling. Console links one name per format, so
+      # each bundle is staged under the versioned name and aliased without it.
+      - name: Stage the bundles under the published names
+        env:
+          APP_VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          mkdir -p staging
+          bundle=desktop/target/x86_64-unknown-linux-gnu/release/bundle
+          for ext in AppImage deb rpm; do
+            file="$(find "$bundle" -type f -name "*.$ext" | head -n 1)"
+            test -n "$file" || { echo "No .$ext bundle was produced"; find "$bundle" -type f; exit 1; }
+            cp "$file" "staging/redrob-design-x64-$APP_VERSION.$ext"
+          done
+          ls -la staging
+
+      - name: Publish to cdn.redrob.ai
+        env:
+          APP_VERSION: ${{ steps.version.outputs.version }}
+        run: bash .github/scripts/cdn-publish.sh staging
