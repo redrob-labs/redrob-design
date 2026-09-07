@@ -65,6 +65,7 @@ jobs:
         with:
           workspaces: desktop -> target
           key: cdn-x86_64-pc-windows-msvc
+          cache-on-failure: true
 
       - uses: ./.github/actions/setup-bun
 
@@ -73,8 +74,36 @@ jobs:
         shell: bash
         run: echo "version=$(node -p "require('./desktop/tauri.conf.json').version")" >> "$GITHUB_OUTPUT"
 
+      # `tauri build` signs from the Windows certificate store by thumbprint. The
+      # WINDOWS_CERTIFICATE pair is only read by tauri-action, which this job does
+      # not use, so the PFX is imported here and its thumbprint is handed to the
+      # bundler as a config overlay. An overlay file rather than an edit to
+      # tauri.conf.json, because a thumbprint is specific to this runner's store.
+      - name: Import the signing certificate
+        id: certificate
+        shell: pwsh
+        run: |
+          $pfx = Join-Path $env:RUNNER_TEMP "redrob-code-signing.pfx"
+          [IO.File]::WriteAllBytes($pfx, [Convert]::FromBase64String($env:WINDOWS_CERTIFICATE))
+          $password = ConvertTo-SecureString -String $env:WINDOWS_CERTIFICATE_PASSWORD -AsPlainText -Force
+          $imported = Import-PfxCertificate -FilePath $pfx -CertStoreLocation Cert:\CurrentUser\My -Password $password
+          Remove-Item $pfx -Force
+          if (-not $imported.Thumbprint) { throw "The certificate imported without a thumbprint" }
+          Write-Host "Imported $($imported.Subject)"
+          $overlay = Join-Path $env:RUNNER_TEMP "tauri.sign.conf.json"
+          @{
+            bundle = @{
+              windows = @{
+                certificateThumbprint = $imported.Thumbprint
+                digestAlgorithm       = "sha256"
+                timestampUrl          = "http://timestamp.digicert.com"
+              }
+            }
+          } | ConvertTo-Json -Depth 5 | Set-Content -Path $overlay -Encoding utf8
+          "overlay=$overlay" >> $env:GITHUB_OUTPUT
+
       - name: Build the signed Windows installer
-        run: bunx tauri build --target x86_64-pc-windows-msvc --bundles nsis
+        run: bunx tauri build --target x86_64-pc-windows-msvc --bundles nsis --config "${{ steps.certificate.outputs.overlay }}"
 
       - name: Verify the Authenticode signature
         shell: pwsh
@@ -126,6 +155,7 @@ jobs:
         with:
           workspaces: desktop -> target
           key: cdn-x86_64-unknown-linux-gnu
+          cache-on-failure: true
 
       - name: Install the Linux bundle dependencies
         run: |

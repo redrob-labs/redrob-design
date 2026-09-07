@@ -63,12 +63,27 @@ for file in "$staging"/*; do
   fi
 
   (cd "$staging" && sha256sum "$name" >"$name.sha256")
-  # Immutable: a versioned key is written once and never rewritten, so it can be
-  # cached forever and a reader who kept the URL keeps the same bytes.
+  local_sum="$(sha256sum "$file" | awk '{print $1}')"
+
+  # A versioned key is cached as immutable, so it is written once. This build is
+  # not reproducible byte for byte, so a rerun would otherwise hand two different
+  # files to readers who both kept the same URL. An identical rebuild carries on,
+  # and a different one leaves the published version alone and says so: changing
+  # what a version means requires a new version.
+  published="$RUNNER_TEMP/published-$name"
+  if curl --fail --location --silent --show-error -o "$published" \
+    "https://${host}/${prefix}/${version}/${name}"; then
+    published_sum="$(sha256sum "$published" | awk '{print $1}')"
+    if [ "$published_sum" != "$local_sum" ]; then
+      echo "::notice::${prefix}/${version}/${name} is already published with different bytes (published=$published_sum built=$local_sum). Publish a new version to change it; nothing was overwritten."
+      continue
+    fi
+    echo "Already published, unchanged: https://${host}/${prefix}/${version}/${name}"
+  fi
+
   put "$file" "$version/$name" "public, max-age=31536000, immutable"
   put "$file.sha256" "$version/$name.sha256" "public, max-age=31536000, immutable"
 
-  local_sum="$(sha256sum "$file" | awk '{print $1}')"
   remote="$RUNNER_TEMP/verify-$name"
   curl --fail --location --silent --show-error --retry 5 --retry-delay 5 \
     --retry-all-errors -o "$remote" "https://${host}/${prefix}/${version}/${name}"
