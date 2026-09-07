@@ -28,6 +28,7 @@ on:
   push:
     paths:
       - '.github/workflows/cdn.yml'
+      - '.github/scripts/cdn-publish.sh'
 
 permissions:
   contents: read
@@ -41,12 +42,8 @@ jobs:
       # installer. A repository secret of the same name would override them.
       WINDOWS_CERTIFICATE: ${{ secrets.WIN_CSC_LINK }}
       WINDOWS_CERTIFICATE_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
-      REDROB_CDN_BUCKET: ${{ vars.REDROB_CDN_BUCKET }}
-      AWS_ACCESS_KEY_ID: ${{ secrets.REDROB_CDN_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.REDROB_CDN_SECRET_ACCESS_KEY }}
-      AWS_DEFAULT_REGION: us-east-1
-      CDN_PUBLIC_HOST: cdn.redrob.ai
-      CDN_PREFIX: design
+    outputs:
+      version: ${{ steps.version.outputs.version }}
 
     steps:
       - uses: actions/checkout@v7
@@ -127,10 +124,37 @@ jobs:
         env:
           APP_VERSION: ${{ steps.version.outputs.version }}
 
+      - uses: actions/upload-artifact@v4
+        with:
+          name: signed-windows
+          path: staging/redrob-design-x64-*-setup.exe
+          if-no-files-found: error
+          retention-days: 3
+
+  # Publish from Ubuntu so the uploader sees a 403 as "not yet there" the same
+  # way the Linux job does, and so a failed upload can be retried without a
+  # 20-minute Windows rebuild.
+  publish-windows:
+    needs: windows
+    if: github.repository == 'redrob-labs/redrob-design'
+    runs-on: ubuntu-latest
+    env:
+      REDROB_CDN_BUCKET: ${{ vars.REDROB_CDN_BUCKET }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.REDROB_CDN_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.REDROB_CDN_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: us-east-1
+      CDN_PUBLIC_HOST: cdn.redrob.ai
+      CDN_PREFIX: design
+      APP_VERSION: ${{ needs.windows.outputs.version }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: signed-windows
+          path: staging
+
       - name: Publish to cdn.redrob.ai
-        shell: bash
-        env:
-          APP_VERSION: ${{ steps.version.outputs.version }}
         run: bash .github/scripts/cdn-publish.sh staging
 
   linux:

@@ -71,14 +71,20 @@ for file in "$staging"/*; do
   # and a different one leaves the published version alone and says so: changing
   # what a version means requires a new version.
   published="$RUNNER_TEMP/published-$name"
-  if curl --fail --location --silent --show-error -o "$published" \
-    "https://${host}/${prefix}/${version}/${name}"; then
+  # A missing object is 403 from this CloudFront, not 404, and --fail would
+  # redden a first publish. Read the status instead and treat only 200 as "already there".
+  published_code="$(curl --location --silent --show-error --output "$published" \
+    --write-out '%{http_code}' "https://${host}/${prefix}/${version}/${name}" || true)"
+  if [ "$published_code" = "200" ]; then
     published_sum="$(sha256sum "$published" | awk '{print $1}')"
     if [ "$published_sum" != "$local_sum" ]; then
       echo "::notice::${prefix}/${version}/${name} is already published with different bytes (published=$published_sum built=$local_sum). Publish a new version to change it; nothing was overwritten."
       continue
     fi
     echo "Already published, unchanged: https://${host}/${prefix}/${version}/${name}"
+  elif [ "$published_code" != "403" ] && [ "$published_code" != "404" ]; then
+    echo "Could not check ${prefix}/${version}/${name}: HTTP ${published_code}" >&2
+    exit 1
   fi
 
   put "$file" "$version/$name" "public, max-age=31536000, immutable"
