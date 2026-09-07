@@ -65,40 +65,50 @@ for file in "$staging"/*; do
   (cd "$staging" && sha256sum "$name" >"$name.sha256")
   local_sum="$(sha256sum "$file" | awk '{print $1}')"
 
-  # A versioned key is cached as immutable, so it is written once. This build is
-  # not reproducible byte for byte, so a rerun would otherwise hand two different
-  # files to readers who both kept the same URL. An identical rebuild carries on,
-  # and a different one leaves the published version alone and says so: changing
-  # what a version means requires a new version.
+  # A versioned key is cached as immutable, so it is written once. These builds
+  # are not reproducible byte for byte, so a rerun must not hand two different
+  # files to readers who both kept the same URL. When the version is already
+  # published, that copy stays authoritative and becomes what the alias mirrors:
+  # a rerun still repairs an alias that never moved, and changing what a version
+  # means still requires a new version.
+  #
+  # A missing object is 403 from this CloudFront rather than 404, so the status
+  # code is read instead of letting `--fail` redden a first publish.
   published="$RUNNER_TEMP/published-$name"
-  # A missing object is 403 from this CloudFront, not 404, and --fail would
-  # redden a first publish. Read the status instead and treat only 200 as "already there".
-  published_code="$(curl --location --silent --show-error --output "$published" \
+  published_code="$(curl --location --silent --output "$published" \
     --write-out '%{http_code}' "https://${host}/${prefix}/${version}/${name}" || true)"
-  if [ "$published_code" = "200" ]; then
+  case "$published_code" in
+  200)
     published_sum="$(sha256sum "$published" | awk '{print $1}')"
-    if [ "$published_sum" != "$local_sum" ]; then
-      echo "::notice::${prefix}/${version}/${name} is already published with different bytes (published=$published_sum built=$local_sum). Publish a new version to change it; nothing was overwritten."
-      continue
+    if [ "$published_sum" = "$local_sum" ]; then
+      echo "Already published, unchanged: https://${host}/${prefix}/${version}/${name}"
+    else
+      echo "::notice::${prefix}/${version}/${name} is already published (published=$published_sum built=$local_sum). Keeping the published bytes; the alias will mirror them."
+      file="$published"
+      local_sum="$published_sum"
     fi
-    echo "Already published, unchanged: https://${host}/${prefix}/${version}/${name}"
-  elif [ "$published_code" != "403" ] && [ "$published_code" != "404" ]; then
+    ;;
+  403 | 404)
+    put "$file" "$version/$name" "public, max-age=31536000, immutable"
+    put "$file.sha256" "$version/$name.sha256" "public, max-age=31536000, immutable"
+
+    # CloudFront caches the 403 this key just returned, so the read back has to
+    # outlast that negative TTL rather than fail on the first attempt.
+    remote="$RUNNER_TEMP/verify-$name"
+    curl --fail --location --silent --show-error --retry 10 --retry-delay 6 \
+      --retry-all-errors -o "$remote" "https://${host}/${prefix}/${version}/${name}"
+    remote_sum="$(sha256sum "$remote" | awk '{print $1}')"
+    if [ "$local_sum" != "$remote_sum" ]; then
+      echo "Checksum mismatch for $name: local=$local_sum remote=$remote_sum" >&2
+      exit 1
+    fi
+    echo "OK https://${host}/${prefix}/${version}/${name} ($remote_sum)"
+    ;;
+  *)
     echo "Could not check ${prefix}/${version}/${name}: HTTP ${published_code}" >&2
     exit 1
-  fi
-
-  put "$file" "$version/$name" "public, max-age=31536000, immutable"
-  put "$file.sha256" "$version/$name.sha256" "public, max-age=31536000, immutable"
-
-  remote="$RUNNER_TEMP/verify-$name"
-  curl --fail --location --silent --show-error --retry 5 --retry-delay 5 \
-    --retry-all-errors -o "$remote" "https://${host}/${prefix}/${version}/${name}"
-  remote_sum="$(sha256sum "$remote" | awk '{print $1}')"
-  if [ "$local_sum" != "$remote_sum" ]; then
-    echo "Checksum mismatch for $name: local=$local_sum remote=$remote_sum" >&2
-    exit 1
-  fi
-  echo "OK https://${host}/${prefix}/${version}/${name} ($remote_sum)"
+    ;;
+  esac
 
   # The alias moves only now that the versioned copy is known to be readable.
   # Short cache: this key is rewritten by the next publish.
