@@ -2,6 +2,14 @@ name: Build
 
 on:
   workflow_dispatch:
+    inputs:
+      platforms:
+        description: Platforms to build. Choose windows to try Authenticode without Apple secrets.
+        type: choice
+        options:
+          - all
+          - windows
+        default: all
   push:
     tags:
       - 'v*'
@@ -12,6 +20,7 @@ permissions:
 
 jobs:
   build:
+    if: github.event_name != 'workflow_dispatch' || github.event.inputs.platforms != 'windows' || startsWith(matrix.platform, 'windows')
     strategy:
       fail-fast: false
       matrix:
@@ -66,6 +75,16 @@ jobs:
           cat "$NOTES_FILE" >> "$GITHUB_OUTPUT"
           echo "$EOF" >> "$GITHUB_OUTPUT"
 
+      - name: Require Windows signing certificate
+        if: startsWith(matrix.platform, 'windows')
+        shell: pwsh
+        env:
+          WINDOWS_CERTIFICATE: ${{ secrets.WIN_CSC_LINK }}
+          WINDOWS_CERTIFICATE_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
+        run: |
+          if (-not $env:WINDOWS_CERTIFICATE) { throw "Missing WIN_CSC_LINK organization secret" }
+          if (-not $env:WINDOWS_CERTIFICATE_PASSWORD) { throw "Missing WIN_CSC_KEY_PASSWORD organization secret" }
+
       - name: Build Tauri
         uses: tauri-apps/tauri-action@v0
         env:
@@ -77,6 +96,10 @@ jobs:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          # Same org PFX Office and Work use. Tauri reads WINDOWS_CERTIFICATE as
+          # base64 PFX; do not recreate these names as repository secrets.
+          WINDOWS_CERTIFICATE: ${{ secrets.WIN_CSC_LINK }}
+          WINDOWS_CERTIFICATE_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
         with:
           tauriScript: bunx tauri
           args: --target ${{ matrix.target }}
