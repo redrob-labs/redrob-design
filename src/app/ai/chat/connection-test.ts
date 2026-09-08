@@ -42,6 +42,18 @@ function validateConfig(config: ModelConfig): ProviderConnectionTestFailureReaso
 
 function errorText(error: unknown): string {
   if (error instanceof Error) return `${error.name}: ${error.message}`
+  if (error && typeof error === 'object') {
+    const record = error as Record<string, unknown>
+    if (typeof record.message === 'string' && record.message.trim()) {
+      return record.message.trim()
+    }
+    try {
+      const json = JSON.stringify(error)
+      if (json && json !== '{}') return json
+    } catch {
+      // fall through
+    }
+  }
   return String(error)
 }
 

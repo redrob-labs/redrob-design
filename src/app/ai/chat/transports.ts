@@ -68,7 +68,9 @@ export async function createACPTransport(providerID: AIProviderID) {
 
   const { ACPChatTransport } = await import('@/app/ai/acp/transport')
   const { homeDir } = await import('@tauri-apps/api/path')
-  return new ACPChatTransport({ agentDef, cwd: await homeDir() })
+  const { designCustomModelID, designModelID } = await import('@/app/ai/models')
+  const modelId = designCustomModelID.value.trim() || designModelID.value.trim()
+  return new ACPChatTransport({ agentDef, cwd: await homeDir(), modelId })
 }
 
 export function createToolLoopTransport({

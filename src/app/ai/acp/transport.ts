@@ -14,11 +14,13 @@ import {
   type ACPAgentDef
 } from '@redrob-design/core/constants'
 
+import { formatUnknownError } from '@/app/ai/chat/failure'
 import SYSTEM_PROMPT from '@/app/ai/chat/system-prompt.md?raw'
 import { describeDiagnosticError, recordACPTransportFailure } from '@/app/diagnostics'
 import { buildACPMCPServers } from '@/app/integrations/mcp'
 
 import { mapUpdate } from './map-update'
+import { normalizeRedrobCodeModelId } from './model'
 import { spawnACPProcess } from './process'
 
 type TauriChild = Awaited<ReturnType<typeof spawnACPProcess>>['child']
@@ -84,7 +86,7 @@ export function missingCommandMessage(agentDef?: ACPAgentDef): string {
 }
 
 export function formatConnectionError(e: unknown, agentDef?: ACPAgentDef): string {
-  const msg = e instanceof Error ? e.message : String(e)
+  const msg = formatUnknownError(e)
   if (
     msg.includes('ECONNREFUSED') ||
     msg.includes('fetch failed') ||
@@ -97,6 +99,12 @@ export function formatConnectionError(e: unknown, agentDef?: ACPAgentDef): strin
   }
   if (isMissingCommandError(msg)) {
     return missingCommandMessage(agentDef)
+  }
+  if (
+    msg.toLowerCase().includes('authentication required') ||
+    msg.toLowerCase().includes('provider authentication')
+  ) {
+    return 'Redrob Code needs a Console API key. Set REDROB_API_KEY (or REDROB_KEY) and restart.'
   }
   return msg
 }
@@ -124,12 +132,17 @@ export class ACPChatTransport implements ChatTransport<UIMessage> {
   private session: ACPSession | null = null
   private agentDef: ACPAgentDef
   private cwd: string
+  private modelId: string
   private sentContext = false
   private destroying = false
 
-  constructor(options: { agentDef: ACPAgentDef; cwd?: string }) {
+  constructor(options: { agentDef: ACPAgentDef; cwd?: string; modelId?: string }) {
     this.agentDef = options.agentDef
     this.cwd = options.cwd ?? '.'
+    this.modelId =
+      options.agentDef.id === REDROB_CODE_AGENT_ID
+        ? normalizeRedrobCodeModelId(options.modelId)
+        : (options.modelId?.trim() ?? '')
   }
 
   async sendMessages({
@@ -220,7 +233,8 @@ export class ACPChatTransport implements ChatTransport<UIMessage> {
                   message: 'ACP prompt failed',
                   data: {
                     agentId: this.agentDef.id,
-                    error: e instanceof Error ? e.message : String(e)
+                    modelId: this.modelId,
+                    error: formatUnknownError(e)
                   }
                 })
               )
@@ -252,7 +266,11 @@ export class ACPChatTransport implements ChatTransport<UIMessage> {
     // #region agent log
     {
       const { agentDebugLog } = await import('./debug-log')
-      let hostEnv: { hasRedrobApiKey: boolean; hasRedrobKeyAlias: boolean } | null = null
+      let hostEnv: {
+        hasRedrobApiKey: boolean
+        hasRedrobKeyAlias: boolean
+        propagatedApiKeyFromAlias?: boolean
+      } | null = null
       try {
         const { invoke } = await import('@tauri-apps/api/core')
         hostEnv = await invoke('redrob_code_env_status')
@@ -262,7 +280,7 @@ export class ACPChatTransport implements ChatTransport<UIMessage> {
           hypothesisId: 'A',
           location: 'acp/transport.ts:spawnAgent',
           message: 'host env status invoke failed',
-          data: { error: e instanceof Error ? e.message : String(e) }
+          data: { error: formatUnknownError(e) }
         })
       }
       void agentDebugLog({
@@ -274,6 +292,7 @@ export class ACPChatTransport implements ChatTransport<UIMessage> {
           command: this.agentDef.command,
           args: this.agentDef.args,
           cwd: this.cwd,
+          modelId: this.modelId,
           hostEnv
         }
       })
@@ -349,11 +368,38 @@ export class ACPChatTransport implements ChatTransport<UIMessage> {
       throw startupError(e, this.agentDef)
     }
 
+    if (this.modelId) {
+      try {
+        await connection.setSessionConfigOption({
+          sessionId: sessionResult.sessionId,
+          configId: 'model',
+          value: this.modelId
+        })
+      } catch (e) {
+        // #region agent log
+        {
+          const { agentDebugLog } = await import('./debug-log')
+          void agentDebugLog({
+            hypothesisId: 'C',
+            location: 'acp/transport.ts:setModel',
+            message: 'ACP setSessionConfigOption(model) failed',
+            data: {
+              agentId: this.agentDef.id,
+              modelId: this.modelId,
+              error: formatUnknownError(e)
+            }
+          })
+        }
+        // #endregion
+      }
+    }
+
     // #region agent log
     {
       const { agentDebugLog } = await import('./debug-log')
-      const configOptions = (sessionResult as { configOptions?: Array<{ id?: string; currentValue?: string }> })
-        .configOptions
+      const configOptions = (
+        sessionResult as { configOptions?: Array<{ id?: string; currentValue?: string }> }
+      ).configOptions
       const modelOption = configOptions?.find((option) => option.id === 'model')
       void agentDebugLog({
         hypothesisId: 'C',
@@ -363,6 +409,7 @@ export class ACPChatTransport implements ChatTransport<UIMessage> {
           agentId: this.agentDef.id,
           sessionId: sessionResult.sessionId,
           includeBuiltInMCP,
+          requestedModelId: this.modelId || null,
           modelCurrentValue: modelOption?.currentValue ?? null,
           configOptionIds: configOptions?.map((option) => option.id) ?? []
         }

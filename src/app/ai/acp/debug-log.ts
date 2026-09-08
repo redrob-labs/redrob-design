@@ -15,8 +15,17 @@ export async function agentDebugLog(entry: {
       hypothesisId: entry.hypothesisId,
       location: entry.location,
       message: entry.message,
-      data: entry.data ?? {}
+      data: entry.data ?? {},
+      runId: 'post-fix'
     }) + '\n'
+
+  try {
+    const { invoke } = await import('@tauri-apps/api/core')
+    await invoke('agent_debug_log', { line })
+    return
+  } catch {
+    // Fall through when not running under Tauri or the command is unavailable.
+  }
 
   try {
     const { readTextFile, writeTextFile, mkdir } = await import('@tauri-apps/plugin-fs')

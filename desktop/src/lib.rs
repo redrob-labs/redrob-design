@@ -18,6 +18,7 @@ use menu::{install_app_menu, native_menu_checked, set_native_menu_checked};
 use menu_events::handle_menu_event;
 use std::{
     path::{Path, PathBuf},
+    sync::atomic::{AtomicBool, Ordering},
     sync::Mutex,
 };
 use tauri::{Emitter, Manager};
@@ -157,6 +158,30 @@ fn import_login_shell_path() {
     let _ = fix_path_env::fix();
 }
 
+fn env_nonempty(name: &str) -> bool {
+    std::env::var_os(name)
+        .map(|value| !value.is_empty())
+        .unwrap_or(false)
+}
+
+static PROPAGATED_REDROB_API_KEY_FROM_ALIAS: AtomicBool = AtomicBool::new(false);
+
+/// Cloud / host shells often export `REDROB_KEY` while Redrob Code only reads
+/// `REDROB_API_KEY`. Copy the alias into the canonical name once at startup so
+/// ACP children that inherit the host environment can authenticate.
+fn propagate_redrob_api_key_from_alias() {
+    if env_nonempty("REDROB_API_KEY") {
+        return;
+    }
+    let Some(key) = std::env::var_os("REDROB_KEY").filter(|value| !value.is_empty()) else {
+        return;
+    };
+    // SAFETY: process startup, before the Tauri runtime spawns worker threads that
+    // read auth env for ACP. We only set when the canonical key is absent.
+    unsafe { std::env::set_var("REDROB_API_KEY", key) };
+    PROPAGATED_REDROB_API_KEY_FROM_ALIAS.store(true, Ordering::Relaxed);
+}
+
 /// Booleans only: whether the Tauri host process sees Redrob Code auth env vars.
 /// Never returns values — used by ACP debug instrumentation.
 #[derive(Clone, serde::Serialize)]
@@ -164,23 +189,41 @@ fn import_login_shell_path() {
 struct RedrobCodeEnvStatus {
     has_redrob_api_key: bool,
     has_redrob_key_alias: bool,
+    propagated_api_key_from_alias: bool,
 }
 
 #[tauri::command]
 fn redrob_code_env_status() -> RedrobCodeEnvStatus {
     RedrobCodeEnvStatus {
-        has_redrob_api_key: std::env::var_os("REDROB_API_KEY")
-            .map(|value| !value.is_empty())
-            .unwrap_or(false),
-        has_redrob_key_alias: std::env::var_os("REDROB_KEY")
-            .map(|value| !value.is_empty())
-            .unwrap_or(false),
+        has_redrob_api_key: env_nonempty("REDROB_API_KEY"),
+        has_redrob_key_alias: env_nonempty("REDROB_KEY"),
+        propagated_api_key_from_alias: PROPAGATED_REDROB_API_KEY_FROM_ALIAS.load(Ordering::Relaxed),
+    }
+}
+
+/// Appends one NDJSON line to the cloud agent debug log. Used when the WebView
+/// FS plugin cannot write outside its scoped paths.
+#[tauri::command]
+fn agent_debug_log(line: String) {
+    use std::io::Write;
+
+    let path = std::path::Path::new("/opt/cursor/logs/debug.log");
+    if let Some(parent) = path.parent() {
+        let _ = std::fs::create_dir_all(parent);
+    }
+    if let Ok(mut file) = std::fs::OpenOptions::new()
+        .create(true)
+        .append(true)
+        .open(path)
+    {
+        let _ = writeln!(file, "{line}");
     }
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     import_login_shell_path();
+    propagate_redrob_api_key_from_alias();
 
     let context = tauri::generate_context!();
     let mut builder = tauri::Builder::default();
@@ -207,6 +250,7 @@ pub fn run() {
     builder
         .manage(PendingOpen(Mutex::new(Vec::new())))
         .invoke_handler(tauri::generate_handler![
+            agent_debug_log,
             build_fig_file,
             credential_read,
             credential_remove,

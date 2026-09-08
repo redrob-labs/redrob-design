@@ -207,6 +207,20 @@ describe('formatConnectionError', () => {
     const msg = formatConnectionError('raw string error')
     expect(msg).toBe('raw string error')
   })
+
+  test('plain JSON-RPC error objects expose their message', () => {
+    const msg = formatConnectionError({
+      code: -32000,
+      message: 'Authentication required: provider authentication required'
+    })
+    expect(msg).toContain('Console API key')
+  })
+
+  test('object without message JSON-stringifies instead of [object Object]', () => {
+    const msg = formatConnectionError({ code: -32603, data: { service: 'session' } })
+    expect(msg).not.toBe('[object Object]')
+    expect(msg).toContain('session')
+  })
 })
 
 describe('buildCrashChunks', () => {

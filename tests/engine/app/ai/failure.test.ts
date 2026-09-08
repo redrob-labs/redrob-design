@@ -67,4 +67,16 @@ describe('AI chat failures', () => {
       detail: 'Provider unavailable'
     })
   })
+
+  test('serializes plain error objects instead of [object Object]', () => {
+    expect(
+      classifyAIChatError({
+        code: -32000,
+        message: 'Authentication required: provider authentication required'
+      })
+    ).toMatchObject({
+      reason: 'authentication',
+      detail: 'Authentication required: provider authentication required'
+    })
+  })
 })
