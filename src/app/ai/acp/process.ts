@@ -30,6 +30,24 @@ export async function spawnACPProcess({
     encoding: 'raw'
   })
 
+  // #region agent log
+  {
+    const { agentDebugLog } = await import('./debug-log')
+    void agentDebugLog({
+      hypothesisId: 'B',
+      location: 'acp/process.ts:spawnACPProcess',
+      message: 'ACP spawn options',
+      data: {
+        logId,
+        commandName,
+        resolvedCommand: resolved.command,
+        resolvedArgs: resolved.args,
+        envOptionPresent: false
+      }
+    })
+  }
+  // #endregion
+
   const stdoutChunks: Uint8Array[] = []
   let stdoutResolver: ((chunk: Uint8Array | null) => void) | null = null
   let stdoutClosed = false
@@ -47,7 +65,27 @@ export async function spawnACPProcess({
   })
 
   command.stderr.on('data', (raw: Uint8Array | number[] | string) => {
-    console.error(`[ACP ${logId}]`, decodeTauriStderr(raw))
+    const text = decodeTauriStderr(raw)
+    console.error(`[ACP ${logId}]`, text)
+    // #region agent log
+    {
+      void import('./debug-log').then(({ agentDebugLog }) =>
+        agentDebugLog({
+          hypothesisId: 'A',
+          location: 'acp/process.ts:stderr',
+          message: 'ACP stderr chunk',
+          data: {
+            logId,
+            // Truncate and redact anything that looks like a key.
+            text: text
+              .replace(/sk-[A-Za-z0-9_-]+/g, '[redacted]')
+              .replace(/rk-[A-Za-z0-9_-]+/g, '[redacted]')
+              .slice(0, 400)
+          }
+        })
+      )
+    }
+    // #endregion
   })
 
   command.on('close', () => {

@@ -157,6 +157,27 @@ fn import_login_shell_path() {
     let _ = fix_path_env::fix();
 }
 
+/// Booleans only: whether the Tauri host process sees Redrob Code auth env vars.
+/// Never returns values — used by ACP debug instrumentation.
+#[derive(Clone, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+struct RedrobCodeEnvStatus {
+    has_redrob_api_key: bool,
+    has_redrob_key_alias: bool,
+}
+
+#[tauri::command]
+fn redrob_code_env_status() -> RedrobCodeEnvStatus {
+    RedrobCodeEnvStatus {
+        has_redrob_api_key: std::env::var_os("REDROB_API_KEY")
+            .map(|value| !value.is_empty())
+            .unwrap_or(false),
+        has_redrob_key_alias: std::env::var_os("REDROB_KEY")
+            .map(|value| !value.is_empty())
+            .unwrap_or(false),
+    }
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     import_login_shell_path();
@@ -196,6 +217,7 @@ pub fn run() {
             list_system_fonts,
             load_system_font,
             proxy_http_request,
+            redrob_code_env_status,
             set_recent_files,
             native_menu_checked,
             set_native_menu_checked,

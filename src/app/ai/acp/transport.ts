@@ -211,6 +211,21 @@ export class ACPChatTransport implements ChatTransport<UIMessage> {
             return finish('stop')
           })
           .catch((e) => {
+            // #region agent log
+            {
+              void import('./debug-log').then(({ agentDebugLog }) =>
+                agentDebugLog({
+                  hypothesisId: 'C',
+                  location: 'acp/transport.ts:prompt',
+                  message: 'ACP prompt failed',
+                  data: {
+                    agentId: this.agentDef.id,
+                    error: e instanceof Error ? e.message : String(e)
+                  }
+                })
+              )
+            }
+            // #endregion
             recordACPTransportFailure({
               operation: 'message',
               ...describeDiagnosticError(e)
@@ -234,6 +249,36 @@ export class ACPChatTransport implements ChatTransport<UIMessage> {
   }
 
   private async spawnAgent(): Promise<ACPSession> {
+    // #region agent log
+    {
+      const { agentDebugLog } = await import('./debug-log')
+      let hostEnv: { hasRedrobApiKey: boolean; hasRedrobKeyAlias: boolean } | null = null
+      try {
+        const { invoke } = await import('@tauri-apps/api/core')
+        hostEnv = await invoke('redrob_code_env_status')
+      } catch (e) {
+        hostEnv = null
+        void agentDebugLog({
+          hypothesisId: 'A',
+          location: 'acp/transport.ts:spawnAgent',
+          message: 'host env status invoke failed',
+          data: { error: e instanceof Error ? e.message : String(e) }
+        })
+      }
+      void agentDebugLog({
+        hypothesisId: 'A',
+        location: 'acp/transport.ts:spawnAgent',
+        message: 'spawning ACP agent',
+        data: {
+          agentId: this.agentDef.id,
+          command: this.agentDef.command,
+          args: this.agentDef.args,
+          cwd: this.cwd,
+          hostEnv
+        }
+      })
+    }
+    // #endregion
     let process: Awaited<ReturnType<typeof spawnACPProcess>>
     try {
       process = await spawnACPProcess({
@@ -303,6 +348,27 @@ export class ACPChatTransport implements ChatTransport<UIMessage> {
       await child.kill().catch(() => undefined)
       throw startupError(e, this.agentDef)
     }
+
+    // #region agent log
+    {
+      const { agentDebugLog } = await import('./debug-log')
+      const configOptions = (sessionResult as { configOptions?: Array<{ id?: string; currentValue?: string }> })
+        .configOptions
+      const modelOption = configOptions?.find((option) => option.id === 'model')
+      void agentDebugLog({
+        hypothesisId: 'C',
+        location: 'acp/transport.ts:newSession',
+        message: 'ACP session created',
+        data: {
+          agentId: this.agentDef.id,
+          sessionId: sessionResult.sessionId,
+          includeBuiltInMCP,
+          modelCurrentValue: modelOption?.currentValue ?? null,
+          configOptionIds: configOptions?.map((option) => option.id) ?? []
+        }
+      })
+    }
+    // #endregion
 
     const session: ACPSession = {
       connection,
