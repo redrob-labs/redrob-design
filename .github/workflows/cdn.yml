@@ -244,12 +244,20 @@ jobs:
         run: |
           set -euo pipefail
           bundle="desktop/target/$TARGET/release/bundle"
-          app="$(find "$bundle/macos" -maxdepth 1 -type d -name '*.app' | head -n 1)"
           dmg="$(find "$bundle/dmg" -maxdepth 1 -type f -name '*.dmg' | head -n 1)"
-          test -n "$app" || { echo 'The macOS app bundle was not produced' >&2; exit 1; }
           test -n "$dmg" || { echo 'The macOS DMG was not produced' >&2; exit 1; }
+          codesign --verify --verbose=2 "$dmg"
+          mount="$RUNNER_TEMP/redrob-design-$APP_ARCH"
+          mkdir -p "$mount"
+          hdiutil attach "$dmg" -nobrowse -readonly -mountpoint "$mount"
+          trap 'hdiutil detach "$mount"' EXIT
+          app="$(find "$mount" -maxdepth 1 -type d -name '*.app' | head -n 1)"
+          test -n "$app" || { echo 'The signed app was not found inside the DMG' >&2; exit 1; }
           codesign --verify --deep --strict --verbose=2 "$app"
-          xcrun stapler validate "$dmg"
+          xcrun stapler validate "$app"
+          spctl --assess --type execute --verbose=2 "$app"
+          hdiutil detach "$mount"
+          trap - EXIT
           mkdir -p staging
           cp "$dmg" "staging/redrob-design-$APP_ARCH-$APP_VERSION.dmg"
 
