@@ -40,6 +40,7 @@ content_type() {
   *.deb) echo "application/vnd.debian.binary-package" ;;
   *.rpm) echo "application/x-rpm" ;;
   *.AppImage) echo "application/x-iso9660-appimage" ;;
+  *.dmg) echo "application/x-apple-diskimage" ;;
   *) echo "application/octet-stream" ;;
   esac
 }
