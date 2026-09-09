@@ -91,6 +91,9 @@ jobs:
           Write-Host "Imported $($imported.Subject)"
           $overlay = Join-Path $env:RUNNER_TEMP "tauri.sign.conf.json"
           @{
+            build = @{
+              beforeBuildCommand = "bun run generate:tauri-menu && bun run build:packages && bunx vite build"
+            }
             bundle = @{
               windows = @{
                 certificateThumbprint = $imported.Thumbprint
@@ -102,7 +105,7 @@ jobs:
           "overlay=$overlay" >> $env:GITHUB_OUTPUT
 
       - name: Build the signed Windows installer
-        run: bunx @tauri-apps/cli build --target x86_64-pc-windows-msvc --bundles nsis --config "${{ steps.certificate.outputs.overlay }}"
+        run: bunx @tauri-apps/cli@2.11.4 build --target x86_64-pc-windows-msvc --bundles nsis --config "${{ steps.certificate.outputs.overlay }}"
 
       - name: Verify the Authenticode signature
         shell: pwsh
@@ -223,8 +226,14 @@ jobs:
         shell: bash
         run: echo "version=$(node -p "require('./desktop/tauri.conf.json').version")" >> "$GITHUB_OUTPUT"
 
+      - name: Prepare the release build configuration
+        shell: bash
+        run: |
+          node -e 'const fs=require("node:fs"),p=require("node:path");fs.writeFileSync(p.join(process.env.RUNNER_TEMP,"tauri-cdn.conf.json"),JSON.stringify({build:{beforeBuildCommand:"bun run generate:tauri-menu && bun run build:packages && bunx vite build"}},null,2)+"\n")'
+          echo "TAURI_CDN_CONFIG=$RUNNER_TEMP/tauri-cdn.conf.json" >> "$GITHUB_ENV"
+
       - name: Build the signed and notarized macOS DMG
-        run: bunx @tauri-apps/cli build --target ${{ matrix.target }} --bundles dmg
+        run: bunx @tauri-apps/cli@2.11.4 build --target ${{ matrix.target }} --bundles dmg --config "${{ env.TAURI_CDN_CONFIG }}"
 
       - name: Verify signing and notarization, then stage the DMG
         shell: bash
@@ -318,8 +327,14 @@ jobs:
         id: version
         run: echo "version=$(node -p "require('./desktop/tauri.conf.json').version")" >> "$GITHUB_OUTPUT"
 
+      - name: Prepare the release build configuration
+        shell: bash
+        run: |
+          node -e 'const fs=require("node:fs"),p=require("node:path");fs.writeFileSync(p.join(process.env.RUNNER_TEMP,"tauri-cdn.conf.json"),JSON.stringify({build:{beforeBuildCommand:"bun run generate:tauri-menu && bun run build:packages && bunx vite build"}},null,2)+"\n")'
+          echo "TAURI_CDN_CONFIG=$RUNNER_TEMP/tauri-cdn.conf.json" >> "$GITHUB_ENV"
+
       - name: Build the Linux bundles (unsigned)
-        run: bunx @tauri-apps/cli build --target x86_64-unknown-linux-gnu --bundles appimage,deb,rpm
+        run: bunx @tauri-apps/cli@2.11.4 build --target x86_64-unknown-linux-gnu --bundles appimage,deb,rpm --config "${{ env.TAURI_CDN_CONFIG }}"
 
       # Tauri names its bundles from productName, which carries a space and the
       # distribution's own arch spelling. Console links one name per format, so
