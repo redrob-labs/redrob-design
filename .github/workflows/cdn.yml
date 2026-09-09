@@ -100,7 +100,7 @@ jobs:
           "overlay=$overlay" >> $env:GITHUB_OUTPUT
 
       - name: Build the signed Windows installer
-        run: bunx tauri build --target x86_64-pc-windows-msvc --bundles nsis --config "${{ steps.certificate.outputs.overlay }}"
+        run: bunx @tauri-apps/cli build --target x86_64-pc-windows-msvc --bundles nsis --config "${{ steps.certificate.outputs.overlay }}"
 
       - name: Verify the Authenticode signature
         shell: pwsh
@@ -193,7 +193,7 @@ jobs:
         run: echo "version=$(node -p "require('./desktop/tauri.conf.json').version")" >> "$GITHUB_OUTPUT"
 
       - name: Build the Linux bundles (unsigned)
-        run: bunx tauri build --target x86_64-unknown-linux-gnu --bundles appimage,deb,rpm
+        run: bunx @tauri-apps/cli build --target x86_64-unknown-linux-gnu --bundles appimage,deb,rpm
 
       # Tauri names its bundles from productName, which carries a space and the
       # distribution's own arch spelling. Console links one name per format, so
