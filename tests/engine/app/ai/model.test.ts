@@ -1,6 +1,10 @@
 import { describe, expect, test } from 'bun:test'
 
-import { AI_PROVIDERS, REDROB_CONSOLE_API_BASE, REDROB_CONSOLE_MODEL } from '@redrob-design/core/constants'
+import {
+  AI_PROVIDERS,
+  REDROB_CONSOLE_API_BASE,
+  REDROB_CONSOLE_MODEL
+} from '@redrob-design/core/constants'
 
 import { resolveLanguageModelID } from '@/app/ai/chat/model'
 import { normalizeOpenRouterModel } from '@/app/ai/chat/provider-models'
@@ -112,7 +116,8 @@ describe('model provider registry', () => {
     expect(url).toBe('https://console.example.com/api/backend/v1/chat/completions')
   })
 
-  test('registers every direct provider without handling agent runtimes as models', () => {    for (const provider of AI_PROVIDERS.filter((entry) => entry.id !== 'harness:pi')) {
+  test('registers every direct provider without handling agent runtimes as models', () => {
+    for (const provider of AI_PROVIDERS.filter((entry) => entry.id !== 'harness:pi')) {
       expect(modelProviderAdapter(provider.id).create).toBeFunction()
     }
     expect(() => modelProviderAdapter('harness:pi')).toThrow('Harness agents')
