@@ -16,7 +16,7 @@
  * deliberately identical so the two cannot drift into different behaviour against the
  * same Console endpoints.
  */
-export const REDROB_CONSOLE_API_BASE = 'https://console.redrob.ai/api/backend/v1'
+import { REDROB_CONSOLE_API_BASE } from '@redrob-design/core/constants'
 
 /** Console's product allowlist refuses anything outside this set. */
 export type DeviceProduct =

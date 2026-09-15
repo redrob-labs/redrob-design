@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test'
 
-import { AI_PROVIDERS } from '@redrob-design/core/constants'
+import { AI_PROVIDERS, REDROB_CONSOLE_API_BASE, REDROB_CONSOLE_MODEL } from '@redrob-design/core/constants'
 
 import { resolveLanguageModelID } from '@/app/ai/chat/model'
 import { normalizeOpenRouterModel } from '@/app/ai/chat/provider-models'
@@ -31,6 +31,35 @@ describe('resolveLanguageModelID', () => {
 })
 
 describe('model provider registry', () => {
+  async function captureRedrobRequest(
+    customBaseURL: string
+  ): Promise<{ url: string; body: string; headers: Record<string, string> }> {
+    let url = ''
+    let body = ''
+    let headers: Record<string, string> = {}
+    const fetchSpy: typeof fetch = async (input, init) => {
+      url = String(input)
+      body = String(init?.body)
+      headers = Object.fromEntries(new Headers(init?.headers).entries())
+      throw new Error('stop')
+    }
+    const config: ModelConfig = {
+      providerID: 'redrob',
+      apiKey: 'rrk_test_secret',
+      modelID: REDROB_CONSOLE_MODEL,
+      customModelID: '',
+      customBaseURL,
+      customAPIType: 'completions'
+    }
+
+    const model = modelProviderAdapter('redrob').create(config, { fetch: fetchSpy })
+    await model
+      .doGenerate({ prompt: [{ role: 'user', content: [{ type: 'text', text: 'hi' }] }] })
+      .catch(() => undefined)
+
+    return { url, body, headers }
+  }
+
   test('offers MiniMax-M3 as the default MiniMax model', () => {
     const provider = AI_PROVIDERS.find(({ id }) => id === 'minimax')
     expect(provider?.defaultModel).toBe('MiniMax-M3')
@@ -63,8 +92,27 @@ describe('model provider registry', () => {
     expect(requestBody).toContain('"model":"MiniMax-M3"')
   })
 
-  test('registers every direct provider without handling agent runtimes as models', () => {
-    for (const provider of AI_PROVIDERS.filter((entry) => entry.id !== 'harness:pi')) {
+  test('offers Console auto as the only Redrob model', () => {
+    const provider = AI_PROVIDERS.find(({ id }) => id === 'redrob')
+    expect(provider?.defaultModel).toBe(REDROB_CONSOLE_MODEL)
+    expect(provider?.models).toEqual([
+      { id: REDROB_CONSOLE_MODEL, name: 'Redrob Auto', capabilities: ['tools'] }
+    ])
+  })
+
+  test('sends Redrob requests to Console chat/completions with the workspace key', async () => {
+    const { url, body, headers } = await captureRedrobRequest('')
+    expect(url).toBe(`${REDROB_CONSOLE_API_BASE}/chat/completions`)
+    expect(body).toContain(`"model":"${REDROB_CONSOLE_MODEL}"`)
+    expect(headers).toHaveProperty('authorization', 'Bearer rrk_test_secret')
+  })
+
+  test('a key minted for a self-hosted Console keeps its own base URL', async () => {
+    const { url } = await captureRedrobRequest('https://console.example.com/api/backend/v1')
+    expect(url).toBe('https://console.example.com/api/backend/v1/chat/completions')
+  })
+
+  test('registers every direct provider without handling agent runtimes as models', () => {    for (const provider of AI_PROVIDERS.filter((entry) => entry.id !== 'harness:pi')) {
       expect(modelProviderAdapter(provider.id).create).toBeFunction()
     }
     expect(() => modelProviderAdapter('harness:pi')).toThrow('Harness agents')

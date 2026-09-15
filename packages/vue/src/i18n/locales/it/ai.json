@@ -109,5 +109,14 @@
   "connectProvider": "Collega un provider AI per iniziare a chattare.",
   "getProviderAPIKey": "Ottieni una chiave API {provider} →",
   "provider": "Provider AI",
-  "modelsTitle": "Modelli"
+  "modelsTitle": "Modelli",
+  "connectRedrob": "Connect Redrob",
+  "connectRedrobHint": "Sign in to Redrob Console and the key is stored for you.",
+  "connectRedrobWaiting": "Enter {code} at {url} — waiting for approval.",
+  "connectRedrobConnected": "Connected. The workspace key is stored.",
+  "connectRedrobDenied": "The request was declined in Console.",
+  "connectRedrobExpired": "The code expired before it was approved. Try again.",
+  "connectRedrobUnreachable": "Could not reach Redrob Console. Check your connection.",
+  "connectRedrobFailed": "Connect did not complete. Try again.",
+  "connectRedrobCancel": "Cancel"
 }

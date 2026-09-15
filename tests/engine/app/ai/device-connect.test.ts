@@ -1,9 +1,10 @@
 import { describe, expect, test } from 'bun:test'
 
+import { REDROB_CONSOLE_API_BASE } from '@redrob-design/core/constants'
+
 import {
   formatUserCode,
   pollDeviceToken,
-  REDROB_CONSOLE_API_BASE,
   runDeviceConnect,
   startDeviceAuthorization,
   type DeviceAuthorization,

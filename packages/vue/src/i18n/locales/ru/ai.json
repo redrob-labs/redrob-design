@@ -109,5 +109,14 @@
   "connectProvider": "Подключите AI-провайдера, чтобы начать чат.",
   "getProviderAPIKey": "Получить API-ключ {provider} →",
   "provider": "Провайдер ИИ",
-  "modelsTitle": "Модели"
+  "modelsTitle": "Модели",
+  "connectRedrob": "Connect Redrob",
+  "connectRedrobHint": "Sign in to Redrob Console and the key is stored for you.",
+  "connectRedrobWaiting": "Enter {code} at {url} — waiting for approval.",
+  "connectRedrobConnected": "Connected. The workspace key is stored.",
+  "connectRedrobDenied": "The request was declined in Console.",
+  "connectRedrobExpired": "The code expired before it was approved. Try again.",
+  "connectRedrobUnreachable": "Could not reach Redrob Console. Check your connection.",
+  "connectRedrobFailed": "Connect did not complete. Try again.",
+  "connectRedrobCancel": "Cancel"
 }

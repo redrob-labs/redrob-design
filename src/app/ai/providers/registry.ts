@@ -2,6 +2,7 @@ import { createDeepSeek } from '@ai-sdk/deepseek'
 import { createGoogleGenerativeAI } from '@ai-sdk/google'
 import { createOpenRouter } from '@openrouter/ai-sdk-provider'
 
+import { REDROB_CONSOLE_API_BASE } from '@redrob-design/core/constants'
 import type { AIProviderID } from '@redrob-design/core/constants'
 
 import {
@@ -13,6 +14,12 @@ import type { ModelProviderAdapter } from '@/app/ai/providers/types'
 type DirectProviderID = Exclude<AIProviderID, `acp:${string}` | `harness:${string}`>
 
 const MODEL_PROVIDER_ADAPTERS = {
+  // Console is OpenAI-compatible on chat/completions. A key issued for a self-hosted
+  // Console arrives with its own base URL, so an explicit one wins over the default.
+  redrob: createOpenAICompatibleAdapter({
+    baseURL: (config) => config.customBaseURL.trim() || REDROB_CONSOLE_API_BASE,
+    mode: 'chat'
+  }),
   openrouter: {
     create(config, runtime) {
       const provider = createOpenRouter({
