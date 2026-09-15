@@ -1,4 +1,4 @@
-import { nodeToXPath } from '@open-pencil/core/xpath'
+import { nodeToXPath } from '@redrob-design/core/xpath'
 
 import type { AutomationTarget } from '@/app/automation/bridge/target'
 

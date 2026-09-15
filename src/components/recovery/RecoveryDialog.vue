@@ -2,7 +2,7 @@
 import { AlertDialogCancel, AlertDialogDescription, AlertDialogTitle } from 'reka-ui'
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { useI18n } from '@open-pencil/vue'
+import { useI18n } from '@redrob-design/vue'
 import { recoveryEnabled } from '@/app/document/recovery/preferences'
 import { useNotificationMessages } from '@/app/i18n/notifications'
 import { discardRecoverySnapshot, listRecoverySnapshots, restoreRecoverySnapshot } from '@/app/tabs'

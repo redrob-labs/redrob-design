@@ -1,6 +1,6 @@
-import type { Editor } from '@open-pencil/core/editor'
-import { nearestPointOnNetwork, removeVertex, splitSegmentAt } from '@open-pencil/core/vector'
-import type { VectorNetwork } from '@open-pencil/scene-graph'
+import type { Editor } from '@redrob-design/core/editor'
+import { nearestPointOnNetwork, removeVertex, splitSegmentAt } from '@redrob-design/core/vector'
+import type { VectorNetwork } from '@redrob-design/scene-graph'
 
 import { pushNodeEditHistory } from './history'
 import type { NodeEditState, VectorEditState } from './types'

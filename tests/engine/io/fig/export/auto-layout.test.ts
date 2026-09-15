@@ -1,7 +1,7 @@
 import { beforeAll, describe, expect, test } from 'bun:test'
 
-import { exportFigFile, initCodec, parseFigFile, SceneGraph } from '@open-pencil/core'
-import { parseFigBuffer } from '@open-pencil/fig'
+import { exportFigFile, initCodec, parseFigFile, SceneGraph } from '@redrob-design/core'
+import { parseFigBuffer } from '@redrob-design/fig'
 
 function decodeExport(bytes: Uint8Array) {
   return parseFigBuffer(bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength))

@@ -1,8 +1,8 @@
 import { defineCommand } from 'citty'
 
-import { colorToHex } from '@open-pencil/core/color'
-import type { NodeResult } from '@open-pencil/core/rpc'
-import type { Color } from '@open-pencil/scene-graph/primitives'
+import { colorToHex } from '@redrob-design/core/color'
+import type { NodeResult } from '@redrob-design/core/rpc'
+import type { Color } from '@redrob-design/scene-graph/primitives'
 
 import { appTargetOptions } from '#cli/app-target'
 import { fmtNode, printError, formatType } from '#cli/format'

@@ -1,6 +1,6 @@
 ---
 title: SDK Getting Started
-description: Set up @open-pencil/vue with createEditor, provideEditor, and a canvas.
+description: Set up @redrob-design/vue with createEditor, provideEditor, and a canvas.
 ---
 
 # SDK Getting Started
@@ -8,22 +8,22 @@ description: Set up @open-pencil/vue with createEditor, provideEditor, and a can
 ## Installation
 
 ```bash
-bun add @open-pencil/core @open-pencil/vue canvaskit-wasm
+bun add @redrob-design/core @redrob-design/vue canvaskit-wasm
 ```
 
-The SDK lives in the monorepo today and is also published as `@open-pencil/vue`.
+The SDK lives in the monorepo today and is also published as `@redrob-design/vue`.
 
 ```ts
-import { createEditor } from '@open-pencil/core/editor'
-import { provideEditor, useCanvas } from '@open-pencil/vue'
+import { createEditor } from '@redrob-design/core/editor'
+import { provideEditor, useCanvas } from '@redrob-design/vue'
 ```
 
 ## Mental model
 
 There are three layers:
 
-1. `@open-pencil/core` — framework-agnostic editor engine
-2. `@open-pencil/vue` — Vue composables and headless primitives
+1. `@redrob-design/core` — framework-agnostic editor engine
+2. `@redrob-design/vue` — Vue composables and headless primitives
 3. your app — styling, routing, file flows, product-specific UI
 
 ## Minimal setup
@@ -31,7 +31,7 @@ There are three layers:
 ### 1. Create an editor
 
 ```ts
-import { createEditor } from '@open-pencil/core/editor'
+import { createEditor } from '@redrob-design/core/editor'
 
 const editor = createEditor({
   width: 1200,
@@ -43,9 +43,9 @@ const editor = createEditor({
 
 ```vue
 <script setup lang="ts">
-import { provideEditor } from '@open-pencil/vue'
+import { provideEditor } from '@redrob-design/vue'
 
-import type { Editor } from '@open-pencil/core/editor'
+import type { Editor } from '@redrob-design/core/editor'
 
 const props = defineProps<{
   editor: Editor
@@ -67,7 +67,7 @@ You can think of this as the provider layer for the editor tree. The docs prefer
 <script setup lang="ts">
 import { ref } from 'vue'
 
-import { useCanvas, useEditor } from '@open-pencil/vue'
+import { useCanvas, useEditor } from '@redrob-design/vue'
 
 const canvasRef = ref<HTMLCanvasElement | null>(null)
 const editor = useEditor()
@@ -85,7 +85,7 @@ useCanvas(canvasRef, editor)
 Once the editor is provided, child components can read selection and issue commands:
 
 ```ts
-import { useEditorCommands, useSelectionState } from '@open-pencil/vue'
+import { useEditorCommands, useSelectionState } from '@redrob-design/vue'
 
 const selection = useSelectionState()
 const commands = useEditorCommands()
@@ -97,7 +97,7 @@ const commands = useEditorCommands()
 <script setup lang="ts">
 import { ref } from 'vue'
 
-import { useCanvas, useEditor, useSelectionState } from '@open-pencil/vue'
+import { useCanvas, useEditor, useSelectionState } from '@redrob-design/vue'
 
 const canvasRef = ref<HTMLCanvasElement | null>(null)
 const editor = useEditor()

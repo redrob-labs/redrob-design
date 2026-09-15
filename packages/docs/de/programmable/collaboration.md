@@ -10,7 +10,7 @@ Mehrere Personen können dasselbe Dokument gleichzeitig bearbeiten. Die Teilnehm
 ## Raum teilen
 
 1. Schaltfläche „Teilen“ oben rechts öffnen.
-2. Den erzeugten Link `app.openpencil.dev/share/<room-id>` kopieren.
+2. Den erzeugten Link `app.redrob.design/share/<room-id>` kopieren.
 3. Link an die anderen Teilnehmer senden.
 
 Jede Person mit dem Link kann beitreten. Der Raum bleibt erreichbar, solange mindestens ein Teilnehmer die Seite geöffnet hat.

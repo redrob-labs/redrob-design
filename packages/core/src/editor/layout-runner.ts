@@ -3,7 +3,7 @@ import {
   mutationLayoutScopeIds,
   type SceneGraph,
   type SceneMutationImpact
-} from '@open-pencil/scene-graph'
+} from '@redrob-design/scene-graph'
 
 import { computeAllLayouts, computeLayout } from '#core/layout'
 

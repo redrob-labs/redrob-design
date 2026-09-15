@@ -1,7 +1,7 @@
 import type { CanvasKit, Paragraph } from 'canvaskit-wasm'
 
-import type { SceneNode } from '@open-pencil/scene-graph'
-import type { Rect } from '@open-pencil/scene-graph/primitives'
+import type { SceneNode } from '@redrob-design/scene-graph'
+import type { Rect } from '@redrob-design/scene-graph/primitives'
 
 import type { SkiaRenderer } from '#core/canvas'
 

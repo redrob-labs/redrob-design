@@ -2,10 +2,10 @@
 import AppSelect from '@/components/ui/AppSelect.vue'
 import NumberField from '@/components/inputs/NumberField.vue'
 import IconButton from '@/components/ui/IconButton.vue'
-import { useI18n, useLayoutControlsContext } from '@open-pencil/vue'
+import { useI18n, useLayoutControlsContext } from '@redrob-design/vue'
 
 import type { GridTrackProp } from '@/components/properties/LayoutSection/types'
-import type { GridTrackSizing } from '@open-pencil/scene-graph'
+import type { GridTrackSizing } from '@redrob-design/scene-graph'
 
 const ctx = useLayoutControlsContext()
 

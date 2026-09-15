@@ -1,5 +1,5 @@
 {
-  "name": "@open-pencil/core",
+  "name": "@redrob-design/core",
   "version": "0.14.0",
   "license": "MIT",
   "repository": {
@@ -174,10 +174,10 @@
   "dependencies": {
     "@chenglou/pretext": "^0.0.7",
     "@iconify/utils": "^3.1.4",
-    "@open-pencil/fig": "workspace:*",
-    "@open-pencil/kiwi": "workspace:*",
-    "@open-pencil/pen": "workspace:*",
-    "@open-pencil/scene-graph": "workspace:*",
+    "@redrob-design/fig": "workspace:*",
+    "@redrob-design/kiwi": "workspace:*",
+    "@redrob-design/pen": "workspace:*",
+    "@redrob-design/scene-graph": "workspace:*",
     "@tauri-apps/api": "^2.11.1",
     "@xmldom/xmldom": "^0.9.11",
     "acorn": "^8.18.0",

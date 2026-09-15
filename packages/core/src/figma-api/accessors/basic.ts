@@ -1,5 +1,5 @@
-import { getNodeLocalMatrix, getWorldMatrix, type SceneNode } from '@open-pencil/scene-graph'
-import type { Rect } from '@open-pencil/scene-graph/primitives'
+import { getNodeLocalMatrix, getWorldMatrix, type SceneNode } from '@redrob-design/scene-graph'
+import type { Rect } from '@redrob-design/scene-graph/primitives'
 
 import { assertNodeEditable } from '#core/editor/capabilities'
 import {

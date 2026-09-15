@@ -3,9 +3,9 @@ import type {
   GeometryPath,
   SceneNode,
   TextPathData
-} from '@open-pencil/scene-graph'
-import { transformGeometryPaths } from '@open-pencil/scene-graph/copy'
-import { geometryBlobBounds } from '@open-pencil/scene-graph/geometry'
+} from '@redrob-design/scene-graph'
+import { transformGeometryPaths } from '@redrob-design/scene-graph/copy'
+import { geometryBlobBounds } from '@redrob-design/scene-graph/geometry'
 
 /**
  * Shift geometry command blobs in node space. Used when we grow the layout box

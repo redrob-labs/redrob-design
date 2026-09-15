@@ -1,4 +1,4 @@
-import type { VariableType, VariableValue } from '@open-pencil/scene-graph'
+import type { VariableType, VariableValue } from '@redrob-design/scene-graph'
 
 import { parseColor } from '#core/color'
 import { defineTool } from '#core/tools/schema'

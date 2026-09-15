@@ -2,7 +2,7 @@ import { createDeepSeek } from '@ai-sdk/deepseek'
 import { createGoogleGenerativeAI } from '@ai-sdk/google'
 import { createOpenRouter } from '@openrouter/ai-sdk-provider'
 
-import type { AIProviderID } from '@open-pencil/core/constants'
+import type { AIProviderID } from '@redrob-design/core/constants'
 
 import {
   createAnthropicCompatibleAdapter,
@@ -19,8 +19,8 @@ const MODEL_PROVIDER_ADAPTERS = {
         apiKey: config.apiKey,
         fetch: runtime.fetch,
         headers: {
-          'X-OpenRouter-Title': 'OpenPencil',
-          'HTTP-Referer': 'https://github.com/open-pencil/open-pencil'
+          'X-OpenRouter-Title': 'Redrob Design',
+          'HTTP-Referer': 'https://redrob.design'
         }
       })
       return provider(config.customModelID.trim() || config.modelID)

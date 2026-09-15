@@ -7,8 +7,8 @@ import {
 } from '@xmldom/xmldom'
 import svgpath from 'svgpath'
 
-import { parseSVGPath } from '@open-pencil/scene-graph/parse-path'
-import type { Vector } from '@open-pencil/scene-graph/primitives'
+import { parseSVGPath } from '@redrob-design/scene-graph/parse-path'
+import type { Vector } from '@redrob-design/scene-graph/primitives'
 
 import { parseSVGFragment } from '#core/io/formats/svg/document'
 

@@ -2,7 +2,7 @@ import { describe, expect, test } from 'bun:test'
 
 import type { Canvas } from 'canvaskit-wasm'
 
-import type { SceneNode } from '@open-pencil/scene-graph'
+import type { SceneNode } from '@redrob-design/scene-graph'
 
 import { renderEffects } from '#core/canvas/shadows'
 

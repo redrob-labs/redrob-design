@@ -1,6 +1,6 @@
 import type { CanvasKit } from 'canvaskit-wasm'
 
-import type { SceneGraph } from '@open-pencil/scene-graph'
+import type { SceneGraph } from '@redrob-design/scene-graph'
 
 import { SkiaRenderer } from '#core/canvas'
 

@@ -1,6 +1,6 @@
 ---
 title: Riferimento API
-description: Componenti, composable e API avanzate di @open-pencil/vue.
+description: Componenti, composable e API avanzate di @redrob-design/vue.
 ---
 
 # Riferimento API

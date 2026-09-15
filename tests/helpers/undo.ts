@@ -1,4 +1,4 @@
-import { UndoManager } from '@open-pencil/core'
+import { UndoManager } from '@redrob-design/core'
 
 export function noop() {
   return undefined

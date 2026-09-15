@@ -4,8 +4,8 @@ import type { ChatTransport, FinishReason, LanguageModel, UIMessage } from 'ai'
 import type { ComputedRef, Ref } from 'vue'
 import { ref } from 'vue'
 
-import { ACP_AGENTS } from '@open-pencil/core/constants'
-import type { ACPAgentID, AIProviderID } from '@open-pencil/core/constants'
+import { ACP_AGENTS } from '@redrob-design/core/constants'
+import type { ACPAgentID, AIProviderID } from '@redrob-design/core/constants'
 
 import { classifyAIChatError, type AIChatFailure } from '@/app/ai/chat/failure'
 import { resolveLanguageModelID } from '@/app/ai/chat/model'

@@ -1,5 +1,5 @@
-import type { Editor, EditorState } from '@open-pencil/core/editor'
-import type { ExportRequest, IORegistry } from '@open-pencil/core/io'
+import type { Editor, EditorState } from '@redrob-design/core/editor'
+import type { ExportRequest, IORegistry } from '@redrob-design/core/io'
 
 import {
   bundleExportFiles,

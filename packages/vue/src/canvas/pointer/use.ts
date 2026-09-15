@@ -1,7 +1,7 @@
 import type { Ref } from 'vue'
 
-import type { Editor } from '@open-pencil/core/editor'
-import type { SceneNode } from '@open-pencil/scene-graph'
+import type { Editor } from '@redrob-design/core/editor'
+import type { SceneNode } from '@redrob-design/scene-graph'
 
 import {
   canvasToLocalPoint,

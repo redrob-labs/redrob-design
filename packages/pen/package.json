@@ -1,5 +1,5 @@
 {
-  "name": "@open-pencil/pen",
+  "name": "@redrob-design/pen",
   "version": "0.14.0",
   "license": "MIT",
   "type": "module",
@@ -35,7 +35,7 @@
     "provenance": true
   },
   "peerDependencies": {
-    "@open-pencil/scene-graph": "workspace:*"
+    "@redrob-design/scene-graph": "workspace:*"
   },
   "dependencies": {
     "culori": "^4.0.2"

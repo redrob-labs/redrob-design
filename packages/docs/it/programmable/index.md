@@ -6,7 +6,7 @@ description: AI, MCP, CLI, JSX e Figma Plugin API per automatizzare i design.
 
 # Automazione e API
 
-OpenPencil tratta i file di design come dati strutturati. Le operazioni dell’editor — creare forme, modificare riempimenti, configurare la disposizione automatica o esportare risorse — sono disponibili anche tramite CLI, agenti AI e API.
+Redrob Design tratta i file di design come dati strutturati. Le operazioni dell’editor — creare forme, modificare riempimenti, configurare la disposizione automatica o esportare risorse — sono disponibili anche tramite CLI, agenti AI e API.
 
 ## Chat con AI
 
@@ -30,7 +30,7 @@ La CLI esamina, esporta e analizza file `.fig` senza aprire l’editor. Può ele
 
 Un’interfaccia può essere descritta in modo dichiarativo con JSX. Una chiamata crea un albero completo di frame, testo, disposizioni, riempimenti e contorni.
 
-OpenPencil può anche esportare una selezione come JSX o HTML con classi Tailwind, utile come base per implementazione e revisione del codice.
+Redrob Design può anche esportare una selezione come JSX o HTML con classi Tailwind, utile come base per implementazione e revisione del codice.
 
 [Motore JSX →](./jsx-renderer)
 
@@ -40,4 +40,4 @@ Il comando `eval` esegue JavaScript con un oggetto globale `figma` compatibile. 
 
 [Scripting con `eval` →](./cli/scripting)
 
-OpenPencil ha licenza MIT e conserva i documenti localmente. I file `.fig` possono essere esaminati, trasformati, elaborati in CI o forniti come contesto a un modello senza dipendere da uno specifico servizio di hosting.
+Redrob Design ha licenza MIT e conserva i documenti localmente. I file `.fig` possono essere esaminati, trasformati, elaborati in CI o forniti come contesto a un modello senza dipendere da uno specifico servizio di hosting.

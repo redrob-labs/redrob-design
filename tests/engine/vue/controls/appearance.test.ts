@@ -2,9 +2,9 @@ import { describe, expect, test } from 'bun:test'
 
 import { computed, ref } from 'vue'
 
-import { createEditor } from '@open-pencil/core/editor'
-import type { SceneNode } from '@open-pencil/scene-graph'
-import { MIXED, type MixedValue } from '@open-pencil/vue'
+import { createEditor } from '@redrob-design/core/editor'
+import type { SceneNode } from '@redrob-design/scene-graph'
+import { MIXED, type MixedValue } from '@redrob-design/vue'
 
 import { createAppearanceActions, createAppearanceState } from '#vue/controls/appearance/helpers'
 

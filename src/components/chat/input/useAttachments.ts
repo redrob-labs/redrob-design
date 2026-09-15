@@ -1,7 +1,7 @@
 import { useFileDialog } from '@vueuse/core'
 import { computed, onBeforeUnmount, ref, type Ref } from 'vue'
 
-import type { Editor } from '@open-pencil/core/editor'
+import type { Editor } from '@redrob-design/core/editor'
 
 import {
   createImagePreviewURL,

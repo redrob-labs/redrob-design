@@ -2,7 +2,7 @@
 import { computed, ref, watch } from 'vue'
 import { useLocalStorage } from '@vueuse/core'
 
-import { useDocumentWorkspace, useI18n } from '@open-pencil/vue'
+import { useDocumentWorkspace, useI18n } from '@redrob-design/vue'
 
 import {
   activeStorageProviderID,

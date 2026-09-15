@@ -7,7 +7,7 @@ import {
   encodeMessage,
   getSchemaBytes,
   initCodec
-} from '@open-pencil/kiwi/fig/codec'
+} from '@redrob-design/kiwi/fig/codec'
 
 import {
   FIG_PACKAGE_STATUS,
@@ -28,7 +28,7 @@ function appendChunk(container: Uint8Array, chunk: Uint8Array): Uint8Array {
   return bytes
 }
 
-describe('@open-pencil/fig package API', () => {
+describe('@redrob-design/fig package API', () => {
   beforeAll(async () => {
     await initCodec()
   })

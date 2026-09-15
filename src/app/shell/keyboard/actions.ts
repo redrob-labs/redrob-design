@@ -1,7 +1,7 @@
 import type { Ref } from 'vue'
 
-import { opacityFromBuffer } from '@open-pencil/core/editor'
-import type { useEditorCommands, useViewportKind } from '@open-pencil/vue'
+import { opacityFromBuffer } from '@redrob-design/core/editor'
+import type { useEditorCommands, useViewportKind } from '@redrob-design/vue'
 
 import type { EditorStore } from '@/app/editor/active-store'
 

@@ -1,11 +1,11 @@
 ---
 title: Componentes
-description: Referencia de los componentes sin estilos de @open-pencil/vue.
+description: Referencia de los componentes sin estilos de @redrob-design/vue.
 ---
 
 # Componentes
 
-`@open-pencil/vue` proporciona componentes sin estilos para el lienzo, la navegación, los paneles de propiedades y campos especializados.
+`@redrob-design/vue` proporciona componentes sin estilos para el lienzo, la navegación, los paneles de propiedades y campos especializados.
 
 ## Lienzo
 

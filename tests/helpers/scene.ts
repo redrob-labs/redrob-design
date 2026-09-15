@@ -1,5 +1,5 @@
-import { SceneGraph } from '@open-pencil/core'
-import type { Color, SceneNode } from '@open-pencil/core'
+import { SceneGraph } from '@redrob-design/core'
+import type { Color, SceneNode } from '@redrob-design/core'
 
 export function makeSceneGraph(pageName = 'Test'): SceneGraph {
   const graph = new SceneGraph()

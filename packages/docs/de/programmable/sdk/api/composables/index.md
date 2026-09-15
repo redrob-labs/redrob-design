@@ -1,11 +1,11 @@
 ---
 title: Composables
-description: Zentrale Composable-APIs aus @open-pencil/vue.
+description: Zentrale Composable-APIs aus @redrob-design/vue.
 ---
 
 # Composables
 
-Diese Composables liefern Zustand und Aktionen, die eigene OpenPencil-Oberflächen typischerweise benötigen.
+Diese Composables liefern Zustand und Aktionen, die eigene Redrob Design-Oberflächen typischerweise benötigen.
 
 ## Kontext und Arbeitsfläche
 

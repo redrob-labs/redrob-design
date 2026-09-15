@@ -1,7 +1,7 @@
 import { defineCommand } from 'citty'
 
-import type { AnalyzeClustersResult } from '@open-pencil/core/rpc'
-import { calcClusterConfidence } from '@open-pencil/core/tools'
+import type { AnalyzeClustersResult } from '@redrob-design/core/rpc'
+import { calcClusterConfidence } from '@redrob-design/core/tools'
 
 import { appTargetOptions } from '#cli/app-target'
 import { bold, fmtList, fmtSummary } from '#cli/format'

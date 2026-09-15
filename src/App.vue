@@ -4,7 +4,7 @@ import { useEventListener } from '@vueuse/core'
 import { useHead } from '@unhead/vue'
 import { TooltipProvider } from 'reka-ui'
 
-import { provideEditor, useI18n } from '@open-pencil/vue'
+import { provideEditor, useI18n } from '@redrob-design/vue'
 import AppShell from '@/components/Shell/AppShell.vue'
 import AppToast from '@/components/Shell/AppToast.vue'
 import PublishLibraryDialog from '@/components/libraries/PublishLibraryDialog.vue'
@@ -22,7 +22,7 @@ const store = useEditorStore()
 const { updates, locale } = useI18n()
 
 useHead({
-  titleTemplate: (title) => (title ? `${title} — OpenPencil` : 'OpenPencil'),
+  titleTemplate: (title) => (title ? `${title} — Redrob Design` : 'Redrob Design'),
   htmlAttrs: { lang: locale }
 })
 

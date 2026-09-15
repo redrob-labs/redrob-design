@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-import type { Variable } from '@open-pencil/scene-graph'
-import type { BindingProvider, BindingState, BindingTarget } from '@open-pencil/vue'
+import type { Variable } from '@redrob-design/scene-graph'
+import type { BindingProvider, BindingState, BindingTarget } from '@redrob-design/vue'
 
 import BindingFieldDemoItem from './BindingFieldDemoItem.vue'
 

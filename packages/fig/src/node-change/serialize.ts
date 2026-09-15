@@ -1,4 +1,4 @@
-import { normalizeFontFamily, weightToStyle } from '@open-pencil/scene-graph'
+import { normalizeFontFamily, weightToStyle } from '@redrob-design/scene-graph'
 
 import { effectiveFigmaRawNodeFields } from '../source-metadata'
 import { computeExportTransform, fractionalPosition, mapToFigmaType } from './basics'
@@ -27,11 +27,11 @@ export {
   decompressFigKiwiDataAsync,
   FIG_KIWI_DEFAULT_VERSION,
   parseFigKiwiChunks
-} from '@open-pencil/kiwi/fig/container'
-import type { NodeChange, VariableConsumptionEntry } from '@open-pencil/kiwi/fig/codec'
-import { guidToString, stringToGuid } from '@open-pencil/kiwi/fig/guid'
-import type { SceneGraph, SceneNode } from '@open-pencil/scene-graph'
-import type { GUID, JSONObject } from '@open-pencil/scene-graph/primitives'
+} from '@redrob-design/kiwi/fig/container'
+import type { NodeChange, VariableConsumptionEntry } from '@redrob-design/kiwi/fig/codec'
+import { guidToString, stringToGuid } from '@redrob-design/kiwi/fig/guid'
+import type { SceneGraph, SceneNode } from '@redrob-design/scene-graph'
+import type { GUID, JSONObject } from '@redrob-design/scene-graph/primitives'
 
 import {
   buildAssetRefToVarGuidMap,

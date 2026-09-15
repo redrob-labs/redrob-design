@@ -1,6 +1,6 @@
-import { populateAndApplyOverrides } from '@open-pencil/fig/instance-overrides'
-import type { InstanceNodeChange } from '@open-pencil/fig/instance-overrides'
-import type { SceneGraph } from '@open-pencil/scene-graph'
+import { populateAndApplyOverrides } from '@redrob-design/fig/instance-overrides'
+import type { InstanceNodeChange } from '@redrob-design/fig/instance-overrides'
+import type { SceneGraph } from '@redrob-design/scene-graph'
 
 export interface LazyFigImportContext {
   changeMap: Map<string, InstanceNodeChange>

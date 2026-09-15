@@ -4,12 +4,12 @@ import {
   componentPropertyDefinitions,
   findComponentPropertyTarget,
   resolveComponentPropertyValue
-} from '@open-pencil/scene-graph'
+} from '@redrob-design/scene-graph'
 import type {
   ComponentPropertyDefinition,
   ComponentPropertyTarget,
   SceneNode
-} from '@open-pencil/scene-graph'
+} from '@redrob-design/scene-graph'
 
 import { assertNodeEditable } from '#core/editor/capabilities'
 import type { EditorContext } from '#core/editor/types'

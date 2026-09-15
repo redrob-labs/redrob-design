@@ -1,6 +1,6 @@
-import type { InstanceNodeChange } from '@open-pencil/fig/instance-overrides'
-import { SceneGraph } from '@open-pencil/scene-graph'
-import type { EnabledLibraryBinding, SceneNode } from '@open-pencil/scene-graph'
+import type { InstanceNodeChange } from '@redrob-design/fig/instance-overrides'
+import { SceneGraph } from '@redrob-design/scene-graph'
+import type { EnabledLibraryBinding, SceneNode } from '@redrob-design/scene-graph'
 
 import { getLazyFigImportContext, setLazyFigImportContext } from '#core/kiwi/fig/lazy-import'
 import type { PortableSceneGraphData } from '#core/kiwi/fig/parse/portable-data'

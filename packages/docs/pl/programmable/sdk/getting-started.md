@@ -1,6 +1,6 @@
 ---
 title: Pierwsze kroki z SDK
-description: Podłącz @open-pencil/vue, utwórz edytor i skonfiguruj obszar roboczy.
+description: Podłącz @redrob-design/vue, utwórz edytor i skonfiguruj obszar roboczy.
 ---
 
 # Pierwsze kroki z SDK
@@ -8,22 +8,22 @@ description: Podłącz @open-pencil/vue, utwórz edytor i skonfiguruj obszar rob
 ## Instalacja
 
 ```bash
-bun add @open-pencil/core @open-pencil/vue canvaskit-wasm
+bun add @redrob-design/core @redrob-design/vue canvaskit-wasm
 ```
 
-SDK znajduje się w monorepo OpenPencil i jest publikowany jako pakiet `@open-pencil/vue`.
+SDK znajduje się w monorepo Redrob Design i jest publikowany jako pakiet `@redrob-design/vue`.
 
 ```ts
-import { createEditor } from '@open-pencil/core/editor'
-import { provideEditor, useCanvas } from '@open-pencil/vue'
+import { createEditor } from '@redrob-design/core/editor'
+import { provideEditor, useCanvas } from '@redrob-design/vue'
 ```
 
 ## Warstwy aplikacji
 
 Aplikacja oparta na SDK składa się z trzech warstw:
 
-1. `@open-pencil/core` — silnik edytora niezależny od frameworka;
-2. `@open-pencil/vue` — composables i komponenty bez narzuconego wyglądu dla Vue;
+1. `@redrob-design/core` — silnik edytora niezależny od frameworka;
+2. `@redrob-design/vue` — composables i komponenty bez narzuconego wyglądu dla Vue;
 3. aplikacja — wygląd, routing, obsługa plików i interfejs produktu.
 
 ## Minimalna konfiguracja
@@ -31,7 +31,7 @@ Aplikacja oparta na SDK składa się z trzech warstw:
 ### 1. Utwórz edytor
 
 ```ts
-import { createEditor } from '@open-pencil/core/editor'
+import { createEditor } from '@redrob-design/core/editor'
 
 const editor = createEditor({
   width: 1200,
@@ -43,9 +43,9 @@ const editor = createEditor({
 
 ```vue
 <script setup lang="ts">
-import { provideEditor } from '@open-pencil/vue'
+import { provideEditor } from '@redrob-design/vue'
 
-import type { Editor } from '@open-pencil/core/editor'
+import type { Editor } from '@redrob-design/core/editor'
 
 const props = defineProps<{
   editor: Editor
@@ -67,7 +67,7 @@ provideEditor(props.editor)
 <script setup lang="ts">
 import { ref } from 'vue'
 
-import { useCanvas, useEditor } from '@open-pencil/vue'
+import { useCanvas, useEditor } from '@redrob-design/vue'
 
 const canvasRef = ref<HTMLCanvasElement | null>(null)
 const editor = useEditor()
@@ -85,7 +85,7 @@ useCanvas(canvasRef, editor)
 Po wywołaniu `provideEditor()` komponenty potomne mogą odczytywać zaznaczenie i wykonywać polecenia edytora:
 
 ```ts
-import { useEditorCommands, useSelectionState } from '@open-pencil/vue'
+import { useEditorCommands, useSelectionState } from '@redrob-design/vue'
 
 const selection = useSelectionState()
 const commands = useEditorCommands()
@@ -97,7 +97,7 @@ const commands = useEditorCommands()
 <script setup lang="ts">
 import { ref } from 'vue'
 
-import { useCanvas, useEditor, useSelectionState } from '@open-pencil/vue'
+import { useCanvas, useEditor, useSelectionState } from '@redrob-design/vue'
 
 const canvasRef = ref<HTMLCanvasElement | null>(null)
 const editor = useEditor()

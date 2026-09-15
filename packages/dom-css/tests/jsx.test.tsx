@@ -1,4 +1,4 @@
-/** @jsxImportSource @open-pencil/dom-css */
+/** @jsxImportSource @redrob-design/dom-css */
 import { describe, expect, it } from 'bun:test'
 
 import {
@@ -14,7 +14,7 @@ function CardTitle(props: { children?: string }) {
   return <h1 class="title">{props.children}</h1>
 }
 
-describe('@open-pencil/dom-css JSX', () => {
+describe('@redrob-design/dom-css JSX', () => {
   it('converts JSX elements into DesignDOM documents', async () => {
     const document = await jsxToDesignDocument(
       <article class="card" data-id="card-1" style={{ width: '320px', backgroundColor: 'white' }}>

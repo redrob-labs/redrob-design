@@ -1,7 +1,7 @@
 import { describe, test, expect } from 'bun:test'
 
-import { SceneGraph, UndoManager } from '@open-pencil/core'
-import type { JSONObject } from '@open-pencil/scene-graph/primitives'
+import { SceneGraph, UndoManager } from '@redrob-design/core'
+import type { JSONObject } from '@redrob-design/scene-graph/primitives'
 
 import { getNodeOrThrow } from '#tests/helpers/assert'
 

@@ -8,8 +8,8 @@ import {
   FigmaAPI,
   computeAllLayouts,
   executeRPCCommand
-} from '@open-pencil/core'
-import type { ToolDescriptor } from '@open-pencil/mcp/tools'
+} from '@redrob-design/core'
+import type { ToolDescriptor } from '@redrob-design/mcp/tools'
 
 export interface HealthResponse {
   status: string

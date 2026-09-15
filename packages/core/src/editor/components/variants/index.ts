@@ -6,8 +6,8 @@ import type {
   ComponentPropertyDefinition,
   ComponentPropertyType,
   SceneNode
-} from '@open-pencil/scene-graph'
-import { buildVariantName, parseVariantName } from '@open-pencil/scene-graph/variant-name'
+} from '@redrob-design/scene-graph'
+import { buildVariantName, parseVariantName } from '@redrob-design/scene-graph/variant-name'
 
 import { assertNodeEditable } from '#core/editor/capabilities'
 import { restoreSubtree, snapshotSubtree } from '#core/editor/clipboard/subtree-history'

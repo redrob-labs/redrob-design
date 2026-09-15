@@ -1,7 +1,7 @@
 import { mkdirSync, writeFileSync } from 'node:fs'
 import { dirname } from 'node:path'
 
-import { editorCommandMetadata } from '@open-pencil/vue'
+import { editorCommandMetadata } from '@redrob-design/vue'
 
 import { APP_MENU_SCHEMA } from '@/app/shell/menu/schema'
 import type { AppMenuEntry, AppMenuGroupSchema } from '@/app/shell/menu/schema'

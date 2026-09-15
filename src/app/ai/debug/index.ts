@@ -1,8 +1,8 @@
 import type { UIMessage } from 'ai'
 
-import { buildDebugLog } from '@open-pencil/core/tools'
-import type { ToolDebugLog, ToolLogEntry } from '@open-pencil/core/tools'
-import type { JSONObject } from '@open-pencil/scene-graph/primitives'
+import { buildDebugLog } from '@redrob-design/core/tools'
+import type { ToolDebugLog, ToolLogEntry } from '@redrob-design/core/tools'
+import type { JSONObject } from '@redrob-design/scene-graph/primitives'
 
 import type { AIChatFailure } from '@/app/ai/chat/failure'
 import { getToolLogEntries } from '@/app/ai/tools'
@@ -212,7 +212,7 @@ export function serializeChatLog(messages: UIMessage[], failure?: AIChatFailure 
   const debugLog = buildDebugLog(toolLog)
 
   sections.push('╔══════════════════════════════════════╗')
-  sections.push('║     OPEN PENCIL AI DEBUG LOG         ║')
+  sections.push('║     REDROB DESIGN AI DEBUG LOG       ║')
   sections.push(`║     ${new Date().toISOString()}   ║`)
   sections.push('╚══════════════════════════════════════╝')
   sections.push('')

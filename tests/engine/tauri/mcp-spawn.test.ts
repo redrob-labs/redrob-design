@@ -4,10 +4,10 @@ import { getAutomationAuthToken, spawnMCPIfNeeded } from '@/app/automation/mcp/s
 
 import { clearTauriMocks, installTauriMockWindow, mockTauriIPC } from '#tests/helpers/tauri/mocks'
 
-const DISCOVERY_PATH = '/mock/home/.openpencil/mcp.json'
+const DISCOVERY_PATH = '/mock/home/Library/Application Support/RedrobDesign/mcp.json'
 const DISCOVERY_JSON = JSON.stringify({
   pid: 1234,
-  socketPath: '/mock/home/.openpencil/mcp.sock',
+  socketPath: '/mock/home/Library/Application Support/RedrobDesign/mcp.sock',
   httpPort: 7600,
   authRequired: true,
   authToken: 'discovery-token',
@@ -129,7 +129,7 @@ describe('Tauri MCP spawning', () => {
       if (cmd === 'mcp_executable_available') return true
       if (cmd === 'plugin:shell|spawn') {
         expect(args).toMatchObject({
-          program: 'openpencil-mcp-http',
+          program: 'redrob-design-mcp-http',
           args: [],
           options: {
             env: {

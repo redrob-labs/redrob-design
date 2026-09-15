@@ -1,9 +1,9 @@
 import { useLocalStorage, usePreferredDark } from '@vueuse/core'
 import { computed, watch } from 'vue'
 
-import type { RulerTheme } from '@open-pencil/core/canvas'
-import { parseColor } from '@open-pencil/core/color'
-import { IS_BROWSER } from '@open-pencil/core/constants'
+import type { RulerTheme } from '@redrob-design/core/canvas'
+import { parseColor } from '@redrob-design/core/color'
+import { IS_BROWSER } from '@redrob-design/core/constants'
 
 import { getActiveEditorStoreOrNull, useActiveEditorStoreRef } from '@/app/editor/active-store'
 

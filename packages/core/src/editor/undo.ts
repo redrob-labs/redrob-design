@@ -1,9 +1,9 @@
 import { pick } from 'es-toolkit/object'
 
-import type { SceneNode } from '@open-pencil/scene-graph'
-import type { Rect, Vector } from '@open-pencil/scene-graph/primitives'
-import { createResizeSnapshot, type ResizeSnapshot } from '@open-pencil/scene-graph/resize'
-import type { UndoEntry } from '@open-pencil/scene-graph/undo'
+import type { SceneNode } from '@redrob-design/scene-graph'
+import type { Rect, Vector } from '@redrob-design/scene-graph/primitives'
+import { createResizeSnapshot, type ResizeSnapshot } from '@redrob-design/scene-graph/resize'
+import type { UndoEntry } from '@redrob-design/scene-graph/undo'
 
 import { assertNodeEditable } from './capabilities'
 import { restoreSubtree, snapshotSubtree } from './clipboard/subtree-history'

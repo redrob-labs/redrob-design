@@ -12,8 +12,8 @@ export default defineConfig({
   outDir: './dist',
   treeshake: false,
   deps: {
-    alwaysBundle: ['@open-pencil/mcp', /^@open-pencil\/mcp\//],
-    neverBundle: ['@open-pencil/core', /^@open-pencil\/core\//, 'canvaskit-wasm', /^node:/],
+    alwaysBundle: ['@redrob-design/mcp', /^@redrob-design\/mcp\//],
+    neverBundle: ['@redrob-design/core', /^@redrob-design\/core\//, 'canvaskit-wasm', /^node:/],
     onlyBundle: false
   }
 })

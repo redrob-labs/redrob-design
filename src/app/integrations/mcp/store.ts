@@ -75,7 +75,7 @@ export function parseMCPConnectionSettings(value: unknown): MCPConnectionSetting
     const connection = parseConnection(candidate)
     if (!connection || ids.has(connection.id)) continue
     const normalizedName = connection.name.toLowerCase()
-    if (normalizedName === 'open-pencil' || names.has(normalizedName)) continue
+    if (normalizedName === 'redrob-design' || names.has(normalizedName)) continue
     ids.add(connection.id)
     names.add(normalizedName)
     connections.push(connection)
@@ -130,7 +130,7 @@ export function saveMCPConnectionDraft(draft: MCPConnectionDraft): MCPConnection
   const name = draft.name.trim()
   if (!name) throw new Error('Connection name is required')
   if (name.length > MAX_NAME_LENGTH) throw new Error('Connection name is too long')
-  if (name.toLowerCase() === 'open-pencil') throw new Error('The open-pencil name is reserved')
+  if (name.toLowerCase() === 'redrob-design') throw new Error('The redrob-design name is reserved')
   const duplicateName = mcpConnectionSettings.value.connections.some(
     (connection) =>
       connection.id !== draft.id && connection.name.toLowerCase() === name.toLowerCase()

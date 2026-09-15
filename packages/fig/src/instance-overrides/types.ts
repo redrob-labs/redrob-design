@@ -1,6 +1,6 @@
-import type { GUID, NodeChange, VariableConsumptionEntry } from '@open-pencil/kiwi/fig/codec'
-import type { SceneGraph } from '@open-pencil/scene-graph'
-import type { Matrix, Vector } from '@open-pencil/scene-graph/primitives'
+import type { GUID, NodeChange, VariableConsumptionEntry } from '@redrob-design/kiwi/fig/codec'
+import type { SceneGraph } from '@redrob-design/scene-graph'
+import type { Matrix, Vector } from '@redrob-design/scene-graph/primitives'
 
 import type { ProtectionMap } from './patches'
 

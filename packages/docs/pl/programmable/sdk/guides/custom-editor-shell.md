@@ -5,15 +5,15 @@ description: Tworzenie własnego interfejsu edytora za pomocą provideEditor, Ca
 
 # Własny interfejs edytora
 
-Typowa aplikacja OpenPencil oparta na Vue składa się z trzech warstw:
+Typowa aplikacja Redrob Design oparta na Vue składa się z trzech warstw:
 
-1. `@open-pencil/core` tworzy edytor;
-2. `@open-pencil/vue` łączy go z composables i komponentami Vue bez narzuconego wyglądu;
+1. `@redrob-design/core` tworzy edytor;
+2. `@redrob-design/vue` łączy go z composables i komponentami Vue bez narzuconego wyglądu;
 3. aplikacja określa układ, wygląd i zachowanie właściwe dla produktu.
 
 ## Dlaczego warto rozdzielić te warstwy
 
-Gotowa aplikacja OpenPencil jest tylko jednym z możliwych interfejsów.
+Gotowa aplikacja Redrob Design jest tylko jednym z możliwych interfejsów.
 
 Na podstawie SDK można utworzyć edytor osadzony w innym produkcie, wewnętrzne narzędzie do pracy z zasobami, edytor szablonów, interfejs do adnotacji albo wyspecjalizowany edytor z obsługą AI.
 
@@ -31,7 +31,7 @@ Wygodny interfejs zwykle:
 
 ```vue
 <script setup lang="ts">
-import { createEditor } from '@open-pencil/core/editor'
+import { createEditor } from '@redrob-design/core/editor'
 import {
   provideEditor,
   CanvasRoot,
@@ -39,7 +39,7 @@ import {
   ToolbarRoot,
   PageListRoot,
   LayerTreeRoot,
-} from '@open-pencil/vue'
+} from '@redrob-design/vue'
 
 const editor = createEditor({ width: 1440, height: 900 })
 provideEditor(editor)

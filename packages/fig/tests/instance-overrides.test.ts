@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test'
 
-import { SceneGraph } from '@open-pencil/scene-graph'
+import { SceneGraph } from '@redrob-design/scene-graph'
 
 import {
   populateAndApplyOverrides,
@@ -10,7 +10,7 @@ import {
 } from '../src/instance-overrides'
 import { propagateOverridesTransitively } from '../src/instance-overrides/sync/propagate'
 
-describe('@open-pencil/fig instance interpretation', () => {
+describe('@redrob-design/fig instance interpretation', () => {
   test('populates an empty instance from its component tree', () => {
     const graph = new SceneGraph()
     const pageId = graph.getPages()[0].id

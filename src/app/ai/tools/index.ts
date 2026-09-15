@@ -7,9 +7,9 @@ import {
   EXTENDED_TOOLS,
   registerComponentCatalog,
   toolsToAI
-} from '@open-pencil/core/tools'
-import type { StepBudget, ToolLogEntry } from '@open-pencil/core/tools'
-import type { SceneNode } from '@open-pencil/scene-graph'
+} from '@redrob-design/core/tools'
+import type { StepBudget, ToolLogEntry } from '@redrob-design/core/tools'
+import type { SceneNode } from '@redrob-design/scene-graph'
 
 import { makeFigmaFromStore } from '@/app/automation/bridge/figma-factory'
 import { getActiveEditorStore } from '@/app/editor/active-store'

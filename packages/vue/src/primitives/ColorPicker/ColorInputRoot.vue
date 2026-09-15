@@ -2,7 +2,7 @@
 import { useColorModel } from '#vue/controls/color-model/use'
 import type { OkHCLControls } from '#vue/controls/color-model/types'
 
-import type { Color } from '@open-pencil/scene-graph/primitives'
+import type { Color } from '@redrob-design/scene-graph/primitives'
 
 const {
   color,

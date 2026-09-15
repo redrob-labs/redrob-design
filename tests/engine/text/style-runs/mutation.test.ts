@@ -7,7 +7,7 @@ import {
   toggleBoldInRange,
   toggleItalicInRange,
   type StyleRun
-} from '@open-pencil/core'
+} from '@redrob-design/core'
 
 // ---------------------------------------------------------------------------
 // toggleBoldInRange — mutation coverage

@@ -1,7 +1,7 @@
 import type { Font } from 'canvaskit-wasm'
 
-import type { SceneGraph, SceneNode } from '@open-pencil/scene-graph'
-import type { Vector } from '@open-pencil/scene-graph/primitives'
+import type { SceneGraph, SceneNode } from '@redrob-design/scene-graph'
+import type { Vector } from '@redrob-design/scene-graph/primitives'
 
 import {
   COMPONENT_LABEL_FONT_SIZE,

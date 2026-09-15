@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'bun:test'
 
-import { renderNodesToPPTX, type PPTXExportStats } from '@open-pencil/core'
-import { BUILTIN_IO_FORMATS } from '@open-pencil/core/io'
+import { renderNodesToPPTX, type PPTXExportStats } from '@redrob-design/core'
+import { BUILTIN_IO_FORMATS } from '@redrob-design/core/io'
 
 import {
   SLIDE_WIDTH_IN,

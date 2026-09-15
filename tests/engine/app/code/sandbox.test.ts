@@ -48,11 +48,11 @@ describe('Design JSX sandbox output', () => {
 
   test('rejects empty output and malformed elements before rendering', () => {
     expect(() => validateDesignJSXOutput(undefined, limits)).toThrow(
-      'must return an OpenPencil element'
+      'must return a Redrob Design element'
     )
-    expect(() => validateDesignJSXOutput([], limits)).toThrow('must return an OpenPencil element')
+    expect(() => validateDesignJSXOutput([], limits)).toThrow('must return a Redrob Design element')
     expect(() => convertDesignJSXRoots([{ type: 'frame', props: {}, children: null }])).toThrow(
-      'must return an OpenPencil element'
+      'must return a Redrob Design element'
     )
   })
 
@@ -88,7 +88,7 @@ describe('Design JSX sandbox output', () => {
 
   test('counts container and primitive data toward the output limit', () => {
     const tiny = resolveDesignJSXValidationLimits({ outputBytes: 1 })
-    expect(() => validateDesignJSXOutput([], tiny)).toThrow('must return an OpenPencil element')
+    expect(() => validateDesignJSXOutput([], tiny)).toThrow('must return a Redrob Design element')
     expect(() => validateDesignJSXOutput(true, tiny)).toThrow('too large')
     expect(() => validateDesignJSXOutput(1, tiny)).toThrow('too large')
     expect(() => validateDesignJSXOutput(frame(), tiny)).toThrow('too large')

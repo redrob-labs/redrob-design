@@ -1,8 +1,8 @@
 import { describe, expect, test } from 'bun:test'
 
-import { importNodeChanges } from '@open-pencil/core'
-import { applyStyleRefsToFields } from '@open-pencil/fig/node-change'
-import type { NodeChange } from '@open-pencil/kiwi/fig/codec'
+import { importNodeChanges } from '@redrob-design/core'
+import { applyStyleRefsToFields } from '@redrob-design/fig/node-change'
+import type { NodeChange } from '@redrob-design/kiwi/fig/codec'
 
 describe('fig import style refs', () => {
   test('resolves library paint styles referenced by asset key and version', () => {

@@ -24,10 +24,10 @@ import {
   toolbarToolTestId,
   useI18n,
   vTestId
-} from '@open-pencil/vue'
+} from '@redrob-design/vue'
 
-import type { Tool } from '@open-pencil/vue'
-import type { EditorToolDef } from '@open-pencil/core/editor'
+import type { Tool } from '@redrob-design/vue'
+import type { EditorToolDef } from '@redrob-design/core/editor'
 import type { ToolbarUI, ToolIconMap, ToolLabels } from '@/components/Toolbar/types'
 
 const {

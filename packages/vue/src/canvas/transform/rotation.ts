@@ -1,6 +1,6 @@
-import { ROTATION_SNAP_DEGREES } from '@open-pencil/core/constants'
-import type { Editor } from '@open-pencil/core/editor'
-import { getAbsolutePositionFull } from '@open-pencil/scene-graph/coordinate'
+import { ROTATION_SNAP_DEGREES } from '@redrob-design/core/constants'
+import type { Editor } from '@redrob-design/core/editor'
+import { getAbsolutePositionFull } from '@redrob-design/scene-graph/coordinate'
 
 import {
   hitTestCornerRotationByMatrix,

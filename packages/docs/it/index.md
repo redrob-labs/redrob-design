@@ -1,16 +1,16 @@
 ---
 layout: home
-title: OpenPencil — Editor di design open source
+title: Redrob Design — Editor di design open source
 description: Alternativa open source a Figma con file .fig, AI integrata e automazione completa.
 
 hero:
-  name: OpenPencil
+  name: Redrob Design
   text: Editor di design open source
   tagline: Apri i file Figma. Usa l’AI. Automatizza ogni operazione. Crea anche editor personalizzati.
   actions:
     - theme: brand
       text: Prova online
-      link: https://app.openpencil.dev/demo
+      link: https://app.redrob.design/demo
     - theme: alt
       text: Scarica
       link: https://github.com/open-pencil/open-pencil/releases/latest
@@ -21,13 +21,13 @@ hero:
 features:
   - icon: 📂
     title: Compatibile con Figma
-    details: Apre direttamente i file .fig. Copia e incolla tra Figma e OpenPencil. Il codec binario Kiwi conserva i dati nei passaggi tra le due applicazioni.
+    details: Apre direttamente i file .fig. Copia e incolla tra Figma e Redrob Design. Il codec binario Kiwi conserva i dati nei passaggi tra le due applicazioni.
   - icon: ⚡
     title: Programmabile
     details: CLI senza interfaccia grafica per esaminare, esportare e analizzare file .fig. Figma Plugin API tramite eval, esportazione Tailwind CSS e output JSON per CI e automazione.
   - icon: 🧩
     title: Un insieme di strumenti, non solo un’app
-    details: Crea interfacce di editing con il Vue SDK, integra OpenPencil in altri prodotti o sviluppa editor specializzati sullo stesso nucleo.
+    details: Crea interfacce di editing con il Vue SDK, integra Redrob Design in altri prodotti o sviluppa editor specializzati sullo stesso nucleo.
   - icon: 🤖
     title: AI integrata
     details: Chat con 90 strumenti per creare forme, modificare stili, gestire disposizioni e analizzare variabili di design. Server MCP per Claude Code, Cursor e Windsurf.

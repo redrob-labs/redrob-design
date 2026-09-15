@@ -1,5 +1,5 @@
-import { parseFigBuffer } from '@open-pencil/fig'
-import type { SceneGraph } from '@open-pencil/scene-graph'
+import { parseFigBuffer } from '@redrob-design/fig'
+import type { SceneGraph } from '@redrob-design/scene-graph'
 
 import { importNodeChanges } from '#core/kiwi/fig/import'
 import { getLazyFigImportContext, populateLazyFigImportRoots } from '#core/kiwi/fig/lazy-import'

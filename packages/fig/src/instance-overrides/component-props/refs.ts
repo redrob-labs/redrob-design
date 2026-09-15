@@ -1,4 +1,4 @@
-import { guidToString } from '@open-pencil/fig/node-change'
+import { guidToString } from '@redrob-design/fig/node-change'
 
 import type { ComponentPropRef, ComponentPropValue, OverrideContext } from '../types'
 import { normalizePropName, stringToGuidParts } from './values'

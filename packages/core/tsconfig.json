@@ -16,8 +16,8 @@
     "rootDir": "src",
     "paths": {
       "#core/*": ["./src/*"],
-      "@open-pencil/core": ["./src/index.ts"],
-      "@open-pencil/core/*": ["./src/*"]
+      "@redrob-design/core": ["./src/index.ts"],
+      "@redrob-design/core/*": ["./src/*"]
     }
   },
   "include": ["src"]

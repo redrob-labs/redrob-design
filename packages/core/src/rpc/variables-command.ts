@@ -1,4 +1,4 @@
-import type { SceneGraph, Variable } from '@open-pencil/scene-graph'
+import type { SceneGraph, Variable } from '@redrob-design/scene-graph'
 
 import { colorToHex } from '#core/color'
 

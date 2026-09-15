@@ -1,6 +1,6 @@
 import type { Canvas, Path, PathBuilder, PathOp } from 'canvaskit-wasm'
 
-import type { SceneGraph, SceneNode } from '@open-pencil/scene-graph'
+import type { SceneGraph, SceneNode } from '@redrob-design/scene-graph'
 
 import { getTextOutlineSupport } from '#core/text/outlines'
 

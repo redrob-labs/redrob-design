@@ -1,5 +1,5 @@
-import { guidToString } from '@open-pencil/fig/node-change'
-import { copyFills, copyStyleRuns } from '@open-pencil/scene-graph/copy'
+import { guidToString } from '@redrob-design/fig/node-change'
+import { copyFills, copyStyleRuns } from '@redrob-design/scene-graph/copy'
 
 import { applyOverridePatch, type OverridePatch } from '../patches'
 import { getComponentRoot } from '../resolve'

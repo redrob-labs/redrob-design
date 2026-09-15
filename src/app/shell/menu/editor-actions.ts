@@ -1,4 +1,4 @@
-import type { SceneNode } from '@open-pencil/scene-graph'
+import type { SceneNode } from '@redrob-design/scene-graph'
 
 import { useEditorStore } from '@/app/editor/active-store'
 import { setSnappingPreference } from '@/app/settings/preferences/apply'

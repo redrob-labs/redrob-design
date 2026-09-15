@@ -2,18 +2,18 @@
 import type { CanvasKit } from 'canvaskit-wasm'
 import { deflateSync, inflateSync } from 'fflate'
 
-import { compressFigDataSync } from '@open-pencil/fig'
+import { compressFigDataSync } from '@redrob-design/fig'
 import {
   buildComponentPropIndex,
   exportCanvasGuides,
   importCanvasGuides,
   stringToGuid
-} from '@open-pencil/fig/node-change'
-import { initCodec, getCompiledSchema, getSchemaBytes } from '@open-pencil/kiwi/fig/codec'
-import type { NodeChange } from '@open-pencil/kiwi/fig/codec'
-import { decodeBinarySchema, compileSchema, ByteBuffer } from '@open-pencil/kiwi/schema-runtime'
-import type { SceneGraph, VariableValue } from '@open-pencil/scene-graph'
-import type { GUID } from '@open-pencil/scene-graph/primitives'
+} from '@redrob-design/fig/node-change'
+import { initCodec, getCompiledSchema, getSchemaBytes } from '@redrob-design/kiwi/fig/codec'
+import type { NodeChange } from '@redrob-design/kiwi/fig/codec'
+import { decodeBinarySchema, compileSchema, ByteBuffer } from '@redrob-design/kiwi/schema-runtime'
+import type { SceneGraph, VariableValue } from '@redrob-design/scene-graph'
+import type { GUID } from '@redrob-design/scene-graph/primitives'
 
 import { decodeBase64 } from '#core/bytes'
 import type { SkiaRenderer } from '#core/canvas'
@@ -618,7 +618,7 @@ export async function exportFigFile(
 
   const metaJSON = JSON.stringify({
     version: 1,
-    app: 'OpenPencil',
+    app: 'Redrob Design',
     createdAt: new Date().toISOString()
   })
 
@@ -643,7 +643,7 @@ export async function exportFigFile(
   return compressFigData(schemaDeflated, kiwiData, thumbnailPNG, metaJSON, imageEntries, version)
 }
 
-export { compressFigDataSync } from '@open-pencil/fig'
+export { compressFigDataSync } from '@redrob-design/fig'
 
 function canUseWorker(): boolean {
   return typeof Worker !== 'undefined' && IS_BROWSER

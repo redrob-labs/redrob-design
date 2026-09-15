@@ -5,14 +5,14 @@ description: Flags réactifs Mobile et Desktop pour une interface d’édition p
 
 # useViewportKind
 
-`useViewportKind()` renvoie une classification simplifiée de la Viewport size utilisée par l’UI responsive d’OpenPencil.
+`useViewportKind()` renvoie une classification simplifiée de la Viewport size utilisée par l’UI responsive d’Redrob Design.
 
 Utilisez le composable lorsqu’il suffit de distinguer Mobile et Desktop sans configurer directement `useBreakpoints()`.
 
 ## Utilisation
 
 ```ts
-import { useViewportKind } from '@open-pencil/vue'
+import { useViewportKind } from '@redrob-design/vue'
 
 const { isMobile, isDesktop } = useViewportKind()
 ```

@@ -1,7 +1,7 @@
-import type { Editor } from '@open-pencil/core/editor'
-import { computeSelectionBounds } from '@open-pencil/scene-graph'
-import type { SceneNode } from '@open-pencil/scene-graph'
-import { getAxisAlignedWorldBounds } from '@open-pencil/scene-graph/coordinate'
+import type { Editor } from '@redrob-design/core/editor'
+import { computeSelectionBounds } from '@redrob-design/scene-graph'
+import type { SceneNode } from '@redrob-design/scene-graph'
+import { getAxisAlignedWorldBounds } from '@redrob-design/scene-graph/coordinate'
 
 import { explicitSnapTargets } from '#vue/shared/input/explicit-snap-targets'
 import {

@@ -1,5 +1,5 @@
-import type { SceneNode } from '@open-pencil/scene-graph'
-import { copyGeometryPaths } from '@open-pencil/scene-graph/copy'
+import type { SceneNode } from '@redrob-design/scene-graph'
+import { copyGeometryPaths } from '@redrob-design/scene-graph/copy'
 
 import { buildClonesMap } from '../sync'
 import type { OverrideContext } from '../types'

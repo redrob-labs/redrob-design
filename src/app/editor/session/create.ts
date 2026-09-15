@@ -1,8 +1,8 @@
 import { shallowReactive } from 'vue'
 
-import { createEditor } from '@open-pencil/core/editor'
-import { BUILTIN_IO_FORMATS, IORegistry } from '@open-pencil/core/io'
-import { SceneGraph } from '@open-pencil/scene-graph'
+import { createEditor } from '@redrob-design/core/editor'
+import { BUILTIN_IO_FORMATS, IORegistry } from '@redrob-design/core/io'
+import { SceneGraph } from '@redrob-design/scene-graph'
 
 import { recordPreparationOutcome } from '@/app/diagnostics'
 import {
@@ -31,8 +31,8 @@ import { notificationMessages } from '@/app/i18n/notifications'
 import { toast } from '@/app/shell/ui'
 import { IS_BROWSER, IS_TAURI } from '@/constants'
 
-export { EDITOR_TOOLS as TOOLS, TOOL_SHORTCUTS } from '@open-pencil/core/editor'
-export type { EditorToolDef as ToolDef, Tool } from '@open-pencil/core/editor'
+export { EDITOR_TOOLS as TOOLS, TOOL_SHORTCUTS } from '@redrob-design/core/editor'
+export type { EditorToolDef as ToolDef, Tool } from '@redrob-design/core/editor'
 
 export function createEditorStore(initialGraph?: SceneGraph) {
   const graph = initialGraph ?? new SceneGraph()

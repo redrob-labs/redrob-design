@@ -3,7 +3,7 @@ import type {
   VectorRegion,
   VectorSegment,
   VectorVertex
-} from '@open-pencil/scene-graph'
+} from '@redrob-design/scene-graph'
 
 export function findConnectedComponents(network: VectorNetwork): number[][] {
   const n = network.vertices.length

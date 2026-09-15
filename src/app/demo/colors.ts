@@ -1,5 +1,5 @@
-import { BLACK } from '@open-pencil/core/constants'
-import type { Color, Fill, GradientStop, Stroke } from '@open-pencil/scene-graph'
+import { BLACK } from '@redrob-design/core/constants'
+import type { Color, Fill, GradientStop, Stroke } from '@redrob-design/scene-graph'
 
 export const DEMO_COLORS = {
   white: { r: 1, g: 1, b: 1, a: 1 },

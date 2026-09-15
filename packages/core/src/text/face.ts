@@ -1,8 +1,8 @@
-import { parseFontStyle } from '@open-pencil/scene-graph'
-import type { ParsedFontStyle } from '@open-pencil/scene-graph'
+import { parseFontStyle } from '@redrob-design/scene-graph'
+import type { ParsedFontStyle } from '@redrob-design/scene-graph'
 
-export { normalizeFontStyleName, parseFontStyle, styleToWeight } from '@open-pencil/scene-graph'
-export type { ParsedFontStyle } from '@open-pencil/scene-graph'
+export { normalizeFontStyleName, parseFontStyle, styleToWeight } from '@redrob-design/scene-graph'
+export type { ParsedFontStyle } from '@redrob-design/scene-graph'
 
 export interface FontFaceRef extends ParsedFontStyle {
   family: string

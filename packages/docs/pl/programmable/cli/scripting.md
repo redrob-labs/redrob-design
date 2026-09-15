@@ -5,20 +5,20 @@ description: Wykonywanie JavaScript przez API zgodne z Figma Plugin API do wyszu
 
 # Skrypty
 
-`openpencil eval` wykonuje JavaScript dla dokumentu OpenPencil i udostępnia globalny obiekt `figma` zgodny z Figma Plugin API. Polecenie nadaje się do zmian zbiorczych, sprawdzania dokumentów, przygotowywania danych testowych i automatyzacji bez interfejsu edytora.
+`redrob-design eval` wykonuje JavaScript dla dokumentu Redrob Design i udostępnia globalny obiekt `figma` zgodny z Figma Plugin API. Polecenie nadaje się do zmian zbiorczych, sprawdzania dokumentów, przygotowywania danych testowych i automatyzacji bez interfejsu edytora.
 
 ## Pierwsze wywołanie
 
 ```sh
-openpencil eval design.fig -c "return figma.currentPage.children.length"
+redrob-design eval design.fig -c "return figma.currentPage.children.length"
 ```
 
-Opcja `-c` przyjmuje JavaScript. Jeśli kod nie zaczyna się od `return`, OpenPencil umieszcza go w funkcji asynchronicznej i zwraca jej wynik, jeśli istnieje.
+Opcja `-c` przyjmuje JavaScript. Jeśli kod nie zaczyna się od `return`, Redrob Design umieszcza go w funkcji asynchronicznej i zwraca jej wynik, jeśli istnieje.
 
 ## Wyszukiwanie obiektów
 
 ```sh
-openpencil eval design.fig -c "
+redrob-design eval design.fig -c "
   return figma.currentPage
     .findAll((node) => node.type === 'FRAME' && node.name.includes('Button'))
     .map((button) => ({ id: button.id, name: button.name }))
@@ -32,7 +32,7 @@ openpencil eval design.fig -c "
 ## Skrypt ze standardowego wejścia
 
 ```sh
-cat transform.js | openpencil eval design.fig --stdin --write
+cat transform.js | redrob-design eval design.fig --stdin --write
 ```
 
 ## Otwarta aplikacja
@@ -45,7 +45,7 @@ Po przekierowaniu wyjścia domyślnie używany jest JSON. Opcja `--json` włącz
 
 ## Dostępne API
 
-API jest celowo zbliżone do Figma Plugin API, ale pracuje z SceneGraph i formatami plików OpenPencil.
+API jest celowo zbliżone do Figma Plugin API, ale pracuje z SceneGraph i formatami plików Redrob Design.
 
 ### Dokument i strony
 
@@ -99,7 +99,7 @@ Najczęściej używane właściwości można odczytywać i zapisywać przez poś
 
 - `figma.mixed`
 - `figma.createImage(data)`
-- `figma.loadFontAsync(fontName)` niczego nie wykonuje, ponieważ OpenPencil nie blokuje zmiany tekstu do czasu załadowania czcionki przez wtyczkę
+- `figma.loadFontAsync(fontName)` niczego nie wykonuje, ponieważ Redrob Design nie blokuje zmiany tekstu do czasu załadowania czcionki przez wtyczkę
 - `figma.listAvailableFontsAsync()` zwraca dostępne czcionki systemowe
 - `figma.notify(message)` zapisuje ostrzeżenie w trybie bez interfejsu
 - `figma.viewport`

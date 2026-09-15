@@ -1,8 +1,8 @@
 import type { Canvas, SkPicture } from 'canvaskit-wasm'
 
-import type { SceneGraph, SceneNode } from '@open-pencil/scene-graph'
-import { getWorldMatrix } from '@open-pencil/scene-graph/coordinate'
-import Matrix from '@open-pencil/scene-graph/matrix'
+import type { SceneGraph, SceneNode } from '@redrob-design/scene-graph'
+import { getWorldMatrix } from '@redrob-design/scene-graph/coordinate'
+import Matrix from '@redrob-design/scene-graph/matrix'
 
 import type { SkiaRenderer } from '#core/canvas/renderer'
 import { clipNodeShape, nodeHasRadius } from '#core/canvas/shapes'

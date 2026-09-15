@@ -1,5 +1,5 @@
-import type { Editor } from '@open-pencil/core/editor'
-import type { SceneNode } from '@open-pencil/scene-graph'
+import type { Editor } from '@redrob-design/core/editor'
+import type { SceneNode } from '@redrob-design/scene-graph'
 
 import type { CanvasLabelKind } from '#vue/canvas/labels/edit'
 import type { DragState } from '#vue/shared/input/types'

@@ -1,9 +1,9 @@
 import { describe, expect, test } from 'bun:test'
 import { readFileSync } from 'node:fs'
 
-import { nodeChangeToProps } from '@open-pencil/fig/node-change'
-import type { NodeChange, Paint } from '@open-pencil/kiwi/fig/codec'
-import { SceneGraph } from '@open-pencil/scene-graph'
+import { nodeChangeToProps } from '@redrob-design/fig/node-change'
+import type { NodeChange, Paint } from '@redrob-design/kiwi/fig/codec'
+import { SceneGraph } from '@redrob-design/scene-graph'
 
 import { sceneNodeToKiwi } from '#core/kiwi/fig/node-change/serialize'
 

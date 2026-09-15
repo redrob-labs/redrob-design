@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'bun:test'
 
-import { figmaNodesBounds } from '@open-pencil/core'
-import type { NodeChange } from '@open-pencil/core'
+import { figmaNodesBounds } from '@redrob-design/core'
+import type { NodeChange } from '@redrob-design/core'
 
 describe('figmaNodesBounds', () => {
   it('computes bounds of top-level visual nodes', () => {

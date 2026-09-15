@@ -1,4 +1,4 @@
-import type { Editor } from '@open-pencil/core/editor'
+import type { Editor } from '@redrob-design/core/editor'
 
 import { createVectorEditHandleActions } from './handle-actions'
 import { createVectorEditHistoryActions } from './history'

@@ -12,7 +12,7 @@ Use it when you want direct control over collections, active modes, filtering, a
 ## Usage
 
 ```ts
-import { useVariables } from '@open-pencil/vue'
+import { useVariables } from '@redrob-design/vue'
 
 const variables = useVariables()
 ```

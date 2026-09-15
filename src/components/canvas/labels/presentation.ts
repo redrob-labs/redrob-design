@@ -1,6 +1,6 @@
-import { canvasLabelForeground } from '@open-pencil/core/canvas'
-import type { Editor } from '@open-pencil/core/editor'
-import type { Color, SceneNode } from '@open-pencil/scene-graph'
+import { canvasLabelForeground } from '@redrob-design/core/canvas'
+import type { Editor } from '@redrob-design/core/editor'
+import type { Color, SceneNode } from '@redrob-design/scene-graph'
 
 export interface CanvasLabelPresentation {
   background: Color

@@ -1,4 +1,4 @@
-import { hasInstanceOverride } from '@open-pencil/scene-graph'
+import { hasInstanceOverride } from '@redrob-design/scene-graph'
 
 import { applyOverridePatch } from '../patches'
 import { resolveOverrideTarget } from '../resolve'

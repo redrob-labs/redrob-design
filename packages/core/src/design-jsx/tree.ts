@@ -1,5 +1,5 @@
-import type { Effect, Fill } from '@open-pencil/scene-graph'
-import type { Color } from '@open-pencil/scene-graph/primitives'
+import type { Effect, Fill } from '@redrob-design/scene-graph'
+import type { Color } from '@redrob-design/scene-graph/primitives'
 
 import type { DesignVariable } from './vars'
 

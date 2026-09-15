@@ -1,7 +1,7 @@
 import type { CanvasKit, Surface } from 'canvaskit-wasm'
 
-import { IS_BROWSER } from '@open-pencil/core/constants'
-import type { Editor } from '@open-pencil/core/editor'
+import { IS_BROWSER } from '@redrob-design/core/constants'
+import type { Editor } from '@redrob-design/core/editor'
 
 import type { UseCanvasOptions } from '#vue/canvas/surface/types'
 

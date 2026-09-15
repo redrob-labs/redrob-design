@@ -1,6 +1,6 @@
-import type { SceneNode, SceneGraph, Fill, Stroke } from '@open-pencil/scene-graph'
-import type { Color, Rect, Vector } from '@open-pencil/scene-graph/primitives'
-import type { SnapGuide } from '@open-pencil/scene-graph/snap'
+import type { SceneNode, SceneGraph, Fill, Stroke } from '@redrob-design/scene-graph'
+import type { Color, Rect, Vector } from '@redrob-design/scene-graph/primitives'
+import type { SnapGuide } from '@redrob-design/scene-graph/snap'
 
 import { decodeBase64 } from '#core/bytes'
 import type { ResolvedRenderColor } from '#core/color/management'

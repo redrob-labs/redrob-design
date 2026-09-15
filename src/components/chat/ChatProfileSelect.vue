@@ -13,8 +13,8 @@ import {
   SelectViewport
 } from 'reka-ui'
 
-import { AI_PROVIDERS } from '@open-pencil/core/constants'
-import { useI18n } from '@open-pencil/vue'
+import { AI_PROVIDERS } from '@redrob-design/core/constants'
+import { useI18n } from '@redrob-design/vue'
 
 import {
   aiModelSettings,

@@ -29,7 +29,7 @@ import {
 } from 'reka-ui'
 import { computed, nextTick, ref, watch } from 'vue'
 
-import { BindableValuePicker, useBindableValue } from '@open-pencil/vue'
+import { BindableValuePicker, useBindableValue } from '@redrob-design/vue'
 
 import Tip from '@/components/ui/Tip.vue'
 import { BindingTrigger, useBindingFieldUI } from '@/components/ui/binding'

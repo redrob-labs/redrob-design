@@ -4,8 +4,8 @@ import {
   createLibraryRevision,
   createLibraryUpdatePreview,
   materializeLibraryAsset
-} from '@open-pencil/core/library'
-import { SceneGraph } from '@open-pencil/scene-graph'
+} from '@redrob-design/core/library'
+import { SceneGraph } from '@redrob-design/scene-graph'
 
 function source(label: string) {
   const graph = new SceneGraph()

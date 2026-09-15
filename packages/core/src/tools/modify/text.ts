@@ -1,4 +1,4 @@
-import type { CharacterStyleOverride, SceneNode } from '@open-pencil/scene-graph'
+import type { CharacterStyleOverride, SceneNode } from '@redrob-design/scene-graph'
 
 import { parseColor } from '#core/color'
 import { styleToWeight } from '#core/text/fonts'

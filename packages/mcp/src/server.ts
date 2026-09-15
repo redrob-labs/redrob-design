@@ -46,8 +46,8 @@ async function resolveMCPInstallCommand(): Promise<string> {
       })
     )?.agent ??
     'npm'
-  const resolved = resolveCommand(agent, 'global', [`@open-pencil/mcp@${MCP_VERSION}`])
-  if (!resolved) return `npm install -g @open-pencil/mcp@${MCP_VERSION}`
+  const resolved = resolveCommand(agent, 'global', [`@redrob-design/mcp@${MCP_VERSION}`])
+  if (!resolved) return `npm install -g @redrob-design/mcp@${MCP_VERSION}`
   return [resolved.command, ...resolved.args].join(' ')
 }
 

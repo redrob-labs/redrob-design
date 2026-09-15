@@ -1,7 +1,7 @@
-import type { NodeChange } from '@open-pencil/kiwi/fig/codec'
-import type { Fill, GeometryPath, VectorNetwork, WindingRule } from '@open-pencil/scene-graph'
-import { copyFills } from '@open-pencil/scene-graph/copy'
-import type { Vector } from '@open-pencil/scene-graph/primitives'
+import type { NodeChange } from '@redrob-design/kiwi/fig/codec'
+import type { Fill, GeometryPath, VectorNetwork, WindingRule } from '@redrob-design/scene-graph'
+import { copyFills } from '@redrob-design/scene-graph/copy'
+import type { Vector } from '@redrob-design/scene-graph/primitives'
 
 import { convertFills } from './paint'
 import { decodeVectorNetworkBlob, type StyleOverride } from './vector-network'

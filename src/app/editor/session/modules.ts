@@ -1,7 +1,7 @@
 import { computed } from 'vue'
 
-import type { Editor } from '@open-pencil/core/editor'
-import type { IORegistry } from '@open-pencil/core/io'
+import type { Editor } from '@redrob-design/core/editor'
+import type { IORegistry } from '@redrob-design/core/io'
 
 import { createDocumentExportActions } from '@/app/document/export'
 import { createDocumentIOActions } from '@/app/document/io'

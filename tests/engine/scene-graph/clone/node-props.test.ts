@@ -1,8 +1,8 @@
 import { describe, expect, test } from 'bun:test'
 
-import { SceneGraph, type SceneNode } from '@open-pencil/core'
-import { getInstanceOverride, setInstanceOverride } from '@open-pencil/scene-graph'
-import { cloneNodeProps } from '@open-pencil/scene-graph/copy'
+import { SceneGraph, type SceneNode } from '@redrob-design/core'
+import { getInstanceOverride, setInstanceOverride } from '@redrob-design/scene-graph'
+import { cloneNodeProps } from '@redrob-design/scene-graph/copy'
 
 function pageId(graph: SceneGraph): string {
   return graph.getPages()[0].id

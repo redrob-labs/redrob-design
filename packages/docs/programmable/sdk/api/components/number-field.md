@@ -52,7 +52,7 @@ import {
   NumberFieldRoot,
   NumberFieldUnit,
   NumberFieldValue
-} from '@open-pencil/vue'
+} from '@redrob-design/vue'
 
 const width = ref(120)
 //    ^?

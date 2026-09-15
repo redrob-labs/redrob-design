@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue'
-import { useI18n } from '@open-pencil/vue'
+import { useI18n } from '@redrob-design/vue'
 
 import { diagnostics } from '@/app/diagnostics'
 import { isUsageEnabled } from '@/app/diagnostics/settings'

@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { tv } from 'tailwind-variants'
 
-import { constraintPins, useI18n } from '@open-pencil/vue'
+import { constraintPins, useI18n } from '@redrob-design/vue'
 
 import Tip from '@/components/ui/Tip.vue'
 import constraintsTheme from '@/theme/constraints'
@@ -12,7 +12,7 @@ import type {
   ConstraintAxis,
   ConstraintEdge,
   ConstraintValue
-} from '@open-pencil/vue'
+} from '@redrob-design/vue'
 
 type PinPosition = keyof (typeof constraintsTheme)['variants']['pinPosition']
 type PinItem = {

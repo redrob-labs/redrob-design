@@ -1,9 +1,9 @@
 {
-  "name": "@open-pencil/harness",
+  "name": "@redrob-design/harness",
   "version": "0.14.0",
   "private": false,
   "license": "MIT",
-  "description": "Optional OpenPencil companion CLI for coding-agent Harness sessions",
+  "description": "Optional Redrob Design companion CLI for coding-agent Harness sessions",
   "type": "module",
   "exports": {
     ".": {
@@ -14,7 +14,7 @@
     }
   },
   "bin": {
-    "openpencil-harness": "./dist/stdio.mjs"
+    "redrob-design-harness": "./dist/stdio.mjs"
   },
   "scripts": {
     "build": "bunx tsdown --config tsdown.config.ts",

@@ -1,9 +1,9 @@
 import { beforeAll, describe, expect, test } from 'bun:test'
 
-import { initCodec } from '@open-pencil/core'
-import { buildFigmaClipboardHTML } from '@open-pencil/core/clipboard'
-import { createEditor } from '@open-pencil/core/editor'
-import type { ClipboardImageResolution } from '@open-pencil/core/editor'
+import { initCodec } from '@redrob-design/core'
+import { buildFigmaClipboardHTML } from '@redrob-design/core/clipboard'
+import { createEditor } from '@redrob-design/core/editor'
+import type { ClipboardImageResolution } from '@redrob-design/core/editor'
 
 import { expectDefined } from '#tests/helpers/assert'
 

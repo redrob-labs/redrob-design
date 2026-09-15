@@ -3,7 +3,7 @@ import { basename, extname, resolve } from 'node:path'
 
 import { defineCommand } from 'citty'
 
-import { BUILTIN_IO_FORMATS, IORegistry } from '@open-pencil/core/io'
+import { BUILTIN_IO_FORMATS, IORegistry } from '@redrob-design/core/io'
 
 import { requireFile } from '#cli/app-client'
 import { ok, printError } from '#cli/format'

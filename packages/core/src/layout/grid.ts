@@ -1,6 +1,6 @@
 import { Direction, Display, Gutter, Edge, type Node as YogaNode } from 'yoga-layout'
 
-import type { SceneGraph, SceneNode } from '@open-pencil/scene-graph'
+import type { SceneGraph, SceneNode } from '@redrob-design/scene-graph'
 
 import { resolveNodeLayoutDirection } from '#core/text/direction'
 

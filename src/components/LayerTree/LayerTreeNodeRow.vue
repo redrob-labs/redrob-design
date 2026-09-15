@@ -10,7 +10,7 @@ import { useLayerTreeUI } from './ui'
 
 import layerTreeTheme from '@/theme/layer-tree'
 
-import type { LayerNode } from '@open-pencil/vue'
+import type { LayerNode } from '@redrob-design/vue'
 import type { LayerTreeChrome, LayerTreeItemActions } from './types'
 
 const { node, level, hasChildren, selected, padLeft, expanded, actions, chrome } = defineProps<{

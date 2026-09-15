@@ -8,7 +8,7 @@ import {
   SelectTrigger,
   SelectViewport
 } from 'reka-ui'
-import { useLayoutControlsContext } from '@open-pencil/vue'
+import { useLayoutControlsContext } from '@redrob-design/vue'
 
 import VariableNumberField from '@/components/properties/VariableNumberField.vue'
 import { useSelectUI } from '@/components/ui/select'

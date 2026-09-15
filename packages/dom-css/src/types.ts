@@ -1,4 +1,4 @@
-import type { SceneGraph, SceneNode } from '@open-pencil/scene-graph'
+import type { SceneGraph, SceneNode } from '@redrob-design/scene-graph'
 
 export type DesignNode = DesignElement | DesignText
 

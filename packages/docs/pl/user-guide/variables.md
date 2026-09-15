@@ -1,6 +1,6 @@
 ---
 title: Zmienne
-description: Zmienne projektu, kolekcje, tryby i powiązania kolorów w OpenPencil.
+description: Zmienne projektu, kolekcje, tryby i powiązania kolorów w Redrob Design.
 ---
 
 # Zmienne

@@ -17,7 +17,7 @@ It manages:
 ## Usage
 
 ```ts
-import { useExport } from '@open-pencil/vue'
+import { useExport } from '@redrob-design/vue'
 
 const exportState = useExport()
 ```

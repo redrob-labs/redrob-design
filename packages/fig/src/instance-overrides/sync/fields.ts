@@ -1,6 +1,6 @@
 import { omit } from 'es-toolkit/object'
 
-import type { SceneGraph, SceneNode } from '@open-pencil/scene-graph'
+import type { SceneGraph, SceneNode } from '@redrob-design/scene-graph'
 import {
   copyEffects,
   copyFills,
@@ -8,7 +8,7 @@ import {
   copyStyleRuns,
   hasSameCopySource,
   markCopySource
-} from '@open-pencil/scene-graph/copy'
+} from '@redrob-design/scene-graph/copy'
 
 import { isFieldProtected } from '../patches'
 import type { ProtectedField, ProtectionMap } from '../patches'

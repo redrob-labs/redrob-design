@@ -1,4 +1,4 @@
-import type { SceneNode, TextPathData } from '@open-pencil/scene-graph'
+import type { SceneNode, TextPathData } from '@redrob-design/scene-graph'
 
 export * from './fitting'
 export * from './layout'

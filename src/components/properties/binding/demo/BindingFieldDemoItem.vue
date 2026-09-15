@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { BindingProvider, BindingTarget, BoundEditPolicy } from '@open-pencil/vue'
+import type { BindingProvider, BindingTarget, BoundEditPolicy } from '@redrob-design/vue'
 import {
   BindableValueRoot,
   NumberFieldInput,
   NumberFieldRoot,
   NumberFieldValue
-} from '@open-pencil/vue'
+} from '@redrob-design/vue'
 
 import VariableBindingPicker from '@/components/properties/binding/VariableBindingPicker.vue'
 import { BindingPill } from '@/components/ui/binding'

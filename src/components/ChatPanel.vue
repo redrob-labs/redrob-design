@@ -20,13 +20,13 @@ import ProviderSetup from '@/components/chat/ProviderSetup.vue'
 import { useAIChat } from '@/app/ai/chat/use'
 import { toast } from '@/app/shell/ui'
 import { openSettingsDialog } from '@/app/settings/dialog'
-import { useI18n } from '@open-pencil/vue'
+import { useI18n } from '@redrob-design/vue'
 
 import { useNotificationMessages } from '@/app/i18n/notifications'
 
 import type { Chat } from '@ai-sdk/vue'
 import type { UIMessage } from 'ai'
-import type { JSONObject } from '@open-pencil/scene-graph/primitives'
+import type { JSONObject } from '@redrob-design/scene-graph/primitives'
 
 const IS_DEV = import.meta.env.DEV
 

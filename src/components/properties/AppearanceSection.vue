@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AppearanceControlsRoot, MIXED, useI18n } from '@open-pencil/vue'
+import { AppearanceControlsRoot, MIXED, useI18n } from '@redrob-design/vue'
 
 import NumberField from '@/components/inputs/NumberField.vue'
 import VariableNumberField from '@/components/properties/VariableNumberField.vue'
@@ -10,7 +10,7 @@ import PanelFieldGroup from '@/components/ui/panel/PanelFieldGroup.vue'
 import PanelGrid from '@/components/ui/panel/PanelGrid.vue'
 import PanelSection from '@/components/ui/panel/PanelSection.vue'
 
-import type { BlendMode } from '@open-pencil/scene-graph'
+import type { BlendMode } from '@redrob-design/scene-graph'
 
 const { panels } = useI18n()
 type BlendModeSelectValue = BlendMode | 'MIXED'

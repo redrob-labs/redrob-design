@@ -3,7 +3,7 @@ import { computed } from 'vue'
 
 import IconButton from '@/components/ui/IconButton.vue'
 import PanelSection from '@/components/ui/panel/PanelSection.vue'
-import { useI18n, useSceneComputed } from '@open-pencil/vue'
+import { useI18n, useSceneComputed } from '@redrob-design/vue'
 
 import { useEditorStore } from '@/app/editor/active-store'
 

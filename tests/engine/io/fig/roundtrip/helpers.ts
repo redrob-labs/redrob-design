@@ -1,6 +1,6 @@
-import type { SceneGraph, SceneNode } from '@open-pencil/core'
-import type { ComponentPropertyDefinition } from '@open-pencil/scene-graph'
-import type { JSONObject } from '@open-pencil/scene-graph/primitives'
+import type { SceneGraph, SceneNode } from '@redrob-design/core'
+import type { ComponentPropertyDefinition } from '@redrob-design/scene-graph'
+import type { JSONObject } from '@redrob-design/scene-graph/primitives'
 
 import { verifyComponentPropDefs, verifyDerivedTextData } from './raw-verifiers/helpers'
 

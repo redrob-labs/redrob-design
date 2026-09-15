@@ -10,13 +10,13 @@ CLI экспортирует дизайн в растровые изображе
 ## Изображения и .fig
 
 ```sh
-openpencil export design.fig                           # PNG по умолчанию
-openpencil export design.fig -f jpg -s 2 -q 90        # JPG, масштаб 2×, качество 90
-openpencil export design.fig -f webp -s 3             # WEBP, масштаб 3×
-openpencil export design.fig -f svg                   # SVG
-openpencil export design.fig -f fig --page "Page 1"   # одна страница в отдельном .fig
-openpencil export design.fig -f fig --node 1:23        # один объект в отдельном .fig
-openpencil export design.fig -f html --css tailwind    # фрагмент HTML с классами Tailwind
+redrob-design export design.fig                           # PNG по умолчанию
+redrob-design export design.fig -f jpg -s 2 -q 90        # JPG, масштаб 2×, качество 90
+redrob-design export design.fig -f webp -s 3             # WEBP, масштаб 3×
+redrob-design export design.fig -f svg                   # SVG
+redrob-design export design.fig -f fig --page "Page 1"   # одна страница в отдельном .fig
+redrob-design export design.fig -f fig --node 1:23        # один объект в отдельном .fig
+redrob-design export design.fig -f html --css tailwind    # фрагмент HTML с классами Tailwind
 ```
 
 Параметры:
@@ -33,26 +33,26 @@ openpencil export design.fig -f html --css tailwind    # фрагмент HTML �
 Чтобы получить JSX с классами Tailwind:
 
 ```sh
-openpencil export design.fig -f jsx --style tailwind
+redrob-design export design.fig -f jsx --style tailwind
 ```
 
-Параметр `--style openpencil` выбирает собственный формат JSX OpenPencil. Подробнее — в разделе [Рендерер JSX](../jsx-renderer).
+Параметр `--style openpencil` выбирает собственный формат JSX Redrob Design. Подробнее — в разделе [Рендерер JSX](../jsx-renderer).
 
 ## HTML
 
 По умолчанию команда создаёт фрагмент HTML со встроенными стилями. Вместо них можно использовать классы Tailwind:
 
 ```sh
-openpencil export design.fig -f html
-openpencil export design.fig -f html --css tailwind
+redrob-design export design.fig -f html
+redrob-design export design.fig -f html --css tailwind
 ```
 
 Параметр `--html standalone` создаёт полноценный HTML-документ, который можно открыть в браузере. В него входят стили сброса и обёртка страницы. Этот формат предназначен для передачи дизайна и кода, а не для точного воспроизведения отрисовки до пикселя:
 
 ```sh
-openpencil export design.fig -f html --html standalone --css inline
-openpencil export design.fig -f html --html standalone --css tailwind
-openpencil export design.fig -f html --html standalone --css tailwind --assets external
+redrob-design export design.fig -f html --html standalone --css inline
+redrob-design export design.fig -f html --html standalone --css tailwind
+redrob-design export design.fig -f html --html standalone --css tailwind --assets external
 ```
 
 При автономном экспорте Tailwind CSS компилируется сразу, поэтому браузерная среда Tailwind не требуется. `--assets external` сохраняет CSS и извлечённые изображения рядом с HTML. В сочетании с ним `--fonts assets` находит шрифты текстовых объектов SceneGraph через настроенных поставщиков веб-шрифтов и создаёт локальные файлы `@font-face`.
@@ -62,7 +62,7 @@ openpencil export design.fig -f html --html standalone --css tailwind --assets e
 ## Миниатюра
 
 ```sh
-openpencil export design.fig --thumbnail --width 1920 --height 1080
+redrob-design export design.fig --thumbnail --width 1920 --height 1080
 ```
 
 ## Экспорт из запущенного приложения
@@ -70,5 +70,5 @@ openpencil export design.fig --thumbnail --width 1920 --height 1080
 Не указывайте файл, чтобы экспортировать текущий документ из приложения:
 
 ```sh
-openpencil export -f png    # снимок текущего холста
+redrob-design export -f png    # снимок текущего холста
 ```

@@ -4,7 +4,7 @@ The root [`CONTRIBUTING.md`](https://github.com/open-pencil/open-pencil/blob/mas
 
 ## Project structure
 
-OpenPencil is a Bun monorepo: framework-neutral document and format packages feed the core editor, DOM/CSS and Vue SDK layers, automation entry points, and the Tauri/Vite app.
+Redrob Design is a Bun monorepo: framework-neutral document and format packages feed the core editor, DOM/CSS and Vue SDK layers, automation entry points, and the Tauri/Vite app.
 
 See [Architecture](/development/architecture) for a public overview. Use root `AGENTS.md` when exact package ownership or paths matter; do not infer ownership from an older copied tree.
 

@@ -1,5 +1,5 @@
-import type { SkiaRenderer } from '@open-pencil/core/canvas'
-import type { Editor } from '@open-pencil/core/editor'
+import type { SkiaRenderer } from '@redrob-design/core/canvas'
+import type { Editor } from '@redrob-design/core/editor'
 
 import { useViewportKind } from '#vue/editor/viewport-kind/use'
 

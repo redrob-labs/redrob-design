@@ -1,6 +1,6 @@
 ---
 title: Text Editing
-description: Creating and editing text with rich formatting, fonts, and inline editing in OpenPencil.
+description: Creating and editing text with rich formatting, fonts, and inline editing in Redrob Design.
 ---
 
 # Text Editing
@@ -82,7 +82,7 @@ Change the font weight in the Typography section of the properties panel. Availa
 
 ## Missing Fonts and Substitutions
 
-When a requested family or style cannot be loaded, OpenPencil displays a warning above the editor instead of silently treating fallback rendering as faithful typography.
+When a requested family or style cannot be loaded, Redrob Design displays a warning above the editor instead of silently treating fallback rendering as faithful typography.
 
 Expand the warning to see every affected face and its active substitute. Use **Select layers** to locate all affected text nodes or **Retry fonts** after changing network access, local-font permission, or provider settings. A style may be synthesized from another loaded face in the same family; a missing family falls back to Inter when available.
 

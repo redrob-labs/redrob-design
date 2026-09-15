@@ -1,6 +1,6 @@
 ---
 title: File Format
-description: Technical reference for OpenPencil .fig and .pen document formats, Kiwi binary structure, import pipeline, and export behavior.
+description: Technical reference for Redrob Design .fig and .pen document formats, Kiwi binary structure, import pipeline, and export behavior.
 ---
 
 # File Format
@@ -35,7 +35,7 @@ SceneGraph → NodeChange[] → Kiwi encode → compress (Zstd/deflate)
   → write .fig file
 ```
 
-Export uses <kbd>⌘</kbd><kbd>S</kbd> (Save) and <kbd>⇧</kbd><kbd>⌘</kbd><kbd>S</kbd> (Save As) with native OS dialogs on the desktop app. The exported file includes a `thumbnail.png` required by Figma for file preview. OpenPencil uses the first page named exactly `Cover` (case-insensitive), then the first page whose name contains `Cover`. The desktop app also caches this Cover after opening a file so Recent Files can prefer the generated preview without modifying the source `.fig`.
+Export uses <kbd>⌘</kbd><kbd>S</kbd> (Save) and <kbd>⇧</kbd><kbd>⌘</kbd><kbd>S</kbd> (Save As) with native OS dialogs on the desktop app. The exported file includes a `thumbnail.png` required by Figma for file preview. Redrob Design uses the first page named exactly `Cover` (case-insensitive), then the first page whose name contains `Cover`. The desktop app also caches this Cover after opening a file so Recent Files can prefer the generated preview without modifying the source `.fig`.
 
 Compression uses Zstd via Tauri Rust command on desktop, with deflate fallback in the browser.
 
@@ -77,4 +77,4 @@ Copy/paste uses the same Kiwi binary encoding:
 1. **Copy** — encode selected `NodeChange[]` to Kiwi binary, compress, write to clipboard as `application/x-figma-design` MIME type
 2. **Paste** — read clipboard, decompress, decode Kiwi binary, create nodes in scene graph
 
-Encoding happens synchronously in the copy event handler (not async Clipboard API) for browser compatibility. This enables bidirectional clipboard between OpenPencil and Figma.
+Encoding happens synchronously in the copy event handler (not async Clipboard API) for browser compatibility. This enables bidirectional clipboard between Redrob Design and Figma.

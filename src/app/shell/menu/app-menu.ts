@@ -15,10 +15,12 @@ import IconUndo from '~icons/lucide/undo-2'
 import IconZoomIn from '~icons/lucide/zoom-in'
 import IconZoomOut from '~icons/lucide/zoom-out'
 
-import type { CommandPaletteGroup, CommandPaletteItem, MenuEntry } from '@open-pencil/vue'
-import { shortcutPlatform, useEditorCommands, useI18n } from '@open-pencil/vue'
+import type { CommandPaletteGroup, CommandPaletteItem, MenuEntry } from '@redrob-design/vue'
+import { shortcutPlatform, useEditorCommands, useI18n } from '@redrob-design/vue'
 
+import { runImportDesignTokens } from '@/app/design-system'
 import { useEditorStore } from '@/app/editor/active-store'
+import { designTokensMessages } from '@/app/i18n/design-tokens'
 import { openSettingsDialog } from '@/app/settings/dialog'
 import { setSnappingPreference } from '@/app/settings/preferences/apply'
 import { createSharedEditorMenuActions } from '@/app/shell/menu/editor-actions'
@@ -153,6 +155,7 @@ export function useAppMenu() {
     },
     open: () => void openFileDialog(),
     'open-storage-workspace': () => openStorageWorkspace(router),
+    'import-design-tokens': () => void runImportDesignTokens(),
     save: () => void store.saveFigFile(),
     'save-as': () => void store.saveFigFileAs(),
     'export-selection': () => exportSelection('png'),
@@ -243,6 +246,9 @@ export function useAppMenu() {
   }
 
   function menuLabel(entry: AppMenuActionItem): string {
+    if (entry.id === 'import-design-tokens') {
+      return designTokensMessages.get().importDesignTokens
+    }
     const key = translatedMenuItemLabels[entry.id]
     return key ? menu.value[key] : entry.label
   }

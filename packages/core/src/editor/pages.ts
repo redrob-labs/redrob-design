@@ -1,6 +1,6 @@
 import { limitAsync } from 'es-toolkit/promise'
 
-import type { Color } from '@open-pencil/scene-graph/primitives'
+import type { Color } from '@redrob-design/scene-graph/primitives'
 
 import { populateLazyFigImportRoots } from '#core/kiwi/fig/lazy-import'
 import {

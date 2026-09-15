@@ -33,4 +33,4 @@ Les mises en forme partielles sont conservées sous forme de plages et participe
 
 ## Polices
 
-OpenPencil détecte les polices du système lorsque l’environnement le permet. Si une police manque, son état est signalé et une police de remplacement est utilisée jusqu’à sa disponibilité.
+Redrob Design détecte les polices du système lorsque l’environnement le permet. Si une police manque, son état est signalé et une police de remplacement est utilisée jusqu’à sa disponibilité.

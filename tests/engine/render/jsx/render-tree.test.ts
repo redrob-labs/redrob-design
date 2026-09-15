@@ -22,7 +22,7 @@ import {
   layerBlur,
   linearGradient,
   solid
-} from '@open-pencil/core'
+} from '@redrob-design/core'
 
 import { expectDefined, getNodeOrThrow, childIdAt } from '#tests/helpers/assert'
 import { addTestColorVariable, makeSceneGraph } from '#tests/helpers/scene'

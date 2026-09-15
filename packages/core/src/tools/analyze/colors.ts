@@ -1,7 +1,7 @@
 import { orderBy } from 'es-toolkit/array'
 import { sumBy } from 'es-toolkit/math'
 
-import type { Color } from '@open-pencil/scene-graph/primitives'
+import type { Color } from '@redrob-design/scene-graph/primitives'
 
 import { colorDistance, colorToHex } from '#core/color'
 import type { ColorUsageEntry } from '#core/color/analysis'

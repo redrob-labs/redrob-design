@@ -1,7 +1,7 @@
-import { renderTreeNode } from '@open-pencil/core/design-jsx'
-import type { FigmaAPI } from '@open-pencil/core/figma-api'
-import { ALL_TOOLS, registerComponentCatalog } from '@open-pencil/core/tools'
-import type { JSONObject } from '@open-pencil/scene-graph/primitives'
+import { renderTreeNode } from '@redrob-design/core/design-jsx'
+import type { FigmaAPI } from '@redrob-design/core/figma-api'
+import { ALL_TOOLS, registerComponentCatalog } from '@redrob-design/core/tools'
+import type { JSONObject } from '@redrob-design/scene-graph/primitives'
 
 import type { AutomationTarget } from '@/app/automation/bridge/target'
 import { ensureGraphFonts } from '@/app/editor/fonts'

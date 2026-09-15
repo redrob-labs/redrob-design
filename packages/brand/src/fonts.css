@@ -1,0 +1,22 @@
+/**
+ * Pretendard, vendored.
+ *
+ * Console loads the pinned variable dynamic subset from jsDelivr. The desktop app cannot: it runs
+ * local-first and has to render its own chrome with no network, so the one variable file is checked
+ * in beside this stylesheet and Vite fingerprints it into the renderer bundle. Same face, same
+ * family name Console's stack asks for first, no fetch.
+ *
+ * One file covers Latin and Hangul, which is why the `ko` locale needs no second family.
+ *
+ * The weight range is the axis the variable font actually declares, so a `font-weight: 600` label
+ * gets an instance rather than a synthesised bolding.
+ *
+ * SIL Open Font License 1.1. See ./assets/fonts/pretendard/LICENSE.txt.
+ */
+@font-face {
+  font-family: "Pretendard Variable";
+  src: url("./assets/fonts/pretendard/PretendardVariable.woff2") format("woff2-variations");
+  font-weight: 45 920;
+  font-style: normal;
+  font-display: swap;
+}

@@ -1,7 +1,7 @@
-import { convertFills, fillToKiwiPaint } from '@open-pencil/fig/node-change'
-import type { Fill, SceneGraph, SceneNode } from '@open-pencil/scene-graph'
-import { copyFills } from '@open-pencil/scene-graph/copy'
-import type { Color } from '@open-pencil/scene-graph/primitives'
+import { convertFills, fillToKiwiPaint } from '@redrob-design/fig/node-change'
+import type { Fill, SceneGraph, SceneNode } from '@redrob-design/scene-graph'
+import { copyFills } from '@redrob-design/scene-graph/copy'
+import type { Color } from '@redrob-design/scene-graph/primitives'
 
 import { CANVAS_BG_COLOR } from '#core/constants'
 

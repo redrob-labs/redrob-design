@@ -2,7 +2,7 @@
 import { nextTick, watch } from 'vue'
 import { templateRef } from '@vueuse/core'
 
-import { useI18n, useViewportKind } from '@open-pencil/vue'
+import { useI18n, useViewportKind } from '@redrob-design/vue'
 
 import { openFileDialog } from '@/app/shell/menu/use'
 import { activeTab } from '@/app/tabs'

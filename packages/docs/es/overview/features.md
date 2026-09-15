@@ -2,9 +2,9 @@
 
 ## Archivos de Figma
 
-OpenPencil abre y guarda archivos `.fig` directamente. La importación y exportación usan el mismo códec binario Kiwi que Figma: 194 definiciones de esquema y unos 390 campos por objeto. Guardar: <kbd>⌘</kbd><kbd>S</kbd>. Guardar como: <kbd>⇧</kbd><kbd>⌘</kbd><kbd>S</kbd>.
+Redrob Design abre y guarda archivos `.fig` directamente. La importación y exportación usan el mismo códec binario Kiwi que Figma: 194 definiciones de esquema y unos 390 campos por objeto. Guardar: <kbd>⌘</kbd><kbd>S</kbd>. Guardar como: <kbd>⇧</kbd><kbd>⌘</kbd><kbd>S</kbd>.
 
-**Copiar y pegar con Figma:** selecciona objetos en Figma, pulsa <kbd>⌘</kbd><kbd>C</kbd>, cambia a OpenPencil y usa <kbd>⌘</kbd><kbd>V</kbd>. Los rellenos, contornos, la disposición automática, el texto, los efectos, los radios de esquina y las redes vectoriales se conservan en ambas direcciones.
+**Copiar y pegar con Figma:** selecciona objetos en Figma, pulsa <kbd>⌘</kbd><kbd>C</kbd>, cambia a Redrob Design y usa <kbd>⌘</kbd><kbd>V</kbd>. Los rellenos, contornos, la disposición automática, el texto, los efectos, los radios de esquina y las redes vectoriales se conservan en ambas direcciones.
 
 ## Dibujo y edición
 
@@ -31,7 +31,7 @@ Las pestañas Diseño, Código e AI se adaptan a la selección:
 
 ## Renderizado
 
-OpenPencil usa Skia mediante CanvasKit WASM, el mismo motor gráfico de Figma:
+Redrob Design usa Skia mediante CanvasKit WASM, el mismo motor gráfico de Figma:
 
 - degradados lineales, radiales, angulares y diamante;
 - rellenos de imagen con varios modos de escala;
@@ -58,7 +58,7 @@ Puedes crear, eliminar y renombrar páginas; cada una conserva su posición y es
 - **Copiar como:** texto, SVG, PNG o JSX desde el menú contextual.
 
 ```sh
-openpencil export design.fig -f jsx --style tailwind
+redrob-design export design.fig -f jsx --style tailwind
 ```
 
 ## Chat con AI
@@ -72,7 +72,7 @@ Las llamadas a herramientas aparecen en una cronología plegable. Para verificar
 Claude Code, Cursor, Windsurf y otros clientes MCP pueden leer y modificar archivos `.fig` con más de 90 herramientas. Están disponibles stdio y HTTP.
 
 ```sh
-npm install -g @open-pencil/mcp
+npm install -g @redrob-design/mcp
 ```
 
 ## CLI
@@ -80,15 +80,15 @@ npm install -g @open-pencil/mcp
 La CLI examina, exporta y analiza archivos `.fig`:
 
 ```sh
-openpencil tree design.fig              # Árbol del documento
-openpencil find design.fig --type TEXT  # Búsqueda
-openpencil export design.fig -f png     # Exportación
-openpencil analyze colors design.fig    # Análisis de colores
-openpencil analyze clusters design.fig  # Estructuras repetidas
-openpencil eval design.fig -c "..."     # Figma Plugin API
+redrob-design tree design.fig              # Árbol del documento
+redrob-design find design.fig --type TEXT  # Búsqueda
+redrob-design export design.fig -f png     # Exportación
+redrob-design analyze colors design.fig    # Análisis de colores
+redrob-design analyze clusters design.fig  # Estructuras repetidas
+redrob-design eval design.fig -c "..."     # Figma Plugin API
 ```
 
-Todos los comandos admiten `--json`. Instalación: `npm install -g @open-pencil/cli` o `bun add -g @open-pencil/cli`.
+Todos los comandos admiten `--json`. Instalación: `npm install -g @redrob-design/cli` o `bun add -g @redrob-design/cli`.
 
 ## Colaboración en tiempo real
 
@@ -98,8 +98,8 @@ La colaboración funciona directamente entre participantes mediante WebRTC y no 
 
 **Escritorio:** Tauri v2, unos 7 MB, para macOS, Windows y Linux, con menús nativos, uso sin conexión y guardado automático.
 
-**Web:** [app.openpencil.dev](https://app.openpencil.dev), instalable como PWA y adaptado a pantallas táctiles.
+**Web:** [app.redrob.design](https://app.redrob.design), instalable como PWA y adaptado a pantallas táctiles.
 
 ## Carga alternativa desde Google Fonts
 
-Si una fuente no está disponible localmente, OpenPencil la descarga automáticamente desde Google Fonts. No hace falta instalarla manualmente.
+Si una fuente no está disponible localmente, Redrob Design la descarga automáticamente desde Google Fonts. No hace falta instalarla manualmente.

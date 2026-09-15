@@ -1,7 +1,7 @@
-import type { TreeNode } from '@open-pencil/core/design-jsx'
-import { renderTree } from '@open-pencil/core/design-jsx'
-import { computeAllLayouts } from '@open-pencil/core/layout'
-import type { Vector } from '@open-pencil/scene-graph'
+import type { TreeNode } from '@redrob-design/core/design-jsx'
+import { renderTree } from '@redrob-design/core/design-jsx'
+import { computeAllLayouts } from '@redrob-design/core/layout'
+import type { Vector } from '@redrob-design/scene-graph'
 
 import { convertDesignJSXRoots } from '@/app/code/sandbox/convert'
 import { evaluateDesignJSX } from '@/app/code/sandbox/evaluate'

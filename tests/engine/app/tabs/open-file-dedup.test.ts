@@ -1,8 +1,8 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from 'bun:test'
 
-import * as figModule from '@open-pencil/core/io/formats/fig'
-import * as layoutModule from '@open-pencil/core/layout'
-import { SceneGraph } from '@open-pencil/scene-graph'
+import * as figModule from '@redrob-design/core/io/formats/fig'
+import * as layoutModule from '@redrob-design/core/layout'
+import { SceneGraph } from '@redrob-design/scene-graph'
 
 import { resolveBrowserFileURL } from '@/app/document/io/browser'
 import type { DocumentSourceIdentity } from '@/app/document/io/types'

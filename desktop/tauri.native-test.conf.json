@@ -7,7 +7,7 @@
     "withGlobalTauri": true,
     "windows": [
       {
-        "title": "OpenPencil Native Test",
+        "title": "Redrob Design Native Test",
         "width": 1280,
         "height": 800,
         "dragDropEnabled": false

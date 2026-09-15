@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 
-import { useI18n } from '@open-pencil/vue'
+import { useI18n } from '@redrob-design/vue'
 
 import { useDocumentFontStatus } from '@/app/editor/fonts/status'
 

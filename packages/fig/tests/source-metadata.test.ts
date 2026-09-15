@@ -1,10 +1,10 @@
 import { describe, expect, test } from 'bun:test'
 
-import { SceneGraph } from '@open-pencil/scene-graph'
+import { SceneGraph } from '@redrob-design/scene-graph'
 
 import { effectiveFigmaRawNodeFields, effectiveFigmaSourcePayload } from '../src/source-metadata'
 
-describe('@open-pencil/fig source metadata policy', () => {
+describe('@redrob-design/fig source metadata policy', () => {
   test('filters only raw fields made stale by normalized edits', () => {
     const graph = new SceneGraph()
     const node = graph.createNode('RECTANGLE', graph.getPages()[0].id)

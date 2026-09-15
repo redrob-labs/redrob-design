@@ -31,7 +31,7 @@ import {
   PropertySectionHeader,
   PropertySectionRoot,
   PropertySectionTitle
-} from '@open-pencil/vue'
+} from '@redrob-design/vue'
 
 import theme from '@/theme/panel/section'
 

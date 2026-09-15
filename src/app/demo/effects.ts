@@ -1,5 +1,5 @@
-import { TRANSPARENT } from '@open-pencil/core/constants'
-import type { Color, Effect } from '@open-pencil/scene-graph'
+import { TRANSPARENT } from '@redrob-design/core/constants'
+import type { Color, Effect } from '@redrob-design/scene-graph'
 
 export function dropShadow(
   ox = 0,

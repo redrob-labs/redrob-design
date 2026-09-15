@@ -1,9 +1,9 @@
-import { IS_BROWSER } from '@open-pencil/core/constants'
+import { IS_BROWSER } from '@redrob-design/core/constants'
 import {
   DESIGN_JSX_ELEMENTS,
   DESIGN_JSX_HELPERS,
   transformDesignJSXExpression
-} from '@open-pencil/core/design-jsx'
+} from '@redrob-design/core/design-jsx'
 
 import { sandboxDocument } from '@/app/code/sandbox/document'
 import {

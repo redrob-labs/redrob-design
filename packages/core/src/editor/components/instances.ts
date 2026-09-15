@@ -1,7 +1,7 @@
-import { cloneInstanceOverrideState } from '@open-pencil/scene-graph'
-import type { SceneNode, Vector } from '@open-pencil/scene-graph'
-import { getAxisAlignedWorldBounds, getWorldMatrix } from '@open-pencil/scene-graph/coordinate'
-import Matrix from '@open-pencil/scene-graph/matrix'
+import { cloneInstanceOverrideState } from '@redrob-design/scene-graph'
+import type { SceneNode, Vector } from '@redrob-design/scene-graph'
+import { getAxisAlignedWorldBounds, getWorldMatrix } from '@redrob-design/scene-graph/coordinate'
+import Matrix from '@redrob-design/scene-graph/matrix'
 
 import type { EditorContext } from '#core/editor/types'
 

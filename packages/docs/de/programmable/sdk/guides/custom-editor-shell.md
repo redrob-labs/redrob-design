@@ -5,15 +5,15 @@ description: Eine eigene Oberfläche mit provideEditor, CanvasRoot, Menüs, Pane
 
 # Eigene Editor-Oberfläche
 
-Eine OpenPencil-Anwendung mit Vue besteht typischerweise aus drei Schichten:
+Eine Redrob Design-Anwendung mit Vue besteht typischerweise aus drei Schichten:
 
-1. `@open-pencil/core` erstellt den Editor;
-2. `@open-pencil/vue` verbindet ihn mit Vue Composables und Komponenten ohne vorgegebenes Erscheinungsbild;
+1. `@redrob-design/core` erstellt den Editor;
+2. `@redrob-design/vue` verbindet ihn mit Vue Composables und Komponenten ohne vorgegebenes Erscheinungsbild;
 3. die Anwendung bestimmt Anordnung, Gestaltung und produktspezifisches Verhalten.
 
 ## Mögliche Anwendungen
 
-Die fertige OpenPencil-App ist nur eine mögliche Oberfläche. Mit dem SDK können beispielsweise ein in ein anderes Produkt eingebetteter Editor, ein internes Asset tool, ein Template editor, eine Annotation UI oder ein spezialisierter AI-assisted editor entwickelt werden.
+Die fertige Redrob Design-App ist nur eine mögliche Oberfläche. Mit dem SDK können beispielsweise ein in ein anderes Produkt eingebetteter Editor, ein internes Asset tool, ein Template editor, eine Annotation UI oder ein spezialisierter AI-assisted editor entwickelt werden.
 
 ## Empfohlene Struktur
 
@@ -29,7 +29,7 @@ Eine typische Oberfläche:
 
 ```vue
 <script setup lang="ts">
-import { createEditor } from '@open-pencil/core/editor'
+import { createEditor } from '@redrob-design/core/editor'
 import {
   provideEditor,
   CanvasRoot,
@@ -37,7 +37,7 @@ import {
   ToolbarRoot,
   PageListRoot,
   LayerTreeRoot,
-} from '@open-pencil/vue'
+} from '@redrob-design/vue'
 
 const editor = createEditor({ width: 1440, height: 900 })
 provideEditor(editor)

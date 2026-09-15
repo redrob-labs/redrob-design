@@ -1,4 +1,4 @@
-import type { AIProviderID } from '@open-pencil/core/constants'
+import type { AIProviderID } from '@redrob-design/core/constants'
 
 export type DiagnosticCategory =
   | 'ai'

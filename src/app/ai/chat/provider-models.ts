@@ -1,5 +1,5 @@
-import { AI_PROVIDERS } from '@open-pencil/core/constants'
-import type { AIProviderID, ModelOption } from '@open-pencil/core/constants'
+import { AI_PROVIDERS } from '@redrob-design/core/constants'
+import type { AIProviderID, ModelOption } from '@redrob-design/core/constants'
 
 import { readCacheJSON, writeCacheJSON } from '@/app/cache'
 

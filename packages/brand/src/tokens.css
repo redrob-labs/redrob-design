@@ -1,0 +1,428 @@
+/**
+ * Design tokens for redrob-design.
+ *
+ * Two layers, the same two Console declares, so a colour is decided in exactly one place and
+ * product code speaks exactly one vocabulary.
+ *
+ *   1. PRIMITIVES  `--rr-*`. The brand's confirmed HEX values, transcribed from Console's
+ *      `apps/web/src/app/globals.css` so the two products cannot drift. They carry no meaning and
+ *      no theme: Blue 6 is Blue 6 in light and in dark. No component may name this layer. If a
+ *      value here is wrong it is wrong in the brand document first.
+ *
+ *   2. SEMANTICS  `--color-*`, re-pointed per theme below. This is the only layer components read.
+ *      The names are this app's existing role names, kept rather than renamed to Console's shadcn
+ *      roles: they are the same roles under different labels, and Console's own note applies in
+ *      reverse here, that two sets of aliases for one set of values is the thing that rots.
+ *      Console's correspondence table maps them, and these are the rows that matter:
+ *
+ *        here                    Console            light              dark
+ *        ──────────────────────  ─────────────────  ─────────────────  ──────────────────────
+ *        background              background         Gray 1             Gray 9
+ *        background-secondary    background-secon.  Gray 2             Redrob Black
+ *        surface / -elevated     card / popover     White              Gray 8/9 mix
+ *        surface-hover           accent             Gray 2             see the note in `.dark`
+ *        surface-active          accent-active      Gray 3             Gray 8
+ *        surface-muted           muted              Gray 2             Gray 8
+ *        border-subtle           border-subtle      Gray 2             Gray 8/9 mix
+ *        border                  border             Gray 3             Gray 8
+ *        border-strong           border-strong      Gray 4             Gray 7
+ *        text-primary            foreground         Gray 9             Gray 1
+ *        text-secondary          muted-foreground   Gray 7             Gray 5
+ *        text-muted              subtle-foreground  Gray 6             Gray 6
+ *        accent / focus-ring     primary / ring     Blue 6             Blue 5
+ *        accent-hover            primary-hover      Blue 7             Blue 4
+ *        accent-muted            primary-muted      Blue 3             Blue 9
+ *        accent-soft             primary-soft       Blue 1             Blue 10
+ *        on-accent               primary-foreground White              Redrob Black
+ *        mcp                     primary-ink        Blue 6             Blue 4
+ *        success/warning/error   success/warning/destructive  spectrum level 4 light, 3 dark
+ *        overlay                 overlay            Black 45%          Black 65%
+ *
+ *      `border-muted`, `accent-tint`, `artifact-bg` and the phone tokens are roles Console does not
+ *      name; each is commented where it is declared.
+ *
+ * Not taken from Console: nothing below the colour and type sections. The size, spacing, radius and
+ * motion scales here are this app's and Console does not implement the proposal's either, so
+ * re-flowing every desktop screen is not part of a colour change. All values are CSS custom
+ * properties, never hardcode.
+ */
+
+:root {
+  /* ── 1. PRIMITIVES ──────────────────────────────────────────────────────────
+     Theme-independent. Declared once, and not repeated in `.dark`: only the semantic aliases are
+     re-pointed there. */
+
+  /* Primary. Redrob Blue is Blue 6, so the scale below carries it and the brand's own name for it is
+     not declared a second time. */
+  --rr-black: #0a0b0c; /* Redrob Black */
+  --rr-white: #ffffff; /* Redrob White */
+
+  /* Blue tint, 1 lightest to 10 darkest */
+  --rr-blue-1: #eff4ff;
+  --rr-blue-3: #bad2ff;
+  --rr-blue-4: #8aafff;
+  --rr-blue-5: #507fff;
+  --rr-blue-6: #2b52ff;
+  --rr-blue-7: #1733d5;
+  --rr-blue-9: #061460;
+  --rr-blue-10: #030c34;
+
+  /* Grayscale, 1 lightest to 9 darkest */
+  --rr-gray-1: #f8f9fb;
+  --rr-gray-2: #eff1f4;
+  --rr-gray-3: #dfe2e8;
+  --rr-gray-4: #cbcfd7;
+  --rr-gray-5: #aab0bb;
+  --rr-gray-6: #7c8390;
+  --rr-gray-7: #576071;
+  --rr-gray-8: #292e37;
+  --rr-gray-9: #141719;
+
+  /* Accent spectrum, 1 lightest to 5 darkest. Only the three hues the product's status roles use
+     are transcribed; the rest of the spectrum belongs to marketing and charts, which this app has
+     none of. Level 4 on light and level 3 on dark, which is the split Console applies. */
+  --rr-orange-3: #ff9c1b;
+  --rr-orange-4: #ae5100;
+  --rr-green-3: #29e474;
+  --rr-green-4: #00864a;
+  --rr-red-3: #ff5452;
+  --rr-red-4: #a31310;
+
+  /* ── 2. SEMANTICS - light ───────────────────────────────────────────────────
+     Light is the default and `.dark` on <html> swaps it. */
+
+  /* Surface. Gray 1 as the page and White as the panel is the brand document's order: a card sits
+     above the page, not below it. */
+  --color-background: var(--rr-gray-1);
+  --color-background-secondary: var(--rr-gray-2);
+  --color-surface: var(--rr-white);
+  --color-surface-hover: var(--rr-gray-2);
+  --color-surface-active: var(--rr-gray-3);
+  --color-surface-muted: var(--rr-gray-2);
+  /* alias used by some components */
+  --color-surface-elevated: var(--rr-white);
+  /* Artifact iframe background — user-generated content defaults to white in
+     both themes; artifacts ship their own styles and should not inherit app theme. */
+  --color-artifact-bg: var(--rr-white);
+
+  /* Border */
+  --color-border: var(--rr-gray-3);
+  --color-border-subtle: var(--rr-gray-2);
+  /* Console names one step lighter than `border` and calls it `border-subtle`, so this app's second
+     lighter name is an alias of it rather than the off-scale value it used to hold. A screen that
+     wants a lighter border names either; neither invents an alpha. */
+  --color-border-muted: var(--color-border-subtle);
+  --color-border-strong: var(--rr-gray-4);
+
+  /* Accent, Redrob Blue */
+  --color-accent: var(--rr-blue-6);
+  --color-accent-hover: var(--rr-blue-7);
+  --color-accent-muted: var(--rr-blue-3);
+  --color-accent-soft: var(--rr-blue-1);
+  /* Not a Console role: the 7% wash this app paints behind a selected row. Derived from the accent
+     rather than fixed, so it follows the theme. */
+  --color-accent-tint: color-mix(in srgb, var(--color-accent) 7%, var(--color-surface));
+  /* Full opacity, matching Console. The 35% wash this replaces was about 2:1 against the page,
+     under the 3:1 WCAG 1.4.11 asks of a focus indicator; Blue 6 at full strength is 5.6:1. */
+  --color-focus-ring: var(--rr-blue-6);
+  --color-on-accent: var(--rr-white);
+
+  /* Text. Gray 6 is 3.6:1 on the page, which clears 3:1 for large text, icons and non-text UI and
+     does not clear 4.5:1 for body copy, so secondary sentences take `text-secondary` (6.0:1). */
+  --color-text-primary: var(--rr-gray-9);
+  --color-text-secondary: var(--rr-gray-7);
+  --color-text-muted: var(--rr-gray-6);
+
+  /* Status. The brand document defines none, so these come from the accent spectrum the way
+     Console draws them: level 4 on light, level 3 on dark. */
+  --color-success: var(--rr-green-4);
+  --color-warning: var(--rr-orange-4);
+  --color-error: var(--rr-red-4);
+  /* MCP badges are brand-coloured text rather than a brand-coloured fill, which is Console's
+     `primary-ink`: the same as the accent on light, one tint lighter on dark. */
+  --color-mcp: var(--rr-blue-6);
+
+  /* Feedback */
+  --color-toast-success: var(--rr-green-4);
+  --color-toast-error: var(--rr-red-4);
+  --color-overlay: color-mix(in srgb, var(--rr-black) 45%, transparent);
+
+  /* Shadow, cool-tinted with Gray 8, three discrete levels */
+  --shadow-soft: 0 1px 2px color-mix(in srgb, var(--rr-gray-8) 5%, transparent);
+  --shadow-card:
+    0 1px 2px color-mix(in srgb, var(--rr-gray-8) 5%, transparent),
+    0 4px 16px color-mix(in srgb, var(--rr-gray-8) 7%, transparent);
+  --shadow-elevated:
+    0 2px 4px color-mix(in srgb, var(--rr-gray-8) 6%, transparent),
+    0 12px 32px color-mix(in srgb, var(--rr-gray-8) 12%, transparent);
+  --shadow-inset-soft: inset 0 0 0 1px var(--color-border-subtle);
+
+  /* Typography. Pretendard is the single Redrob product family and the only approved product
+     typeface: it carries Latin and Hangul in one face, so the `ko` locale is the same font here
+     rather than a fallback. Geist and Fraunces are not product typography and are no longer loaded.
+     `Pretendard Variable` is the family fonts.css registers from the vendored variable file; bare
+     `Pretendard` covers an OS install, and the system stack is a last resort while the face is in
+     flight rather than an alternative. */
+  --font-sans:
+    "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  /* A deliberate alias, not a placeholder for a future serif. There is no second display face;
+     brand moments use the same family at a heavier weight and tighter tracking. */
+  --font-display: var(--font-sans);
+  /* Code only: editor surfaces, token values, diffs. Never UI labels or body copy. */
+  --font-mono:
+    "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo,
+    Consolas, "Liberation Mono", monospace;
+
+  /* Extended type scale */
+  --font-size-display-2xl: 48px;
+  --font-size-display-xl: 36px;
+  --font-size-display-lg: 28px;
+  --font-size-body-lg: 17px;
+  --font-size-body: 15px;
+  --font-size-body-sm: 13px;
+  --font-size-body-xs: 11px;
+  --font-size-mono: 13px;
+
+  /* Type scale — strict 8 sizes (kept for back-compat) */
+  --text-2xs: 10px;
+  --text-xs: 12px;
+  --text-sm: 13px;
+  --text-base: 15px;
+  --text-md: 17px;
+  --text-lg: 20px;
+  --text-xl: 28px;
+  --text-2xl: 36px;
+
+  /* Line height */
+  --leading-heading: 1.2;
+  --leading-ui: 1.4;
+  --leading-body: 1.6;
+  --leading-snug: 1.5;
+
+  /* Letter spacing */
+  --tracking-heading: -0.01em;
+  --tracking-tight: -0.005em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.04em;
+  --tracking-label: 0.08em;
+
+  /* Control sizes */
+  --size-control-xs: 30px;
+  --size-control-sm: 32px;
+  --size-control-md: 40px;
+  --size-control-lg: 48px;
+  --size-accent-stripe: 3px;
+
+  /* Spacing — strict 4-px scale */
+  --space-0_5: 2px;
+  --space-0-5: var(--space-0_5);
+  --space-1: 4px;
+  --space-1_5: 6px;
+  --space-1-5: var(--space-1_5);
+  --space-2: 8px;
+  --space-2_5: 10px;
+  --space-2-5: var(--space-2_5);
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-content: 24px;
+
+  /* Icon sizes */
+  --size-icon-xs: 12px;
+  --size-icon-sm: 14px;
+  --size-icon-md: 16px;
+  --size-input-height: 40px;
+
+  /* Titlebar (Electron frameless window)
+     No fixed height: the bar is as tall as its tallest control plus this
+     padding, so changing a control size can't leave it clipped or floating in
+     dead space. With a 32px control (--size-control-sm) that lands at 64px. */
+  --space-titlebar-pad: var(--space-4);
+
+  /* Shared app layout. The title bar and the page body MUST use both of these
+     so their left/right edges line up. */
+  --size-app-max-width: 1600px;
+  --size-app-gutter: clamp(var(--space-4), 3vw, var(--space-8));
+
+  /* Extra space reserved INSIDE the title bar's aligned container, on top of
+     the shared gutter, so macOS traffic lights never sit under a control.
+     Padding rather than an outer margin: padding leaves the container box
+     itself aligned with the page body, and only shifts the content within it.
+     Zero on Windows and Linux, where the OS draws its own frame. */
+  --size-titlebar-traffic-lights: 0px;
+
+  /* Chip / file-token max width */
+  --size-chip-max: 180px;
+
+  /* Minimum width for menus, popovers, and stage panels */
+  --size-stage-min: 200px;
+
+  /* Compact menu width (zoom dropdown, narrow option pickers) */
+  --size-menu-compact: 6rem;
+
+  /* Hub sidebar (Designs hub left rail) */
+  --size-hub-sidebar: 360px;
+
+  /* Modal widths */
+  --size-modal-md: 560px;
+
+  /* Grid card minimum (project / artifact cards) */
+  --size-card-min: 240px;
+
+  /* Reading-width caps for prose / descriptions */
+  --size-prose-narrow: 60ch;
+
+  /* Card hover lift offset */
+  --lift-card-hover: 1px;
+
+  /* Press feedback scale */
+  --scale-hover-up: 1.04;
+  --scale-press-down: 0.96;
+
+  /* Radius — slightly larger, friendlier */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 14px;
+  --radius-2xl: 18px;
+  --radius-full: 9999px;
+  --radius-phone: 44px;
+
+  /* Border width */
+  --border-width-strong: 8px;
+  --border-width-phone-bezel: 3px;
+
+  /* Phone body — deep space gray, intentionally distinct from app cream bg
+     so the device reads as a physical object, not melting into the canvas. */
+  --color-phone-body: oklch(0.22 0.005 280);
+  --color-phone-island: oklch(0.08 0 0);
+
+  /* Preview viewport sizes */
+  --size-preview-mobile-width: 375px;
+  --size-preview-mobile-height: 812px;
+  --size-preview-mobile-island-width: 95px;
+  --size-preview-mobile-island-height: 28px;
+  --size-preview-mobile-home-indicator-width: 134px;
+  --size-preview-mobile-home-indicator-height: 5px;
+  --size-preview-tablet-width: 768px;
+  --size-preview-tablet-height: 1024px;
+  --size-preview-desktop-width: 1440px;
+  --size-preview-desktop-height: 900px;
+
+  /* Motion — subtle, editorial */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 120ms;
+  --duration-faster: 150ms;
+  --duration-base: 200ms;
+  --duration-slow: 300ms;
+  --transition-base: all var(--duration-base) var(--ease-out);
+  --transition-fast: all var(--duration-fast) var(--ease-out);
+}
+
+/* Headings are the product family at a heavier weight. There is no second display face, which is
+   why `--font-display` is an alias rather than a serif. */
+h1,
+h2,
+h3,
+.display {
+  font-family: var(--font-sans);
+  font-weight: 600;
+}
+
+/* Monospaced numbers and code */
+code,
+kbd,
+pre,
+.mono,
+.num {
+  font-family: var(--font-mono);
+  font-feature-settings: "tnum";
+}
+
+/**
+ * ── 2b. SEMANTICS - dark ────────────────────────────────────────────────────
+ * Only aliases are re-pointed; no new primitive is invented here.
+ *
+ * Gray 9 is the dark page and Redrob Black is the deeper layer beneath it, per the brand document.
+ * That is the reverse of what this app used to do, and it is the same correction Console made. The
+ * scale has nothing between Gray 9 and Gray 8, so a raised panel would jump the whole gap at once;
+ * Console's answer, kept here, is to mix them.
+ */
+.dark {
+  --color-background: var(--rr-gray-9);
+  --color-background-secondary: var(--rr-black);
+  --color-surface: color-mix(in srgb, var(--rr-gray-8) 45%, var(--rr-gray-9));
+  /* The one step this app needs and Console does not. Console's hover surface paints on the page,
+     so it can equal the card; here it paints on a card, so it has to sit between the card mix and
+     Gray 8 or hover feedback disappears on every panel. Mixed from the same two primitives. */
+  --color-surface-hover: color-mix(in srgb, var(--rr-gray-8) 70%, var(--rr-gray-9));
+  --color-surface-active: var(--rr-gray-8);
+  --color-surface-muted: var(--rr-gray-8);
+  --color-surface-elevated: color-mix(in srgb, var(--rr-gray-8) 45%, var(--rr-gray-9));
+  --color-artifact-bg: var(--rr-white);
+
+  --color-border: var(--rr-gray-8);
+  --color-border-subtle: color-mix(in srgb, var(--rr-gray-8) 55%, var(--rr-gray-9));
+  --color-border-muted: var(--color-border-subtle);
+  --color-border-strong: var(--rr-gray-7);
+
+  /* Blue 6 does not carry enough contrast against Gray 9, so dark steps one tint lighter and pairs
+     it with Redrob Black ink: Blue 5 with Black is 5.5:1 and with White only 3.6:1. */
+  --color-accent: var(--rr-blue-5);
+  --color-accent-hover: var(--rr-blue-4);
+  --color-accent-muted: var(--rr-blue-9);
+  --color-accent-soft: var(--rr-blue-10);
+  --color-accent-tint: color-mix(in srgb, var(--color-accent) 14%, var(--color-surface));
+  --color-focus-ring: var(--rr-blue-5);
+  --color-on-accent: var(--rr-black);
+
+  --color-text-primary: var(--rr-gray-1);
+  --color-text-secondary: var(--rr-gray-5);
+  --color-text-muted: var(--rr-gray-6);
+
+  --color-success: var(--rr-green-3);
+  --color-warning: var(--rr-orange-3);
+  --color-error: var(--rr-red-3);
+  /* Blue 5 is 4.5:1 on a raised panel and a link inside a card is small text, so brand-coloured
+     text steps once more while `--color-accent` stays Blue 5 for fills and the ring. */
+  --color-mcp: var(--rr-blue-4);
+
+  --color-toast-success: var(--rr-green-3);
+  --color-toast-error: var(--rr-red-3);
+  --color-overlay: color-mix(in srgb, var(--rr-black) 65%, transparent);
+
+  /* Phone body — slightly lighter than dark bg so the device still reads as an object. */
+  --color-phone-body: oklch(0.32 0.005 280);
+  --color-phone-island: oklch(0.05 0 0);
+
+  /* A shadow has to be darker than the surface to read at all on dark, so the same three levels
+     are re-mixed against Redrob Black. */
+  --shadow-soft: 0 1px 2px color-mix(in srgb, var(--rr-black) 30%, transparent);
+  --shadow-card:
+    0 1px 2px color-mix(in srgb, var(--rr-black) 25%, transparent),
+    0 4px 16px color-mix(in srgb, var(--rr-black) 35%, transparent);
+  --shadow-elevated:
+    0 2px 4px color-mix(in srgb, var(--rr-black) 30%, transparent),
+    0 12px 32px color-mix(in srgb, var(--rr-black) 50%, transparent);
+  --shadow-inset-soft: inset 0 0 0 1px var(--color-border-subtle);
+}
+
+/* macOS draws the traffic lights inside the window (titleBarStyle
+   'hiddenInset'), so the title bar needs to keep its leading controls clear of
+   them there and only there. 62px clears the three 12px buttons plus Apple's
+   own inset. The class is set on <html> at boot in main.tsx. */
+.platform-darwin {
+  --size-titlebar-traffic-lights: 62px;
+}
+
+/* Global focus-visible style — every interactive element inherits unless overridden. */
+:where(button, a, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}

@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test'
 
-import { exportFigFile, parseFigFile, SceneGraph } from '@open-pencil/core'
+import { exportFigFile, parseFigFile, SceneGraph } from '@redrob-design/core'
 
 import { pageId } from './helpers'
 

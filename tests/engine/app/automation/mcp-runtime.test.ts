@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test'
 
-import type { ToolDescriptor } from '@open-pencil/mcp/tools'
+import type { ToolDescriptor } from '@redrob-design/mcp/tools'
 
 import { createMCPRuntimeService, type MCPRuntimeDependencies } from '@/app/automation/mcp/runtime'
 

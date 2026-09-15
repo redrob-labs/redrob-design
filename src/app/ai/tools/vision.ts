@@ -2,7 +2,7 @@ import { valibotSchema } from '@ai-sdk/valibot'
 import { generateText, tool } from 'ai'
 import * as v from 'valibot'
 
-import { computeContentBounds } from '@open-pencil/core/io'
+import { computeContentBounds } from '@redrob-design/core/io'
 
 import { buildReasoningProviderOptions } from '@/app/ai/chat/reasoning'
 import { createAIModelRuntime } from '@/app/ai/models'

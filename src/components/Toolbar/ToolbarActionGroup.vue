@@ -2,7 +2,7 @@
 import { tv } from 'tailwind-variants'
 
 import toolbarTheme from '@/theme/toolbar'
-import { vTestId } from '@open-pencil/vue'
+import { vTestId } from '@redrob-design/vue'
 
 import type { ToolbarActionItem, ToolbarUI } from '@/components/Toolbar/types'
 

@@ -4,8 +4,8 @@ import type {
   FillType,
   GradientStop,
   GradientTransform
-} from '@open-pencil/scene-graph'
-import type { Color } from '@open-pencil/scene-graph/primitives'
+} from '@redrob-design/scene-graph'
+import type { Color } from '@redrob-design/scene-graph/primitives'
 
 import { colorToFill, parseColor } from '#core/color'
 import { TRANSPARENT } from '#core/constants'

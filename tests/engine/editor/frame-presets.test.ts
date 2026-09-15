@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'bun:test'
 
-import { createEditor } from '@open-pencil/core/editor'
-import { computeLayout } from '@open-pencil/core/layout'
+import { createEditor } from '@redrob-design/core/editor'
+import { computeLayout } from '@redrob-design/core/layout'
 
 import { getNodeOrThrow } from '#tests/helpers/assert'
 

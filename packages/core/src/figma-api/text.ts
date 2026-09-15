@@ -1,5 +1,5 @@
-import { recordInstanceOverride } from '@open-pencil/scene-graph'
-import type { SceneGraph, SceneNode } from '@open-pencil/scene-graph'
+import { recordInstanceOverride } from '@redrob-design/scene-graph'
+import type { SceneGraph, SceneNode } from '@redrob-design/scene-graph'
 
 import { styleNameToWeight, weightToStyleName, type FigmaFontName } from './fonts'
 

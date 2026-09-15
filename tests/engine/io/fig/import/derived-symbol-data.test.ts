@@ -5,8 +5,8 @@ import {
   buildDsdLayoutUpdates,
   propagateDsdChanges,
   type OverrideContext
-} from '@open-pencil/fig/instance-overrides'
-import { getNodeLocalMatrix, SceneGraph } from '@open-pencil/scene-graph'
+} from '@redrob-design/fig/instance-overrides'
+import { getNodeLocalMatrix, SceneGraph } from '@redrob-design/scene-graph'
 
 function pageId(graph: SceneGraph): string {
   return graph.getPages()[0].id

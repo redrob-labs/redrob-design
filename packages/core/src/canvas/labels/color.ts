@@ -1,6 +1,6 @@
 import { wcagContrast } from 'culori'
 
-import type { Color } from '@open-pencil/scene-graph'
+import type { Color } from '@redrob-design/scene-graph'
 
 import { BLACK } from '#core/constants'
 

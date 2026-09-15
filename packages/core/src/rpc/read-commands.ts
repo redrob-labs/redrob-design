@@ -1,4 +1,4 @@
-import type { SceneGraph, SceneNode } from '@open-pencil/scene-graph'
+import type { SceneGraph, SceneNode } from '@redrob-design/scene-graph'
 
 import type { DocumentFontStatus } from '#core/text/font/status'
 import { prepareGraphFonts } from '#core/text/prepare'

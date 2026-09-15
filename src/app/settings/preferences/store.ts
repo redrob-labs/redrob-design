@@ -1,6 +1,6 @@
 import { useLocalStorage } from '@vueuse/core'
 
-import { DEFAULT_SNAPPING_PREFERENCES, type SnappingPreferences } from '@open-pencil/core/editor'
+import { DEFAULT_SNAPPING_PREFERENCES, type SnappingPreferences } from '@redrob-design/core/editor'
 
 export type CanvasRenderingMode = 'retained' | 'tiled'
 

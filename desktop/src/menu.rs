@@ -208,10 +208,10 @@ pub fn install_app_menu<R: tauri::Runtime>(
     recent_files: &[String],
 ) -> tauri::Result<()> {
     #[cfg(target_os = "macos")]
-    let app_menu = SubmenuBuilder::new(app, "OpenPencil")
+    let app_menu = SubmenuBuilder::new(app, "Redrob Design")
         .item(&PredefinedMenuItem::about(
             app,
-            Some("About OpenPencil"),
+            Some("About Redrob Design"),
             None,
         )?)
         .item(

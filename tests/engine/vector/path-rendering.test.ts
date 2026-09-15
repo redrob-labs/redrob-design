@@ -2,8 +2,8 @@ import { describe, expect, test } from 'bun:test'
 
 import type { CanvasKit } from 'canvaskit-wasm'
 
-import { vectorNetworkToPath } from '@open-pencil/core/vector'
-import type { VectorNetwork } from '@open-pencil/scene-graph'
+import { vectorNetworkToPath } from '@redrob-design/core/vector'
+import type { VectorNetwork } from '@redrob-design/scene-graph'
 
 interface RecordedPath {
   operations: string[]

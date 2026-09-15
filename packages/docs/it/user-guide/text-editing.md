@@ -33,4 +33,4 @@ La formattazione parziale viene conservata in intervalli e partecipa ad annulla 
 
 ## Font
 
-OpenPencil rileva i font di sistema quando l’ambiente lo consente. Se un font manca, ne mostra lo stato e usa un’alternativa finché non è disponibile.
+Redrob Design rileva i font di sistema quando l’ambiente lo consente. Se un font manca, ne mostra lo stato e usa un’alternativa finché non è disponibile.

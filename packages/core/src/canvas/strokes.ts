@@ -1,9 +1,9 @@
 import type { Canvas, EmbindEnumEntity, Paint } from 'canvaskit-wasm'
 
-import type { SceneNode, Stroke } from '@open-pencil/scene-graph'
-import type { ArrowEndpoint } from '@open-pencil/scene-graph/arrow-caps'
-import { arrowLinesSegments, equilateralArrowPoints } from '@open-pencil/scene-graph/arrow-caps'
-import type { Color } from '@open-pencil/scene-graph/primitives'
+import type { SceneNode, Stroke } from '@redrob-design/scene-graph'
+import type { ArrowEndpoint } from '@redrob-design/scene-graph/arrow-caps'
+import { arrowLinesSegments, equilateralArrowPoints } from '@redrob-design/scene-graph/arrow-caps'
+import type { Color } from '@redrob-design/scene-graph/primitives'
 
 import type { SkiaRenderer } from './renderer'
 import { makeSmoothRRectPath, nodeHasSmoothCorners } from './shapes'

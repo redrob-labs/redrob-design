@@ -3,14 +3,14 @@ import type {
   ComponentPropertyType,
   SceneGraph,
   SceneNode
-} from '@open-pencil/scene-graph'
+} from '@redrob-design/scene-graph'
 import {
   applyComponentPropertyValue,
   componentPropertyDefinitions as sharedComponentPropertyDefinitions,
   removeComponentProperty
-} from '@open-pencil/scene-graph'
-import { computeAbsoluteBounds } from '@open-pencil/scene-graph/geometry'
-import { deriveSlashVariantProperties } from '@open-pencil/scene-graph/variant-properties'
+} from '@redrob-design/scene-graph'
+import { computeAbsoluteBounds } from '@redrob-design/scene-graph/geometry'
+import { deriveSlashVariantProperties } from '@redrob-design/scene-graph/variant-properties'
 
 import { randomHex } from '#core/random'
 

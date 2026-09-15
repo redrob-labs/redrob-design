@@ -1,6 +1,6 @@
 import { transform } from 'sucrase'
 
-import type { SceneGraph } from '@open-pencil/scene-graph'
+import type { SceneGraph } from '@redrob-design/scene-graph'
 
 import { DESIGN_JSX_SUPPORTED_PROPERTIES } from '#core/design-jsx/schema'
 import type { RenderOptions as RenderJSXOptions } from '#core/design-jsx/types'

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, reactive, ref, watch } from 'vue'
 
-import { useI18n, useVariantAuthoring } from '@open-pencil/vue'
+import { useI18n, useVariantAuthoring } from '@redrob-design/vue'
 
 import AppInput from '@/components/ui/AppInput.vue'
 import IconButton from '@/components/ui/IconButton.vue'

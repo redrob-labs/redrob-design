@@ -12,7 +12,7 @@ import {
   getWorldMatrix,
   SceneGraph,
   TransformMatrix
-} from '@open-pencil/scene-graph'
+} from '@redrob-design/scene-graph'
 
 function pageId(graph: SceneGraph) {
   return graph.getPages()[0].id

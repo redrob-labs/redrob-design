@@ -1,11 +1,11 @@
 ---
 title: Composants
-description: Référence des composants sans styles de @open-pencil/vue.
+description: Référence des composants sans styles de @redrob-design/vue.
 ---
 
 # Composants
 
-`@open-pencil/vue` fournit des composants sans styles pour la zone de travail, la navigation, les panneaux de propriétés et les champs spécialisés.
+`@redrob-design/vue` fournit des composants sans styles pour la zone de travail, la navigation, les panneaux de propriétés et les champs spécialisés.
 
 ## Zone de travail
 

@@ -1,11 +1,11 @@
 ---
 title: Arquitectura del SDK
-description: Estructura del paquete, límites de la API pública y principios de diseño de @open-pencil/vue.
+description: Estructura del paquete, límites de la API pública y principios de diseño de @redrob-design/vue.
 ---
 
 # Arquitectura del SDK
 
-`@open-pencil/vue` conecta `@open-pencil/core` con Vue.
+`@redrob-design/vue` conecta `@redrob-design/core` con Vue.
 
 El modelo del editor sigue perteneciendo al núcleo. Este paquete añade:
 
@@ -113,7 +113,7 @@ Pasa a la ranura únicamente las propiedades necesarias o utiliza el composable 
 
 ## Regla general
 
-Si un fragmento de código puede utilizarse en otro editor basado en OpenPencil sin arrastrar los estilos de la aplicación, probablemente debe formar parte de `@open-pencil/vue`.
+Si un fragmento de código puede utilizarse en otro editor basado en Redrob Design sin arrastrar los estilos de la aplicación, probablemente debe formar parte de `@redrob-design/vue`.
 
 ## Véase también
 

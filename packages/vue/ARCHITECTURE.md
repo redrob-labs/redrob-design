@@ -1,4 +1,4 @@
-# @open-pencil/vue architecture
+# @redrob-design/vue architecture
 
 ## Folder conventions
 

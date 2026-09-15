@@ -16,16 +16,16 @@ export type {
 
 import { isEqual } from 'es-toolkit/predicate'
 
-import { guidToString, resolvedNumericBindingUpdate } from '@open-pencil/fig/node-change'
-import type { SceneGraph, SceneNode } from '@open-pencil/scene-graph'
-import { hasInstanceOverride } from '@open-pencil/scene-graph'
+import { guidToString, resolvedNumericBindingUpdate } from '@redrob-design/fig/node-change'
+import type { SceneGraph, SceneNode } from '@redrob-design/scene-graph'
+import { hasInstanceOverride } from '@redrob-design/scene-graph'
 import {
   copyFills,
   copyStyleRuns,
   hasSameCopySource,
   markCopySource
-} from '@open-pencil/scene-graph/copy'
-import type { JSONObject } from '@open-pencil/scene-graph/primitives'
+} from '@redrob-design/scene-graph/copy'
+import type { JSONObject } from '@redrob-design/scene-graph/primitives'
 
 import { applyComponentProperties } from './component-props'
 import { applyConstraintScaling } from './constraints'

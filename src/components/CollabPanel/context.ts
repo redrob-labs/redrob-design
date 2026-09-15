@@ -3,7 +3,7 @@ import { computed, inject, provide, proxyRefs, ref, watch } from 'vue'
 import type { InjectionKey, ShallowUnwrapRef } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-import { useI18n } from '@open-pencil/vue'
+import { useI18n } from '@redrob-design/vue'
 
 import { DEFAULT_COLLAB_STATE, useCollabInjected } from '@/app/collab/use'
 import { useNotificationMessages } from '@/app/i18n/notifications'

@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "OpenPencil",
+  "productName": "Redrob Design",
   "version": "0.14.0",
-  "identifier": "net.dannote.open-pencil",
+  "identifier": "design.redrob.RedrobDesign",
   "build": {
     "beforeDevCommand": "bun run generate:tauri-menu && bun run dev",
     "devUrl": "http://localhost:1420",
@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "OpenPencil",
+        "title": "Redrob Design",
         "width": 1280,
         "height": 800,
         "dragDropEnabled": false
@@ -25,7 +25,7 @@
   "bundle": {
     "active": true,
     "targets": "all",
-    "createUpdaterArtifacts": true,
+    "createUpdaterArtifacts": false,
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
@@ -36,10 +36,10 @@
     "fileAssociations": [
       {
         "ext": ["pen"],
-        "name": "Pencil Design File",
-        "description": "Pencil design file",
+        "name": "Redrob Design File",
+        "description": "Redrob Design file",
         "role": "Editor",
-        "mimeType": "application/x-pencil-pen",
+        "mimeType": "application/x-redrob-design",
         "rank": "Alternate"
       },
       {
@@ -51,17 +51,6 @@
         "rank": "Alternate"
       }
     ],
-    "macOS": {
-      "signingIdentity": "Developer ID Application: Danila Poyarkov (N7D7M3Q3CD)"
-    }
-  },
-  "plugins": {
-    "updater": {
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDU4QzBCRjBFNzhFNEVEMDEKUldRQjdlUjREci9BV0hLaEJPeG5tRXdsWkhQWFdEa0VxcEtNR1o1S2VJeGlKU1VDTldQTi9wYncK",
-      "endpoints": ["https://github.com/open-pencil/open-pencil/releases/latest/download/latest.json"],
-      "windows": {
-        "installMode": "passive"
-      }
-    }
+    "macOS": {}
   }
 }

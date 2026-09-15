@@ -1,6 +1,6 @@
 ---
 title: Начало работы с SDK
-description: Подключение @open-pencil/vue, создание редактора и настройка холста.
+description: Подключение @redrob-design/vue, создание редактора и настройка холста.
 ---
 
 # Начало работы с SDK
@@ -8,22 +8,22 @@ description: Подключение @open-pencil/vue, создание реда�
 ## Установка
 
 ```bash
-bun add @open-pencil/core @open-pencil/vue canvaskit-wasm
+bun add @redrob-design/core @redrob-design/vue canvaskit-wasm
 ```
 
-SDK находится в монорепозитории OpenPencil и опубликован как пакет `@open-pencil/vue`.
+SDK находится в монорепозитории Redrob Design и опубликован как пакет `@redrob-design/vue`.
 
 ```ts
-import { createEditor } from '@open-pencil/core/editor'
-import { provideEditor, useCanvas } from '@open-pencil/vue'
+import { createEditor } from '@redrob-design/core/editor'
+import { provideEditor, useCanvas } from '@redrob-design/vue'
 ```
 
 ## Из чего состоит приложение
 
 В приложении на базе SDK можно выделить три уровня:
 
-1. `@open-pencil/core` — движок редактора, не зависящий от конкретного framework;
-2. `@open-pencil/vue` — компонуемые функции и компоненты без предустановленных стилей для Vue;
+1. `@redrob-design/core` — движок редактора, не зависящий от конкретного framework;
+2. `@redrob-design/vue` — компонуемые функции и компоненты без предустановленных стилей для Vue;
 3. ваше приложение — оформление, маршрутизация, работа с файлами и интерфейс продукта.
 
 ## Минимальная настройка
@@ -31,7 +31,7 @@ import { provideEditor, useCanvas } from '@open-pencil/vue'
 ### 1. Создайте редактор
 
 ```ts
-import { createEditor } from '@open-pencil/core/editor'
+import { createEditor } from '@redrob-design/core/editor'
 
 const editor = createEditor({
   width: 1200,
@@ -43,9 +43,9 @@ const editor = createEditor({
 
 ```vue
 <script setup lang="ts">
-import { provideEditor } from '@open-pencil/vue'
+import { provideEditor } from '@redrob-design/vue'
 
-import type { Editor } from '@open-pencil/core/editor'
+import type { Editor } from '@redrob-design/core/editor'
 
 const props = defineProps<{
   editor: Editor
@@ -67,7 +67,7 @@ provideEditor(props.editor)
 <script setup lang="ts">
 import { ref } from 'vue'
 
-import { useCanvas, useEditor } from '@open-pencil/vue'
+import { useCanvas, useEditor } from '@redrob-design/vue'
 
 const canvasRef = ref<HTMLCanvasElement | null>(null)
 const editor = useEditor()
@@ -85,7 +85,7 @@ useCanvas(canvasRef, editor)
 После вызова `provideEditor()` дочерние компоненты могут получать сведения о выделении и выполнять команды редактора:
 
 ```ts
-import { useEditorCommands, useSelectionState } from '@open-pencil/vue'
+import { useEditorCommands, useSelectionState } from '@redrob-design/vue'
 
 const selection = useSelectionState()
 const commands = useEditorCommands()
@@ -97,7 +97,7 @@ const commands = useEditorCommands()
 <script setup lang="ts">
 import { ref } from 'vue'
 
-import { useCanvas, useEditor, useSelectionState } from '@open-pencil/vue'
+import { useCanvas, useEditor, useSelectionState } from '@redrob-design/vue'
 
 const canvasRef = ref<HTMLCanvasElement | null>(null)
 const editor = useEditor()

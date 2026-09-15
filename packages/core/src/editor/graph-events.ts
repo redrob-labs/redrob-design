@@ -1,4 +1,4 @@
-import type { SceneGraph, SceneGraphEvents, SceneNode } from '@open-pencil/scene-graph'
+import type { SceneGraph, SceneGraphEvents, SceneNode } from '@redrob-design/scene-graph'
 
 import type { SkiaRenderer } from '#core/canvas/renderer'
 

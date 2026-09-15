@@ -1,7 +1,7 @@
 import { watchDebounced } from '@vueuse/core'
 import { watch, type WatchHandle } from 'vue'
 
-import type { EditorState } from '@open-pencil/core/editor'
+import type { EditorState } from '@redrob-design/core/editor'
 
 import { getRecoveryStore } from '@/app/document/recovery/store'
 import type { RecoveryStore } from '@/app/document/recovery/types'

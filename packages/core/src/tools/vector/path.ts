@@ -1,5 +1,5 @@
-import { cloneVectorNetwork } from '@open-pencil/scene-graph'
-import type { SceneNode, VectorNetwork } from '@open-pencil/scene-graph'
+import { cloneVectorNetwork } from '@redrob-design/scene-graph'
+import type { SceneNode, VectorNetwork } from '@redrob-design/scene-graph'
 
 import type { FigmaAPI } from '#core/figma-api'
 import { defineTool } from '#core/tools/schema'

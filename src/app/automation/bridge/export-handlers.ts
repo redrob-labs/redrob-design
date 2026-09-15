@@ -1,5 +1,5 @@
-import { encodeBase64 } from '@open-pencil/core/bytes'
-import { selectionToJSX, sceneNodeToJSX, type RasterExportFormat } from '@open-pencil/core/io'
+import { encodeBase64 } from '@redrob-design/core/bytes'
+import { selectionToJSX, sceneNodeToJSX, type RasterExportFormat } from '@redrob-design/core/io'
 
 import type { AutomationTarget } from '@/app/automation/bridge/target'
 

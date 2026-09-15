@@ -1,4 +1,4 @@
-import type { Color } from '@open-pencil/scene-graph/primitives'
+import type { Color } from '@redrob-design/scene-graph/primitives'
 
 export interface RemotePeer {
   clientId: number

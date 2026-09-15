@@ -4,9 +4,9 @@ import type {
   SceneGraph,
   SceneNode,
   VectorNetwork
-} from '@open-pencil/scene-graph'
-import { mergeVectorNetworks } from '@open-pencil/scene-graph'
-import type { Rect } from '@open-pencil/scene-graph/primitives'
+} from '@redrob-design/scene-graph'
+import { mergeVectorNetworks } from '@redrob-design/scene-graph'
+import type { Rect } from '@redrob-design/scene-graph/primitives'
 
 import { computeAccurateBounds } from '#core/vector/curve-math'
 import { regenerateFillGeometry } from '#core/vector/fill-geometry'

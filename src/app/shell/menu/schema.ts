@@ -1,4 +1,4 @@
-import type { EditorCommandId } from '@open-pencil/vue'
+import type { EditorCommandId } from '@redrob-design/vue'
 
 export type AppMenuTarget = 'all' | 'browser' | 'native'
 
@@ -69,6 +69,12 @@ export const APP_MENU_SCHEMA = [
       { id: 'open', label: 'Open…', shortcut: 'MOD+O' },
       { id: 'open-recent', label: 'Open Recent', target: 'native' },
       { id: 'open-storage-workspace', label: 'Open Storage Workspace…', handler: 'shell' },
+      {
+        id: 'import-design-tokens',
+        label: 'Import design tokens',
+        handler: 'shell',
+        palette: { icon: 'download' }
+      },
       { type: 'separator' },
       { id: 'save', label: 'Save', shortcut: 'MOD+S' },
       { id: 'save-as', label: 'Save As…', shortcut: 'MOD+SHIFT+S' },

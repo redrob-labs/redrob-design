@@ -7,9 +7,9 @@ import {
   parseFigFile,
   SceneGraph,
   type NodeChange
-} from '@open-pencil/core'
-import { effectiveFigmaRawNodeFields, parseFigBuffer } from '@open-pencil/fig'
-import { MAX_EXPORT_SCALE } from '@open-pencil/scene-graph'
+} from '@redrob-design/core'
+import { effectiveFigmaRawNodeFields, parseFigBuffer } from '@redrob-design/fig'
+import { MAX_EXPORT_SCALE } from '@redrob-design/scene-graph'
 
 function decodeExport(bytes: Uint8Array) {
   return parseFigBuffer(bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength))

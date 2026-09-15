@@ -1,7 +1,7 @@
 import type { Canvas, Path, PathBuilder } from 'canvaskit-wasm'
 
-import type { SceneNode } from '@open-pencil/scene-graph'
-import { polygonVertices } from '@open-pencil/scene-graph/geometry'
+import type { SceneNode } from '@redrob-design/scene-graph'
+import { polygonVertices } from '@redrob-design/scene-graph/geometry'
 
 import { vectorNetworkToPath, geometryBlobToPath } from '#core/vector'
 

@@ -9,10 +9,10 @@ import PanelItemRow from '@/components/ui/panel/PanelItemRow.vue'
 import PanelSection from '@/components/ui/panel/PanelSection.vue'
 import Tip from '@/components/ui/Tip.vue'
 import { useEditorStore } from '@/app/editor/active-store'
-import { useExport, useI18n } from '@open-pencil/vue'
+import { useExport, useI18n } from '@redrob-design/vue'
 import { CHECKERBOARD_BACKGROUND } from '@/theme/checkerboard'
 
-import type { ExportFormatId } from '@open-pencil/vue'
+import type { ExportFormatId } from '@redrob-design/vue'
 
 const editorStore = useEditorStore()
 const { panels } = useI18n()

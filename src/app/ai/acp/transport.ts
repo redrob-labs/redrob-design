@@ -8,7 +8,11 @@ import type {
 } from '@agentclientprotocol/sdk'
 import type { ChatTransport, UIMessage, UIMessageChunk } from 'ai'
 
-import type { ACPAgentDef } from '@open-pencil/core/constants'
+import {
+  REDROB_CODE_AGENT_ID,
+  redrobCodeMissingMessage,
+  type ACPAgentDef
+} from '@redrob-design/core/constants'
 
 import SYSTEM_PROMPT from '@/app/ai/chat/system-prompt.md?raw'
 import { describeDiagnosticError, recordACPTransportFailure } from '@/app/diagnostics'
@@ -66,10 +70,15 @@ function isMissingCommandError(message: string): boolean {
   return normalized.includes('enoent') || normalized.includes('program not found')
 }
 
-function missingCommandMessage(agentDef?: ACPAgentDef): string {
+export function missingCommandMessage(agentDef?: ACPAgentDef): string {
   if (!agentDef) return 'ACP agent CLI is not installed.'
+  // Redrob Code is the engine Redrob Design runs on, so a missing engine is a
+  // setup problem to guide through, not a generic CLI-not-found notice.
+  if (agentDef.id === REDROB_CODE_AGENT_ID) {
+    return redrobCodeMissingMessage(`"${agentDef.command}" was not found.`)
+  }
   if (!agentDef.installCommand) {
-    return `"${agentDef.command}" is not installed. Install it and restart OpenPencil.`
+    return `"${agentDef.command}" is not installed. Install it and restart Redrob Design.`
   }
   return `"${agentDef.command}" is not installed. Install it with: ${agentDef.installCommand}`
 }

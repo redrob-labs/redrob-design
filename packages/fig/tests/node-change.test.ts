@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test'
 
-import type { NodeChange, Paint } from '@open-pencil/kiwi/fig/codec'
+import type { NodeChange, Paint } from '@redrob-design/kiwi/fig/codec'
 
 import {
   applyStyleRefsToFields,
@@ -19,7 +19,7 @@ import {
   setVariableColorResolver
 } from '../src/node-change'
 
-describe('@open-pencil/fig NodeChange policy', () => {
+describe('@redrob-design/fig NodeChange policy', () => {
   test('converts normalized text values', () => {
     expect(convertLineHeight({ value: 120, units: 'PERCENT' }, 20)).toBe(24)
     expect(convertLetterSpacing({ value: 10, units: 'PERCENT' }, 20)).toBe(2)

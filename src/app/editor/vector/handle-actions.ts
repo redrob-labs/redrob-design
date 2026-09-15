@@ -1,6 +1,6 @@
-import type { Editor } from '@open-pencil/core/editor'
-import { findAllHandles, findOppositeHandle, mirrorHandle } from '@open-pencil/core/vector'
-import type { Vector } from '@open-pencil/scene-graph/primitives'
+import type { Editor } from '@redrob-design/core/editor'
+import { findAllHandles, findOppositeHandle, mirrorHandle } from '@redrob-design/core/vector'
+import type { Vector } from '@redrob-design/scene-graph/primitives'
 
 import { constrainContinuousTangent } from './handles'
 import { pushNodeEditHistory } from './history'

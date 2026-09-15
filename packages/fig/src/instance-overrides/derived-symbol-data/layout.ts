@@ -3,8 +3,8 @@ import {
   convertFigmaDerivedTextGlyphs,
   convertLetterSpacing,
   convertLineHeight
-} from '@open-pencil/fig/node-change'
-import { getNodeLocalMatrix, type SceneNode } from '@open-pencil/scene-graph'
+} from '@redrob-design/fig/node-change'
+import { getNodeLocalMatrix, type SceneNode } from '@redrob-design/scene-graph'
 
 import type { DerivedSymbolOverride, OverrideContext } from '../types'
 import { resolveDsdGeometry } from './geometry'

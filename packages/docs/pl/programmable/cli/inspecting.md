@@ -9,9 +9,9 @@ CLI pozwala analizować dokumenty projektu bez uruchamiania edytora. Te same pol
 
 ::: tip Instalacja
 ```sh
-npm install -g @open-pencil/cli
+npm install -g @redrob-design/cli
 # albo
-bun add -g @open-pencil/cli
+bun add -g @redrob-design/cli
 # albo
 brew install open-pencil/tap/open-pencil
 ```
@@ -22,13 +22,13 @@ brew install open-pencil/tap/open-pencil
 Liczba stron i obiektów, używane czcionki oraz rozmiar pliku:
 
 ```sh
-openpencil info design.fig
+redrob-design info design.fig
 ```
 
 ## Drzewo obiektów
 
 ```sh
-openpencil tree design.fig
+redrob-design tree design.fig
 ```
 
 ## Wyszukiwanie obiektów
@@ -36,13 +36,13 @@ openpencil tree design.fig
 Według typu:
 
 ```sh
-openpencil find design.fig --type TEXT
+redrob-design find design.fig --type TEXT
 ```
 
 Według nazwy:
 
 ```sh
-openpencil find design.fig --name "Button"
+redrob-design find design.fig --name "Button"
 ```
 
 ## Zapytania XPath
@@ -50,17 +50,17 @@ openpencil find design.fig --name "Button"
 Selektory XPath wyszukują obiekty według typu, atrybutów i położenia w drzewie:
 
 ```sh
-openpencil query design.fig "//FRAME"
+redrob-design query design.fig "//FRAME"
 ```
 
 ```sh
-openpencil query design.fig "//TEXT"                    # Wszystkie obiekty tekstowe
-openpencil query design.fig "//COMPONENT"               # Wszystkie komponenty
-openpencil query design.fig "//INSTANCE"                # Wszystkie egzemplarze
-openpencil query design.fig "//FRAME[@width < 300]"     # Ramki węższe niż 300 px
-openpencil query design.fig "//*[@cornerRadius > 0]"    # Obiekty z zaokrąglonymi narożnikami
-openpencil query design.fig "//*[@visible = false]"     # Ukryte obiekty
-openpencil query design.fig "//SECTION//TEXT"            # Tekst wewnątrz sekcji
+redrob-design query design.fig "//TEXT"                    # Wszystkie obiekty tekstowe
+redrob-design query design.fig "//COMPONENT"               # Wszystkie komponenty
+redrob-design query design.fig "//INSTANCE"                # Wszystkie egzemplarze
+redrob-design query design.fig "//FRAME[@width < 300]"     # Ramki węższe niż 300 px
+redrob-design query design.fig "//*[@cornerRadius > 0]"    # Obiekty z zaokrąglonymi narożnikami
+redrob-design query design.fig "//*[@visible = false]"     # Ukryte obiekty
+redrob-design query design.fig "//SECTION//TEXT"            # Tekst wewnątrz sekcji
 ```
 
 Nazwy dostępnych atrybutów, takie jak `fontSize`, `layoutMode` i `strokeWeight`, pozostają zgodne z API.
@@ -68,14 +68,14 @@ Nazwy dostępnych atrybutów, takie jak `fontSize`, `layoutMode` i `strokeWeight
 ## Właściwości obiektu
 
 ```sh
-openpencil node design.fig --id 1:23
+redrob-design node design.fig --id 1:23
 ```
 
 ## Strony i zmienne
 
 ```sh
 openpencil pages design.fig
-openpencil variables design.fig
+redrob-design variables design.fig
 ```
 
 ## Praca z otwartą aplikacją
@@ -83,23 +83,23 @@ openpencil variables design.fig
 Jeśli aplikacja komputerowa jest uruchomiona, nie podawaj ścieżki pliku. CLI połączy się przez RPC z otwartym dokumentem:
 
 ```sh
-openpencil documents
-openpencil tree
-openpencil tree --document-id tab-123 --page-id 0:1
-openpencil eval --document-id tab-123 --page-id 0:1 -c "..."
+redrob-design documents
+redrob-design tree
+redrob-design tree --document-id tab-123 --page-id 0:1
+redrob-design eval --document-id tab-123 --page-id 0:1 -c "..."
 ```
 
-W procesach automatycznych najpierw wywołaj `openpencil documents --json`, a potem jawnie przekazuj `--document-id` i `--page-id`.
+W procesach automatycznych najpierw wywołaj `redrob-design documents --json`, a potem jawnie przekazuj `--document-id` i `--page-id`.
 
 ## Kontrola jakości
 
 Sprawdzanie nazw, układu, struktury i dostępności:
 
 ```sh
-openpencil lint design.fig
-openpencil lint design.pen --preset strict
-openpencil lint design.fig --rule color-contrast
-openpencil lint design.fig --list-rules
+redrob-design lint design.fig
+redrob-design lint design.pen --preset strict
+redrob-design lint design.fig --rule color-contrast
+redrob-design lint design.fig --list-rules
 ```
 
 ## Wyjście JSON

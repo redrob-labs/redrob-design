@@ -1,11 +1,11 @@
-import { randomHex } from '@open-pencil/core/random'
+import { randomHex } from '@redrob-design/core/random'
 
 import { useVariableBinding } from '#vue/controls/variable-binding/use'
 
 const FALLBACK_COLOR_VARIABLE_NAME = 'New color'
 
-import type { VariableCollection } from '@open-pencil/scene-graph'
-import type { Color } from '@open-pencil/scene-graph/primitives'
+import type { VariableCollection } from '@redrob-design/scene-graph'
+import type { Color } from '@redrob-design/scene-graph/primitives'
 
 type ColorBindingKind = 'fills' | 'strokes'
 

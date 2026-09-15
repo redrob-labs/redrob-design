@@ -1,12 +1,12 @@
 import { promiseTimeout } from '@vueuse/core'
 import { shallowRef, computed, triggerRef } from 'vue'
 
-import { BUILTIN_IO_FORMATS, IORegistry } from '@open-pencil/core/io'
-import { findFigThumbnailPageId } from '@open-pencil/core/io/formats/fig'
-import { renderThumbnail } from '@open-pencil/core/io/formats/raster'
-import { populateLazyFigImportRoots } from '@open-pencil/core/kiwi'
-import { computeAllLayouts } from '@open-pencil/core/layout'
-import type { SceneGraph } from '@open-pencil/scene-graph'
+import { BUILTIN_IO_FORMATS, IORegistry } from '@redrob-design/core/io'
+import { findFigThumbnailPageId } from '@redrob-design/core/io/formats/fig'
+import { renderThumbnail } from '@redrob-design/core/io/formats/raster'
+import { populateLazyFigImportRoots } from '@redrob-design/core/kiwi'
+import { computeAllLayouts } from '@redrob-design/core/layout'
+import type { SceneGraph } from '@redrob-design/scene-graph'
 
 import { setOpenPencilStore } from '@/app/browser-bridge'
 import { describeDiagnosticError, recordStorageFailure } from '@/app/diagnostics'

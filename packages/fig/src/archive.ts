@@ -1,9 +1,9 @@
 import { unzipSync, zipSync, type Unzipped, type Zippable } from 'fflate'
 
-import type { FigPageManifestEntry } from '@open-pencil/kiwi/fig'
-import type { NodeChange } from '@open-pencil/kiwi/fig/codec'
-import { buildFigKiwi, parseFigKiwiChunks } from '@open-pencil/kiwi/fig/container'
-import { decodeFigKiwiCanvas } from '@open-pencil/kiwi/fig/parse'
+import type { FigPageManifestEntry } from '@redrob-design/kiwi/fig'
+import type { NodeChange } from '@redrob-design/kiwi/fig/codec'
+import { buildFigKiwi, parseFigKiwiChunks } from '@redrob-design/kiwi/fig/container'
+import { decodeFigKiwiCanvas } from '@redrob-design/kiwi/fig/parse'
 
 import { hasPNGSignature } from './thumbnail'
 

@@ -1,6 +1,6 @@
-import type { SceneNode } from '@open-pencil/scene-graph'
-import { copyFills, copyStrokes } from '@open-pencil/scene-graph/copy'
-import { computeAbsoluteBounds } from '@open-pencil/scene-graph/geometry'
+import type { SceneNode } from '@redrob-design/scene-graph'
+import { copyFills, copyStrokes } from '@redrob-design/scene-graph/copy'
+import { computeAbsoluteBounds } from '@redrob-design/scene-graph/geometry'
 
 import { canMakeBooleanSourceNode } from '#core/canvas/boolean'
 import { restoreSubtree, snapshotSubtree } from '#core/editor/clipboard/subtree-history'

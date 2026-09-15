@@ -24,7 +24,7 @@ import {
 } from 'reka-ui'
 import { FlexRender } from '@tanstack/vue-table'
 
-import { variablesAddTestId, vTestId, useI18n, useVariablesEditor } from '@open-pencil/vue'
+import { variablesAddTestId, vTestId, useI18n, useVariablesEditor } from '@redrob-design/vue'
 
 import IconHash from '~icons/lucide/hash'
 import IconPalette from '~icons/lucide/palette'
@@ -38,7 +38,7 @@ import { AppDialogRoot } from '@/components/ui/dialog'
 import { useMenuUI } from '@/components/ui/menu'
 import variableTableTheme from '@/theme/variable-table'
 
-import type { VariableType } from '@open-pencil/scene-graph'
+import type { VariableType } from '@redrob-design/scene-graph'
 
 const open = defineModel<boolean>('open', { default: false })
 const menuCls = useMenuUI({ content: 'w-40', item: 'justify-start gap-2' })

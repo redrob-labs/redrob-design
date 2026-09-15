@@ -2,10 +2,10 @@ import { describe, expect, test } from 'bun:test'
 
 import { reactive } from 'vue'
 
-import type { Editor } from '@open-pencil/core/editor'
-import { SceneGraph } from '@open-pencil/scene-graph'
-import type { DerivedTextGlyph, Fill, SceneNode, Stroke } from '@open-pencil/scene-graph'
-import { copyGeometryPaths, copyStrokes } from '@open-pencil/scene-graph/copy'
+import type { Editor } from '@redrob-design/core/editor'
+import { SceneGraph } from '@redrob-design/scene-graph'
+import type { DerivedTextGlyph, Fill, SceneNode, Stroke } from '@redrob-design/scene-graph'
+import { copyGeometryPaths, copyStrokes } from '@redrob-design/scene-graph/copy'
 
 import { applyResize, commitResizePreview } from '#vue/shared/input/resize'
 import type { DragResize, OrigChildState } from '#vue/shared/input/types'

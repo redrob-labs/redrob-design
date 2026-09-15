@@ -7,7 +7,7 @@ import PreparationIndicator from '@/components/preparation/tab/Indicator.vue'
 import Tip from '@/components/ui/Tip.vue'
 import tabBarTheme from '@/theme/tab-bar'
 import { useTabsStore, createHomeTab } from '@/app/tabs'
-import { useI18n } from '@open-pencil/vue'
+import { useI18n } from '@redrob-design/vue'
 
 const { files } = useI18n()
 

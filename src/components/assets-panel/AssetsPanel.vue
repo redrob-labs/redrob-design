@@ -11,9 +11,9 @@ import {
   DialogTitle
 } from 'reka-ui'
 
-import type { SceneNode } from '@open-pencil/scene-graph'
-import { createDefaultNode } from '@open-pencil/scene-graph/node-defaults'
-import { useI18n } from '@open-pencil/vue'
+import type { SceneNode } from '@redrob-design/scene-graph'
+import { createDefaultNode } from '@redrob-design/scene-graph/node-defaults'
+import { useI18n } from '@redrob-design/vue'
 
 import { nodeIcon } from '@/app/editor/icons'
 import { useEditorStore } from '@/app/editor/active-store'

@@ -15,7 +15,7 @@ export default defineConfig({
     moduleSideEffects: false
   },
   deps: {
-    neverBundle: ['@open-pencil/scene-graph', /^@open-pencil\/scene-graph\//, /^node:/],
+    neverBundle: ['@redrob-design/scene-graph', /^@redrob-design\/scene-graph\//, /^node:/],
     onlyBundle: false
   },
   outputOptions: {

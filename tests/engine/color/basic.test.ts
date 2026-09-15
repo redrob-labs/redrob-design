@@ -12,7 +12,7 @@ import {
   rgba255ToColor,
   colorToFill,
   colorDistance
-} from '@open-pencil/core'
+} from '@redrob-design/core'
 
 describe('parseColor', () => {
   test('hex 6-digit', () => {

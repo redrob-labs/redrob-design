@@ -1,5 +1,5 @@
-import type { NodeChange } from '@open-pencil/kiwi/fig/codec'
-import type { FontFeature } from '@open-pencil/scene-graph'
+import type { NodeChange } from '@redrob-design/kiwi/fig/codec'
+import type { FontFeature } from '@redrob-design/scene-graph'
 
 const BOOLEAN_FEATURES = [
   ['fontVariantCommonLigatures', 'LIGA'],

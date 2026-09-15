@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useI18n, useLayoutControlsContext } from '@open-pencil/vue'
+import { useI18n, useLayoutControlsContext } from '@redrob-design/vue'
 
 import SegmentedControl from '@/components/ui/SegmentedControl.vue'
 import PanelFieldGroup from '@/components/ui/panel/PanelFieldGroup.vue'
 import Tip from '@/components/ui/Tip.vue'
 
-import type { SceneNode } from '@open-pencil/scene-graph'
+import type { SceneNode } from '@redrob-design/scene-graph'
 
 type TextResizeMode = 'AUTO_WIDTH' | 'AUTO_HEIGHT' | 'FIXED'
 

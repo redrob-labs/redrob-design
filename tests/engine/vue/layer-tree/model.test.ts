@@ -5,7 +5,7 @@ import {
   layerSelectionForTarget,
   patchLayerNode,
   visibleLayerRows
-} from '@open-pencil/vue'
+} from '@redrob-design/vue'
 
 import { createRect, firstPageId, makeSceneGraph } from '#tests/helpers/scene'
 

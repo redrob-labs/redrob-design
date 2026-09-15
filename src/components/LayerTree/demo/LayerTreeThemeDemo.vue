@@ -3,7 +3,7 @@ import LayerTreeNodeRow from '../LayerTreeNodeRow.vue'
 import LayerTreeRenameRow from '../LayerTreeRenameRow.vue'
 import { provideLayerTreeUI } from '../ui'
 
-import type { LayerNode } from '@open-pencil/vue'
+import type { LayerNode } from '@redrob-design/vue'
 import type { LayerRenameControls, LayerTreeChrome, LayerTreeItemActions } from '../types'
 
 provideLayerTreeUI(() => undefined)

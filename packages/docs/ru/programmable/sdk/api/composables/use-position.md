@@ -23,7 +23,7 @@ description: Чтение и изменение положения, размер
 ## Использование
 
 ```ts
-import { usePosition } from '@open-pencil/vue'
+import { usePosition } from '@redrob-design/vue'
 
 const position = usePosition()
 ```

@@ -1,13 +1,13 @@
-import type { NodeChange, Paint } from '@open-pencil/kiwi/fig/codec'
-import { stringToGuid } from '@open-pencil/kiwi/fig/guid'
+import type { NodeChange, Paint } from '@redrob-design/kiwi/fig/codec'
+import { stringToGuid } from '@redrob-design/kiwi/fig/guid'
 import type {
   ComponentPropertyDefinition,
   ComponentPropertyReferenceField,
   SceneGraph,
   SceneNode
-} from '@open-pencil/scene-graph'
-import { DEFAULT_STROKE_MITER_LIMIT, forEachInstanceOverride } from '@open-pencil/scene-graph'
-import type { Color, GUID, Matrix, Vector } from '@open-pencil/scene-graph/primitives'
+} from '@redrob-design/scene-graph'
+import { DEFAULT_STROKE_MITER_LIMIT, forEachInstanceOverride } from '@redrob-design/scene-graph'
+import type { Color, GUID, Matrix, Vector } from '@redrob-design/scene-graph/primitives'
 
 import { effectiveFigmaRawNodeFields, effectiveFigmaSourcePayload } from '../source-metadata'
 /* eslint-disable max-lines */

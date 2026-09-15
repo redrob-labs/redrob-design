@@ -7,7 +7,7 @@ import {
   rgbaToOkHCL,
   SceneGraph,
   setNodeFillOkHCL
-} from '@open-pencil/core'
+} from '@redrob-design/core'
 
 import { expectDefined, getNodeOrThrow } from '#tests/helpers/assert'
 

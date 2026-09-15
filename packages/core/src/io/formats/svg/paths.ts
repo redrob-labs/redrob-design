@@ -3,8 +3,8 @@ import type {
   VectorNetwork,
   VectorSegment,
   VectorVertex
-} from '@open-pencil/scene-graph'
-import { polygonVertices } from '@open-pencil/scene-graph/geometry'
+} from '@redrob-design/scene-graph'
+import { polygonVertices } from '@redrob-design/scene-graph/geometry'
 
 import { nodeHasRadius } from '#core/canvas/shapes'
 

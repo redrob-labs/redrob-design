@@ -37,7 +37,7 @@
       "#mcp/*": [
         "./packages/mcp/src/*"
       ],
-      "@open-pencil/harness": [
+      "@redrob-design/harness": [
         "./packages/harness/src/index.ts"
       ],
       "#dom-css/*": [
@@ -52,37 +52,37 @@
       "tinykeys": [
         "./node_modules/tinykeys/dist/tinykeys.d.ts"
       ],
-      "@open-pencil/cli/library": [
+      "@redrob-design/cli/library": [
         "./packages/cli/src/library/index.ts"
       ],
-      "@open-pencil/vue": [
+      "@redrob-design/vue": [
         "./packages/vue/src/index.ts"
       ],
-      "@open-pencil/core": [
+      "@redrob-design/core": [
         "./packages/core/src/index.ts"
       ],
-      "@open-pencil/core/*": [
+      "@redrob-design/core/*": [
         "./packages/core/src/*"
       ],
-      "@open-pencil/dom-css": [
+      "@redrob-design/dom-css": [
         "./packages/dom-css/src/index.ts"
       ],
       "#scene-graph/*": [
         "./packages/scene-graph/src/*"
       ],
-      "@open-pencil/scene-graph": [
+      "@redrob-design/scene-graph": [
         "./packages/scene-graph/src/index.ts"
       ],
-      "@open-pencil/scene-graph/*": [
+      "@redrob-design/scene-graph/*": [
         "./packages/scene-graph/src/*"
       ],
       "#pen/*": [
         "./packages/pen/src/*"
       ],
-      "@open-pencil/pen": [
+      "@redrob-design/pen": [
         "./packages/pen/src/index.ts"
       ],
-      "@open-pencil/pen/*": [
+      "@redrob-design/pen/*": [
         "./packages/pen/src/*"
       ]
     }

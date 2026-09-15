@@ -9,7 +9,7 @@ import {
   AUTOMATION_HTTP_PORT,
   IS_TAURI,
   type AIProviderID
-} from '@open-pencil/core/constants'
+} from '@redrob-design/core/constants'
 
 const mcpAvailable = ref(false)
 

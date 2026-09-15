@@ -53,7 +53,7 @@ describe('MCP connections', () => {
           },
           {
             id: 'mcp-reserved',
-            name: 'Open-Pencil',
+            name: 'Redrob-Design',
             enabled: true,
             transport: { type: 'streamable-http', url: 'https://reserved.example.com/mcp' },
             authentication: { type: 'none' }
@@ -96,7 +96,7 @@ describe('MCP connections', () => {
     duplicate.name = 'github'
     duplicate.url = 'https://other.example.com/mcp'
     expect(() => saveMCPConnectionDraft(duplicate)).toThrow('unique')
-    duplicate.name = 'open-pencil'
+    duplicate.name = 'redrob-design'
     expect(() => saveMCPConnectionDraft(duplicate)).toThrow('reserved')
 
     duplicate.id = 'mcp-../../unsafe' as typeof duplicate.id
@@ -116,7 +116,7 @@ describe('MCP connections', () => {
       expect(await buildACPMCPServers({ authorizationToken: 'built-in-token' })).toEqual([
         {
           type: 'http',
-          name: 'open-pencil',
+          name: 'redrob-design',
           url: expect.stringContaining('/mcp'),
           headers: [{ name: 'Authorization', value: 'Bearer built-in-token' }]
         },
@@ -157,7 +157,7 @@ describe('MCP connections', () => {
     expect(await captureACPSessionMCPServers()).toEqual([
       {
         type: 'http',
-        name: 'open-pencil',
+        name: 'redrob-design',
         url: expect.stringContaining('/mcp'),
         headers: [{ name: 'Authorization', value: 'Bearer built-in-token' }]
       },

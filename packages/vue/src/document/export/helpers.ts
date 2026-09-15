@@ -1,10 +1,10 @@
 import { computed } from 'vue'
 import type { ComputedRef } from 'vue'
 
-import type { Editor } from '@open-pencil/core/editor'
-import { BUILTIN_IO_FORMATS, IORegistry } from '@open-pencil/core/io'
-import { MAX_EXPORT_SCALE, MIN_EXPORT_SCALE, clampExportScale } from '@open-pencil/scene-graph'
-import type { ExportFormatId, ExportSetting, PluginDataEntry } from '@open-pencil/scene-graph'
+import type { Editor } from '@redrob-design/core/editor'
+import { BUILTIN_IO_FORMATS, IORegistry } from '@redrob-design/core/io'
+import { MAX_EXPORT_SCALE, MIN_EXPORT_SCALE, clampExportScale } from '@redrob-design/scene-graph'
+import type { ExportFormatId, ExportSetting, PluginDataEntry } from '@redrob-design/scene-graph'
 
 import { useSceneComputed } from '#vue/internal/scene-computed/use'
 

@@ -19,8 +19,8 @@ export {
   buildStyleOverrideTable,
   decodeVectorNetworkBlob,
   encodeVectorNetworkBlob
-} from '@open-pencil/fig/node-change'
-import type { VectorNetwork, WindingRule } from '@open-pencil/scene-graph'
+} from '@redrob-design/fig/node-change'
+import type { VectorNetwork, WindingRule } from '@redrob-design/scene-graph'
 
 import { addLoopToPath, addOpenSegmentsToPath } from './path-helpers'
 export { vectorNetworkToCenterlinePath, fitCircleArc, isClosedThinCrescent } from './centerline'

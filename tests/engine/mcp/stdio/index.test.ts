@@ -6,7 +6,7 @@ import { join } from 'node:path'
 import type { Client } from '@modelcontextprotocol/sdk/client/index.js'
 import type { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js'
 
-import { SceneGraph } from '@open-pencil/scene-graph'
+import { SceneGraph } from '@redrob-design/scene-graph'
 
 import { startServer, type ServerHandle } from '#mcp/server'
 
@@ -75,7 +75,7 @@ async function createStdioClient(socketPath: string, authToken: string | null) {
         // Buffer stderr so the readiness marker is not missed if it
         // straddles a chunk boundary.
         stderrBuffer += chunk.toString()
-        if (stderrBuffer.includes('Connected to OpenPencil')) {
+        if (stderrBuffer.includes('Connected to Redrob Design')) {
           clearTimeout(timer)
           resolve()
         }
@@ -340,7 +340,7 @@ describe('MCP stdio readiness without an open document', () => {
       const result = await client.callTool({ name: 'get_current_page', arguments: {} })
       expect(result.isError).toBe(true)
       const message = textContent(result.content)
-      expect(message).toContain('OpenPencil app is not connected')
+      expect(message).toContain('Redrob Design app is not connected')
       expect(message).toContain('no document is open')
     } finally {
       await client?.close().catch(() => undefined)

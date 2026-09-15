@@ -5,7 +5,7 @@ description: Créer des panneaux de propriétés avec des composables et des com
 
 # Panneaux de propriétés
 
-`@open-pencil/vue` fournit principalement des composables pour les panneaux de propriétés.
+`@redrob-design/vue` fournit principalement des composables pour les panneaux de propriétés.
 
 Si un panneau utilise des valeurs calculées depuis la sélection et des actions pour les modifier, choisissez un composable. Pour une structure réutilisable de tableau ou de liste, utilisez un composant sans apparence imposée comme `PropertyListRoot`.
 
@@ -35,13 +35,13 @@ Lorsqu’un champ peut être lié à une variable ou à un jeton de design exter
 - Une action explicite de suppression de la liaison est préférable dans le sélecteur à un bouton facile à déclencher par erreur près du champ.
 - Regroupez changement de liaison, détachement pendant l’édition et mises à jour de plusieurs objets dans une seule opération groupée du fournisseur.
 
-L’application OpenPencil affiche le nom de la variable en violet lorsque le champ est inactif. Au début de l’édition, `NumberField` affiche la valeur numérique calculée. Une interface personnalisée peut présenter le même état différemment.
+L’application Redrob Design affiche le nom de la variable en violet lorsque le champ est inactif. Au début de l’édition, `NumberField` affiche la valeur numérique calculée. Une interface personnalisée peut présenter le même état différemment.
 
 ## Exemple : position et taille
 
 ```vue
 <script setup lang="ts">
-import { usePosition } from '@open-pencil/vue'
+import { usePosition } from '@redrob-design/vue'
 
 const { x, y, width, height, updateProp, commitProp } = usePosition()
 </script>
@@ -64,7 +64,7 @@ import {
   PropertyListRoot,
   useEditorPropertyList,
   useFillControls
-} from '@open-pencil/vue'
+} from '@redrob-design/vue'
 
 const fillControls = useFillControls()
 const fills = useEditorPropertyList('fills')

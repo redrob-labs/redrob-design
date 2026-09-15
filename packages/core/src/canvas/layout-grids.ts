@@ -1,9 +1,9 @@
 import type { Canvas } from 'canvaskit-wasm'
 
-import { readEffectiveFigmaRawField } from '@open-pencil/fig'
-import type { SceneNode } from '@open-pencil/scene-graph'
-import { layoutGuideSections } from '@open-pencil/scene-graph/layout-guides'
-import type { Color } from '@open-pencil/scene-graph/primitives'
+import { readEffectiveFigmaRawField } from '@redrob-design/fig'
+import type { SceneNode } from '@redrob-design/scene-graph'
+import { layoutGuideSections } from '@redrob-design/scene-graph/layout-guides'
+import type { Color } from '@redrob-design/scene-graph/primitives'
 
 import { SELECTION_COLOR } from '#core/constants'
 

@@ -1,4 +1,4 @@
-import type { CanvasGuide } from '@open-pencil/scene-graph/guides'
+import type { CanvasGuide } from '@redrob-design/scene-graph/guides'
 
 import type { EditorContext } from './types'
 

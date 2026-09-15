@@ -1,4 +1,4 @@
-import type { Vector } from '@open-pencil/scene-graph/primitives'
+import type { Vector } from '@redrob-design/scene-graph/primitives'
 
 import { collectNodePositions, pushPositionUndo } from './history/position'
 import type { EditorContext } from './types'

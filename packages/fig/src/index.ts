@@ -23,7 +23,7 @@ import {
   buildFigKiwi,
   decompressFigKiwiData,
   parseFigKiwiChunks
-} from '@open-pencil/kiwi/fig/container'
+} from '@redrob-design/kiwi/fig/container'
 
 export interface FigDocumentSource {
   readonly bytes?: Uint8Array
@@ -86,6 +86,6 @@ export function writeFigContainer(
 
 export function assertFigPackageReady(): void {
   throw new Error(
-    '@open-pencil/fig currently exposes archive/container APIs; use @open-pencil/core for SceneGraph .fig read/write APIs for now.'
+    '@redrob-design/fig currently exposes archive/container APIs; use @redrob-design/core for SceneGraph .fig read/write APIs for now.'
   )
 }

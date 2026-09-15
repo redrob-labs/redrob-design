@@ -5,15 +5,15 @@ description: Создание собственного интерфейса ре
 
 # Собственный интерфейс редактора
 
-Типичное приложение OpenPencil на Vue состоит из трёх уровней:
+Типичное приложение Redrob Design на Vue состоит из трёх уровней:
 
-1. `@open-pencil/core` создаёт редактор;
-2. `@open-pencil/vue` связывает его с composables и компонентами Vue без встроенного оформления;
+1. `@redrob-design/core` создаёт редактор;
+2. `@redrob-design/vue` связывает его с composables и компонентами Vue без встроенного оформления;
 3. приложение определяет компоновку, оформление и характерное для продукта поведение.
 
 ## Зачем разделять эти уровни
 
-Готовое приложение OpenPencil — лишь один из возможных интерфейсов.
+Готовое приложение Redrob Design — лишь один из возможных интерфейсов.
 
 На основе SDK можно создать встроенный редактор для другого продукта, внутренний инструмент для работы с ресурсами, редактор шаблонов, интерфейс аннотирования или специализированный редактор с поддержкой ИИ.
 
@@ -31,7 +31,7 @@ description: Создание собственного интерфейса ре
 
 ```vue
 <script setup lang="ts">
-import { createEditor } from '@open-pencil/core/editor'
+import { createEditor } from '@redrob-design/core/editor'
 import {
   provideEditor,
   CanvasRoot,
@@ -39,7 +39,7 @@ import {
   ToolbarRoot,
   PageListRoot,
   LayerTreeRoot,
-} from '@open-pencil/vue'
+} from '@redrob-design/vue'
 
 const editor = createEditor({ width: 1440, height: 900 })
 provideEditor(editor)

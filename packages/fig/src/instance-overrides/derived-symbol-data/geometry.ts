@@ -2,10 +2,10 @@ import {
   alignGeometryWindingRules,
   resolveGeometryPaths,
   resolveVectorStyleOverrideFills
-} from '@open-pencil/fig/node-change'
-import type { SceneNode } from '@open-pencil/scene-graph'
-import { scaleGeometryPaths } from '@open-pencil/scene-graph/copy'
-import { cloneVectorNetwork } from '@open-pencil/scene-graph/vector-network'
+} from '@redrob-design/fig/node-change'
+import type { SceneNode } from '@redrob-design/scene-graph'
+import { scaleGeometryPaths } from '@redrob-design/scene-graph/copy'
+import { cloneVectorNetwork } from '@redrob-design/scene-graph/vector-network'
 
 import type { DerivedSymbolOverride } from '../types'
 

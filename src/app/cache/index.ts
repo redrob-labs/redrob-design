@@ -1,4 +1,4 @@
-import { IS_TAURI } from '@open-pencil/core/constants'
+import { IS_TAURI } from '@redrob-design/core/constants'
 
 const APP_CACHE_DIR = 'cache/v1'
 const STORAGE_PREFIX = 'open-pencil:cache:v1:'

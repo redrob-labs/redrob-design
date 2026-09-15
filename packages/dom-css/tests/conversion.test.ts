@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test'
 
-import type { SceneGraph, SceneNode } from '@open-pencil/scene-graph'
+import type { SceneGraph, SceneNode } from '@redrob-design/scene-graph'
 
 import { browserHTMLToSceneGraph } from '../src/browser'
 import type { DesignElement, DesignNode } from '../src/index'
@@ -157,7 +157,7 @@ function expectStyleRoundTripHTML(graph: SceneGraph) {
   expectRoundTripHeadingStyle(roundTripHeading)
 }
 
-describe('@open-pencil/dom-css conversion', () => {
+describe('@redrob-design/dom-css conversion', () => {
   it('rejects pre-aborted browser conversion before runtime work', async () => {
     const abort = new AbortController()
     abort.abort()

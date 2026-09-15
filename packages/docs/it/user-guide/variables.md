@@ -33,7 +33,7 @@ Aprire o selezionare il campo non modifica il collegamento. Solo la prima variaz
 
 ## Alias
 
-Una variabile può fare riferimento a un’altra. OpenPencil risolve la catena in base alla modalità attiva e rileva i cicli.
+Una variabile può fare riferimento a un’altra. Redrob Design risolve la catena in base alla modalità attiva e rileva i cicli.
 
 ## Importazione ed esportazione
 

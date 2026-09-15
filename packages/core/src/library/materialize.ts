@@ -1,10 +1,10 @@
-import { cloneNodeProps, type SceneGraph, type SceneNode } from '@open-pencil/scene-graph'
+import { cloneNodeProps, type SceneGraph, type SceneNode } from '@redrob-design/scene-graph'
 
 import { findLibraryDefinition } from './definitions'
 import { assertLibraryAssetKey, assertLibraryId, libraryAssetIdentityKey } from './identity'
 import type { ComponentLibraryRevision, LibraryAssetDescriptor } from './types'
 
-const INTERNAL_LIBRARY_PAGE_NAME = 'OpenPencil library definitions'
+const INTERNAL_LIBRARY_PAGE_NAME = 'Redrob Design library definitions'
 
 export interface MaterializedLibraryAsset {
   componentId: string

@@ -9,7 +9,7 @@ import {
   type SceneNode,
   type Stroke,
   type StyleRun
-} from '@open-pencil/scene-graph'
+} from '@redrob-design/scene-graph'
 
 const MIN_SCALE = 0.01
 const RESCALABLE_NODE_TYPES = new Set<SceneNode['type']>([

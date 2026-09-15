@@ -1,8 +1,8 @@
 import { describe, expect, test } from 'bun:test'
 
-import { buildOpenPencilClipboardHTML } from '@open-pencil/core/clipboard'
-import { createEditor } from '@open-pencil/core/editor'
-import type { Editor } from '@open-pencil/core/editor'
+import { buildOpenPencilClipboardHTML } from '@redrob-design/core/clipboard'
+import { createEditor } from '@redrob-design/core/editor'
+import type { Editor } from '@redrob-design/core/editor'
 
 function copiedRectangleHTML(name = 'Pasted') {
   const source = createEditor()

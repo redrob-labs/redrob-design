@@ -1,8 +1,8 @@
 [package]
-name = "open_pencil"
+name = "redrob_design"
 version = "0.14.0"
-description = "OpenPencil desktop app"
-authors = ["Danila Poyarkov"]
+description = "Redrob Design desktop app"
+authors = ["Redrob"]
 edition = "2021"
 
 [features]
@@ -12,11 +12,11 @@ native-test = ["dep:tauri-plugin-wdio-webdriver"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [[bin]]
-name = "OpenPencil"
+name = "RedrobDesign"
 path = "src/main.rs"
 
 [lib]
-name = "open_pencil_lib"
+name = "redrob_design_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
 [build-dependencies]

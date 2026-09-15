@@ -6,11 +6,11 @@ import type {
   VariableCollection,
   VariableType,
   VariableValue
-} from '@open-pencil/scene-graph'
-import { copyFills, copyStrokes, copyEffects } from '@open-pencil/scene-graph/copy'
-import { computeBounds } from '@open-pencil/scene-graph/geometry'
-import { computeImageHash } from '@open-pencil/scene-graph/images'
-import type { Rect, Vector } from '@open-pencil/scene-graph/primitives'
+} from '@redrob-design/scene-graph'
+import { copyFills, copyStrokes, copyEffects } from '@redrob-design/scene-graph/copy'
+import { computeBounds } from '@redrob-design/scene-graph/geometry'
+import { computeImageHash } from '@redrob-design/scene-graph/images'
+import type { Rect, Vector } from '@redrob-design/scene-graph/primitives'
 
 import { decodeBase64, encodeBase64 } from '#core/bytes'
 import type { SkiaRenderer } from '#core/canvas'

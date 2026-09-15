@@ -1,5 +1,5 @@
-import { guidToString } from '@open-pencil/fig/node-change'
-import type { GUID } from '@open-pencil/kiwi/fig/codec'
+import { guidToString } from '@redrob-design/fig/node-change'
+import type { GUID } from '@redrob-design/kiwi/fig/codec'
 
 import type { ComponentPropAssignment, ComponentPropValue, OverrideContext } from '../types'
 

@@ -2,14 +2,14 @@
 import { computed } from 'vue'
 import { tv } from 'tailwind-variants'
 
-import { useI18n } from '@open-pencil/vue'
+import { useI18n } from '@redrob-design/vue'
 
 import Tip from '../ui/Tip.vue'
 import { useLayerTreeUI } from './ui'
 
 import layerTreeTheme from '@/theme/layer-tree'
 
-import type { LayerNode } from '@open-pencil/vue'
+import type { LayerNode } from '@redrob-design/vue'
 
 const { node, selected } = defineProps<{
   node: LayerNode

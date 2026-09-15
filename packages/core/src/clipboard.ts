@@ -1,16 +1,16 @@
 import { inflateSync, deflateSync } from 'fflate'
 
-import { populateAndApplyOverrides } from '@open-pencil/fig/instance-overrides'
-import type { InstanceNodeChange } from '@open-pencil/fig/instance-overrides'
+import { populateAndApplyOverrides } from '@redrob-design/fig/instance-overrides'
+import type { InstanceNodeChange } from '@redrob-design/fig/instance-overrides'
 import {
   nodeChangeToProps,
   shouldImportTextAsAutoSize,
   sortChildren
-} from '@open-pencil/fig/node-change'
-import { initCodec, getCompiledSchema, getSchemaBytes } from '@open-pencil/kiwi/fig/codec'
-import type { GUID, NodeChange as KiwiNodeChange } from '@open-pencil/kiwi/fig/codec'
-import { decodeBinarySchema, compileSchema, ByteBuffer } from '@open-pencil/kiwi/schema-runtime'
-import type { SceneGraph, SceneNode } from '@open-pencil/scene-graph'
+} from '@redrob-design/fig/node-change'
+import { initCodec, getCompiledSchema, getSchemaBytes } from '@redrob-design/kiwi/fig/codec'
+import type { GUID, NodeChange as KiwiNodeChange } from '@redrob-design/kiwi/fig/codec'
+import { decodeBinarySchema, compileSchema, ByteBuffer } from '@redrob-design/kiwi/schema-runtime'
+import type { SceneGraph, SceneNode } from '@redrob-design/scene-graph'
 
 import { decodeBase64, decodeBase64Text, encodeBase64, encodeBase64Text } from './bytes'
 import { shapeTextForClipboard } from './canvas/text/clipboard'

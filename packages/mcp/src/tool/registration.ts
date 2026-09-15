@@ -5,7 +5,7 @@ import type { McpServer, ToolCallback } from '@modelcontextprotocol/sdk/server/m
 import type { ToolAnnotations } from '@modelcontextprotocol/sdk/types.js'
 import { z } from 'zod'
 
-import { ALL_TOOLS, CODEGEN_PROMPT } from '@open-pencil/core/tools'
+import { ALL_TOOLS, CODEGEN_PROMPT } from '@redrob-design/core/tools'
 
 import type { RPCJSONObject } from '#mcp/json'
 import { MAX_RESULT_BYTES, fail, ok, resultTooLargeMessage } from '#mcp/result'
@@ -18,7 +18,7 @@ import { paramToZod } from '#mcp/tool/schema'
 export type RPCSender = (body: Record<string, unknown>) => Promise<unknown>
 
 const automationTargetSchema = {
-  document_id: z.string().describe('Optional OpenPencil document/tab ID to target').optional(),
+  document_id: z.string().describe('Optional Redrob Design document/tab ID to target').optional(),
   page_id: z.string().describe('Optional page ID to target within the document').optional()
 }
 
@@ -135,7 +135,7 @@ export function registerTools(mcpServer: McpServer, options: RegisterToolsOption
     'list_documents',
     {
       description:
-        'List open OpenPencil documents/tabs with their IDs, file paths, current pages, and pages.',
+        'List open Redrob Design documents/tabs with their IDs, file paths, current pages, and pages.',
       inputSchema: z.object({})
     },
     async () => {

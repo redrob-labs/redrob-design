@@ -10,8 +10,8 @@ import {
   type FontFamilyOption,
   type LocalFontAccessState,
   type WebFontProviderId
-} from '@open-pencil/core/text'
-import type { SceneGraph } from '@open-pencil/scene-graph'
+} from '@redrob-design/core/text'
+import type { SceneGraph } from '@redrob-design/scene-graph'
 
 import { browserWebFontFetch } from '@/app/editor/fonts/browser-fetch'
 import {

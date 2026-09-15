@@ -1,10 +1,10 @@
 import { convertToHsb, convertToHsl, convertToRgb } from 'reka-ui'
 import type { Color as RekaColor, HSBColor, HSLColor, RGBColor } from 'reka-ui'
 
-import { colorToCSS, okhclToRGBA, rgba255ToColor, rgbaToOkHCL } from '@open-pencil/core/color'
-import type { OkHCLColor } from '@open-pencil/core/color'
-import type { Fill, Stroke } from '@open-pencil/scene-graph'
-import type { Color } from '@open-pencil/scene-graph/primitives'
+import { colorToCSS, okhclToRGBA, rgba255ToColor, rgbaToOkHCL } from '@redrob-design/core/color'
+import type { OkHCLColor } from '@redrob-design/core/color'
+import type { Fill, Stroke } from '@redrob-design/scene-graph'
+import type { Color } from '@redrob-design/scene-graph/primitives'
 
 import type {
   HSBChannel,

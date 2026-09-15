@@ -1,4 +1,4 @@
-import { colorToCSS } from '@open-pencil/core/color'
+import { colorToCSS } from '@redrob-design/core/color'
 
 import type { DesignDocument } from '../src/index'
 

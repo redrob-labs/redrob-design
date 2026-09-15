@@ -1,9 +1,9 @@
 import {
   sceneNodeToKiwi as sceneNodeToKiwiWithRuntime,
   type KiwiNodeChange
-} from '@open-pencil/fig/node-change'
-import type { ComponentPropertyDefinition, SceneGraph, SceneNode } from '@open-pencil/scene-graph'
-import type { GUID } from '@open-pencil/scene-graph/primitives'
+} from '@redrob-design/fig/node-change'
+import type { ComponentPropertyDefinition, SceneGraph, SceneNode } from '@redrob-design/scene-graph'
+import type { GUID } from '@redrob-design/scene-graph/primitives'
 
 import { getGlyphOutlineMetricsSync } from '#core/text/opentype'
 
@@ -17,7 +17,7 @@ export {
   mapToFigmaType,
   parseFigKiwiChunks,
   safeColor
-} from '@open-pencil/fig/node-change'
+} from '@redrob-design/fig/node-change'
 export { buildFontDigestMap } from './font/digests'
 
 const coreFigExportRuntime = {

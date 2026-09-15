@@ -4,8 +4,8 @@ import {
   createLibraryRevision,
   createSelectiveLibraryRevision,
   discoverPublishableLibraryChanges
-} from '@open-pencil/core/library'
-import { SceneGraph } from '@open-pencil/scene-graph'
+} from '@redrob-design/core/library'
+import { SceneGraph } from '@redrob-design/scene-graph'
 
 function source(buttonWidth: number, includeCard = true) {
   const graph = new SceneGraph()

@@ -1,6 +1,6 @@
-import type { Editor } from '@open-pencil/core/editor'
-import { randomHex } from '@open-pencil/core/random'
-import type { VariableCollection } from '@open-pencil/scene-graph'
+import type { Editor } from '@redrob-design/core/editor'
+import { randomHex } from '@redrob-design/core/random'
+import type { VariableCollection } from '@redrob-design/scene-graph'
 
 import { useOpenPencilBindingProvider } from '#vue/controls/binding-provider/open-pencil'
 import type { BindingTarget } from '#vue/controls/binding-provider/types'

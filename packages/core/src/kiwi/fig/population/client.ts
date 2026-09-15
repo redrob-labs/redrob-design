@@ -1,4 +1,4 @@
-import type { SceneGraph } from '@open-pencil/scene-graph'
+import type { SceneGraph } from '@redrob-design/scene-graph'
 
 import { getLazyFigImportContext } from '#core/kiwi/fig/lazy-import'
 import type { FigSessionResponse } from '#core/kiwi/fig/session/protocol'

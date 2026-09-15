@@ -3,14 +3,14 @@ import { basename, dirname, extname, join, resolve } from 'node:path'
 
 import { defineCommand } from 'citty'
 
-import { decodeBase64 } from '@open-pencil/core/bytes'
-import { BUILTIN_IO_FORMATS, IORegistry } from '@open-pencil/core/io'
-import type { RasterExportFormat } from '@open-pencil/core/io'
+import { decodeBase64 } from '@redrob-design/core/bytes'
+import { BUILTIN_IO_FORMATS, IORegistry } from '@redrob-design/core/io'
+import type { RasterExportFormat } from '@redrob-design/core/io'
 import {
   exportHTMLBundle,
   sceneGraphToDesignDocument,
   type ExportHTMLBundleOptions
-} from '@open-pencil/dom-css'
+} from '@redrob-design/dom-css'
 
 import { isAppMode, requireFile, rpc } from '#cli/app-client'
 import { appTargetOptions, appTargetRPCArgs } from '#cli/app-target'

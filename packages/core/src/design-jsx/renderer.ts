@@ -5,7 +5,7 @@ import {
   type NodeType,
   type SceneGraph,
   type SceneNode
-} from '@open-pencil/scene-graph'
+} from '@redrob-design/scene-graph'
 
 import { parseColor } from '#core/color'
 import type { RenderOptions } from '#core/design-jsx/types'

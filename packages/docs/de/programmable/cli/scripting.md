@@ -5,15 +5,15 @@ description: JavaScript mit einer Figma-kompatiblen Plugin API ausführen, um De
 
 # Skripte
 
-`openpencil eval` führt JavaScript für ein OpenPencil-Dokument aus und stellt das globale Objekt `figma` bereit. Der Befehl eignet sich für Massenänderungen, Prüfungen, Testdaten und Automatisierung ohne Editoroberfläche.
+`redrob-design eval` führt JavaScript für ein Redrob-Design-Dokument aus und stellt das globale Objekt `figma` bereit. Der Befehl eignet sich für Massenänderungen, Prüfungen, Testdaten und Automatisierung ohne Editoroberfläche.
 
 ## Grundlagen
 
 ```sh
-openpencil eval design.fig -c "return figma.currentPage.children.length"
+redrob-design eval design.fig -c "return figma.currentPage.children.length"
 ```
 
-Beginnt der Code nicht mit `return`, führt OpenPencil ihn in einer asynchronen Funktion aus.
+Beginnt der Code nicht mit `return`, führt Redrob Design ihn in einer asynchronen Funktion aus.
 
 ## Ändern und speichern
 
@@ -29,7 +29,7 @@ Nicht interaktive Ausgabe verwendet standardmäßig JSON. `--quiet` unterdrückt
 
 ## Unterstützte API
 
-Die API orientiert sich an Figma Plugin API und arbeitet mit SceneGraph und dem OpenPencil-Dateiformat.
+Die API orientiert sich an Figma Plugin API und arbeitet mit SceneGraph und dem Redrob Design-Dateiformat.
 
 Sie umfasst Dokumente und Seiten, Objekterstellung, Baumoperationen, Komponenten, Variablen sowie häufige Eigenschaften für Geometrie, Darstellung, Text, automatische Anordnung und Konturen.
 

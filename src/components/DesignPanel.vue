@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 
-import { useI18n, useSelectionState, useEditorCommands } from '@open-pencil/vue'
+import { useI18n, useSelectionState, useEditorCommands } from '@redrob-design/vue'
 
 import { useEditorStore } from '@/app/editor/active-store'
 import { openLibraryReview, useLibraryService } from '@/app/libraries'

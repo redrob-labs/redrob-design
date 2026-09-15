@@ -1,5 +1,5 @@
-import type { ToolDef } from '@open-pencil/core/tools'
-import { ALL_TOOLS, toolChangesDocument } from '@open-pencil/core/tools'
+import type { ToolDef } from '@redrob-design/core/tools'
+import { ALL_TOOLS, toolChangesDocument } from '@redrob-design/core/tools'
 
 import type {
   ToolAvailability,
@@ -47,7 +47,7 @@ export function createToolDescriptors(filesystemEnabled: boolean): ToolDescripto
     {
       name: 'list_documents',
       description:
-        'List open OpenPencil documents/tabs with their IDs, file paths, current pages, and pages.',
+        'List open Redrob Design documents/tabs with their IDs, file paths, current pages, and pages.',
       effect: 'read',
       availability: 'default',
       capabilities: ['document:read'],

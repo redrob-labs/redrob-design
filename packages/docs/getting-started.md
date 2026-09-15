@@ -2,7 +2,7 @@
 
 ## Try Online
 
-OpenPencil runs in the browser — no installation required. Open [app.openpencil.dev](https://app.openpencil.dev) to start designing.
+Redrob Design runs in the browser — no installation required. Open [app.redrob.design](https://app.redrob.design) to start designing.
 
 If you want to build on top of it instead of only using the default app, see the [Programmable](/programmable/) section and the [Vue SDK](/programmable/sdk/).
 

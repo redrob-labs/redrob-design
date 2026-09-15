@@ -1,4 +1,4 @@
-import type { SceneNode } from '@open-pencil/scene-graph'
+import type { SceneNode } from '@redrob-design/scene-graph'
 
 import { buildCloneIndex, instanceAndClones } from '../clone-index'
 import { resolveOverrideTarget } from '../resolve'

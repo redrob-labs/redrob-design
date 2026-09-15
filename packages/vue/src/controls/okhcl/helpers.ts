@@ -7,11 +7,11 @@ import {
   rgbaToOkHCL,
   setNodeFillOkHCL,
   setNodeStrokeOkHCL
-} from '@open-pencil/core/color'
-import type { OkHCLColor } from '@open-pencil/core/color'
-import { BLACK } from '@open-pencil/core/constants'
-import type { Editor } from '@open-pencil/core/editor'
-import type { SceneNode } from '@open-pencil/scene-graph'
+} from '@redrob-design/core/color'
+import type { OkHCLColor } from '@redrob-design/core/color'
+import { BLACK } from '@redrob-design/core/constants'
+import type { Editor } from '@redrob-design/core/editor'
+import type { SceneNode } from '@redrob-design/scene-graph'
 
 import type { ColorFieldFormat } from '#vue/controls/color-model/types'
 

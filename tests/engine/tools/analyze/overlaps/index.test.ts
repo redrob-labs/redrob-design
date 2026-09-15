@@ -1,11 +1,11 @@
 import { describe, expect, test } from 'bun:test'
 
-import { FigmaAPI, SceneGraph } from '@open-pencil/core'
+import { FigmaAPI, SceneGraph } from '@redrob-design/core'
 import {
   analyzeOverlaps,
   computeOverlaps,
   type OverlapScope
-} from '@open-pencil/core/tools/analyze/overlaps'
+} from '@redrob-design/core/tools/analyze/overlaps'
 
 import { frame, pageId, rect, text } from './helpers'
 

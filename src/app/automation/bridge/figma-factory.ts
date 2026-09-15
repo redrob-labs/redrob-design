@@ -1,4 +1,4 @@
-import { FigmaAPI } from '@open-pencil/core/figma-api'
+import { FigmaAPI } from '@redrob-design/core/figma-api'
 
 import type { EditorStore } from '@/app/editor/active-store'
 import { listFamilies, listFonts } from '@/app/editor/fonts'

@@ -1,7 +1,7 @@
 import type { Canvas } from 'canvaskit-wasm'
 
-import type { SceneGraph } from '@open-pencil/scene-graph'
-import { computeDescendantVisualBounds } from '@open-pencil/scene-graph/geometry'
+import type { SceneGraph } from '@redrob-design/scene-graph'
+import { computeDescendantVisualBounds } from '@redrob-design/scene-graph/geometry'
 
 import type { RenderOverlays, SkiaRenderer } from '#core/canvas/renderer'
 import type { EditorState } from '#core/editor/types'

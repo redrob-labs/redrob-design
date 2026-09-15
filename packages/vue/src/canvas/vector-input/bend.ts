@@ -1,6 +1,6 @@
-import type { Editor } from '@open-pencil/core/editor'
-import type { VectorSegment } from '@open-pencil/scene-graph'
-import type { Vector } from '@open-pencil/scene-graph/primitives'
+import type { Editor } from '@redrob-design/core/editor'
+import type { VectorSegment } from '@redrob-design/scene-graph'
+import type { Vector } from '@redrob-design/scene-graph/primitives'
 
 import type { DragState } from '#vue/shared/input/types'
 

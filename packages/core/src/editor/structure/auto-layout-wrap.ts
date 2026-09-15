@@ -1,5 +1,5 @@
-import type { LayoutMode, SceneNode } from '@open-pencil/scene-graph'
-import { computeAbsoluteBounds } from '@open-pencil/scene-graph/geometry'
+import type { LayoutMode, SceneNode } from '@redrob-design/scene-graph'
+import { computeAbsoluteBounds } from '@redrob-design/scene-graph/geometry'
 
 import type { EditorContext } from '#core/editor/types'
 import { computeLayout } from '#core/layout'

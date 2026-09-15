@@ -1,6 +1,6 @@
 ---
 title: Locale API
-description: Low-level Locale stores und Metadata aus @open-pencil/vue.
+description: Low-level Locale stores und Metadata aus @redrob-design/vue.
 ---
 
 # Locale API
@@ -24,7 +24,7 @@ import {
   setLocale,
   AVAILABLE_LOCALES,
   LOCALE_LABELS,
-} from '@open-pencil/vue'
+} from '@redrob-design/vue'
 ```
 
 ## Verhalten

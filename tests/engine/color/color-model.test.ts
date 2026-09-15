@@ -2,9 +2,9 @@ import { describe, expect, test } from 'bun:test'
 
 import { ref } from 'vue'
 
-import type { Color, OkHCLColor } from '@open-pencil/core'
-import type { ColorFieldFormat } from '@open-pencil/vue'
-import { BUILT_IN_COLOR_FORMATS, fromPercent, toPercent, useColorModel } from '@open-pencil/vue'
+import type { Color, OkHCLColor } from '@redrob-design/core'
+import type { ColorFieldFormat } from '@redrob-design/vue'
+import { BUILT_IN_COLOR_FORMATS, fromPercent, toPercent, useColorModel } from '@redrob-design/vue'
 
 function expectColorClose(actual: Color, expected: Color, precision = 5) {
   expect(actual.r).toBeCloseTo(expected.r, precision)

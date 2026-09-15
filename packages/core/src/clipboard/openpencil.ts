@@ -9,8 +9,8 @@ import {
   type SceneGraph,
   type SceneNode,
   type SerializedInstanceOverrideState
-} from '@open-pencil/scene-graph'
-import type { JSONObject } from '@open-pencil/scene-graph/primitives'
+} from '@redrob-design/scene-graph'
+import type { JSONObject } from '@redrob-design/scene-graph/primitives'
 
 import { decodeBase64, encodeBase64 } from '#core/bytes'
 
@@ -54,7 +54,7 @@ export function parseOpenPencilClipboard(html: string): OpenPencilClipboardData 
       return { nodes, images }
     }
   } catch (e) {
-    console.warn('Failed to parse OpenPencil clipboard data:', e)
+    console.warn('Failed to parse Redrob Design clipboard data:', e)
   }
   return null
 }

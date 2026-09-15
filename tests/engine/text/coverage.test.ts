@@ -1,11 +1,11 @@
 import { describe, expect, test } from 'bun:test'
 
-import { SceneGraph } from '@open-pencil/core'
+import { SceneGraph } from '@redrob-design/core'
 import {
   collectGraphFontRequirements,
   fontManager,
   textNeededFallbackScripts
-} from '@open-pencil/core/text'
+} from '@redrob-design/core/text'
 
 function pageId(graph: SceneGraph): string {
   return graph.getPages()[0].id

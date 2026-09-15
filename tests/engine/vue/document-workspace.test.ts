@@ -6,7 +6,7 @@ import {
   useDocumentWorkspace,
   type DocumentWorkspaceItem,
   type DocumentWorkspaceSource
-} from '@open-pencil/vue'
+} from '@redrob-design/vue'
 
 type HostNode = {
   children: HostNode[]

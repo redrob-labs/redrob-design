@@ -2,8 +2,8 @@ import { describe, expect, mock, test } from 'bun:test'
 
 import type { Canvas } from 'canvaskit-wasm'
 
-import { SceneGraph } from '@open-pencil/scene-graph'
-import type { BlendMode, Fill, SceneNode } from '@open-pencil/scene-graph'
+import { SceneGraph } from '@redrob-design/scene-graph'
+import type { BlendMode, Fill, SceneNode } from '@redrob-design/scene-graph'
 
 import { figmaBlendModeToSkia } from '#core/canvas/blend'
 import type { SkiaRenderer } from '#core/canvas/renderer'

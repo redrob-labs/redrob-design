@@ -5,18 +5,18 @@ description: Ejecutar JavaScript con una API compatible con plugins de Figma par
 
 # Scripting
 
-`openpencil eval` ejecuta JavaScript sobre un documento y proporciona un objeto global `figma`. Resulta útil para cambios por lotes, inspección, datos de prueba y automatización sin abrir la interfaz del editor.
+`redrob-design eval` ejecuta JavaScript sobre un documento y proporciona un objeto global `figma`. Resulta útil para cambios por lotes, inspección, datos de prueba y automatización sin abrir la interfaz del editor.
 
 ## Uso básico
 
 ```sh
-openpencil eval design.fig -c "return figma.currentPage.children.length"
+redrob-design eval design.fig -c "return figma.currentPage.children.length"
 ```
 
-`-c` acepta JavaScript. Si el código no empieza por `return`, OpenPencil lo ejecuta dentro de una función asíncrona y devuelve el resultado cuando existe.
+`-c` acepta JavaScript. Si el código no empieza por `return`, Redrob Design lo ejecuta dentro de una función asíncrona y devuelve el resultado cuando existe.
 
 ```sh
-openpencil eval design.fig -c "
+redrob-design eval design.fig -c "
   const frame = figma.createFrame()
   frame.name = 'Card'
   frame.resize(300, 200)
@@ -29,7 +29,7 @@ openpencil eval design.fig -c "
 ## Consultar objetos
 
 ```sh
-openpencil eval design.fig -c "
+redrob-design eval design.fig -c "
   return figma.currentPage
     .findAll((node) => node.type === 'FRAME' && node.name.includes('Button'))
     .map((button) => ({ id: button.id, name: button.name }))
@@ -41,13 +41,13 @@ openpencil eval design.fig -c "
 `--write` o `-w` sobrescribe el archivo de entrada. `--output` o `-o` crea otro.
 
 ```sh
-openpencil eval design.fig -c "figma.currentPage.name = 'Updated'" -o updated.fig
+redrob-design eval design.fig -c "figma.currentPage.name = 'Updated'" -o updated.fig
 ```
 
 ## Leer el script de stdin
 
 ```sh
-cat transform.js | openpencil eval design.fig --stdin --write
+cat transform.js | redrob-design eval design.fig --stdin --write
 ```
 
 ## Documento abierto
@@ -55,7 +55,7 @@ cat transform.js | openpencil eval design.fig --stdin --write
 Omite la ruta para ejecutar el script sobre el documento activo en la aplicación de escritorio:
 
 ```sh
-openpencil eval -c "return figma.currentPage.name"
+redrob-design eval -c "return figma.currentPage.name"
 ```
 
 ## Salida
@@ -64,7 +64,7 @@ En entornos no interactivos, `eval` usa JSON de forma predeterminada. `--json` l
 
 ## API compatible
 
-La API sigue el modelo de Figma Plugin API, pero actúa sobre SceneGraph y los formatos de OpenPencil.
+La API sigue el modelo de Figma Plugin API, pero actúa sobre SceneGraph y los formatos de Redrob Design.
 
 ### Documento y páginas
 

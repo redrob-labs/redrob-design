@@ -1,13 +1,13 @@
 import { promiseTimeout } from '@vueuse/core'
 
-import { AUTOMATION_HTTP_PORT } from '@open-pencil/core/constants'
-import { randomHex } from '@open-pencil/core/random'
-import type { DiscoveryInfo } from '@open-pencil/mcp/discovery'
+import { AUTOMATION_HTTP_PORT } from '@redrob-design/core/constants'
+import { randomHex } from '@redrob-design/core/random'
+import type { DiscoveryInfo } from '@redrob-design/mcp/discovery'
 import {
   parseToolDescriptor,
   serializeDisabledTools,
   type ToolDescriptor
-} from '@open-pencil/mcp/tools'
+} from '@redrob-design/mcp/tools'
 
 import { decodeTauriStderr } from '@/app/shell/ui'
 import { resolvePlatformCommand } from '@/app/tauri/command'
@@ -32,17 +32,17 @@ export interface AutomationServerHandle {
 }
 
 const DEV_AUTOMATION_HTTP_URL = import.meta.env.DEV
-  ? __OPENPENCIL_LOCAL_AUTOMATION_HTTP_URL__
+  ? __REDROB_LOCAL_AUTOMATION_HTTP_URL__
   : `http://127.0.0.1:${AUTOMATION_HTTP_PORT}`
 const DEV_AUTOMATION_AUTH_TOKEN =
-  import.meta.env.DEV && typeof __OPENPENCIL_LOCAL_AUTOMATION_TOKEN__ === 'string'
-    ? __OPENPENCIL_LOCAL_AUTOMATION_TOKEN__
+  import.meta.env.DEV && typeof __REDROB_LOCAL_AUTOMATION_TOKEN__ === 'string'
+    ? __REDROB_LOCAL_AUTOMATION_TOKEN__
     : null
 const APP_VERSION =
-  typeof __OPENPENCIL_APP_VERSION__ === 'string' ? __OPENPENCIL_APP_VERSION__ : '0.0.0-test'
+  typeof __REDROB_APP_VERSION__ === 'string' ? __REDROB_APP_VERSION__ : '0.0.0-test'
 const noop = () => undefined
 const MAX_STARTUP_STDERR_LENGTH = 8_192
-const MCP_EXECUTABLE = 'openpencil-mcp-http'
+const MCP_EXECUTABLE = 'redrob-design-mcp-http'
 // While no app is attached, the spawned server waits this long for a register
 // or reconnect before closing itself and removing its discovery file. This
 // prevents a server that outlives a crashed/reloaded app from squatting the
@@ -58,7 +58,7 @@ function toError(error: unknown): Error {
 
 function missingMCPError(): Error {
   return new Error(
-    `MCP automation is not installed. Install @open-pencil/mcp@${APP_VERSION} globally with your package manager, then restart OpenPencil.`
+    `MCP automation is not installed. Install @redrob-design/mcp@${APP_VERSION} globally with your package manager, then restart Redrob Design.`
   )
 }
 
@@ -112,16 +112,16 @@ async function computeExpectedDiscoveryPath(): Promise<string> {
   // matches the server's path in the common case. When it doesn't (custom
   // LOCALAPPDATA), resolveDiscoveryPath() falls back to the /health endpoint.
   if (isMac) {
-    return join(home, 'Library', 'Application Support', 'OpenPencil', 'mcp.json')
+    return join(home, 'Library', 'Application Support', 'RedrobDesign', 'mcp.json')
   }
   if (isWindows) {
-    return join(home, 'AppData', 'Local', 'OpenPencil', 'mcp.json')
+    return join(home, 'AppData', 'Local', 'RedrobDesign', 'mcp.json')
   }
-  // Linux: $XDG_RUNTIME_DIR/openpencil/mcp.json or ~/.openpencil/mcp.json.
+  // Linux: $XDG_RUNTIME_DIR/redrob-design/mcp.json or ~/.redrob-design/mcp.json.
   // In Tauri we don't have direct env access, so we use the home-directory
   // fallback. The server may use XDG_RUNTIME_DIR if set — when the paths
   // differ, resolveDiscoveryPath() falls back to the /health endpoint.
-  return join(home, '.openpencil', 'mcp.json')
+  return join(home, '.redrob-design', 'mcp.json')
 }
 
 /**
@@ -260,10 +260,10 @@ function assertCompatibleMCPVersion(health: AutomationHealth): void {
   if (runningMajorMinor === oursMajorMinor) return
   const runningVersion = health.version ? `v${health.version}` : 'an older version'
   const updateHint = health.installCommand
-    ? `Run: ${health.installCommand}, then restart OpenPencil.`
-    : `Update the global @open-pencil/mcp package to v${APP_VERSION} with your package manager, then restart OpenPencil.`
+    ? `Run: ${health.installCommand}, then restart Redrob Design.`
+    : `Update the global @redrob-design/mcp package to v${APP_VERSION} with your package manager, then restart Redrob Design.`
   throw new Error(
-    `OpenPencil desktop v${APP_VERSION} requires @open-pencil/mcp v${oursMajorMinor}.x ` +
+    `Redrob Design desktop v${APP_VERSION} requires @redrob-design/mcp v${oursMajorMinor}.x ` +
       `(major.minor compatibility), but the running MCP server is ${runningVersion}. ${updateHint}`
   )
 }

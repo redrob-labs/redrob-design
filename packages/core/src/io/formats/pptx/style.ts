@@ -1,6 +1,6 @@
 import type PptxGenJS from 'pptxgenjs'
 
-import type { Color, Fill, SceneNode, Stroke } from '@open-pencil/scene-graph'
+import type { Color, Fill, SceneNode, Stroke } from '@redrob-design/scene-graph'
 
 import { colorToHex } from '#core/color'
 

@@ -4,9 +4,9 @@ import {
   normalizeVectorNetwork,
   transformVectorNetwork,
   validateVectorNetwork
-} from '@open-pencil/scene-graph'
-import type { VectorNetwork } from '@open-pencil/scene-graph'
-import { parseSVGPath } from '@open-pencil/scene-graph/parse-path'
+} from '@redrob-design/scene-graph'
+import type { VectorNetwork } from '@redrob-design/scene-graph'
+import { parseSVGPath } from '@redrob-design/scene-graph/parse-path'
 
 import { parseColor } from '#core/color'
 import { defineTool, nodeSummary } from '#core/tools/schema'

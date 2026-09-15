@@ -17,7 +17,7 @@ description: "Реактивные сведения о выделении: ос�
 ## Использование
 
 ```ts
-import { useSelectionState } from '@open-pencil/vue'
+import { useSelectionState } from '@redrob-design/vue'
 
 const selection = useSelectionState()
 ```
@@ -26,7 +26,7 @@ const selection = useSelectionState()
 
 ```vue
 <script setup lang="ts">
-import { useSelectionState } from '@open-pencil/vue'
+import { useSelectionState } from '@redrob-design/vue'
 
 const { hasSelection, selectedCount, isInstance } = useSelectionState()
 </script>

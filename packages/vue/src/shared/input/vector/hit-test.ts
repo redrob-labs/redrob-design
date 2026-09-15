@@ -1,6 +1,6 @@
-import type { Editor } from '@open-pencil/core/editor'
-import { vectorHandleParts } from '@open-pencil/core/vector'
-import type { VectorSegment, VectorVertex } from '@open-pencil/scene-graph'
+import type { Editor } from '@redrob-design/core/editor'
+import { vectorHandleParts } from '@redrob-design/core/vector'
+import type { VectorSegment, VectorVertex } from '@redrob-design/scene-graph'
 
 export type NodeEditState = {
   nodeId: string

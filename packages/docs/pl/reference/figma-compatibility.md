@@ -1,6 +1,6 @@
 # Zgodność z Figmą
 
-Porównanie funkcji Figma Design z obecnymi możliwościami OpenPencil.
+Porównanie funkcji Figma Design z obecnymi możliwościami Redrob Design.
 
 ::: tip Stan
 ✅ Obsługiwane — działa w pełnym zakresie · 🟡 Częściowo — podstawowe działanie istnieje, ale brakuje części funkcji · 🔲 Brak

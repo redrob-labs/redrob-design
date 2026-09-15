@@ -1,8 +1,8 @@
 import { describe, expect, test } from 'bun:test'
 
-import { createEditor } from '@open-pencil/core/editor'
-import { effectiveFigmaRawNodeFields } from '@open-pencil/fig'
-import { getSharedStyles, type Effect, type Fill, type SceneNode } from '@open-pencil/scene-graph'
+import { createEditor } from '@redrob-design/core/editor'
+import { effectiveFigmaRawNodeFields } from '@redrob-design/fig'
+import { getSharedStyles, type Effect, type Fill, type SceneNode } from '@redrob-design/scene-graph'
 
 import { sharedStyleDetachPatch, sharedStylePatch } from '#vue/controls/shared-style/model'
 

@@ -1,4 +1,4 @@
-import type { SceneGraph, SceneNode } from '@open-pencil/scene-graph'
+import type { SceneGraph, SceneNode } from '@redrob-design/scene-graph'
 
 import { DEFAULT_FONT_FAMILY } from '#core/constants'
 import type { FontLoadedSource } from '#core/text/font/sources'

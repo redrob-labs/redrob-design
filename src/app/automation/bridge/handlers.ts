@@ -1,4 +1,4 @@
-import type { FigmaAPI } from '@open-pencil/core/figma-api'
+import type { FigmaAPI } from '@redrob-design/core/figma-api'
 
 import { createAutomationEvalHandler } from '@/app/automation/bridge/eval-handler'
 import { handleExport, handleExportJSX } from '@/app/automation/bridge/export-handlers'

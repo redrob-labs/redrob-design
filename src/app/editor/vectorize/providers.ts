@@ -1,5 +1,5 @@
-import { encodeBase64 } from '@open-pencil/core/bytes'
-import { IS_TAURI } from '@open-pencil/core/constants'
+import { encodeBase64 } from '@redrob-design/core/bytes'
+import { IS_TAURI } from '@redrob-design/core/constants'
 
 import { tauriFetch } from '@/app/tauri/http'
 

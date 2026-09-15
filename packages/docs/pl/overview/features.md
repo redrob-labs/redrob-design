@@ -2,9 +2,9 @@
 
 ## Pliki Figma
 
-OpenPencil otwiera i zapisuje pliki `.fig` bez wcześniejszej konwersji. Import i eksport korzystają z binarnego kodeka Kiwi używanego przez Figmę: 194 definicje schematu i około 390 pól dla każdego obiektu. Zapisz: <kbd>⌘</kbd><kbd>S</kbd>; Zapisz jako: <kbd>⇧</kbd><kbd>⌘</kbd><kbd>S</kbd>.
+Redrob Design otwiera i zapisuje pliki `.fig` bez wcześniejszej konwersji. Import i eksport korzystają z binarnego kodeka Kiwi używanego przez Figmę: 194 definicje schematu i około 390 pól dla każdego obiektu. Zapisz: <kbd>⌘</kbd><kbd>S</kbd>; Zapisz jako: <kbd>⇧</kbd><kbd>⌘</kbd><kbd>S</kbd>.
 
-**Kopiowanie między Figmą a OpenPencil:** skopiuj obiekty w jednym edytorze i wklej w drugim. Zachowywane są zalewy, obwiednie, automatyczny układ, tekst, efekty, promienie narożników i sieci wektorowe. Wymiana działa w obie strony.
+**Kopiowanie między Figmą a Redrob Design:** skopiuj obiekty w jednym edytorze i wklej w drugim. Zachowywane są zalewy, obwiednie, automatyczny układ, tekst, efekty, promienie narożników i sieci wektorowe. Wymiana działa w obie strony.
 
 ## Rysowanie i edycja
 
@@ -31,7 +31,7 @@ Zawartość kart „Projekt”, „Kod” i „AI” zależy od zaznaczenia.
 
 ## Renderowanie
 
-OpenPencil używa Skia przez CanvasKit WASM — tego samego silnika graficznego co Figma:
+Redrob Design używa Skia przez CanvasKit WASM — tego samego silnika graficznego co Figma:
 
 - gradienty liniowe, radialne, kątowe i diamentowe;
 - zalewy obrazami z różnymi trybami skalowania;
@@ -58,7 +58,7 @@ Strony można dodawać, usuwać i przemianowywać; każda zachowuje własne poł
 - **Kopiuj jako:** tekst, SVG, PNG albo JSX przez menu kontekstowe.
 
 ```sh
-openpencil export design.fig -f jsx --style tailwind
+redrob-design export design.fig -f jsx --style tailwind
 ```
 
 ## Czat AI
@@ -72,21 +72,21 @@ Wywołania narzędzi pojawiają się na zwijanej osi czasu. Do kontroli wizualne
 Claude Code, Cursor, Windsurf i inni klienci MCP mogą odczytywać i zmieniać `.fig` bez interfejsu. Dostępnych jest ponad 90 narzędzi oraz transporty stdio i HTTP.
 
 ```sh
-npm install -g @open-pencil/mcp
+npm install -g @redrob-design/mcp
 ```
 
 ## CLI
 
 ```sh
-openpencil tree design.fig              # Drzewo obiektów
-openpencil find design.fig --type TEXT  # Wyszukiwanie
-openpencil export design.fig -f png     # Eksport
-openpencil analyze colors design.fig    # Analiza kolorów
-openpencil analyze clusters design.fig  # Powtarzające się struktury
-openpencil eval design.fig -c "..."     # Figma Plugin API
+redrob-design tree design.fig              # Drzewo obiektów
+redrob-design find design.fig --type TEXT  # Wyszukiwanie
+redrob-design export design.fig -f png     # Eksport
+redrob-design analyze colors design.fig    # Analiza kolorów
+redrob-design analyze clusters design.fig  # Powtarzające się struktury
+redrob-design eval design.fig -c "..."     # Figma Plugin API
 ```
 
-Wszystkie polecenia obsługują `--json`. Instalacja: `npm install -g @open-pencil/cli` albo `bun add -g @open-pencil/cli`.
+Wszystkie polecenia obsługują `--json`. Instalacja: `npm install -g @redrob-design/cli` albo `bun add -g @redrob-design/cli`.
 
 ## Współpraca w czasie rzeczywistym
 
@@ -96,8 +96,8 @@ Połączenie równorzędne WebRTC nie wymaga centralnego serwera. Udostępnij od
 
 **Komputer:** Tauri v2, około 7 MB, dla macOS, Windows i Linux, z menu systemowymi, pracą bez sieci i automatycznym zapisem.
 
-**Internet:** [app.openpencil.dev](https://app.openpencil.dev), możliwość instalacji jako PWA i interfejs dotykowy.
+**Internet:** [app.redrob.design](https://app.redrob.design), możliwość instalacji jako PWA i interfejs dotykowy.
 
 ## Zastępcze ładowanie Google Fonts
 
-Jeśli czcionka nie jest dostępna lokalnie, OpenPencil automatycznie pobiera ją z Google Fonts. Ręczna instalacja nie jest potrzebna.
+Jeśli czcionka nie jest dostępna lokalnie, Redrob Design automatycznie pobiera ją z Google Fonts. Ręczna instalacja nie jest potrzebna.

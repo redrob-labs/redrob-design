@@ -1,6 +1,6 @@
-import type { Editor } from '@open-pencil/core/editor'
-import { cloneVectorNetwork, vectorNetworksEqual } from '@open-pencil/scene-graph'
-import type { VectorNetwork } from '@open-pencil/scene-graph'
+import type { Editor } from '@redrob-design/core/editor'
+import { cloneVectorNetwork, vectorNetworksEqual } from '@redrob-design/scene-graph'
+import type { VectorNetwork } from '@redrob-design/scene-graph'
 
 import type { NodeEditState, VectorEditState } from './types'
 

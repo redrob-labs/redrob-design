@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'bun:test'
 import { readFileSync } from 'node:fs'
 
-import type { Vector } from '@open-pencil/scene-graph/primitives'
+import type { Vector } from '@redrob-design/scene-graph/primitives'
 
 interface PatternOracleFill {
   type: string

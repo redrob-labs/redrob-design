@@ -1,5 +1,5 @@
-import { readFigFile } from '@open-pencil/core'
-import type { GridTrack, SceneGraph, SceneNode } from '@open-pencil/core'
+import { readFigFile } from '@redrob-design/core'
+import type { GridTrack, SceneGraph, SceneNode } from '@redrob-design/core'
 
 export function pageId(graph: SceneGraph) {
   return graph.getPages()[0].id

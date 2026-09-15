@@ -1,6 +1,6 @@
 # Compatibilité avec Figma
 
-Comparaison entre les fonctions de Figma Design et l’état actuel d’OpenPencil.
+Comparaison entre les fonctions de Figma Design et l’état actuel d’Redrob Design.
 
 ::: tip État
 ✅ Pris en charge — fonctionne de bout en bout · 🟡 Partiel — le comportement principal existe, mais certaines fonctions manquent · 🔲 Non implémenté
@@ -95,7 +95,7 @@ Connexions, déclencheurs, actions, animations, superpositions, défilement, par
 | Extraits de code | 🟡 | JSX avec coloration et copie ; pas de Swift/Kotlin |
 | Tailwind CSS v4 | ✅ | HTML avec classes utilitaires depuis Code, la CLI ou l’API |
 | Figma pour VS Code | 🔲 | Pas d’intégration à l’extension de l’éditeur |
-| Serveur MCP | ✅ | `@open-pencil/mcp` avec stdio et HTTP ; 90 outils au total |
+| Serveur MCP | ✅ | `@redrob-design/mcp` avec stdio et HTTP ; 90 outils au total |
 | CLI | ✅ | `info`, `tree`, `find`, `export`, `analyze`, `node`, `pages`, `variables` et `eval` |
 
 ## Figma Draw

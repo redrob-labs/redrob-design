@@ -1,9 +1,9 @@
 import { readFile } from 'node:fs/promises'
 
-import { BUILTIN_IO_FORMATS, IORegistry, initCanvasKit } from '@open-pencil/core/io'
-import { populateAllLazyFigImportRoots, populateLazyFigImportRoots } from '@open-pencil/core/kiwi'
-import { computeAllLayouts } from '@open-pencil/core/layout'
-import type { SceneGraph } from '@open-pencil/scene-graph'
+import { BUILTIN_IO_FORMATS, IORegistry, initCanvasKit } from '@redrob-design/core/io'
+import { populateAllLazyFigImportRoots, populateLazyFigImportRoots } from '@redrob-design/core/kiwi'
+import { computeAllLayouts } from '@redrob-design/core/layout'
+import type { SceneGraph } from '@redrob-design/scene-graph'
 
 export { initCanvasKit }
 

@@ -44,7 +44,7 @@
         "paths": [
           {
             "name": "@/types",
-            "message": "Import types directly from @open-pencil/core."
+            "message": "Import types directly from @redrob-design/core."
           },
           {
             "name": "node:module",
@@ -59,7 +59,7 @@
             "group": [
               "@/engine/*"
             ],
-            "message": "Import from @open-pencil/core unless the module adds platform-specific logic.",
+            "message": "Import from @redrob-design/core unless the module adds platform-specific logic.",
             "allowImportNames": [
               "loadFont",
               "listFamilies",
@@ -72,7 +72,7 @@
               "../../packages/*",
               "../../../packages/*"
             ],
-            "message": "Use the workspace package name (e.g. @open-pencil/core) instead of relative paths to packages/."
+            "message": "Use the workspace package name (e.g. @redrob-design/core) instead of relative paths to packages/."
           }
         ]
       }
@@ -516,6 +516,34 @@
       ],
       "rules": {
         "unicorn/require-post-message-target-origin": "off"
+      }
+    },
+    {
+      "files": [
+        "packages/brand/src/**"
+      ],
+      "rules": {
+        "open-pencil/no-mixed-case-acronym-identifiers": "off",
+        "open-pencil/no-hardcoded-color-constants": "off",
+        "open-pencil/no-broad-double-cast": "off",
+        "open-pencil/no-broad-unknown-type-assertions": "off",
+        "open-pencil/no-useless-pass-through-wrappers": "off",
+        "unicorn/consistent-existence-index-check": "off",
+        "unicorn/prefer-string-starts-ends-with": "off",
+        "typescript/no-unnecessary-type-assertion": "off",
+        "typescript/no-unnecessary-condition": "off",
+        "typescript/return-await": "off",
+        "no-empty-function": "off",
+        "complexity": "off"
+      }
+    },
+    {
+      "files": [
+        "src/app/design-system/**",
+        "src/app/i18n/design-tokens/**"
+      ],
+      "rules": {
+        "open-pencil/no-mixed-case-acronym-identifiers": "off"
       }
     }
   ],

@@ -1,4 +1,4 @@
-import { generateId } from '@open-pencil/scene-graph'
+import { generateId } from '@redrob-design/scene-graph'
 import type {
   Color,
   Effect,
@@ -19,9 +19,9 @@ import type {
   VariableCollectionMode,
   VariableType,
   VariableValue
-} from '@open-pencil/scene-graph'
-import { BLACK } from '@open-pencil/scene-graph/constants'
-import type { Vector } from '@open-pencil/scene-graph/primitives'
+} from '@redrob-design/scene-graph'
+import { BLACK } from '@redrob-design/scene-graph/constants'
+import type { Vector } from '@redrob-design/scene-graph/primitives'
 
 import { parseColor } from './color'
 

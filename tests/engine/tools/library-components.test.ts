@@ -1,9 +1,9 @@
 import { describe, expect, test } from 'bun:test'
 
-import { FigmaAPI } from '@open-pencil/core/figma-api'
-import { registerComponentCatalog } from '@open-pencil/core/tools'
-import { getComponents, insertLibraryComponent, listLibraries } from '@open-pencil/core/tools/read'
-import { SceneGraph } from '@open-pencil/scene-graph'
+import { FigmaAPI } from '@redrob-design/core/figma-api'
+import { registerComponentCatalog } from '@redrob-design/core/tools'
+import { getComponents, insertLibraryComponent, listLibraries } from '@redrob-design/core/tools/read'
+import { SceneGraph } from '@redrob-design/scene-graph'
 
 function catalog() {
   return {

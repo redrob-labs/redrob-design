@@ -8,7 +8,7 @@ import { toast } from '@/app/shell/ui'
 import { useToastUI } from '@/components/ui/toast'
 
 import type { ToastVariant } from '@/components/ui/toast'
-import { useI18n } from '@open-pencil/vue'
+import { useI18n } from '@redrob-design/vue'
 
 const { copy, copied } = useClipboard({ copiedDuring: 1500 })
 const { common, settings } = useI18n()

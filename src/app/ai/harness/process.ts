@@ -1,4 +1,4 @@
-import type { HarnessSidecarMessage } from '@open-pencil/harness'
+import type { HarnessSidecarMessage } from '@redrob-design/harness'
 
 import { resolvePlatformCommand } from '@/app/tauri/command'
 
@@ -18,7 +18,7 @@ export async function spawnHarnessProcess(options: {
   onUnexpectedClose: () => void
 }): Promise<HarnessProcess> {
   const { Command } = await import('@tauri-apps/plugin-shell')
-  const resolved = resolvePlatformCommand('openpencil-harness')
+  const resolved = resolvePlatformCommand('redrob-design-harness')
   const command = Command.create(resolved.command, resolved.args, {
     encoding: 'raw',
     env: options.environment

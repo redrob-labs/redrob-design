@@ -1,6 +1,6 @@
-import type { SceneGraph, SceneNode } from '@open-pencil/scene-graph'
-import { copyFills } from '@open-pencil/scene-graph/copy'
-import { parseSVGPath } from '@open-pencil/scene-graph/parse-path'
+import type { SceneGraph, SceneNode } from '@redrob-design/scene-graph'
+import { copyFills } from '@redrob-design/scene-graph/copy'
+import { parseSVGPath } from '@redrob-design/scene-graph/parse-path'
 
 import { makeBooleanSourcePath, makeStrokeOutlinePath, nodePathTransform } from './boolean'
 import type { SkiaRenderer } from './renderer'

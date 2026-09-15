@@ -1,4 +1,4 @@
-import type { LayoutMode, SceneGraph, SceneNode } from '@open-pencil/scene-graph'
+import type { LayoutMode, SceneGraph, SceneNode } from '@redrob-design/scene-graph'
 
 import {
   raw,

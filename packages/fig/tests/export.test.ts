@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'bun:test'
 
-import { SceneGraph } from '@open-pencil/scene-graph'
-import type { GUID } from '@open-pencil/scene-graph/primitives'
+import { SceneGraph } from '@redrob-design/scene-graph'
+import type { GUID } from '@redrob-design/scene-graph/primitives'
 
 import {
   buildComponentPropIndex,
@@ -11,7 +11,7 @@ import {
   type FigNodeChangeExportRuntime
 } from '../src/node-change'
 
-describe('@open-pencil/fig SceneGraph export policy', () => {
+describe('@redrob-design/fig SceneGraph export policy', () => {
   test('maps node types and sibling positions deterministically', () => {
     expect(mapToFigmaType('COMPONENT')).toBe('SYMBOL')
     expect([0, 93, 94, 188].map(fractionalPosition)).toEqual(['!', '~', '~!', '~~!'])

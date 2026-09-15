@@ -5,7 +5,7 @@ import { join } from 'node:path'
 
 import type { WebSocket } from 'ws'
 
-import { SceneGraph } from '@open-pencil/scene-graph'
+import { SceneGraph } from '@redrob-design/scene-graph'
 
 import { startServer, type ServerHandle } from '#mcp/server'
 
@@ -303,7 +303,7 @@ describe('MCP WebSocket stdio bridge routing', () => {
       expect(response.type).toBe('response')
       expect(response.id).toBe('stdio-no-app')
       expect(response.ok).toBe(false)
-      expect(response.error).toContain('OpenPencil app is not connected')
+      expect(response.error).toContain('Redrob Design app is not connected')
     } finally {
       clientWs?.close()
       await handle.close()

@@ -2,7 +2,7 @@ import { describe, expect, test } from 'bun:test'
 
 import { reactive } from 'vue'
 
-import { createDefaultEditorState } from '@open-pencil/core/editor'
+import { createDefaultEditorState } from '@redrob-design/core/editor'
 
 import { createAutosave } from '@/app/document/autosave/create'
 

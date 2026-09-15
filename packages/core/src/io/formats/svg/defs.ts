@@ -1,5 +1,5 @@
-import type { Effect, Fill, SceneGraph, SceneNode } from '@open-pencil/scene-graph'
-import type { Color } from '@open-pencil/scene-graph/primitives'
+import type { Effect, Fill, SceneGraph, SceneNode } from '@redrob-design/scene-graph'
+import type { Color } from '@redrob-design/scene-graph/primitives'
 
 import { encodeBase64 } from '#core/bytes'
 import { colorToHex } from '#core/color'

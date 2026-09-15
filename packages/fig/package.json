@@ -1,5 +1,5 @@
 {
-  "name": "@open-pencil/fig",
+  "name": "@redrob-design/fig",
   "version": "0.14.0",
   "license": "MIT",
   "type": "module",
@@ -48,8 +48,8 @@
     "provenance": true
   },
   "peerDependencies": {
-    "@open-pencil/kiwi": "workspace:*",
-    "@open-pencil/scene-graph": "workspace:*"
+    "@redrob-design/kiwi": "workspace:*",
+    "@redrob-design/scene-graph": "workspace:*"
   },
   "dependencies": {
     "es-toolkit": "^1.51.0",

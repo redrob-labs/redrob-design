@@ -7,7 +7,7 @@ import {
   parseFigFile,
   SceneGraph,
   type Color
-} from '@open-pencil/core'
+} from '@redrob-design/core'
 
 import { expectDefined } from '#tests/helpers/assert'
 import { parseFixture } from '#tests/helpers/fig-fixtures'

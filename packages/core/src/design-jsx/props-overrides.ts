@@ -7,8 +7,8 @@ import type {
   LayoutMode,
   SceneNode,
   Stroke
-} from '@open-pencil/scene-graph'
-import type { Color, JSONObject } from '@open-pencil/scene-graph/primitives'
+} from '@redrob-design/scene-graph'
+import type { Color, JSONObject } from '@redrob-design/scene-graph/primitives'
 
 import { colorToFill, parseColor } from '#core/color'
 import { TRANSPARENT } from '#core/constants'

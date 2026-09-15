@@ -6,11 +6,11 @@ import type {
   SceneNode,
   VectorSegment,
   VectorVertex
-} from '@open-pencil/scene-graph'
-import type { CanvasGuide } from '@open-pencil/scene-graph/guides'
-import type { Color, Rect, Vector } from '@open-pencil/scene-graph/primitives'
-import type { SnapGuide } from '@open-pencil/scene-graph/snap'
-import type { UndoManager } from '@open-pencil/scene-graph/undo'
+} from '@redrob-design/scene-graph'
+import type { CanvasGuide } from '@redrob-design/scene-graph/guides'
+import type { Color, Rect, Vector } from '@redrob-design/scene-graph/primitives'
+import type { SnapGuide } from '@redrob-design/scene-graph/snap'
+import type { UndoManager } from '@redrob-design/scene-graph/undo'
 
 import type { GuideOverlayState } from '#core/canvas/guides/types'
 import type { RulerTheme, SkiaRenderer } from '#core/canvas/renderer'

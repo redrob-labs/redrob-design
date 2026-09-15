@@ -7,7 +7,7 @@ import { normalizedFilename } from '#lint/support/context.ts'
 import type { RuleDefinition } from '#lint/support/types.ts'
 import type { TSESTree } from '@typescript-eslint/utils'
 
-import type { Color } from '@open-pencil/scene-graph'
+import type { Color } from '@redrob-design/scene-graph'
 
 const noInlineNamedTypes = {
   meta: {
@@ -68,7 +68,7 @@ const noInlineNamedTypes = {
         if (namedType) {
           context.report({
             node,
-            message: `Use '${namedType}' instead of inline type literal. Import from '@open-pencil/core'.`
+            message: `Use '${namedType}' instead of inline type literal. Import from '@redrob-design/core'.`
           })
         }
       }
@@ -106,7 +106,7 @@ const noStructuredCloneSceneArrays = {
           if (props.has(arg.property.name)) {
             context.report({
               node,
-              message: `Use the typed copy helper instead of structuredClone for '${arg.property.name}'. Import from '@open-pencil/core'.`
+              message: `Use the typed copy helper instead of structuredClone for '${arg.property.name}'. Import from '@redrob-design/core'.`
             })
           }
         }

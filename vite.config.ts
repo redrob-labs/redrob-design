@@ -10,10 +10,10 @@ import { defineConfig } from 'vite'
 import packageJson from './package.json'
 import { AUTOMATION_HTTP_PORT } from './packages/core/src/constants'
 import { devAutomationRoute } from './src/app/automation/bridge/portless-route'
-import { createOpenPencilAliases } from './vite/aliases'
-import { localAutomationToken, openPencilAutomationPlugin } from './vite/automation'
+import { createRedrobAliases } from './vite/aliases'
+import { localAutomationToken, redrobAutomationPlugin } from './vite/automation'
 import { copyCanvasKitAssetsPlugin } from './vite/canvaskit-assets'
-import { openPencilPwaPlugin } from './vite/pwa'
+import { redrobPwaPlugin } from './vite/pwa'
 import { rawMarkdownPlugin } from './vite/raw-markdown'
 import { createDevServerOptions } from './vite/server'
 
@@ -22,13 +22,13 @@ const automationRoute = devAutomationRoute(process.env.PORTLESS_URL, AUTOMATION_
 
 export default defineConfig(async ({ command }) => ({
   resolve: {
-    alias: createOpenPencilAliases(__dirname)
+    alias: createRedrobAliases(__dirname)
   },
   define: {
-    __OPENPENCIL_APP_VERSION__: JSON.stringify(packageJson.version),
-    __OPENPENCIL_LOCAL_AUTOMATION_TOKEN__: JSON.stringify(localAutomationToken(command)),
-    __OPENPENCIL_LOCAL_AUTOMATION_URL__: JSON.stringify(automationRoute.browserURL),
-    __OPENPENCIL_LOCAL_AUTOMATION_HTTP_URL__: JSON.stringify(
+    __REDROB_APP_VERSION__: JSON.stringify(packageJson.version),
+    __REDROB_LOCAL_AUTOMATION_TOKEN__: JSON.stringify(localAutomationToken(command)),
+    __REDROB_LOCAL_AUTOMATION_URL__: JSON.stringify(automationRoute.browserURL),
+    __REDROB_LOCAL_AUTOMATION_HTTP_URL__: JSON.stringify(
       automationRoute.browserURL.replace(/^ws/, 'http')
     )
   },
@@ -38,9 +38,9 @@ export default defineConfig(async ({ command }) => ({
     tailwindcss(),
     Icons({ compiler: 'vue3' }),
     Components({ resolvers: [IconsResolver({ prefix: 'icon' })] }),
-    openPencilAutomationPlugin(command, host),
+    redrobAutomationPlugin(command, host),
     vue(),
-    openPencilPwaPlugin()
+    redrobPwaPlugin()
   ],
   clearScreen: false,
   build: {

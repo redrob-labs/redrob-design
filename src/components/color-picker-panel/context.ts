@@ -1,9 +1,9 @@
 import { computed, inject, provide, proxyRefs } from 'vue'
 import type { InjectionKey, ShallowUnwrapRef } from 'vue'
 
-import type { Color } from '@open-pencil/scene-graph/primitives'
-import { useColorModel, useI18n } from '@open-pencil/vue'
-import type { ColorFieldFormat, OkHCLControls } from '@open-pencil/vue'
+import type { Color } from '@redrob-design/scene-graph/primitives'
+import { useColorModel, useI18n } from '@redrob-design/vue'
+import type { ColorFieldFormat, OkHCLControls } from '@redrob-design/vue'
 
 interface ColorPanelProps {
   color: Color

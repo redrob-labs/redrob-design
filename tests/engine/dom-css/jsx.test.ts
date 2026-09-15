@@ -6,11 +6,11 @@ import {
   jsxToDesignDocument,
   jsxToSceneGraph,
   tailwindJSXToSceneGraph
-} from '@open-pencil/dom-css'
+} from '@redrob-design/dom-css'
 
 import { tailwindCardClasses } from '#tests/helpers/dom-css'
 
-describe('@open-pencil/dom-css JSX authoring', () => {
+describe('@redrob-design/dom-css JSX authoring', () => {
   it('converts JSX runtime output into DesignDOM', async () => {
     const document = await jsxToDesignDocument(
       jsx('article', {

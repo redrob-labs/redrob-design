@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { Markdown } from 'vue-stream-markdown'
 
-import { IS_BROWSER } from '@open-pencil/core/constants'
+import { IS_BROWSER } from '@redrob-design/core/constants'
 
 import { createMarkdownHardenOptions, markdownExtensions } from '@/app/shell/markdown/config'
 import { markdownRenderKey, type MarkdownSurface } from '@/app/shell/markdown/state'

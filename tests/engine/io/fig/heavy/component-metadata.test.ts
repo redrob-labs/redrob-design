@@ -1,6 +1,6 @@
 import { expect, setDefaultTimeout, test } from 'bun:test'
 
-import { parseFigBuffer } from '@open-pencil/fig'
+import { parseFigBuffer } from '@redrob-design/fig'
 
 import { importNodeChanges } from '#core/kiwi'
 

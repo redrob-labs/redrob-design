@@ -1,4 +1,4 @@
-import type { VectorNetwork, VectorSegment, VectorVertex } from '@open-pencil/core'
+import type { VectorNetwork, VectorSegment, VectorVertex } from '@redrob-design/core'
 
 export function vectorVertex(x: number, y: number): VectorVertex {
   return { x, y, handleMirroring: 'NONE' }

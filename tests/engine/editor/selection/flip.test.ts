@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test'
 
-import { SceneGraph } from '@open-pencil/core'
+import { SceneGraph } from '@redrob-design/core'
 
 import { expectDefined, getNodeOrThrow } from '#tests/helpers/assert'
 import { createRect, firstPageId } from '#tests/helpers/scene'
@@ -41,7 +41,7 @@ describe('flip', () => {
 
 describe('flip roundtrip via kiwi', () => {
   async function roundtrip(graph: SceneGraph) {
-    const { initCodec } = await import('@open-pencil/kiwi/fig/codec')
+    const { initCodec } = await import('@redrob-design/kiwi/fig/codec')
     const { parseFigFile } = await import('#core/kiwi/fig/file')
     const { exportFigFile } = await import('#core/io/formats/fig/export')
     await initCodec()

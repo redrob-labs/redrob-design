@@ -1,6 +1,6 @@
 import { useFileDialog } from '@vueuse/core'
 
-import { BUILTIN_IO_FORMATS, IORegistry } from '@open-pencil/core/io'
+import { BUILTIN_IO_FORMATS, IORegistry } from '@redrob-design/core/io'
 
 import { setOpenPencilOpenFileHandler } from '@/app/browser-bridge'
 import { resolveBrowserFileURL } from '@/app/document/io/browser'

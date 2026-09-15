@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'bun:test'
 
-import type { Fill, Stroke, Effect, StyleRun, GeometryPath } from '@open-pencil/core'
+import type { Fill, Stroke, Effect, StyleRun, GeometryPath } from '@redrob-design/core'
 import {
   copyFill,
   copyFills,
@@ -9,7 +9,7 @@ import {
   copyStyleRun,
   copyGeometryPaths,
   scaleGeometryPaths
-} from '@open-pencil/scene-graph/copy'
+} from '@redrob-design/scene-graph/copy'
 
 import { expectDefined } from '#tests/helpers/assert'
 

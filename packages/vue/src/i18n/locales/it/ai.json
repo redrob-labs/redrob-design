@@ -97,7 +97,7 @@
   "chatAuthenticationFailed": "La chiave API del provider non è valida o è scaduta. Sostituiscila nelle Impostazioni.",
   "chatForbidden": "Questa chiave API non può usare il modello selezionato. Controlla l’accesso al modello.",
   "chatModelNotFound": "Il modello selezionato non è disponibile. Scegli un altro modello nelle Impostazioni.",
-  "chatNetworkFailed": "OpenPencil non ha raggiunto il provider. Controlla connessione ed endpoint.",
+  "chatNetworkFailed": "Redrob Design non ha raggiunto il provider. Controlla connessione ed endpoint.",
   "chatRateLimited": "È stato raggiunto il limite di richieste del provider. Attendi e riprova.",
   "openProviderSettingsAction": "Apri impostazioni",
   "chatInsufficientCredit": "L’account del provider non dispone di credito o quota sufficiente. Ricaricalo e riprova.",

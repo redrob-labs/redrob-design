@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed, reactive, ref, watch } from 'vue'
 import { CollapsibleContent, CollapsibleRoot, CollapsibleTrigger } from 'reka-ui'
-import { useI18n } from '@open-pencil/vue'
+import { useI18n } from '@redrob-design/vue'
 
-import { ACP_AGENTS, AI_PROVIDERS, type AIProviderID } from '@open-pencil/core/constants'
+import { ACP_AGENTS, AI_PROVIDERS, type AIProviderID } from '@redrob-design/core/constants'
 
 import { refreshAIProviderStatus } from '@/app/ai/chat/storage'
 import { resolveModelsDevModel } from '@/app/ai/models/catalog'

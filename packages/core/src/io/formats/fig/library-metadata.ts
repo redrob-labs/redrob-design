@@ -2,9 +2,9 @@ import {
   ENABLED_LIBRARIES_PLUGIN_KEY,
   mergePluginData,
   OPEN_PENCIL_PLUGIN_ID
-} from '@open-pencil/fig/node-change'
-import type { KiwiNodeChange } from '@open-pencil/fig/node-change'
-import type { SceneGraph } from '@open-pencil/scene-graph'
+} from '@redrob-design/fig/node-change'
+import type { KiwiNodeChange } from '@redrob-design/fig/node-change'
+import type { SceneGraph } from '@redrob-design/scene-graph'
 
 export function applyEnabledLibrariesPluginData(
   documentNodeChange: KiwiNodeChange,

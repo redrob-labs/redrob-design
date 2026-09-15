@@ -1,14 +1,14 @@
 import { zipSync, type Zippable } from 'fflate'
 
-import type { Editor, EditorState } from '@open-pencil/core/editor'
+import type { Editor, EditorState } from '@redrob-design/core/editor'
 import type {
   ExportRequest,
   IOFormatAdapter,
   IORegistry,
   RasterExportFormat
-} from '@open-pencil/core/io'
-import { renderNodesToImage } from '@open-pencil/core/io/formats/raster'
-import type { SceneGraph } from '@open-pencil/scene-graph'
+} from '@redrob-design/core/io'
+import { renderNodesToImage } from '@redrob-design/core/io/formats/raster'
+import type { SceneGraph } from '@redrob-design/scene-graph'
 
 import type { ExportOptions } from '@/app/document/export/types'
 import { isTauri } from '@/app/tauri/env'

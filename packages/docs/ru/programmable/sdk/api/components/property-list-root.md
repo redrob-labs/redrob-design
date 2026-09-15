@@ -22,12 +22,12 @@ PropertyList — управляемый компонент без встроен
 ```vue twoslash
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { Fill } from '@open-pencil/scene-graph'
+import type { Fill } from '@redrob-design/scene-graph'
 import {
   PropertyListItem,
   PropertyListRemove,
   PropertyListRoot
-} from '@open-pencil/vue'
+} from '@redrob-design/vue'
 
 const fills = ref<Fill[]>([])
 </script>
@@ -57,7 +57,7 @@ const fills = ref<Fill[]>([])
 
 ## Адаптер редактора
 
-Панели OpenPencil используют `useEditorPropertyList(propKey)`, чтобы связать управляемые события с выделением, изменением нескольких объектов, группировкой истории отмены и изменением порядка. Пользователи SDK могут предоставить собственный адаптер состояния без контекста редактора OpenPencil.
+Панели Redrob Design используют `useEditorPropertyList(propKey)`, чтобы связать управляемые события с выделением, изменением нескольких объектов, группировкой истории отмены и изменением порядка. Пользователи SDK могут предоставить собственный адаптер состояния без контекста редактора Redrob Design.
 
 ## Сгенерированный справочник API
 

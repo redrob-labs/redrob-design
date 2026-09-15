@@ -1,6 +1,6 @@
 import { VitePWA } from 'vite-plugin-pwa'
 
-export function openPencilPwaPlugin() {
+export function redrobPwaPlugin() {
   return VitePWA({
     registerType: 'autoUpdate',
     devOptions: { enabled: false },
@@ -10,9 +10,9 @@ export function openPencilPwaPlugin() {
       navigateFallback: '/index.html'
     },
     manifest: {
-      name: 'OpenPencil',
-      short_name: 'OpenPencil',
-      description: 'Open-source design editor',
+      name: 'Redrob Design',
+      short_name: 'Redrob Design',
+      description: 'Prompt-driven design editor',
       display: 'standalone',
       orientation: 'any',
       start_url: '/',

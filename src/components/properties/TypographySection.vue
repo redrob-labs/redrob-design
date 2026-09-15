@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-import { TypographyControlsRoot, useI18n } from '@open-pencil/vue'
+import { TypographyControlsRoot, useI18n } from '@redrob-design/vue'
 
 import FontPicker from '@/components/font-picker/FontPicker.vue'
 import FontSettingsPopover from '@/components/FontSettings/FontSettingsPopover.vue'

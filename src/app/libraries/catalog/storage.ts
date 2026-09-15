@@ -1,11 +1,11 @@
-import { decodeBase64, encodeBase64 } from '@open-pencil/core/bytes'
+import { decodeBase64, encodeBase64 } from '@redrob-design/core/bytes'
 import {
   createLibraryRevision,
   deserializeLibraryRevision,
   MAX_LIBRARY_REVISION_BYTES,
   serializeLibraryRevision,
   validateLibraryRevision
-} from '@open-pencil/core/library'
+} from '@redrob-design/core/library'
 import type {
   ComponentLibraryRevision,
   LibraryCatalog,
@@ -13,7 +13,7 @@ import type {
   PublishLibraryInput,
   SerializedComponentLibraryRevision,
   StoredLibraryLatestManifest
-} from '@open-pencil/core/library'
+} from '@redrob-design/core/library'
 
 import type { LibraryObjectStore } from '@/app/integrations/storage'
 

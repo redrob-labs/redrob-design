@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { DialogClose } from 'reka-ui'
 import { computed } from 'vue'
-import { useI18n } from '@open-pencil/vue'
-import { IS_TAURI } from '@open-pencil/core/constants'
+import { useI18n } from '@redrob-design/vue'
+import { IS_TAURI } from '@redrob-design/core/constants'
 
 import { useAIChat } from '@/app/ai/chat/use'
 import { appCredentialServices } from '@/app/settings/credentials/app'

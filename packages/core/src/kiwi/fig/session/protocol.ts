@@ -1,4 +1,4 @@
-import type { FigPageManifestEntry } from '@open-pencil/kiwi/fig'
+import type { FigPageManifestEntry } from '@redrob-design/kiwi/fig'
 
 import type { FigImportOptions } from '#core/kiwi/fig/import'
 import type { SerializedSceneGraph } from '#core/kiwi/fig/parse/transfer'

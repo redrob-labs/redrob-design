@@ -61,14 +61,14 @@ function writeTypeConsumer(cwd: string): void {
 
   writeFileSync(
     join(cwd, 'package-type-consumer.ts'),
-    `import { createEditor, type Editor } from '@open-pencil/core'
-import { htmlToDesignDocument, type DesignDocument } from '@open-pencil/dom-css'
-import { FIG_PACKAGE_STATUS, type FigContainerDocument } from '@open-pencil/fig'
-import { FIG_KIWI_DEFAULT_VERSION, buildFigKiwi } from '@open-pencil/kiwi/fig/container'
-import { type GUID as KiwiGUID } from '@open-pencil/kiwi/fig'
-import { parsePenFile, type PenDocument } from '@open-pencil/pen'
-import { SceneGraph, type Color, type SceneNode, type Vector } from '@open-pencil/scene-graph'
-import { testIdSelector } from '@open-pencil/vue'
+    `import { createEditor, type Editor } from '@redrob-design/core'
+import { htmlToDesignDocument, type DesignDocument } from '@redrob-design/dom-css'
+import { FIG_PACKAGE_STATUS, type FigContainerDocument } from '@redrob-design/fig'
+import { FIG_KIWI_DEFAULT_VERSION, buildFigKiwi } from '@redrob-design/kiwi/fig/container'
+import { type GUID as KiwiGUID } from '@redrob-design/kiwi/fig'
+import { parsePenFile, type PenDocument } from '@redrob-design/pen'
+import { SceneGraph, type Color, type SceneNode, type Vector } from '@redrob-design/scene-graph'
+import { testIdSelector } from '@redrob-design/vue'
 
 const graph = new SceneGraph()
 const editorFactory: typeof createEditor = createEditor
@@ -224,10 +224,10 @@ try {
   run(['npm', 'init', '-y'], tempDir)
   run(['npm', 'install', '--ignore-scripts', '--no-audit', '--no-fund', ...tarballs], tempDir)
 
-  // @open-pencil/mcp/stdio is a CLI entry point that creates a WebSocket
+  // @redrob-design/mcp/stdio is a CLI entry point that creates a WebSocket
   // connection on import. It is verified via the openpencil-mcp --help
   // command below, not via import eval.
-  const evalSkipSpecifiers = new Set(['@open-pencil/mcp/stdio'])
+  const evalSkipSpecifiers = new Set(['@redrob-design/mcp/stdio'])
 
   for (const specifier of [...publicImportSpecifiers].sort()) {
     if (evalSkipSpecifiers.has(specifier)) continue
@@ -237,43 +237,43 @@ try {
   checkTypeConsumer(tempDir)
 
   nodeEval(
-    "const { guidToString } = await import('@open-pencil/kiwi/fig/guid'); if (guidToString({ sessionID: 1, localID: 2 }) !== '1:2') throw new Error('Kiwi GUID subpath failed')",
+    "const { guidToString } = await import('@redrob-design/kiwi/fig/guid'); if (guidToString({ sessionID: 1, localID: 2 }) !== '1:2') throw new Error('Kiwi GUID subpath failed')",
     tempDir
   )
   nodeEval(
-    "const { buildFigKiwi, parseFigKiwiChunks } = await import('@open-pencil/kiwi/fig/container'); const chunks = parseFigKiwiChunks(buildFigKiwi(new Uint8Array([1]), new Uint8Array([2]))); if (chunks?.length !== 2) throw new Error('Kiwi container subpath failed')",
+    "const { buildFigKiwi, parseFigKiwiChunks } = await import('@redrob-design/kiwi/fig/container'); const chunks = parseFigKiwiChunks(buildFigKiwi(new Uint8Array([1]), new Uint8Array([2]))); if (chunks?.length !== 2) throw new Error('Kiwi container subpath failed')",
     tempDir
   )
   nodeEval(
-    "const { FIG_PACKAGE_STATUS, effectiveFigmaRawNodeFields, parseFigBuffer, writeFigArchive, readFigContainer, writeFigContainer } = await import('@open-pencil/fig'); if (FIG_PACKAGE_STATUS !== 'archive-api' || typeof effectiveFigmaRawNodeFields !== 'function' || typeof parseFigBuffer !== 'function' || typeof writeFigArchive !== 'function') throw new Error('Fig package status smoke failed'); const document = readFigContainer(writeFigContainer({ schemaDeflated: new Uint8Array([1]), dataRaw: new Uint8Array([2]) })); if (document.dataRaw[0] !== 2) throw new Error('Fig container smoke failed')",
+    "const { FIG_PACKAGE_STATUS, effectiveFigmaRawNodeFields, parseFigBuffer, writeFigArchive, readFigContainer, writeFigContainer } = await import('@redrob-design/fig'); if (FIG_PACKAGE_STATUS !== 'archive-api' || typeof effectiveFigmaRawNodeFields !== 'function' || typeof parseFigBuffer !== 'function' || typeof writeFigArchive !== 'function') throw new Error('Fig package status smoke failed'); const document = readFigContainer(writeFigContainer({ schemaDeflated: new Uint8Array([1]), dataRaw: new Uint8Array([2]) })); if (document.dataRaw[0] !== 2) throw new Error('Fig container smoke failed')",
     tempDir
   )
   nodeEval(
-    "const { convertLineHeight, sceneNodeToKiwi } = await import('@open-pencil/fig/node-change'); if (convertLineHeight({ value: 120, units: 'PERCENT' }, 20) !== 24 || typeof sceneNodeToKiwi !== 'function') throw new Error('Fig NodeChange subpath failed')",
+    "const { convertLineHeight, sceneNodeToKiwi } = await import('@redrob-design/fig/node-change'); if (convertLineHeight({ value: 120, units: 'PERCENT' }, 20) !== 24 || typeof sceneNodeToKiwi !== 'function') throw new Error('Fig NodeChange subpath failed')",
     tempDir
   )
   nodeEval(
-    "const { populateAndApplyOverrides } = await import('@open-pencil/fig/instance-overrides'); if (typeof populateAndApplyOverrides !== 'function') throw new Error('Fig instance override subpath failed')",
+    "const { populateAndApplyOverrides } = await import('@redrob-design/fig/instance-overrides'); if (typeof populateAndApplyOverrides !== 'function') throw new Error('Fig instance override subpath failed')",
     tempDir
   )
   nodeEval(
-    "const { SceneGraph } = await import('@open-pencil/scene-graph'); const graph = new SceneGraph(); if (graph.getPages().length !== 1) throw new Error('SceneGraph package smoke failed')",
+    "const { SceneGraph } = await import('@redrob-design/scene-graph'); const graph = new SceneGraph(); if (graph.getPages().length !== 1) throw new Error('SceneGraph package smoke failed')",
     tempDir
   )
   nodeEval(
-    "const { parsePenFile } = await import('@open-pencil/pen'); const graph = parsePenFile(JSON.stringify({ version: '1', children: [{ id: 'frame', type: 'frame', width: 100, height: 50 }] })); if (graph.getPages()[0].childIds.length !== 1) throw new Error('Pen package smoke failed')",
+    "const { parsePenFile } = await import('@redrob-design/pen'); const graph = parsePenFile(JSON.stringify({ version: '1', children: [{ id: 'frame', type: 'frame', width: 100, height: 50 }] })); if (graph.getPages()[0].childIds.length !== 1) throw new Error('Pen package smoke failed')",
     tempDir
   )
   nodeEval(
-    "const { htmlToSceneGraph } = await import('@open-pencil/dom-css'); const graph = await htmlToSceneGraph('<div class=card>OpenPencil</div>', { cssText: '.card { width: 320px; }' }); if (graph.getPages()[0].width !== 320) throw new Error('DOM/CSS scene graph smoke failed')",
+    "const { htmlToSceneGraph } = await import('@redrob-design/dom-css'); const graph = await htmlToSceneGraph('<div class=card>OpenPencil</div>', { cssText: '.card { width: 320px; }' }); if (graph.getPages()[0].width !== 320) throw new Error('DOM/CSS scene graph smoke failed')",
     tempDir
   )
   nodeEval(
-    "const browser = await import('@open-pencil/dom-css/browser'); for (const key of ['browserHTMLToDesignDocument', 'browserHTMLToSceneGraph', 'browserTailwindJSXToSceneGraph']) if (typeof browser[key] !== 'function') throw new Error('DOM/CSS browser export missing: ' + key)",
+    "const browser = await import('@redrob-design/dom-css/browser'); for (const key of ['browserHTMLToDesignDocument', 'browserHTMLToSceneGraph', 'browserTailwindJSXToSceneGraph']) if (typeof browser[key] !== 'function') throw new Error('DOM/CSS browser export missing: ' + key)",
     tempDir
   )
   nodeEval(
-    "const { jsx, jsxToDesignDocument } = await import('@open-pencil/dom-css/jsx-runtime'); const document = await jsxToDesignDocument(jsx('section', { class: 'card', style: { width: '120px' }, children: 'OpenPencil' })); const node = document.children[0]; if (node?.type !== 'element' || node.inlineStyle?.width !== '120px') throw new Error('DOM/CSS JSX runtime smoke failed')",
+    "const { jsx, jsxToDesignDocument } = await import('@redrob-design/dom-css/jsx-runtime'); const document = await jsxToDesignDocument(jsx('section', { class: 'card', style: { width: '120px' }, children: 'OpenPencil' })); const node = document.children[0]; if (node?.type !== 'element' || node.inlineStyle?.width !== '120px') throw new Error('DOM/CSS JSX runtime smoke failed')",
     tempDir
   )
 

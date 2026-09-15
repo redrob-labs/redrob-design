@@ -4,7 +4,7 @@ import { TabsContent, TabsList, TabsRoot, TabsTrigger } from 'reka-ui'
 import { motion } from 'motion-v'
 import type { PanInfo } from 'motion-v'
 import { computed, ref } from 'vue'
-import { useI18n } from '@open-pencil/vue'
+import { useI18n } from '@redrob-design/vue'
 
 import ChatPanel from './ChatPanel.vue'
 import CodePanel from './CodePanel.vue'

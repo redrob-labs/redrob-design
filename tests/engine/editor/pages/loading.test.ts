@@ -1,6 +1,6 @@
 import { expect, test } from 'bun:test'
 
-import { SceneGraph } from '@open-pencil/scene-graph'
+import { SceneGraph } from '@redrob-design/scene-graph'
 
 import { createEditor, type PageSwitchProgress } from '#core/editor'
 

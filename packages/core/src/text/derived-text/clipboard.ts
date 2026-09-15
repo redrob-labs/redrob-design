@@ -4,10 +4,10 @@ import {
   buildDerivedTextData,
   encodePathCommandsBlob,
   weightToFigmaStyle
-} from '@open-pencil/fig/node-change'
-import type { NodeChange } from '@open-pencil/kiwi/fig/codec'
-import { normalizeFontFamily, weightToStyle } from '@open-pencil/scene-graph'
-import type { SceneNode } from '@open-pencil/scene-graph'
+} from '@redrob-design/fig/node-change'
+import type { NodeChange } from '@redrob-design/kiwi/fig/codec'
+import { normalizeFontFamily, weightToStyle } from '@redrob-design/scene-graph'
+import type { SceneNode } from '@redrob-design/scene-graph'
 
 import { type GlyphOutlineMetrics, getGlyphOutlineMetricsSync } from '#core/text/opentype'
 

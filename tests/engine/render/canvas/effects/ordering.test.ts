@@ -2,8 +2,8 @@ import { describe, expect, mock, test } from 'bun:test'
 
 import type { Canvas } from 'canvaskit-wasm'
 
-import type { SceneGraph } from '@open-pencil/scene-graph'
-import { createDefaultNode } from '@open-pencil/scene-graph/node-defaults'
+import type { SceneGraph } from '@redrob-design/scene-graph'
+import { createDefaultNode } from '@redrob-design/scene-graph/node-defaults'
 
 import { renderShapeUncached } from '#core/canvas/scene'
 

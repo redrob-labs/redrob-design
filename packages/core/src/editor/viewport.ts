@@ -1,4 +1,4 @@
-import { computeBounds, computeAbsoluteBounds } from '@open-pencil/scene-graph/geometry'
+import { computeBounds, computeAbsoluteBounds } from '@redrob-design/scene-graph/geometry'
 
 import { ZOOM_DIVISOR, ZOOM_SCALE_MAX, ZOOM_SCALE_MIN } from '#core/constants'
 import { emitNavigationTrace } from '#core/profiler'

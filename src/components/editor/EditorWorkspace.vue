@@ -2,7 +2,7 @@
 import { tv } from 'tailwind-variants'
 import { SplitterGroup, SplitterPanel, SplitterResizeHandle } from 'reka-ui'
 
-import { formatShortcut, useI18n, useViewportKind } from '@open-pencil/vue'
+import { formatShortcut, useI18n, useViewportKind } from '@redrob-design/vue'
 
 import { useEditorStore } from '@/app/editor/active-store'
 import { appRuntimeConfig } from '@/app/runtime/config'
@@ -98,7 +98,7 @@ const horizontalSplitterStyles = tv(splitterTheme)({ direction: 'horizontal' })
         v-if="!isMobile"
         class="absolute top-7 left-7 z-10 flex items-center gap-2 rounded-lg border border-border bg-panel px-2 py-1 shadow-sm"
       >
-        <img src="/favicon-32.png" class="size-4" alt="OpenPencil" />
+        <img src="/favicon-32.png" class="size-4" alt="Redrob Design" />
         <span data-test-id="editor-document-name" class="text-xs text-surface">{{
           store.state.documentName
         }}</span>

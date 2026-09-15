@@ -1,4 +1,4 @@
-import type { NodeType, SceneNode } from '@open-pencil/scene-graph'
+import type { NodeType, SceneNode } from '@redrob-design/scene-graph'
 
 export interface RenameSelectionOptions {
   match: string

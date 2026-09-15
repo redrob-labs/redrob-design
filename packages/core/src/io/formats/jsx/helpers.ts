@@ -6,7 +6,7 @@ import type {
   Effect,
   Color,
   GridTrack
-} from '@open-pencil/scene-graph'
+} from '@redrob-design/scene-graph'
 
 import { colorToHex8 } from '#core/color'
 

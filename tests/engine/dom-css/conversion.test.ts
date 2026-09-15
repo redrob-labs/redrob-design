@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test'
 
-import type { DesignElement } from '@open-pencil/dom-css'
+import type { DesignElement } from '@redrob-design/dom-css'
 import {
   compileTailwindCSS,
   createHeadlessCSSRuntime,
@@ -10,8 +10,8 @@ import {
   sceneGraphToDesignDocument,
   serializeHTML,
   tailwindHTMLToSceneGraph
-} from '@open-pencil/dom-css'
-import type { SceneGraph, SceneNode } from '@open-pencil/scene-graph'
+} from '@redrob-design/dom-css'
+import type { SceneGraph, SceneNode } from '@redrob-design/scene-graph'
 
 import {
   DOM_CSS_COLORS,
@@ -141,7 +141,7 @@ function expectStyleRoundTripHTML(graph: SceneGraph) {
   expectRoundTripHeadingStyle(roundTripHeading)
 }
 
-describe('@open-pencil/dom-css conversion', () => {
+describe('@redrob-design/dom-css conversion', () => {
   it('converts HTML and CSS to DesignDOM with one API call', async () => {
     const document = await htmlToDesignDocument(cssCardHTML, {
       cssText: cssCardCSS,

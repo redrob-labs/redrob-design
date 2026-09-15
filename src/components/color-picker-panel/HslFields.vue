@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { inputNumberValue, useI18n } from '@open-pencil/vue'
-import { colorToCSS } from '@open-pencil/core/color'
+import { inputNumberValue, useI18n } from '@redrob-design/vue'
+import { colorToCSS } from '@redrob-design/core/color'
 
 import StandardColorSlider from '@/components/color-picker-panel/StandardColorSlider.vue'
 import { useColorPickerPanelContext } from '@/components/color-picker-panel/context'

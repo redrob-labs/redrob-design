@@ -1,6 +1,6 @@
 import copy, { type Options as ClipboardCopyOptions } from 'copy-to-clipboard'
 
-import type { Vector } from '@open-pencil/scene-graph/primitives'
+import type { Vector } from '@redrob-design/scene-graph/primitives'
 
 import type { EditorStore } from '@/app/editor/active-store'
 import { isDesignClipboardHTML } from '@/app/editor/clipboard/html'

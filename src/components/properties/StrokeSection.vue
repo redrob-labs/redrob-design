@@ -10,7 +10,7 @@ import {
   useI18n,
   useOkHCL,
   useStrokeControls
-} from '@open-pencil/vue'
+} from '@redrob-design/vue'
 
 import ColorPicker from '@/components/ColorPicker/ColorPicker.vue'
 import NumberField from '@/components/inputs/NumberField.vue'
@@ -36,9 +36,9 @@ import PanelSection from '@/components/ui/panel/PanelSection.vue'
 import SegmentedControl from '@/components/ui/SegmentedControl.vue'
 import Tip from '@/components/ui/Tip.vue'
 
-import { colorToHexRaw } from '@open-pencil/core/color'
-import type { Color, Fill, SceneNode, Stroke } from '@open-pencil/scene-graph'
-import type { BindableValueActions } from '@open-pencil/vue'
+import { colorToHexRaw } from '@redrob-design/core/color'
+import type { Color, Fill, SceneNode, Stroke } from '@redrob-design/scene-graph'
+import type { BindableValueActions } from '@redrob-design/vue'
 
 const strokeCtx = useStrokeControls()
 const { advancedActive, cap, join, miterLimit } = strokeCtx

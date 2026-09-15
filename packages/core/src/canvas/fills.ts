@@ -1,7 +1,7 @@
 import type { Canvas, Paint } from 'canvaskit-wasm'
 
-import type { SceneNode, SceneGraph, Fill } from '@open-pencil/scene-graph'
-import type { Rect, Vector } from '@open-pencil/scene-graph/primitives'
+import type { SceneNode, SceneGraph, Fill } from '@redrob-design/scene-graph'
+import type { Rect, Vector } from '@redrob-design/scene-graph/primitives'
 
 import { figmaBlendModeToSkia } from './blend'
 import type { SkiaRenderer } from './renderer'

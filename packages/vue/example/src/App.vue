@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { createEditor, type Tool } from '@open-pencil/core/editor'
+import { createEditor, type Tool } from '@redrob-design/core/editor'
 import {
   OpenPencilProvider,
   CanvasRoot,
@@ -8,7 +8,7 @@ import {
   ToolbarRoot,
   ToolbarItem,
   NodeProperties
-} from '@open-pencil/vue'
+} from '@redrob-design/vue'
 
 const editor = createEditor()
 const pages = () => editor.graph.getPages()

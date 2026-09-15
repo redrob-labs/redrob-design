@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useEffectsControls, useI18n } from '@open-pencil/vue'
+import { useEffectsControls, useI18n } from '@redrob-design/vue'
 
 import ColorInput from '@/components/ColorPicker/ColorInput.vue'
 import NumberField from '@/components/inputs/NumberField.vue'
@@ -17,7 +17,7 @@ import PanelFieldGroup from '@/components/ui/panel/PanelFieldGroup.vue'
 import PanelSection from '@/components/ui/panel/PanelSection.vue'
 import Tip from '@/components/ui/Tip.vue'
 
-import type { Effect, Fill } from '@open-pencil/scene-graph'
+import type { Effect, Fill } from '@redrob-design/scene-graph'
 
 const effectsCtx = useEffectsControls()
 const { panels } = useI18n()

@@ -6,7 +6,7 @@ import { useOptionalBindableValue } from '#vue/primitives/BindableValue/context'
 import type { FillSwatchProps, FillSwatchSlots } from './types'
 import { fillCategory, fillIsTransparent, fillSwatchBackground } from './useFill'
 
-import type { Color } from '@open-pencil/scene-graph/primitives'
+import type { Color } from '@redrob-design/scene-graph/primitives'
 
 const { fill, label, as = 'span', asChild = false } = defineProps<FillSwatchProps>()
 defineSlots<FillSwatchSlots>()

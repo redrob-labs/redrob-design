@@ -3,8 +3,8 @@ import { mkdtemp } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
-import { BUILTIN_IO_FORMATS, IORegistry } from '@open-pencil/core/io'
-import { SceneGraph } from '@open-pencil/scene-graph'
+import { BUILTIN_IO_FORMATS, IORegistry } from '@redrob-design/core/io'
+import { SceneGraph } from '@redrob-design/scene-graph'
 
 import { loadDocument, prepareDocumentForRPC } from '#cli/headless'
 

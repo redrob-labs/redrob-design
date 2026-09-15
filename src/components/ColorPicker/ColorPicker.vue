@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { ColorPickerRoot, useI18n } from '@open-pencil/vue'
+import { ColorPickerRoot, useI18n } from '@redrob-design/vue'
 
 import ColorPickerPanel from '@/components/color-picker-panel/ColorPickerPanel.vue'
 import { usePopoverUI } from '@/components/ui/popover'
 
-import type { Color } from '@open-pencil/scene-graph/primitives'
-import type { OkHCLControls } from '@open-pencil/vue'
+import type { Color } from '@redrob-design/scene-graph/primitives'
+import type { OkHCLControls } from '@redrob-design/vue'
 import type { VNode } from 'vue'
 
 const { panels } = useI18n()

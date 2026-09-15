@@ -159,7 +159,7 @@ jobs:
           lfs: 'true'
 
       - name: Build shared Core test dependency
-        run: bun --filter @open-pencil/core build
+        run: bun --filter @redrob-design/core build
 
       - name: Run ${{ matrix.group }} engine tests
         shell: bash

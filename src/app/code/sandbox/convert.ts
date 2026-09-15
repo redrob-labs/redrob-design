@@ -13,7 +13,7 @@ import {
   radialGradient,
   solid,
   type TreeNode
-} from '@open-pencil/core/design-jsx'
+} from '@redrob-design/core/design-jsx'
 
 import type { DesignJSXHelperDescriptor } from '@/app/code/sandbox/types'
 
@@ -81,7 +81,7 @@ function convertValue(value: unknown): unknown {
 
 function convertTree(value: unknown): TreeNode {
   if (!isSerializedElement(value)) {
-    throw new Error('Design JSX must return an OpenPencil element.')
+    throw new Error('Design JSX must return a Redrob Design element.')
   }
   const children = value.children.map((child): TreeNode | string => {
     if (typeof child === 'string') return child

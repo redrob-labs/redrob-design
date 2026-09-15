@@ -1,4 +1,4 @@
-import { extractFigThumbnailFromReader } from '@open-pencil/fig'
+import { extractFigThumbnailFromReader } from '@redrob-design/fig'
 
 import { isTauri } from '@/app/tauri/env'
 

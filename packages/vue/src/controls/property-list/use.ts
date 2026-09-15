@@ -1,6 +1,6 @@
 import { computed } from 'vue'
 
-import type { SceneNode } from '@open-pencil/scene-graph'
+import type { SceneNode } from '@redrob-design/scene-graph'
 
 import { useNodeProps } from '#vue/controls/node-props/use'
 import { useUndoBatch } from '#vue/controls/undo-batch/use'

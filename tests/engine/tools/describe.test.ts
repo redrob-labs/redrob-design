@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test'
 
-import type { Color, Stroke } from '@open-pencil/scene-graph'
+import type { Color, Stroke } from '@redrob-design/scene-graph'
 
 import { expectDefined } from '#tests/helpers/assert'
 import { getTool, setupToolTest, type ToolResult } from '#tests/helpers/tools'

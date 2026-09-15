@@ -1,6 +1,6 @@
 import type { McpServer } from '@agentclientprotocol/sdk'
 
-import { AUTOMATION_HTTP_PORT } from '@open-pencil/core/constants'
+import { AUTOMATION_HTTP_PORT } from '@redrob-design/core/constants'
 
 import { describeDiagnosticError, recordMCPConnectionFailure } from '@/app/diagnostics'
 import { appCredentialServices } from '@/app/settings/credentials/app'
@@ -14,7 +14,7 @@ export type BuiltInMCPServerOptions = {
 export function builtInMCPServer(options: BuiltInMCPServerOptions): McpServer {
   return {
     type: 'http',
-    name: 'open-pencil',
+    name: 'redrob-design',
     url: `http://127.0.0.1:${AUTOMATION_HTTP_PORT}/mcp`,
     headers: options.authorizationToken
       ? [{ name: 'Authorization', value: `Bearer ${options.authorizationToken}` }]

@@ -1,8 +1,8 @@
 import { useEventListener } from '@vueuse/core'
 import { onScopeDispose, type Ref } from 'vue'
 
-import type { Editor } from '@open-pencil/core/editor'
-import { emitNavigationTrace } from '@open-pencil/core/profiler'
+import type { Editor } from '@redrob-design/core/editor'
+import { emitNavigationTrace } from '@redrob-design/core/profiler'
 
 import { createRafScheduler } from '#vue/shared/input/raf-scheduler'
 

@@ -4,14 +4,14 @@ import { packageBinTargets, packageExportTargetPaths } from '../src/tarballs'
 
 describe('packageBinTargets', () => {
   test('normalizes string bin fields', () => {
-    expect(packageBinTargets({ name: '@open-pencil/cli', bin: './bin/openpencil.js' })).toEqual({
-      '@open-pencil/cli': './bin/openpencil.js'
+    expect(packageBinTargets({ name: '@redrob-design/cli', bin: './bin/openpencil.js' })).toEqual({
+      '@redrob-design/cli': './bin/openpencil.js'
     })
   })
 
   test('keeps named bin fields', () => {
     expect(
-      packageBinTargets({ name: '@open-pencil/cli', bin: { openpencil: './bin/openpencil.js' } })
+      packageBinTargets({ name: '@redrob-design/cli', bin: { openpencil: './bin/openpencil.js' } })
     ).toEqual({
       openpencil: './bin/openpencil.js'
     })

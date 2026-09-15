@@ -1,12 +1,12 @@
 import { describe, expect, test } from 'bun:test'
 
-import { createEditor } from '@open-pencil/core/editor'
+import { createEditor } from '@redrob-design/core/editor'
 import {
   createLibraryRevision,
   materializeLibraryAsset,
   MemoryLibraryCatalog
-} from '@open-pencil/core/library'
-import { SceneGraph } from '@open-pencil/scene-graph'
+} from '@redrob-design/core/library'
+import { SceneGraph } from '@redrob-design/scene-graph'
 
 import { LibraryService } from '@/app/libraries/service'
 

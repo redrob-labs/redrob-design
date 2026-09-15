@@ -1,6 +1,6 @@
 ---
 title: CLI Reference
-description: Complete reference for all openpencil commands, options, and flags.
+description: Complete reference for all redrob-design commands, options, and flags.
 ---
 
 # CLI Reference
@@ -12,7 +12,7 @@ All commands accept a `.fig` file as a positional argument. When omitted, the CL
 Show document info — pages, node counts, fonts, file size.
 
 ```sh
-openpencil info [file] [--json]
+redrob-design info [file] [--json]
 ```
 
 | Option | Description |
@@ -24,7 +24,7 @@ openpencil info [file] [--json]
 Print the node hierarchy.
 
 ```sh
-openpencil tree [file] [options]
+redrob-design tree [file] [options]
 ```
 
 | Option | Description |
@@ -38,7 +38,7 @@ openpencil tree [file] [options]
 Search nodes by name or type.
 
 ```sh
-openpencil find [file] [options]
+redrob-design find [file] [options]
 ```
 
 | Option | Description |
@@ -54,7 +54,7 @@ openpencil find [file] [options]
 Show detailed properties of a node.
 
 ```sh
-openpencil node [file] --id <id> [--json]
+redrob-design node [file] --id <id> [--json]
 ```
 
 | Option | Description |
@@ -79,7 +79,7 @@ openpencil pages [file] [--json]
 List design variables and collections.
 
 ```sh
-openpencil variables [file] [options]
+redrob-design variables [file] [options]
 ```
 
 | Option | Description |
@@ -93,7 +93,7 @@ openpencil variables [file] [options]
 Export to PNG, JPG, WEBP, SVG, JSX, HTML, or `.fig`.
 
 ```sh
-openpencil export [file] [options]
+redrob-design export [file] [options]
 ```
 
 | Option | Alias | Description |
@@ -115,10 +115,10 @@ openpencil export [file] [options]
 
 ## import
 
-Import HTML/CSS/Tailwind into an editable OpenPencil document.
+Import HTML/CSS/Tailwind into an editable Redrob Design document.
 
 ```sh
-openpencil import page.html [options]
+redrob-design import page.html [options]
 ```
 
 | Option | Alias | Description |
@@ -135,8 +135,8 @@ openpencil import page.html [options]
 Examples:
 
 ```sh
-openpencil import card.html --css card.css -o card.fig
-openpencil import card.html --tailwind "flex flex-col gap-3 w-80 p-6 rounded-xl bg-white" -o card.fig
+redrob-design import card.html --css card.css -o card.fig
+redrob-design import card.html --tailwind "flex flex-col gap-3 w-80 p-6 rounded-xl bg-white" -o card.fig
 ```
 
 ## eval
@@ -144,7 +144,7 @@ openpencil import card.html --tailwind "flex flex-col gap-3 w-80 p-6 rounded-xl 
 Execute JavaScript with the Figma Plugin API.
 
 ```sh
-openpencil eval [file] [options]
+redrob-design eval [file] [options]
 ```
 
 | Option | Alias | Description |
@@ -161,7 +161,7 @@ openpencil eval [file] [options]
 Analyze color palette usage across the document.
 
 ```sh
-openpencil analyze colors [file] [options]
+redrob-design analyze colors [file] [options]
 ```
 
 | Option | Description |
@@ -176,7 +176,7 @@ openpencil analyze colors [file] [options]
 Analyze font family, size, and weight distribution.
 
 ```sh
-openpencil analyze typography [file] [options]
+redrob-design analyze typography [file] [options]
 ```
 
 | Option | Description |
@@ -190,7 +190,7 @@ openpencil analyze typography [file] [options]
 Analyze gap and padding values across auto-layout frames.
 
 ```sh
-openpencil analyze spacing [file] [options]
+redrob-design analyze spacing [file] [options]
 ```
 
 | Option | Description |
@@ -203,7 +203,7 @@ openpencil analyze spacing [file] [options]
 Find repeated node patterns — potential components.
 
 ```sh
-openpencil analyze clusters [file] [options]
+redrob-design analyze clusters [file] [options]
 ```
 
 | Option | Description |

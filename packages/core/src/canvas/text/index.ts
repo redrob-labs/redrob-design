@@ -8,7 +8,7 @@ import type {
 } from 'canvaskit-wasm'
 import { uniq } from 'es-toolkit/array'
 
-import type { SceneNode } from '@open-pencil/scene-graph'
+import type { SceneNode } from '@redrob-design/scene-graph'
 
 import { resolveRGBAForPreview } from '#core/color/management'
 import { DEFAULT_FONT_FAMILY, DEFAULT_FONT_SIZE } from '#core/constants'

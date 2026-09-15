@@ -28,7 +28,7 @@ import type {
   Fill,
   Stroke,
   CharacterStyleOverride
-} from '@open-pencil/scene-graph'
+} from '@redrob-design/scene-graph'
 
 import type { SVGExportContext } from './defs'
 import { svg, renderSVGNode } from './node'

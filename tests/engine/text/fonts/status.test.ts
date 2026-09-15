@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test'
 
-import { FontManager, SceneGraph, documentFontStatus } from '@open-pencil/core'
+import { FontManager, SceneGraph, documentFontStatus } from '@redrob-design/core'
 
 function pageId(graph: SceneGraph): string {
   return graph.getPages()[0].id

@@ -1,5 +1,5 @@
-import type { Variable, VariableCollection, VariableValue } from '@open-pencil/scene-graph'
-import type { Color } from '@open-pencil/scene-graph/primitives'
+import type { Variable, VariableCollection, VariableValue } from '@redrob-design/scene-graph'
+import type { Color } from '@redrob-design/scene-graph/primitives'
 
 import { colorToHex } from '#core/color'
 import { defineTool } from '#core/tools/schema'

@@ -21,6 +21,10 @@
         "label": "Open Storage Workspace…"
       },
       {
+        "id": "import-design-tokens",
+        "label": "Import design tokens"
+      },
+      {
         "type": "separator"
       },
       {

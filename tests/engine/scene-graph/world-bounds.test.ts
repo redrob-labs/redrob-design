@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'bun:test'
 
-import { SceneGraph } from '@open-pencil/scene-graph'
-import { getAxisAlignedWorldBounds } from '@open-pencil/scene-graph/coordinate'
+import { SceneGraph } from '@redrob-design/scene-graph'
+import { getAxisAlignedWorldBounds } from '@redrob-design/scene-graph/coordinate'
 
 describe('axis-aligned world bounds', () => {
   test('includes a node own rotation', () => {

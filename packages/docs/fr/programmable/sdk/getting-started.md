@@ -1,6 +1,6 @@
 ---
 title: Premiers pas avec le SDK
-description: Connectez @open-pencil/vue, créez un éditeur et configurez la zone de travail.
+description: Connectez @redrob-design/vue, créez un éditeur et configurez la zone de travail.
 ---
 
 # Premiers pas avec le SDK
@@ -8,22 +8,22 @@ description: Connectez @open-pencil/vue, créez un éditeur et configurez la zon
 ## Installation
 
 ```bash
-bun add @open-pencil/core @open-pencil/vue canvaskit-wasm
+bun add @redrob-design/core @redrob-design/vue canvaskit-wasm
 ```
 
-Le SDK se trouve dans le monorepo OpenPencil et est publié sous forme de package `@open-pencil/vue`.
+Le SDK se trouve dans le monorepo Redrob Design et est publié sous forme de package `@redrob-design/vue`.
 
 ```ts
-import { createEditor } from '@open-pencil/core/editor'
-import { provideEditor, useCanvas } from '@open-pencil/vue'
+import { createEditor } from '@redrob-design/core/editor'
+import { provideEditor, useCanvas } from '@redrob-design/vue'
 ```
 
 ## Couches de l'application
 
 Une application basée sur le SDK se compose de trois couches :
 
-1. `@open-pencil/core` — le moteur de l'éditeur, indépendant du framework ;
-2. `@open-pencil/vue` — les composables et composants sans styles pour Vue ;
+1. `@redrob-design/core` — le moteur de l'éditeur, indépendant du framework ;
+2. `@redrob-design/vue` — les composables et composants sans styles pour Vue ;
 3. l'application — la présentation, le routage, la gestion des fichiers et l'interface propre au produit.
 
 ## Configuration minimale
@@ -31,7 +31,7 @@ Une application basée sur le SDK se compose de trois couches :
 ### 1. Créez un éditeur
 
 ```ts
-import { createEditor } from '@open-pencil/core/editor'
+import { createEditor } from '@redrob-design/core/editor'
 
 const editor = createEditor({
   width: 1200,
@@ -43,9 +43,9 @@ const editor = createEditor({
 
 ```vue
 <script setup lang="ts">
-import { provideEditor } from '@open-pencil/vue'
+import { provideEditor } from '@redrob-design/vue'
 
-import type { Editor } from '@open-pencil/core/editor'
+import type { Editor } from '@redrob-design/core/editor'
 
 const props = defineProps<{
   editor: Editor
@@ -67,7 +67,7 @@ provideEditor(props.editor)
 <script setup lang="ts">
 import { ref } from 'vue'
 
-import { useCanvas, useEditor } from '@open-pencil/vue'
+import { useCanvas, useEditor } from '@redrob-design/vue'
 
 const canvasRef = ref<HTMLCanvasElement | null>(null)
 const editor = useEditor()
@@ -85,7 +85,7 @@ useCanvas(canvasRef, editor)
 Après l'appel à `provideEditor()`, les composants descendants peuvent consulter la sélection et exécuter des commandes de l'éditeur :
 
 ```ts
-import { useEditorCommands, useSelectionState } from '@open-pencil/vue'
+import { useEditorCommands, useSelectionState } from '@redrob-design/vue'
 
 const selection = useSelectionState()
 const commands = useEditorCommands()
@@ -97,7 +97,7 @@ const commands = useEditorCommands()
 <script setup lang="ts">
 import { ref } from 'vue'
 
-import { useCanvas, useEditor, useSelectionState } from '@open-pencil/vue'
+import { useCanvas, useEditor, useSelectionState } from '@redrob-design/vue'
 
 const canvasRef = ref<HTMLCanvasElement | null>(null)
 const editor = useEditor()

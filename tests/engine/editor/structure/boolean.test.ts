@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'bun:test'
 
-import { TRANSPARENT } from '@open-pencil/core/constants'
-import { createEditor } from '@open-pencil/core/editor'
+import { TRANSPARENT } from '@redrob-design/core/constants'
+import { createEditor } from '@redrob-design/core/editor'
 
 describe('booleanOperationSelected', () => {
   test('wraps selected nodes in a boolean operation container', () => {

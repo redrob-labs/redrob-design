@@ -1,12 +1,12 @@
 import { describe, expect, test } from 'bun:test'
 
-import { exportFigFile, initCodec, parseFigFile } from '@open-pencil/core'
+import { exportFigFile, initCodec, parseFigFile } from '@redrob-design/core'
 import {
   getLazyFigImportContext,
   setLazyFigImportContext
-} from '@open-pencil/core/kiwi/fig/lazy-import'
-import { cloneSceneGraphForFigExport } from '@open-pencil/core/kiwi/fig/parse/transfer'
-import { SceneGraph, setInstanceOverride } from '@open-pencil/scene-graph'
+} from '@redrob-design/core/kiwi/fig/lazy-import'
+import { cloneSceneGraphForFigExport } from '@redrob-design/core/kiwi/fig/parse/transfer'
+import { SceneGraph, setInstanceOverride } from '@redrob-design/scene-graph'
 
 function lazyExportGraph() {
   const graph = new SceneGraph()

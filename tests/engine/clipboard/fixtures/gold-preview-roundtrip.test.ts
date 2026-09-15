@@ -11,7 +11,7 @@ import {
   initCodec,
   type SceneNode,
   SceneGraph
-} from '@open-pencil/core'
+} from '@redrob-design/core'
 
 import { expectDefined } from '#tests/helpers/assert'
 import { HEAVY_TEST_TIMEOUT_MS } from '#tests/helpers/test-utils'

@@ -18,7 +18,7 @@ It manages:
 ## Usage
 
 ```ts
-import { useDocumentWorkspace } from '@open-pencil/vue'
+import { useDocumentWorkspace } from '@redrob-design/vue'
 
 const workspace = useDocumentWorkspace({
   source: {

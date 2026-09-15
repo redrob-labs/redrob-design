@@ -2,13 +2,13 @@
 import { existsSync, readFileSync, readdirSync } from 'node:fs'
 import { join } from 'node:path'
 
-import type { JSONObject } from '@open-pencil/scene-graph/primitives'
+import type { JSONObject } from '@redrob-design/scene-graph/primitives'
 import {
   LOCALE_DIR_NAMES,
   TRANSLATED_LOCALES,
   messageDefaults,
   type TranslatedLocale
-} from '@open-pencil/vue'
+} from '@redrob-design/vue'
 
 import { hasMixedLatinAndCjk, placeholders } from './quality'
 

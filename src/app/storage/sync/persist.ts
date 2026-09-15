@@ -1,4 +1,4 @@
-import { extractFigThumbnailFromReader } from '@open-pencil/fig'
+import { extractFigThumbnailFromReader } from '@redrob-design/fig'
 
 import type { StorageProviderID } from '@/app/integrations/storage/types'
 import { evictLocalFigCache } from '@/app/storage/cache-eviction'

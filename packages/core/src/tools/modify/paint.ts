@@ -1,4 +1,4 @@
-import type { Matrix } from '@open-pencil/scene-graph/primitives'
+import type { Matrix } from '@redrob-design/scene-graph/primitives'
 
 import { decodeBase64 } from '#core/bytes'
 import { parseColor } from '#core/color'

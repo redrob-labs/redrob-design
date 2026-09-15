@@ -1,4 +1,4 @@
-# @open-pencil/scene-graph
+# @redrob-design/scene-graph
 
 Shared OpenPencil design document model.
 

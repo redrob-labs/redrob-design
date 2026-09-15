@@ -3,7 +3,7 @@ import {
   normalizeVectorNetwork,
   transformVectorNetwork,
   validateVectorNetwork
-} from '@open-pencil/scene-graph'
+} from '@redrob-design/scene-graph'
 import type {
   Fill,
   GeometryPath,
@@ -12,9 +12,9 @@ import type {
   VectorSegment,
   VectorVertex,
   WindingRule
-} from '@open-pencil/scene-graph'
-import { copyFills } from '@open-pencil/scene-graph/copy'
-import { parsePluginVectorPath } from '@open-pencil/scene-graph/parse-path'
+} from '@redrob-design/scene-graph'
+import { copyFills } from '@redrob-design/scene-graph/copy'
+import { parsePluginVectorPath } from '@redrob-design/scene-graph/parse-path'
 
 import {
   raw,

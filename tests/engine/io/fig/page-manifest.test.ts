@@ -2,8 +2,8 @@ import { expect, test } from 'bun:test'
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 
-import { parseFigBuffer } from '@open-pencil/fig'
-import type { FigPageManifestEntry } from '@open-pencil/kiwi/fig'
+import { parseFigBuffer } from '@redrob-design/fig'
+import type { FigPageManifestEntry } from '@redrob-design/kiwi/fig'
 
 const fixturePath = resolve(import.meta.dir, '../../../fixtures/gold-preview.fig')
 

@@ -48,7 +48,7 @@ fn set_recent_files(app: tauri::AppHandle, paths: Vec<String>) -> Result<(), Str
 
 #[tauri::command]
 fn mcp_executable_available() -> bool {
-    which::which("openpencil-mcp-http").is_ok()
+    which::which("redrob-design-mcp-http").is_ok()
 }
 
 fn file_association_path(path: PathBuf) -> Option<PathBuf> {

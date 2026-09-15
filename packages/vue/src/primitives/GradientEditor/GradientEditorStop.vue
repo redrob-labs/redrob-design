@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { Primitive } from 'reka-ui'
-import { colorToCSS, colorToHexRaw } from '@open-pencil/core/color'
+import { colorToCSS, colorToHexRaw } from '@redrob-design/core/color'
 
 import type {
   GradientEditorStopActions,

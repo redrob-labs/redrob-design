@@ -19,12 +19,12 @@ import { parseArgs } from 'node:util'
 
 import { $ } from 'bun'
 
-import { SkiaRenderer } from '@open-pencil/core/canvas'
-import { importClipboardNodes, parseFigmaClipboard } from '@open-pencil/core/clipboard'
-import { renderNodesToImage, initCanvasKit } from '@open-pencil/core/io'
-import { computeAllLayouts } from '@open-pencil/core/layout'
-import { SceneGraph } from '@open-pencil/core/scene-graph'
-import { fontManager } from '@open-pencil/core/text'
+import { SkiaRenderer } from '@redrob-design/core/canvas'
+import { importClipboardNodes, parseFigmaClipboard } from '@redrob-design/core/clipboard'
+import { renderNodesToImage, initCanvasKit } from '@redrob-design/core/io'
+import { computeAllLayouts } from '@redrob-design/core/layout'
+import { SceneGraph } from '@redrob-design/core/scene-graph'
+import { fontManager } from '@redrob-design/core/text'
 
 const { values: opts } = parseArgs({
   options: {

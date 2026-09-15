@@ -1,5 +1,5 @@
 {
-  "name": "@open-pencil/vue",
+  "name": "@redrob-design/vue",
   "version": "0.14.0",
   "license": "MIT",
   "type": "module",
@@ -31,7 +31,7 @@
     "provenance": true
   },
   "peerDependencies": {
-    "@open-pencil/core": "workspace:*",
+    "@redrob-design/core": "workspace:*",
     "canvaskit-wasm": ">=0.41.1",
     "vue": "^3.5.41"
   },
@@ -45,7 +45,7 @@
     "@atlaskit/pragmatic-drag-and-drop-hitbox": "^1.2.0",
     "@nanostores/i18n": "^1.3.3",
     "@nanostores/vue": "^1.1.0",
-    "@open-pencil/scene-graph": "workspace:*",
+    "@redrob-design/scene-graph": "workspace:*",
     "@tanstack/vue-table": "^8.21.3",
     "@vueuse/core": "^14.4.0",
     "fuse.js": "^7.5.0",

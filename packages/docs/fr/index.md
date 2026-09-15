@@ -1,16 +1,16 @@
 ---
 layout: home
-title: OpenPencil — Éditeur de design open source
+title: Redrob Design — Éditeur de design open source
 description: Une alternative open source à Figma, compatible avec les fichiers .fig, avec AI intégrée et automatisation complète.
 
 hero:
-  name: OpenPencil
+  name: Redrob Design
   text: Éditeur de design open source
   tagline: Ouvrez des fichiers Figma. Utilisez l’AI. Automatisez chaque étape. Créez aussi vos propres éditeurs.
   actions:
     - theme: brand
       text: Essayer en ligne
-      link: https://app.openpencil.dev/demo
+      link: https://app.redrob.design/demo
     - theme: alt
       text: Télécharger
       link: https://github.com/open-pencil/open-pencil/releases/latest
@@ -21,13 +21,13 @@ hero:
 features:
   - icon: 📂
     title: Compatible avec Figma
-    details: Ouvrez directement les fichiers .fig. Copiez-collez entre Figma et OpenPencil. Le codec binaire Kiwi conserve les données lors des allers-retours.
+    details: Ouvrez directement les fichiers .fig. Copiez-collez entre Figma et Redrob Design. Le codec binaire Kiwi conserve les données lors des allers-retours.
   - icon: ⚡
     title: Programmable
     details: Une CLI sans interface graphique permet d’examiner, d’exporter et d’analyser les fichiers .fig. Utilisez Figma Plugin API avec eval, exportez vers Tailwind CSS et produisez du JSON pour la CI.
   - icon: 🧩
     title: Une boîte à outils, pas seulement une application
-    details: Créez des interfaces d’édition avec le SDK Vue, intégrez OpenPencil à d’autres produits ou développez des éditeurs spécialisés sur le même noyau.
+    details: Créez des interfaces d’édition avec le SDK Vue, intégrez Redrob Design à d’autres produits ou développez des éditeurs spécialisés sur le même noyau.
   - icon: 🤖
     title: AI intégrée
     details: Le chat propose 90 outils pour créer des formes, modifier les styles, gérer les dispositions et analyser les variables de design. Serveur MCP pour Claude Code, Cursor et Windsurf.

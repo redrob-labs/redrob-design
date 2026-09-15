@@ -1,8 +1,8 @@
-import type { SceneNode } from '@open-pencil/scene-graph'
-import { getAbsolutePositionFull, getWorldMatrix } from '@open-pencil/scene-graph/coordinate'
-import { computeAbsoluteBounds } from '@open-pencil/scene-graph/geometry'
-import Matrix from '@open-pencil/scene-graph/matrix'
-import type { Vector } from '@open-pencil/scene-graph/primitives'
+import type { SceneNode } from '@redrob-design/scene-graph'
+import { getAbsolutePositionFull, getWorldMatrix } from '@redrob-design/scene-graph/coordinate'
+import { computeAbsoluteBounds } from '@redrob-design/scene-graph/geometry'
+import Matrix from '@redrob-design/scene-graph/matrix'
+import type { Vector } from '@redrob-design/scene-graph/primitives'
 
 import { createFlipRotateActions } from '#core/editor/alignment/flip-rotate'
 

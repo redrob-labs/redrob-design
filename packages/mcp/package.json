@@ -1,5 +1,5 @@
 {
-  "name": "@open-pencil/mcp",
+  "name": "@redrob-design/mcp",
   "version": "0.14.0",
   "license": "MIT",
   "type": "module",
@@ -42,8 +42,8 @@
     }
   },
   "bin": {
-    "openpencil-mcp": "./dist/stdio.mjs",
-    "openpencil-mcp-http": "./dist/index.mjs"
+    "redrob-design-mcp": "./dist/stdio.mjs",
+    "redrob-design-mcp-http": "./dist/index.mjs"
   },
   "files": [
     "dist"
@@ -64,7 +64,7 @@
   "dependencies": {
     "@hono/node-server": "^1.19.17",
     "@modelcontextprotocol/sdk": "^1.30.0",
-    "@open-pencil/core": "workspace:*",
+    "@redrob-design/core": "workspace:*",
     "hono": "^4.13.2",
     "package-manager-detector": "^1.8.0",
     "ws": "^8.21.3",

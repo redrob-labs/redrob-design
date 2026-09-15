@@ -8,7 +8,7 @@ import {
 } from '../src/index'
 import { tailwindCardClasses, tailwindInputClasses } from './helpers'
 
-describe('@open-pencil/dom-css Tailwind', () => {
+describe('@redrob-design/dom-css Tailwind', () => {
   it('compiles utility candidates through Tailwind', async () => {
     const css = await compileTailwindCSS(['flex', 'w-80', 'p-6', 'rounded-xl'])
 

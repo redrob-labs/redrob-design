@@ -1,5 +1,5 @@
-import type { Editor } from '@open-pencil/core/editor'
-import { getAbsoluteRotation } from '@open-pencil/scene-graph/coordinate'
+import type { Editor } from '@redrob-design/core/editor'
+import { getAbsoluteRotation } from '@redrob-design/scene-graph/coordinate'
 
 import {
   buildResizeCursor,

@@ -5,11 +5,11 @@ import {
   createHeadlessCSSRuntime,
   exportHTMLBundle,
   serializeHTML
-} from '@open-pencil/dom-css'
+} from '@redrob-design/dom-css'
 
 import { DOM_CSS_COLORS, simpleCardDocument } from '#tests/helpers/dom-css'
 
-describe('@open-pencil/dom-css', () => {
+describe('@redrob-design/dom-css', () => {
   it('serializes DesignDOM as HTML', () => {
     expect(serializeHTML(simpleCardDocument)).toBe(
       '<div class="card" data-id="node-1">OpenPencil</div>'

@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test'
 
-import { getInstanceOverride, SceneGraph, setInstanceOverride } from '@open-pencil/scene-graph'
+import { getInstanceOverride, SceneGraph, setInstanceOverride } from '@redrob-design/scene-graph'
 
 import type { LibraryObjectStore } from '@/app/integrations/storage'
 import { StorageLibraryCatalog } from '@/app/libraries/catalog/storage'

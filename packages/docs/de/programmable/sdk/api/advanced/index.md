@@ -1,6 +1,6 @@
 ---
 title: Erweiterte API
-description: Spezialisierte öffentliche APIs aus @open-pencil/vue.
+description: Spezialisierte öffentliche APIs aus @redrob-design/vue.
 ---
 
 # Erweiterte API

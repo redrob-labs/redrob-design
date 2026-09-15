@@ -1,6 +1,6 @@
 # Совместимость с Figma
 
-Сравнение возможностей Figma Design с текущим состоянием OpenPencil.
+Сравнение возможностей Figma Design с текущим состоянием Redrob Design.
 
 ::: tip Статус
 ✅ Поддерживается полностью · 🟡 Поддерживается частично · 🔲 Пока не реализовано
@@ -218,7 +218,7 @@
 | Фрагменты кода | 🟡 | JSX с подсветкой и копированием; нет CSS, Swift и Kotlin |
 | Tailwind CSS v4 | ✅ | HTML с классами из вкладки «Код», CLI или программного API |
 | Figma for VS Code | 🔲 | Нет интеграции с редактором кода |
-| Сервер MCP | ✅ | `@open-pencil/mcp`, stdio и HTTP; 87 основных и 3 файловых инструмента |
+| Сервер MCP | ✅ | `@redrob-design/mcp`, stdio и HTTP; 87 основных и 3 файловых инструмента |
 | CLI | ✅ | `info`, `tree`, `find`, `export`, `analyze`, `node`, `pages`, `variables`, `eval` и вывод JSON |
 
 ## Figma Draw

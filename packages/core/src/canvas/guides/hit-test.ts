@@ -1,5 +1,5 @@
-import type { SceneGraph, SceneNode } from '@open-pencil/scene-graph'
-import type { CanvasGuide } from '@open-pencil/scene-graph/guides'
+import type { SceneGraph, SceneNode } from '@redrob-design/scene-graph'
+import type { CanvasGuide } from '@redrob-design/scene-graph/guides'
 
 import { distanceToGuideSegment, getGuideScreenSegment, type GuideViewport } from './geometry'
 

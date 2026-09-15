@@ -2,7 +2,7 @@
 import { tv } from 'tailwind-variants'
 import { PopoverContent, PopoverPortal, PopoverRoot, PopoverTrigger } from 'reka-ui'
 
-import { applySolidFillColor, FillRoot, useI18n } from '@open-pencil/vue'
+import { applySolidFillColor, FillRoot, useI18n } from '@redrob-design/vue'
 
 import ColorPickerPanel from '@/components/color-picker-panel/ColorPickerPanel.vue'
 import GradientEditor from '@/components/fill-picker/GradientEditor.vue'
@@ -12,8 +12,8 @@ import Tip from '@/components/ui/Tip.vue'
 import { usePopoverUI } from '@/components/ui/popover'
 import fillPickerTheme from '@/theme/fill-picker'
 
-import type { Fill } from '@open-pencil/scene-graph'
-import type { OkHCLControls } from '@open-pencil/vue'
+import type { Fill } from '@redrob-design/scene-graph'
+import type { OkHCLControls } from '@redrob-design/vue'
 
 const fillPicker = tv(fillPickerTheme)
 

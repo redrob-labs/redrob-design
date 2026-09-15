@@ -1,5 +1,5 @@
 {
-  "name": "@open-pencil/cli",
+  "name": "@redrob-design/cli",
   "version": "0.14.0",
   "license": "MIT",
   "type": "module",
@@ -7,7 +7,7 @@
     "#cli/*": "./src/*"
   },
   "bin": {
-    "openpencil": "./bin/openpencil.js"
+    "redrob-design": "./bin/redrob-design.js"
   },
   "exports": {
     "./library": {
@@ -35,10 +35,10 @@
     "provenance": true
   },
   "dependencies": {
-    "@open-pencil/core": "workspace:*",
-    "@open-pencil/dom-css": "workspace:*",
-    "@open-pencil/mcp": "workspace:*",
-    "@open-pencil/scene-graph": "workspace:*",
+    "@redrob-design/core": "workspace:*",
+    "@redrob-design/dom-css": "workspace:*",
+    "@redrob-design/mcp": "workspace:*",
+    "@redrob-design/scene-graph": "workspace:*",
     "agentfmt": "^0.1.3",
     "canvaskit-wasm": "^0.41.1",
     "citty": "^0.1.6"

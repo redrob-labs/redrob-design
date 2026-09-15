@@ -1,7 +1,7 @@
 import { beforeAll, describe, expect, test } from 'bun:test'
 
-import { renderNodesToImage, SceneGraph, SkiaRenderer } from '@open-pencil/core'
-import { getWorldMatrix } from '@open-pencil/scene-graph'
+import { renderNodesToImage, SceneGraph, SkiaRenderer } from '@redrob-design/core'
+import { getWorldMatrix } from '@redrob-design/scene-graph'
 
 import { initCanvasKit } from '#cli/headless'
 import { prepareSelectionRenderGraph } from '#core/io/formats/raster/render'

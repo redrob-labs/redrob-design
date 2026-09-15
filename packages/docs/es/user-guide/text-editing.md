@@ -33,4 +33,4 @@ Los estilos parciales se guardan como intervalos y participan en deshacer y reha
 
 ## Fuentes
 
-OpenPencil detecta fuentes del sistema cuando el entorno lo permite. Si falta una fuente, muestra su estado y usa una alternativa hasta que esté disponible.
+Redrob Design detecta fuentes del sistema cuando el entorno lo permite. Si falta una fuente, muestra su estado y usa una alternativa hasta que esté disponible.

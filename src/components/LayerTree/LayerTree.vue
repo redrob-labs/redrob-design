@@ -9,13 +9,13 @@ import {
   ContextMenuPortal
 } from 'reka-ui'
 
-import { LayerTreeRoot, LayerTreeItem, useInlineRename } from '@open-pencil/vue'
+import { LayerTreeRoot, LayerTreeItem, useInlineRename } from '@redrob-design/vue'
 import type {
   LayerDragInstruction,
   LayerNode,
   LayerSelectionMode,
   LayerTreeVirtualizer
-} from '@open-pencil/vue'
+} from '@redrob-design/vue'
 import { useEditorStore } from '@/app/editor/active-store'
 import CanvasMenu from '../canvas/CanvasMenu.vue'
 import LayerTreeNodeRow from './LayerTreeNodeRow.vue'

@@ -18,7 +18,7 @@ export default defineConfig({
     moduleSideEffects: false
   },
   deps: {
-    neverBundle: ['@open-pencil/core', /^@open-pencil\/core\//, 'node:fs/promises'],
+    neverBundle: ['@redrob-design/core', /^@redrob-design\/core\//, 'node:fs/promises'],
     onlyBundle: false
   },
   outputOptions: {

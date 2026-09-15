@@ -9,7 +9,7 @@ Text wird direkt auf der Arbeitsfläche erstellt und bearbeitet. Verschiedene Ze
 
 ## Text erstellen
 
-<kbd>T</kbd> drücken und auf die Arbeitsfläche klicken. OpenPencil erstellt ein leeres Textobjekt und aktiviert den Cursor.
+<kbd>T</kbd> drücken und auf die Arbeitsfläche klicken. Redrob Design erstellt ein leeres Textobjekt und aktiviert den Cursor.
 
 ## Bearbeitungsmodus
 
@@ -47,6 +47,6 @@ Die Schriftauswahl unterstützt Suche, Vorschau, virtuelles Scrollen und das Ans
 
 ## Fehlende Schriften
 
-Kann eine Familie oder ein Schnitt nicht geladen werden, zeigt OpenPencil eine Warnung mit den verwendeten Ersatzschriften. Betroffene Ebenen können ausgewählt und die Schriften erneut geladen werden.
+Kann eine Familie oder ein Schnitt nicht geladen werden, zeigt Redrob Design eine Warnung mit den verwendeten Ersatzschriften. Betroffene Ebenen können ausgewählt und die Schriften erneut geladen werden.
 
 Fehlt nur ein Schnitt, kann er aus einem anderen Schnitt derselben Familie erzeugt werden. Fehlt die ganze Familie, wird nach Möglichkeit Inter verwendet.

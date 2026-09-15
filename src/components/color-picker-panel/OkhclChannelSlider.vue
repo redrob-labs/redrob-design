@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ChannelSliderRoot, ChannelSliderThumb, ChannelSliderTrack } from '@open-pencil/vue'
+import { ChannelSliderRoot, ChannelSliderThumb, ChannelSliderTrack } from '@redrob-design/vue'
 
 import type { ColorSliderUI } from '@/components/color-picker-panel/ui'
 import NumberField from '@/components/inputs/NumberField.vue'

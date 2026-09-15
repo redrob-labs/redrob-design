@@ -1,6 +1,6 @@
 ---
 title: Variablen
-description: Designvariablen, Sammlungen, Modi und Farbbindungen in OpenPencil.
+description: Designvariablen, Sammlungen, Modi und Farbbindungen in Redrob Design.
 ---
 
 # Variablen

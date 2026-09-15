@@ -1,9 +1,9 @@
-import type { Editor } from '@open-pencil/core/editor'
-import type { SceneNode } from '@open-pencil/scene-graph'
-import { getWorldMatrix } from '@open-pencil/scene-graph/coordinate'
-import { layoutGuideLines } from '@open-pencil/scene-graph/layout-guides'
-import Matrix from '@open-pencil/scene-graph/matrix'
-import type { Vector } from '@open-pencil/scene-graph/primitives'
+import type { Editor } from '@redrob-design/core/editor'
+import type { SceneNode } from '@redrob-design/scene-graph'
+import { getWorldMatrix } from '@redrob-design/scene-graph/coordinate'
+import { layoutGuideLines } from '@redrob-design/scene-graph/layout-guides'
+import Matrix from '@redrob-design/scene-graph/matrix'
+import type { Vector } from '@redrob-design/scene-graph/primitives'
 
 import type { ExplicitSnapTarget } from '#vue/shared/input/snap'
 

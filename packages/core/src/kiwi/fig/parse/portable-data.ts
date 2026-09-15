@@ -3,7 +3,7 @@ import type {
   SceneNode,
   Variable,
   VariableCollection
-} from '@open-pencil/scene-graph'
+} from '@redrob-design/scene-graph'
 
 export interface PortableSceneGraphData {
   rootId: string

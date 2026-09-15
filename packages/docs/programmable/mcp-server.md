@@ -1,31 +1,31 @@
 ---
 title: MCP Server
-description: Connect Claude Code, Cursor, Windsurf, and other MCP clients to OpenPencil for AI-assisted design inspection and editing.
+description: Connect Claude Code, Cursor, Windsurf, and other MCP clients to Redrob Design for AI-assisted design inspection and editing.
 ---
 
 # MCP Server
 
-OpenPencil includes an MCP (Model Context Protocol) server that lets AI coding tools — Claude Code, Cursor, Windsurf, etc. — read and modify designs through the running app.
+Redrob Design includes an MCP (Model Context Protocol) server that lets AI coding tools — Claude Code, Cursor, Windsurf, etc. — read and modify designs through the running app.
 
 Two transports: **stdio** for MCP clients, and **Streamable HTTP** for browser extensions and scripts. On macOS and Linux, local clients prefer a private Unix domain socket; Windows and unavailable sockets fall back to localhost TCP.
 
 ## Install
 
 ```sh
-npm install -g @open-pencil/mcp
+npm install -g @redrob-design/mcp
 ```
 
 ## Stdio (Claude Code, Cursor, etc.)
 
-The stdio server discovers the running OpenPencil app automatically. It prefers the app's Unix domain socket on macOS and Linux and falls back to localhost TCP when needed. Make sure the desktop app is open with a document loaded.
+The stdio server discovers the running Redrob Design app automatically. It prefers the app's Unix domain socket on macOS and Linux and falls back to localhost TCP when needed. Make sure the desktop app is open with a document loaded.
 
 ### Claude Code
 
 Install the MCP package and register it with Claude Code:
 
 ```sh
-npm install -g @open-pencil/mcp
-claude mcp add --scope user open-pencil -- openpencil-mcp
+npm install -g @redrob-design/mcp
+claude mcp add --scope user open-pencil -- redrob-design-mcp
 ```
 
 Check the connection:
@@ -34,7 +34,7 @@ Check the connection:
 claude mcp list
 ```
 
-Claude Code asks before using each MCP tool unless you allow the server's tools. To auto-approve OpenPencil tools only, add this to `~/.claude/settings.json`:
+Claude Code asks before using each MCP tool unless you allow the server's tools. To auto-approve Redrob Design tools only, add this to `~/.claude/settings.json`:
 
 ```json
 {
@@ -60,7 +60,7 @@ Add to your MCP config (for example `.cursor/mcp.json`):
 {
   "mcpServers": {
     "open-pencil": {
-      "command": "openpencil-mcp"
+      "command": "redrob-design-mcp"
     }
   }
 }
@@ -96,7 +96,7 @@ Or run from source without installing:
 For browser extensions, scripts, CI, or any HTTP client:
 
 ```sh
-openpencil-mcp-http
+redrob-design-mcp-http
 ```
 
 Or from source: `bun packages/mcp/src/index.ts` / `npx tsx packages/mcp/src/index.ts`
@@ -132,7 +132,7 @@ Most tools accept optional `document_id` and `page_id` fields. Pass them explici
 
 ## AI Agent Skill
 
-Teach your AI coding agent to use OpenPencil tools:
+Teach your AI coding agent to use Redrob Design tools:
 
 ```sh
 npx skills add open-pencil/skills@open-pencil
@@ -142,7 +142,7 @@ Works with Claude Code, Cursor, Windsurf, Codex, and any agent that supports [sk
 
 ## Tools
 
-OpenPencil currently registers 100+ shared design tools, plus MCP-only document and prompt operations when applicable.
+Redrob Design currently registers 100+ shared design tools, plus MCP-only document and prompt operations when applicable.
 
 ### Document
 

@@ -5,7 +5,7 @@ import {
   DEFAULT_AI_MODEL,
   DEFAULT_AI_PROVIDER,
   type AIProviderID
-} from '@open-pencil/core/constants'
+} from '@redrob-design/core/constants'
 
 import {
   readAIModelSettingsStorage,

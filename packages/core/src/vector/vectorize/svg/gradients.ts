@@ -9,8 +9,8 @@
  * normalize into each node's bounding box (objectBoundingBox) space, matching the
  * gradientTransform convention used by the SVG exporter (see io/formats/svg/defs).
  */
-import type { Fill, GradientStop } from '@open-pencil/scene-graph'
-import type { Color, Matrix, Rect, Vector } from '@open-pencil/scene-graph/primitives'
+import type { Fill, GradientStop } from '@redrob-design/scene-graph'
+import type { Color, Matrix, Rect, Vector } from '@redrob-design/scene-graph/primitives'
 
 import { parseColor } from '#core/color'
 import { parseSVGDocument } from '#core/io/formats/svg/document'

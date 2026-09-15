@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'bun:test'
 
-import { SceneGraph } from '@open-pencil/core'
-import noHardcodedColors from '@open-pencil/core/lint/rules/no-hardcoded-colors'
+import { SceneGraph } from '@redrob-design/core'
+import noHardcodedColors from '@redrob-design/core/lint/rules/no-hardcoded-colors'
 
 function pageId(graph: SceneGraph): string {
   return graph.getPages()[0].id

@@ -1,6 +1,6 @@
 import { tryOnScopeDispose, useTimeoutFn } from '@vueuse/core'
 
-import type { UndoManager } from '@open-pencil/scene-graph'
+import type { UndoManager } from '@redrob-design/scene-graph'
 
 const BATCH_IDLE_MS = 300
 

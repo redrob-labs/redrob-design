@@ -4,8 +4,8 @@ import type {
   FontFamilyOption,
   LocalFontAccessState,
   WebFontProviderId
-} from '@open-pencil/core/text'
-import { useI18n } from '@open-pencil/vue'
+} from '@redrob-design/core/text'
+import { useI18n } from '@redrob-design/vue'
 
 import {
   clearDownloadedFontCache,

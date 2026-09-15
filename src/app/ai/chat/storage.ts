@@ -1,7 +1,7 @@
 import { computed, ref, watch } from 'vue'
 
-import { IS_TAURI } from '@open-pencil/core/constants'
-import { setPexelsAPIKey, setUnsplashAccessKey } from '@open-pencil/core/tools'
+import { IS_TAURI } from '@redrob-design/core/constants'
+import { setPexelsAPIKey, setUnsplashAccessKey } from '@redrob-design/core/tools'
 
 import {
   designCustomAPIType,

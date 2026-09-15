@@ -1,14 +1,14 @@
 import { describe, expect, test } from 'bun:test'
 
-import { importNodeChanges } from '@open-pencil/core'
+import { importNodeChanges } from '@redrob-design/core'
 import {
   protectField,
   syncNodeProps,
   type ProtectionMap
-} from '@open-pencil/fig/instance-overrides'
-import type { NodeChange } from '@open-pencil/kiwi/fig/codec'
-import { SceneGraph } from '@open-pencil/scene-graph'
-import type { Fill, Stroke } from '@open-pencil/scene-graph'
+} from '@redrob-design/fig/instance-overrides'
+import type { NodeChange } from '@redrob-design/kiwi/fig/codec'
+import { SceneGraph } from '@redrob-design/scene-graph'
+import type { Fill, Stroke } from '@redrob-design/scene-graph'
 
 function pageId(graph: SceneGraph): string {
   return graph.getPages()[0].id

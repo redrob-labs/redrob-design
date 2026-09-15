@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 
-import { MIXED, type MixedValue } from '@open-pencil/vue'
+import { MIXED, type MixedValue } from '@redrob-design/vue'
 
 import AppInput from '@/components/ui/AppInput.vue'
 

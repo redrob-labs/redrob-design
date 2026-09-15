@@ -6,7 +6,7 @@ import {
   type ParseFigFileOptions,
   type SceneGraph,
   type SceneNode
-} from '@open-pencil/core'
+} from '@redrob-design/core'
 
 import { collectAllNodes } from './fig-traversal'
 

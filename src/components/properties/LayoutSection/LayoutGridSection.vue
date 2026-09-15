@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useEditor, useI18n, useSceneComputed } from '@open-pencil/vue'
+import { useEditor, useI18n, useSceneComputed } from '@redrob-design/vue'
 
 import NumberField from '@/components/inputs/NumberField.vue'
 import IconButton from '@/components/ui/IconButton.vue'
@@ -12,7 +12,7 @@ import PanelItemRow from '@/components/ui/panel/PanelItemRow.vue'
 import PanelSection from '@/components/ui/panel/PanelSection.vue'
 import SharedStyleField from '@/components/properties/shared-style/SharedStyleField.vue'
 
-import type { LayoutGrid } from '@open-pencil/scene-graph'
+import type { LayoutGrid } from '@redrob-design/scene-graph'
 
 const editor = useEditor()
 const { panels } = useI18n()

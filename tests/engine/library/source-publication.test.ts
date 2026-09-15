@@ -1,11 +1,11 @@
 import { describe, expect, test } from 'bun:test'
 
-import { exportFigFile, initCodec, parseFigFile } from '@open-pencil/core'
+import { exportFigFile, initCodec, parseFigFile } from '@redrob-design/core'
 import {
   readSourceLibraryPublication,
   writeSourceLibraryPublication
-} from '@open-pencil/core/library'
-import { SceneGraph } from '@open-pencil/scene-graph'
+} from '@redrob-design/core/library'
+import { SceneGraph } from '@redrob-design/scene-graph'
 
 describe('source library publication identity', () => {
   test('survives a FIG export and reimport', async () => {

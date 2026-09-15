@@ -289,7 +289,7 @@ describe('BrowserRpcBridge reconnection', () => {
     })
 
     // No browser registered — sendRPC rejects with APP_NOT_CONNECTED.
-    await expect(bridge.sendRPC(RPC_BODY)).rejects.toThrow('OpenPencil app is not connected')
+    await expect(bridge.sendRPC(RPC_BODY)).rejects.toThrow('Redrob Design app is not connected')
   }, 12_000)
 
   test('response from non-browser WebSocket is ignored (ws guard)', async () => {

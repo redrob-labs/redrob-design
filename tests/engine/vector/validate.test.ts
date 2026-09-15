@@ -4,7 +4,7 @@ import {
   normalizeVectorNetwork,
   validateVectorNetwork,
   type VectorNetwork
-} from '@open-pencil/core'
+} from '@redrob-design/core'
 
 describe('validateVectorNetwork', () => {
   test('valid network returns no errors', () => {

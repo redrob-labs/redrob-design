@@ -17,9 +17,9 @@ Puedes guardar varios perfiles y asignarlos por separado a diseño, revisiones, 
 
 ## Proveedores
 
-OpenPencil admite conexiones compatibles con OpenAI y Anthropic, además de OpenRouter, Google, Z.ai y proveedores locales. Los modelos y capacidades disponibles dependen de cada servicio.
+Redrob Design admite conexiones compatibles con OpenAI y Anthropic, además de OpenRouter, Google, Z.ai y proveedores locales. Los modelos y capacidades disponibles dependen de cada servicio.
 
-OpenPencil no usa un servidor intermediario. Las solicitudes se envían directamente al proveedor; en el navegador se aplican sus políticas CORS. La fiabilidad de las llamadas de herramientas en flujo continuo también puede variar entre despliegues. Consulta [Compatibilidad BYOK](/programmable/byok-provider-compatibility) para ver mediciones y pasos de reproducción.
+Redrob Design no usa un servidor intermediario. Las solicitudes se envían directamente al proveedor; en el navegador se aplican sus políticas CORS. La fiabilidad de las llamadas de herramientas en flujo continuo también puede variar entre despliegues. Consulta [Compatibilidad BYOK](/programmable/byok-provider-compatibility) para ver mediciones y pasos de reproducción.
 
 ## Agentes ACP y MCP remoto
 
@@ -33,4 +33,4 @@ Las herramientas cubren lectura, creación, modificación, estructura, variables
 
 ## Privacidad y costes
 
-Las solicitudes se envían al proveedor configurado. Revisa sus condiciones, política de datos y precios antes de enviar documentos sensibles. OpenPencil no incluye créditos de modelos.
+Las solicitudes se envían al proveedor configurado. Revisa sus condiciones, política de datos y precios antes de enviar documentos sensibles. Redrob Design no incluye créditos de modelos.

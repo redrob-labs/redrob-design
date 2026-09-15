@@ -1,6 +1,6 @@
 # Open Pencil vs Penpot: Architecture & Performance Comparison
 
-Why compare? OpenPencil exists because closed design platforms control what's possible. Understanding architectural differences shows what an open, local-first alternative can do differently.
+Why compare? Redrob Design exists because closed design platforms control what's possible. Understanding architectural differences shows what an open, local-first alternative can do differently.
 
 ::: info Penpot's WASM renderer
 Penpot 2.x includes a Rust/Skia WASM renderer (`render-wasm/v1`) that can be enabled via server flags or the `?wasm=true` URL parameter. The old SVG renderer remains the default. This page covers both.
@@ -263,7 +263,7 @@ Open Pencil's approach is simpler and lower overhead. Penpot's approach is more 
 ## 10. What Penpot Does Better
 
 1. **Server-side collaboration** — centralized multi-user editing with WebSockets, user accounts, and access control (Open Pencil uses P2P via Trystero + Yjs — no server, but also no access control or persistence beyond the session)
-2. **PDF export** — headless Chromium export service for PDF rendering (OpenPencil exports SVG but not PDF yet)
+2. **PDF export** — headless Chromium export service for PDF rendering (Redrob Design exports SVG but not PDF yet)
 3. **Plugin system** — full plugin API with sandboxed execution
 4. **Design tokens** — native design token support
 5. **CSS Grid layout** — custom implementation (Open Pencil uses Yoga fork with grid support)
@@ -272,7 +272,7 @@ Open Pencil's approach is simpler and lower overhead. Penpot's approach is more 
 
 ## 11. Scripting & Extensibility
 
-OpenPencil ships with an [`eval` command](/programmable/cli/scripting) that provides a Figma-compatible Plugin API for headless scripting — batch operations, automated testing, and AI-driven modifications all run without the GUI. On top of that, **90 AI tools** are available via built-in chat, MCP server (stdio + HTTP), and the CLI — covering read, create, modify, structure, variables, vector path, analyze (color/typography/spacing/clusters), diff, boolean operations, and arrangement. Penpot has a plugin system with sandboxed execution but no headless scripting API or MCP integration.
+Redrob Design ships with an [`eval` command](/programmable/cli/scripting) that provides a Figma-compatible Plugin API for headless scripting — batch operations, automated testing, and AI-driven modifications all run without the GUI. On top of that, **90 AI tools** are available via built-in chat, MCP server (stdio + HTTP), and the CLI — covering read, create, modify, structure, variables, vector path, analyze (color/typography/spacing/clusters), diff, boolean operations, and arrangement. Penpot has a plugin system with sandboxed execution but no headless scripting API or MCP integration.
 
 ## Summary
 

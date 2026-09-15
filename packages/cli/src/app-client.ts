@@ -1,9 +1,9 @@
 import { request as httpRequest } from 'node:http'
 import type { IncomingMessage } from 'node:http'
 
-import { readDiscoveryFile } from '@open-pencil/mcp/discovery'
-import type { DiscoveryInfo } from '@open-pencil/mcp/discovery'
-import { platformHasUnixSockets } from '@open-pencil/mcp/transport'
+import { readDiscoveryFile } from '@redrob-design/mcp/discovery'
+import type { DiscoveryInfo } from '@redrob-design/mcp/discovery'
+import { platformHasUnixSockets } from '@redrob-design/mcp/transport'
 
 /** Maximum time to wait for a single RPC request before giving up. */
 const RPC_TIMEOUT_MS = 30_000

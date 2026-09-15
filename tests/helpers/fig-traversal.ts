@@ -1,4 +1,4 @@
-import type { NodeType, SceneGraph, SceneNode } from '@open-pencil/core'
+import type { NodeType, SceneGraph, SceneNode } from '@redrob-design/core'
 
 export function collectAllNodes(graph: SceneGraph): SceneNode[] {
   const all: SceneNode[] = []

@@ -1,6 +1,6 @@
-import type { Editor, Tool } from '@open-pencil/core/editor'
-import { transformVectorNetwork } from '@open-pencil/scene-graph'
-import { getWorldMatrix } from '@open-pencil/scene-graph/coordinate'
+import type { Editor, Tool } from '@redrob-design/core/editor'
+import { transformVectorNetwork } from '@redrob-design/scene-graph'
+import { getWorldMatrix } from '@redrob-design/scene-graph/coordinate'
 
 import {
   createResumedPenState,

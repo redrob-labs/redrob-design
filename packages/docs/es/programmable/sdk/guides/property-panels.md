@@ -5,7 +5,7 @@ description: Crear paneles de propiedades con composables y componentes sin aspe
 
 # Paneles de propiedades
 
-`@open-pencil/vue` ofrece principalmente composables para construir paneles de propiedades.
+`@redrob-design/vue` ofrece principalmente composables para construir paneles de propiedades.
 
 Si un panel necesita valores calculados a partir de la selección y acciones para modificarlos, usa un composable. Si requiere una estructura reutilizable para matrices o listas, usa un componente sin aspecto predefinido como `PropertyListRoot`.
 
@@ -35,13 +35,13 @@ Cuando un campo pueda vincularse a una variable o un token de diseño externo, c
 - Es preferible incluir una acción explícita para eliminar el enlace dentro del selector que un botón fácil de pulsar por accidente junto al campo.
 - Agrupa cambios de enlace, separación durante la edición y actualizaciones de varios objetos en una sola operación por lotes del proveedor.
 
-La aplicación de OpenPencil muestra el nombre de la variable en morado cuando el campo está inactivo. Al empezar a editar, `NumberField` muestra el valor numérico calculado. Una interfaz propia puede presentar el mismo estado de otra forma.
+La aplicación de Redrob Design muestra el nombre de la variable en morado cuando el campo está inactivo. Al empezar a editar, `NumberField` muestra el valor numérico calculado. Una interfaz propia puede presentar el mismo estado de otra forma.
 
 ## Ejemplo: posición y tamaño
 
 ```vue
 <script setup lang="ts">
-import { usePosition } from '@open-pencil/vue'
+import { usePosition } from '@redrob-design/vue'
 
 const { x, y, width, height, updateProp, commitProp } = usePosition()
 </script>
@@ -64,7 +64,7 @@ import {
   PropertyListRoot,
   useEditorPropertyList,
   useFillControls
-} from '@open-pencil/vue'
+} from '@redrob-design/vue'
 
 const fillControls = useFillControls()
 const fills = useEditorPropertyList('fills')

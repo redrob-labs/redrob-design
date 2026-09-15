@@ -1,4 +1,4 @@
-import type { SceneGraph } from '@open-pencil/scene-graph'
+import type { SceneGraph } from '@redrob-design/scene-graph'
 
 import { raw, type NodeProxyInternals, type ProxyThis } from '#core/figma-api/accessor-utils'
 

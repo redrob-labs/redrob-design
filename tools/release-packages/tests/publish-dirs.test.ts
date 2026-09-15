@@ -17,10 +17,10 @@ async function fixtureRoot() {
     join(root, 'packages/example/package.json'),
     JSON.stringify(
       {
-        name: '@open-pencil/example',
+        name: '@redrob-design/example',
         version: '1.0.0',
         scripts: { build: 'tsdown' },
-        dependencies: { '@open-pencil/core': 'workspace:*', zod: '^4.0.0' },
+        dependencies: { '@redrob-design/core': 'workspace:*', zod: '^4.0.0' },
         exports: { '.': { bun: './src/index.ts', import: './dist/index.js' } },
         devDependencies: { typescript: '^5.0.0' },
         publishConfig: { access: 'public', main: './dist/index.js', types: './dist/index.d.ts' }
@@ -36,9 +36,9 @@ describe('publishPackageJSON', () => {
   test('rewrites workspace dependencies and strips private build fields', () => {
     const json = publishPackageJSON(
       {
-        name: '@open-pencil/example',
+        name: '@redrob-design/example',
         scripts: { build: 'tsdown' },
-        dependencies: { '@open-pencil/core': 'workspace:*', zod: '^4.0.0' },
+        dependencies: { '@redrob-design/core': 'workspace:*', zod: '^4.0.0' },
         exports: { '.': { bun: './src/index.ts', import: './dist/index.js' } },
         devDependencies: { typescript: '^5.0.0' },
         publishConfig: { access: 'public', main: './dist/index.js' }
@@ -47,8 +47,8 @@ describe('publishPackageJSON', () => {
     )
 
     expect(json).toEqual({
-      name: '@open-pencil/example',
-      dependencies: { '@open-pencil/core': '^0.13.2', zod: '^4.0.0' },
+      name: '@redrob-design/example',
+      dependencies: { '@redrob-design/core': '^0.13.2', zod: '^4.0.0' },
       exports: { '.': { import: './dist/index.js' } },
       main: './dist/index.js'
     })
@@ -86,9 +86,9 @@ describe('preparePublishDirectories', () => {
 
     expect(await readFile(join(outRoot, 'example/dist/index.js'), 'utf8')).toBe('export {}\n')
     expect(JSON.parse(await readFile(join(outRoot, 'example/package.json'), 'utf8'))).toEqual({
-      name: '@open-pencil/example',
+      name: '@redrob-design/example',
       version: '1.0.0',
-      dependencies: { '@open-pencil/core': '^0.13.2', zod: '^4.0.0' },
+      dependencies: { '@redrob-design/core': '^0.13.2', zod: '^4.0.0' },
       exports: { '.': { import: './dist/index.js' } },
       main: './dist/index.js',
       types: './dist/index.d.ts'

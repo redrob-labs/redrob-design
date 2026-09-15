@@ -1,4 +1,4 @@
-import { IS_BROWSER, IS_TAURI } from '@open-pencil/core/constants'
+import { IS_BROWSER, IS_TAURI } from '@redrob-design/core/constants'
 
 import ACP_DESIGN_CONTEXT from '@/app/ai/acp/design-context.md'
 
@@ -59,15 +59,15 @@ export {
   COMPONENT_LABEL_ICON_GAP,
   RULER_TARGET_PIXEL_SPACING,
   RULER_MAJOR_TOLERANCE
-} from '@open-pencil/core/constants'
+} from '@redrob-design/core/constants'
 
-import type { Color } from '@open-pencil/scene-graph/primitives'
+import type { Color } from '@redrob-design/scene-graph/primitives'
 
-export const TRYSTERO_APP_ID = 'openpencil'
+export const TRYSTERO_APP_ID = 'redrob-design'
 export const ROOM_ID_LENGTH = 8
 export const ROOM_ID_CHARS = 'abcdefghijklmnopqrstuvwxyz0123456789'
 
-export const WEB_APP_ORIGIN = 'https://app.openpencil.dev'
+export const WEB_APP_ORIGIN = 'https://app.redrob.design'
 
 export function getShareURL(roomId: string): string {
   const base = IS_TAURI || !IS_BROWSER ? WEB_APP_ORIGIN : window.location.origin
@@ -93,7 +93,7 @@ export {
   ZOOM_DIVISOR,
   ZOOM_SCALE_MIN,
   ZOOM_SCALE_MAX
-} from '@open-pencil/core/constants'
+} from '@redrob-design/core/constants'
 
 export const ASSET_GRID_THUMBNAIL_SIZE = 96
 export const ASSET_LIST_THUMBNAIL_SIZE = 40

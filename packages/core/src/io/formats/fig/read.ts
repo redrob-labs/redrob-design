@@ -1,6 +1,6 @@
-import { parseFigBuffer } from '@open-pencil/fig'
-import type { FigPageManifestEntry } from '@open-pencil/kiwi/fig'
-import type { SceneGraph } from '@open-pencil/scene-graph'
+import { parseFigBuffer } from '@redrob-design/fig'
+import type { FigPageManifestEntry } from '@redrob-design/kiwi/fig'
+import type { SceneGraph } from '@redrob-design/scene-graph'
 
 import { IS_BROWSER } from '#core/constants'
 import { importNodeChanges } from '#core/kiwi/fig/import'

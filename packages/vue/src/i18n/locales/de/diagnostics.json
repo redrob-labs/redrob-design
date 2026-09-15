@@ -23,7 +23,7 @@
   "technicalEvent": "Technisches Ereignis",
   "retention": "Aufbewahrungsdauer der Diagnose",
   "retentionDescription": "Bis zu dieser Anzahl aktueller Ereignisse lokal speichern.",
-  "description": "Technische Ereignisse lokal speichern, um OpenPencil zu unterstützen. Prompts, Designinhalte, Zugangsdaten und API-Schlüssel werden ausgeschlossen.",
+  "description": "Technische Ereignisse lokal speichern, um Redrob Design zu unterstützen. Prompts, Designinhalte, Zugangsdaten und API-Schlüssel werden ausgeschlossen.",
   "eventCount": "{count} Ereignisse · {size} KB",
   "copy": "Diagnosedaten kopieren",
   "clear": "Löschen",

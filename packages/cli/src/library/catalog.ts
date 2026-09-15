@@ -8,12 +8,12 @@ import type {
   PublishLibraryInput,
   SerializedComponentLibraryRevision,
   StoredLibraryLatestManifest
-} from '@open-pencil/core/library'
+} from '@redrob-design/core/library'
 import {
   createLibraryRevision,
   deserializeLibraryRevision,
   serializeLibraryRevision
-} from '@open-pencil/core/library'
+} from '@redrob-design/core/library'
 
 const catalogPublicationQueues = new Map<string, Promise<void>>()
 

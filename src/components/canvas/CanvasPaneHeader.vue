@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger
 } from 'reka-ui'
 
-import { useI18n } from '@open-pencil/vue'
+import { useI18n } from '@redrob-design/vue'
 import { useEditorStore } from '@/app/editor/active-store'
 import type { SplitDirection } from '@/app/editor/panes/split-tree'
 import IconButton from '@/components/ui/IconButton.vue'

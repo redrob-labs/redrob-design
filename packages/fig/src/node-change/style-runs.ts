@@ -1,6 +1,6 @@
-import type { NodeChange } from '@open-pencil/kiwi/fig/codec'
-import { styleToWeight } from '@open-pencil/scene-graph'
-import type { CharacterStyleOverride, StyleRun } from '@open-pencil/scene-graph'
+import type { NodeChange } from '@redrob-design/kiwi/fig/codec'
+import { styleToWeight } from '@redrob-design/scene-graph'
+import type { CharacterStyleOverride, StyleRun } from '@redrob-design/scene-graph'
 
 import { convertFontFeatures } from './font/features'
 import { convertFontVariations } from './font/variations'

@@ -30,15 +30,15 @@ describe('resolvePlatformCommand', () => {
   })
 
   test('defaults args to an empty array', () => {
-    expect(resolvePlatformCommand('openpencil-mcp-http', undefined, MAC_UA)).toEqual({
-      command: 'openpencil-mcp-http',
+    expect(resolvePlatformCommand('redrob-design-mcp-http', undefined, MAC_UA)).toEqual({
+      command: 'redrob-design-mcp-http',
       args: []
     })
   })
 
   test('passes through when the user agent is unavailable (headless/non-browser)', () => {
-    expect(resolvePlatformCommand('openpencil-mcp-http', ['--stdio'], '')).toEqual({
-      command: 'openpencil-mcp-http',
+    expect(resolvePlatformCommand('redrob-design-mcp-http', ['--stdio'], '')).toEqual({
+      command: 'redrob-design-mcp-http',
       args: ['--stdio']
     })
   })

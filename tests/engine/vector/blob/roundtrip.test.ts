@@ -5,7 +5,7 @@ import {
   encodeVectorNetworkBlob,
   decodeVectorNetworkBlob,
   type VectorNetwork
-} from '@open-pencil/core'
+} from '@redrob-design/core'
 
 import {
   lineNetwork,

@@ -16,8 +16,8 @@ Pass callbacks to connect it to your own state or persistence layer.
 
 ```ts
 import { ref } from 'vue'
-import { useColorModel } from '@open-pencil/vue'
-import type { Color } from '@open-pencil/scene-graph'
+import { useColorModel } from '@redrob-design/vue'
+import type { Color } from '@redrob-design/scene-graph'
 
 const color = ref<Color>({ r: 0.25, g: 0.5, b: 0.9, a: 1 })
 
@@ -71,7 +71,7 @@ model.updateOkHCLChannel('c', 0.24)
 ```
 
 When no OkHCL callback is supplied, OkHCL edits emit a gamut-mapped scene color through
-`onUpdate`. Conversion and gamut handling reuse OpenPencil's culori-backed core color APIs.
+`onUpdate`. Conversion and gamut handling reuse Redrob Design's culori-backed core color APIs.
 
 ## Slider presentation
 

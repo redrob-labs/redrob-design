@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-import { MIXED, useComponentProperties, useI18n } from '@open-pencil/vue'
+import { MIXED, useComponentProperties, useI18n } from '@redrob-design/vue'
 
 import ComponentPropertyTextField from './ComponentPropertyTextField.vue'
 

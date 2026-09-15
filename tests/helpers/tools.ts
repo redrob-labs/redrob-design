@@ -1,4 +1,4 @@
-import { ALL_TOOLS, FigmaAPI, SceneGraph } from '@open-pencil/core'
+import { ALL_TOOLS, FigmaAPI, SceneGraph } from '@redrob-design/core'
 
 export { ALL_TOOLS }
 

@@ -1,11 +1,11 @@
 ---
 title: Composables
-description: Najważniejsze composables pakietu @open-pencil/vue.
+description: Najważniejsze composables pakietu @redrob-design/vue.
 ---
 
 # Composables
 
-Poniżej znajdują się composables najczęściej używane podczas pracy z `@open-pencil/vue`.
+Poniżej znajdują się composables najczęściej używane podczas pracy z `@redrob-design/vue`.
 
 ## Kontekst i obszar roboczy
 

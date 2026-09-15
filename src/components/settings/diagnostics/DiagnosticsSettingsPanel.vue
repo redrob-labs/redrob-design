@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useI18n, SegmentedControlItem, SegmentedControlRoot } from '@open-pencil/vue'
+import { useI18n, SegmentedControlItem, SegmentedControlRoot } from '@redrob-design/vue'
 import { computed, onUnmounted, ref } from 'vue'
 
 import {

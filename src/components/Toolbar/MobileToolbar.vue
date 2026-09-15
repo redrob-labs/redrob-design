@@ -9,10 +9,10 @@ import ToolButton from '@/components/Toolbar/ToolButton.vue'
 import ToolFlyout from '@/components/Toolbar/ToolFlyout.vue'
 import ToolbarActionGroup from '@/components/Toolbar/ToolbarActionGroup.vue'
 import toolbarTheme from '@/theme/toolbar'
-import { getToolbarToolSelection, toolbarToolTestId, ToolbarItem } from '@open-pencil/vue'
+import { getToolbarToolSelection, toolbarToolTestId, ToolbarItem } from '@redrob-design/vue'
 
-import type { Tool } from '@open-pencil/vue'
-import type { EditorToolDef } from '@open-pencil/core/editor'
+import type { Tool } from '@redrob-design/vue'
+import type { EditorToolDef } from '@redrob-design/core/editor'
 import type {
   ToolbarActionItem,
   ToolbarUI,

@@ -2,7 +2,7 @@ import { describe, expect, test } from 'bun:test'
 
 import { reactive, ref } from 'vue'
 
-import { createDefaultEditorState } from '@open-pencil/core/editor'
+import { createDefaultEditorState } from '@redrob-design/core/editor'
 
 import { createDocumentRecovery } from '@/app/document/recovery/controller'
 import { createMemoryRecoveryStore } from '@/app/document/recovery/memory'

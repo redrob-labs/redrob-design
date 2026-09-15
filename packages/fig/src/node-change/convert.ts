@@ -1,10 +1,10 @@
-import { guidToString } from '@open-pencil/kiwi/fig/guid'
+import { guidToString } from '@redrob-design/kiwi/fig/guid'
 import {
   DEFAULT_FONT_FAMILY,
   DEFAULT_STROKE_MITER_LIMIT,
   styleToWeight
-} from '@open-pencil/scene-graph'
-import { parseVariantName } from '@open-pencil/scene-graph/variant-name'
+} from '@redrob-design/scene-graph'
+import { parseVariantName } from '@redrob-design/scene-graph/variant-name'
 /* eslint-disable max-lines -- kiwi↔scene conversion helpers are tightly coupled */
 
 import { importCanvasGuides } from './canvas-guides'
@@ -40,7 +40,7 @@ export { importStyleRuns } from './style-runs'
 export { convertLetterSpacing, convertLineHeight, mapTextDecoration } from './text-values'
 export { resolveGeometryPaths } from './vector-geometry'
 
-import type { NodeChange } from '@open-pencil/kiwi/fig/codec'
+import type { NodeChange } from '@redrob-design/kiwi/fig/codec'
 import type {
   SceneNode,
   NodeType,
@@ -67,10 +67,10 @@ import type {
   VariantPropSpec,
   VariableModeMap,
   Vector
-} from '@open-pencil/scene-graph'
-import type { GUID } from '@open-pencil/scene-graph/primitives'
+} from '@redrob-design/scene-graph'
+import type { GUID } from '@redrob-design/scene-graph/primitives'
 
-export { guidToString, stringToGuid } from '@open-pencil/kiwi/fig/guid'
+export { guidToString, stringToGuid } from '@redrob-design/kiwi/fig/guid'
 export { VARIABLE_BINDING_FIELDS, VARIABLE_BINDING_FIELDS_INVERSE } from './variable-bindings'
 
 interface FigVariableModeMap {

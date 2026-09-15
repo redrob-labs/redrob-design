@@ -1,4 +1,4 @@
-import { createDefaultEditorState, type EditorState } from '@open-pencil/core/editor'
+import { createDefaultEditorState, type EditorState } from '@redrob-design/core/editor'
 
 import type { EditorPreparation } from '@/app/editor/preparation/types'
 import type { NodeEditState } from '@/app/editor/vector/types'

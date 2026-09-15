@@ -1,7 +1,7 @@
 import { converter, parse } from 'culori'
 
-import { BLACK } from '@open-pencil/scene-graph/constants'
-import type { Color } from '@open-pencil/scene-graph/primitives'
+import { BLACK } from '@redrob-design/scene-graph/constants'
+import type { Color } from '@redrob-design/scene-graph/primitives'
 
 const rgbConverter = converter('rgb')
 

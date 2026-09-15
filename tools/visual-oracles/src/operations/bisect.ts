@@ -6,10 +6,10 @@ import { parseArgs } from 'node:util'
 
 import { $ } from 'bun'
 
-import { parseColor } from '@open-pencil/core/color'
-import { headlessRenderNodes, initCanvasKit, parseFigFile } from '@open-pencil/core/io'
-import { computeAllLayouts } from '@open-pencil/core/layout'
-import type { SceneGraph } from '@open-pencil/core/scene-graph'
+import { parseColor } from '@redrob-design/core/color'
+import { headlessRenderNodes, initCanvasKit, parseFigFile } from '@redrob-design/core/io'
+import { computeAllLayouts } from '@redrob-design/core/layout'
+import type { SceneGraph } from '@redrob-design/core/scene-graph'
 
 interface DiffMetrics {
   mean: number

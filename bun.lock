@@ -1,6 +1,5 @@
 {
   "lockfileVersion": 1,
-  "configVersion": 1,
   "workspaces": {
     "": {
       "name": "open-pencil-app",
@@ -25,16 +24,17 @@
         "@codemirror/view": "^6.43.9",
         "@nanostores/i18n": "^1.3.3",
         "@nanostores/vue": "^1.1.0",
-        "@open-pencil/cli": "workspace:*",
-        "@open-pencil/core": "workspace:*",
-        "@open-pencil/dom-css": "workspace:*",
-        "@open-pencil/fig": "workspace:*",
-        "@open-pencil/harness": "workspace:*",
-        "@open-pencil/kiwi": "workspace:*",
-        "@open-pencil/pen": "workspace:*",
-        "@open-pencil/scene-graph": "workspace:*",
-        "@open-pencil/vue": "workspace:*",
         "@openrouter/ai-sdk-provider": "^3.0.0",
+        "@redrob-design/brand": "workspace:*",
+        "@redrob-design/cli": "workspace:*",
+        "@redrob-design/core": "workspace:*",
+        "@redrob-design/dom-css": "workspace:*",
+        "@redrob-design/fig": "workspace:*",
+        "@redrob-design/harness": "workspace:*",
+        "@redrob-design/kiwi": "workspace:*",
+        "@redrob-design/pen": "workspace:*",
+        "@redrob-design/scene-graph": "workspace:*",
+        "@redrob-design/vue": "workspace:*",
         "@stream-markdown/code": "2.0.0-beta.2",
         "@tailwindcss/vite": "^4.3.3",
         "@tanstack/vue-table": "^8.21.3",
@@ -90,8 +90,8 @@
         "@hono/node-server": "^1.19.17",
         "@iconify-json/lucide": "^1.2.123",
         "@modelcontextprotocol/sdk": "^1.30.0",
-        "@open-pencil/mcp": "workspace:*",
         "@playwright/test": "^1.62.1",
+        "@redrob-design/mcp": "workspace:*",
         "@storybook/addon-a11y": "^10.5.8",
         "@storybook/addon-docs": "^10.5.8",
         "@storybook/addon-themes": "^10.5.8",
@@ -146,17 +146,28 @@
         "ws": "^8.21.3",
       },
     },
+    "packages/brand": {
+      "name": "@redrob-design/brand",
+      "version": "0.1.0",
+      "dependencies": {
+        "yaml": "^2.8.4",
+        "zod": "^4.4.3",
+      },
+      "devDependencies": {
+        "typescript": "~5.8.3",
+      },
+    },
     "packages/cli": {
-      "name": "@open-pencil/cli",
+      "name": "@redrob-design/cli",
       "version": "0.14.0",
       "bin": {
         "openpencil": "./bin/openpencil.js",
       },
       "dependencies": {
-        "@open-pencil/core": "workspace:*",
-        "@open-pencil/dom-css": "workspace:*",
-        "@open-pencil/mcp": "workspace:*",
-        "@open-pencil/scene-graph": "workspace:*",
+        "@redrob-design/core": "workspace:*",
+        "@redrob-design/dom-css": "workspace:*",
+        "@redrob-design/mcp": "workspace:*",
+        "@redrob-design/scene-graph": "workspace:*",
         "agentfmt": "^0.1.3",
         "canvaskit-wasm": "^0.41.1",
         "citty": "^0.1.6",
@@ -166,15 +177,15 @@
       },
     },
     "packages/core": {
-      "name": "@open-pencil/core",
+      "name": "@redrob-design/core",
       "version": "0.14.0",
       "dependencies": {
         "@chenglou/pretext": "^0.0.7",
         "@iconify/utils": "^3.1.4",
-        "@open-pencil/fig": "workspace:*",
-        "@open-pencil/kiwi": "workspace:*",
-        "@open-pencil/pen": "workspace:*",
-        "@open-pencil/scene-graph": "workspace:*",
+        "@redrob-design/fig": "workspace:*",
+        "@redrob-design/kiwi": "workspace:*",
+        "@redrob-design/pen": "workspace:*",
+        "@redrob-design/scene-graph": "workspace:*",
         "@tauri-apps/api": "^2.11.1",
         "@xmldom/xmldom": "^0.9.11",
         "acorn": "^8.18.0",
@@ -211,7 +222,7 @@
       },
     },
     "packages/docs": {
-      "name": "@open-pencil/docs",
+      "name": "@redrob-design/docs",
       "version": "0.1.0",
       "dependencies": {
         "@iconify/vue": "^5.0.1",
@@ -226,7 +237,7 @@
       },
     },
     "packages/dom-css": {
-      "name": "@open-pencil/dom-css",
+      "name": "@redrob-design/dom-css",
       "version": "0.14.0",
       "dependencies": {
         "@acemir/cssom": "^0.9.31",
@@ -241,12 +252,12 @@
         "typescript": "~5.8.3",
       },
       "peerDependencies": {
-        "@open-pencil/core": "workspace:*",
-        "@open-pencil/scene-graph": "workspace:*",
+        "@redrob-design/core": "workspace:*",
+        "@redrob-design/scene-graph": "workspace:*",
       },
     },
     "packages/fig": {
-      "name": "@open-pencil/fig",
+      "name": "@redrob-design/fig",
       "version": "0.14.0",
       "dependencies": {
         "es-toolkit": "^1.51.0",
@@ -258,12 +269,12 @@
         "typescript": "~5.8.3",
       },
       "peerDependencies": {
-        "@open-pencil/kiwi": "workspace:*",
-        "@open-pencil/scene-graph": "workspace:*",
+        "@redrob-design/kiwi": "workspace:*",
+        "@redrob-design/scene-graph": "workspace:*",
       },
     },
     "packages/harness": {
-      "name": "@open-pencil/harness",
+      "name": "@redrob-design/harness",
       "version": "0.14.0",
       "bin": {
         "openpencil-harness": "./dist/stdio.mjs",
@@ -279,7 +290,7 @@
       },
     },
     "packages/kiwi": {
-      "name": "@open-pencil/kiwi",
+      "name": "@redrob-design/kiwi",
       "version": "0.14.0",
       "dependencies": {
         "fflate": "^0.8.3",
@@ -292,7 +303,7 @@
       },
     },
     "packages/mcp": {
-      "name": "@open-pencil/mcp",
+      "name": "@redrob-design/mcp",
       "version": "0.14.0",
       "bin": {
         "openpencil-mcp": "./dist/stdio.mjs",
@@ -301,7 +312,7 @@
       "dependencies": {
         "@hono/node-server": "^1.19.17",
         "@modelcontextprotocol/sdk": "^1.30.0",
-        "@open-pencil/core": "workspace:*",
+        "@redrob-design/core": "workspace:*",
         "hono": "^4.13.2",
         "package-manager-detector": "^1.8.0",
         "ws": "^8.21.3",
@@ -313,7 +324,7 @@
       },
     },
     "packages/pen": {
-      "name": "@open-pencil/pen",
+      "name": "@redrob-design/pen",
       "version": "0.14.0",
       "dependencies": {
         "culori": "^4.0.2",
@@ -325,11 +336,11 @@
         "typescript": "~5.8.3",
       },
       "peerDependencies": {
-        "@open-pencil/scene-graph": "workspace:*",
+        "@redrob-design/scene-graph": "workspace:*",
       },
     },
     "packages/scene-graph": {
-      "name": "@open-pencil/scene-graph",
+      "name": "@redrob-design/scene-graph",
       "version": "0.14.0",
       "dependencies": {
         "es-toolkit": "^1.51.0",
@@ -343,14 +354,14 @@
       },
     },
     "packages/vue": {
-      "name": "@open-pencil/vue",
+      "name": "@redrob-design/vue",
       "version": "0.14.0",
       "dependencies": {
         "@atlaskit/pragmatic-drag-and-drop": "^1.8.1",
         "@atlaskit/pragmatic-drag-and-drop-hitbox": "^1.2.0",
         "@nanostores/i18n": "^1.3.3",
         "@nanostores/vue": "^1.1.0",
-        "@open-pencil/scene-graph": "workspace:*",
+        "@redrob-design/scene-graph": "workspace:*",
         "@tanstack/vue-table": "^8.21.3",
         "@vueuse/core": "^14.4.0",
         "fuse.js": "^7.5.0",
@@ -363,7 +374,7 @@
         "unplugin-vue": "^7.2.0",
       },
       "peerDependencies": {
-        "@open-pencil/core": "workspace:*",
+        "@redrob-design/core": "workspace:*",
         "canvaskit-wasm": ">=0.41.1",
         "vue": "^3.5.41",
       },
@@ -372,16 +383,16 @@
       ],
     },
     "tools/docs": {
-      "name": "@open-pencil/docs-tools",
+      "name": "@redrob-design/docs-tools",
     },
     "tools/package-quality": {
-      "name": "@open-pencil/package-quality-tools",
+      "name": "@redrob-design/package-quality-tools",
       "dependencies": {
         "citty": "^0.1.6",
       },
     },
     "tools/visual-oracles": {
-      "name": "@open-pencil/visual-oracle-tools",
+      "name": "@redrob-design/visual-oracle-tools",
       "dependencies": {
         "citty": "^0.1.6",
       },
@@ -1143,34 +1154,6 @@
 
     "@nodelib/fs.walk": ["@nodelib/fs.walk@1.2.8", "", { "dependencies": { "@nodelib/fs.scandir": "2.1.5", "fastq": "^1.6.0" } }, "sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg=="],
 
-    "@open-pencil/cli": ["@open-pencil/cli@workspace:packages/cli"],
-
-    "@open-pencil/core": ["@open-pencil/core@workspace:packages/core"],
-
-    "@open-pencil/docs": ["@open-pencil/docs@workspace:packages/docs"],
-
-    "@open-pencil/docs-tools": ["@open-pencil/docs-tools@workspace:tools/docs"],
-
-    "@open-pencil/dom-css": ["@open-pencil/dom-css@workspace:packages/dom-css"],
-
-    "@open-pencil/fig": ["@open-pencil/fig@workspace:packages/fig"],
-
-    "@open-pencil/harness": ["@open-pencil/harness@workspace:packages/harness"],
-
-    "@open-pencil/kiwi": ["@open-pencil/kiwi@workspace:packages/kiwi"],
-
-    "@open-pencil/mcp": ["@open-pencil/mcp@workspace:packages/mcp"],
-
-    "@open-pencil/package-quality-tools": ["@open-pencil/package-quality-tools@workspace:tools/package-quality"],
-
-    "@open-pencil/pen": ["@open-pencil/pen@workspace:packages/pen"],
-
-    "@open-pencil/scene-graph": ["@open-pencil/scene-graph@workspace:packages/scene-graph"],
-
-    "@open-pencil/visual-oracle-tools": ["@open-pencil/visual-oracle-tools@workspace:tools/visual-oracles"],
-
-    "@open-pencil/vue": ["@open-pencil/vue@workspace:packages/vue"],
-
     "@openrouter/ai-sdk-provider": ["@openrouter/ai-sdk-provider@3.0.0", "", { "peerDependencies": { "ai": "^7.0.0", "zod": "^3.25.76 || ^4.1.8" } }, "sha512-m9XTSWoODH2RM5OsZpaGiN7QRR8cdP5paBWq699Tu3JVmGPBKT8xF8XwV0ZBVVsjikD/JgWfak4VSsTR4wAVbg=="],
 
     "@opentelemetry/api": ["@opentelemetry/api@1.9.0", "", {}, "sha512-3giAOQvZiH5F9bMlMiv8+GSPMeqg0dbaeo58/0SlA9sxSqZhnUtxzX9/2FzyhS9sWQf5S0GJE0AKBrFqjpeYcg=="],
@@ -1378,6 +1361,36 @@
     "@puppeteer/browsers": ["@puppeteer/browsers@2.13.2", "", { "dependencies": { "debug": "^4.4.3", "extract-zip": "^2.0.1", "progress": "^2.0.3", "proxy-agent": "^6.5.0", "semver": "^7.7.4", "tar-fs": "^3.1.1", "yargs": "^17.7.2" }, "bin": { "browsers": "lib/cjs/main-cli.js" } }, "sha512-5EUZSUIc37H6aIXyWO0Z4y8NlF8NnjgmqeQgOGiswAU7pY0HOo16ho4+alIWmSfdZnjqBRawMsP3I5YqLSn6kw=="],
 
     "@quansync/fs": ["@quansync/fs@1.0.0", "", { "dependencies": { "quansync": "^1.0.0" } }, "sha512-4TJ3DFtlf1L5LDMaM6CanJ/0lckGNtJcMjQ1NAV6zDmA0tEHKZtxNKin8EgPaVX1YzljbxckyT2tJrpQKAtngQ=="],
+
+    "@redrob-design/brand": ["@redrob-design/brand@workspace:packages/brand"],
+
+    "@redrob-design/cli": ["@redrob-design/cli@workspace:packages/cli"],
+
+    "@redrob-design/core": ["@redrob-design/core@workspace:packages/core"],
+
+    "@redrob-design/docs": ["@redrob-design/docs@workspace:packages/docs"],
+
+    "@redrob-design/docs-tools": ["@redrob-design/docs-tools@workspace:tools/docs"],
+
+    "@redrob-design/dom-css": ["@redrob-design/dom-css@workspace:packages/dom-css"],
+
+    "@redrob-design/fig": ["@redrob-design/fig@workspace:packages/fig"],
+
+    "@redrob-design/harness": ["@redrob-design/harness@workspace:packages/harness"],
+
+    "@redrob-design/kiwi": ["@redrob-design/kiwi@workspace:packages/kiwi"],
+
+    "@redrob-design/mcp": ["@redrob-design/mcp@workspace:packages/mcp"],
+
+    "@redrob-design/package-quality-tools": ["@redrob-design/package-quality-tools@workspace:tools/package-quality"],
+
+    "@redrob-design/pen": ["@redrob-design/pen@workspace:packages/pen"],
+
+    "@redrob-design/scene-graph": ["@redrob-design/scene-graph@workspace:packages/scene-graph"],
+
+    "@redrob-design/visual-oracle-tools": ["@redrob-design/visual-oracle-tools@workspace:tools/visual-oracles"],
+
+    "@redrob-design/vue": ["@redrob-design/vue@workspace:packages/vue"],
 
     "@rolldown/binding-android-arm64": ["@rolldown/binding-android-arm64@1.2.4", "", { "os": "android", "cpu": "arm64" }, "sha512-jHC2cnyKz5xU2fhECtFl8OZ83cYNt13GZQD+0uMJ/X3o+ijmd56okHhTUwxVSHPx1IRVIJEZ1/1pPzeLCU6XKA=="],
 
@@ -2437,7 +2450,7 @@
 
     "eslint-scope": ["eslint-scope@9.1.2", "", { "dependencies": { "@types/esrecurse": "^4.3.1", "@types/estree": "^1.0.8", "esrecurse": "^4.3.0", "estraverse": "^5.2.0" } }, "sha512-xS90H51cKw0jltxmvmHy2Iai1LIqrfbw57b79w/J7MfvDfkIkFZ+kj6zC3BjtUwh150HsSSdxXZcsuv72miDFQ=="],
 
-    "eslint-visitor-keys": ["eslint-visitor-keys@3.4.3", "", {}, "sha512-wpc+LXeiyiisxPlEkUzU6svyS1frIO3Mgxj1fdy7Pm8Ygzguax2N3Fa/D/ag1WqbOprdI+uY6wMUl8/a2G+iag=="],
+    "eslint-visitor-keys": ["eslint-visitor-keys@5.0.1", "", {}, "sha512-tD40eHxA35h0PEIZNeIjkHoDR4YjjJp34biM0mDvplBe//mB+IHCqHDGV7pxF+7MklTvighcCPPZC7ynWyjdTA=="],
 
     "esm-resolve": ["esm-resolve@1.0.11", "", {}, "sha512-LxF0wfUQm3ldUDHkkV2MIbvvY0TgzIpJ420jHSV1Dm+IlplBEWiJTKWM61GtxUfvjV6iD4OtTYFGAGM2uuIUWg=="],
 
@@ -4313,6 +4326,8 @@
 
     "@earendil-works/pi-tui/marked": ["marked@18.0.5", "", { "bin": { "marked": "bin/marked.js" } }, "sha512-S6GcvALHg6K4ohtu4E7x0a1AqhAjp6cV8KhLSyN9qVapnzJkusVBxZRcIU9AeYsbe6P1hKDusSbEOzGyyuce6w=="],
 
+    "@eslint-community/eslint-utils/eslint-visitor-keys": ["eslint-visitor-keys@3.4.3", "", {}, "sha512-wpc+LXeiyiisxPlEkUzU6svyS1frIO3Mgxj1fdy7Pm8Ygzguax2N3Fa/D/ag1WqbOprdI+uY6wMUl8/a2G+iag=="],
+
     "@feature-sliced/filesystem/typescript": ["typescript@5.9.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw=="],
 
     "@firebase/app/idb": ["idb@7.1.1", "", {}, "sha512-gchesWBzyvGHRO9W8tzUWFDycow5gwjvFKfyV9FF32Y7F50yZMp7mP+T2mJIWFx49zicqyC4uefHM17o6xKIVQ=="],
@@ -4378,8 +4393,6 @@
     "@testing-library/dom/pretty-format": ["pretty-format@27.5.1", "", { "dependencies": { "ansi-regex": "^5.0.1", "ansi-styles": "^5.0.0", "react-is": "^17.0.1" } }, "sha512-Qb1gy5OrP5+zDf2Bvnzdl3jsTf1qXVMazbvCoKhtKqVs4/YK4ozX4gKQJJVyNe+cajNPn0KoC0MC3FUmaHWEmQ=="],
 
     "@testing-library/jest-dom/dom-accessibility-api": ["dom-accessibility-api@0.6.3", "", {}, "sha512-7ZgogeTnjuHbo+ct10G9Ffp0mif17idi0IyWNVA/wcwcm7NPOD/WEHVP3n7n3MhXqxoIYm8d6MuZohYWIZ4T3w=="],
-
-    "@typescript-eslint/visitor-keys/eslint-visitor-keys": ["eslint-visitor-keys@5.0.1", "", {}, "sha512-tD40eHxA35h0PEIZNeIjkHoDR4YjjJp34biM0mDvplBe//mB+IHCqHDGV7pxF+7MklTvighcCPPZC7ynWyjdTA=="],
 
     "@vitest/expect/@vitest/utils": ["@vitest/utils@3.2.4", "", { "dependencies": { "@vitest/pretty-format": "3.2.4", "loupe": "^3.1.4", "tinyrainbow": "^2.0.0" } }, "sha512-fB2V0JFrQSMsCo9HiSq3Ezpdv4iYaXRG1Sx8edX3MwxfyNn83mKiGzOcH+Fkxt4MHxr3y42fQi1oeAInqgX2QA=="],
 
@@ -4488,10 +4501,6 @@
     "encoding-sniffer/iconv-lite": ["iconv-lite@0.6.3", "", { "dependencies": { "safer-buffer": ">= 2.1.2 < 3.0.0" } }, "sha512-4fCk79wshMdzMp2rH06qWrJE4iolqLhCUH+OiuIgU++RB0+94NlDL81atO7GX55uUKueo0txHNtvEyI6D7WdMw=="],
 
     "eslint/ajv": ["ajv@6.15.0", "", { "dependencies": { "fast-deep-equal": "^3.1.1", "fast-json-stable-stringify": "^2.0.0", "json-schema-traverse": "^0.4.1", "uri-js": "^4.2.2" } }, "sha512-fgFx7Hfoq60ytK2c7DhnF8jIvzYgOMxfugjLOSMHjLIPgenqa7S7oaagATUq99mV6IYvN2tRmC0wnTYX6iPbMw=="],
-
-    "eslint/eslint-visitor-keys": ["eslint-visitor-keys@5.0.1", "", {}, "sha512-tD40eHxA35h0PEIZNeIjkHoDR4YjjJp34biM0mDvplBe//mB+IHCqHDGV7pxF+7MklTvighcCPPZC7ynWyjdTA=="],
-
-    "espree/eslint-visitor-keys": ["eslint-visitor-keys@5.0.1", "", {}, "sha512-tD40eHxA35h0PEIZNeIjkHoDR4YjjJp34biM0mDvplBe//mB+IHCqHDGV7pxF+7MklTvighcCPPZC7ynWyjdTA=="],
 
     "execa/@sindresorhus/merge-streams": ["@sindresorhus/merge-streams@4.0.0", "", {}, "sha512-tlqY9xq5ukxTUZBmoOp+m61cqwQD5pHJtFY3Mn8CA8ps6yghLH/Hw8UPdqg4OLmFW3IFlcXnQNmo/dh8HzXYIQ=="],
 
@@ -5274,8 +5283,6 @@
     "cli-highlight/yargs/cliui/strip-ansi": ["strip-ansi@6.0.1", "", { "dependencies": { "ansi-regex": "^5.0.1" } }, "sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A=="],
 
     "comark/htmlparser2/domutils/dom-serializer": ["dom-serializer@3.1.1", "", { "dependencies": { "domelementtype": "^3.0.0", "domhandler": "^6.0.0", "entities": "^8.0.0" } }, "sha512-4MEa38/QexBob6gFNwu+EGdWvhJ1OKuNwdYY3Y3NyeWDQfnGeDYQUDfIRzWu5B5gsv03so2Uxd28YC6zrsx3Lw=="],
-
-    "detective-typescript/@typescript-eslint/typescript-estree/@typescript-eslint/visitor-keys/eslint-visitor-keys": ["eslint-visitor-keys@5.0.1", "", {}, "sha512-tD40eHxA35h0PEIZNeIjkHoDR4YjjJp34biM0mDvplBe//mB+IHCqHDGV7pxF+7MklTvighcCPPZC7ynWyjdTA=="],
 
     "expect-webdriverio/@vitest/snapshot/@vitest/pretty-format/tinyrainbow": ["tinyrainbow@3.1.1", "", {}, "sha512-yau8yJdTt989Mm0Bd/236QnzEiPf2xLLTqUZRUJOo/3CB078LSwzei343DgtJVmfJKJE3TMINY1u42SQsP6mXw=="],
 

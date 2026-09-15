@@ -1,6 +1,6 @@
 import type { Canvas } from 'canvaskit-wasm'
 
-import type { SceneNode, SceneGraph } from '@open-pencil/scene-graph'
+import type { SceneNode, SceneGraph } from '@redrob-design/scene-graph'
 
 import { canvasLabelForeground } from '#core/canvas/labels/color'
 import type { SkiaRenderer } from '#core/canvas/renderer'

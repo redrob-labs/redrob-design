@@ -1,6 +1,6 @@
-# OpenPencil und Penpot im Vergleich
+# Redrob Design und Penpot im Vergleich
 
-OpenPencil und Penpot sind Open-Source-Designwerkzeuge mit unterschiedlichen Zielen und Architekturen.
+Redrob Design und Penpot sind Open-Source-Designwerkzeuge mit unterschiedlichen Zielen und Architekturen.
 
 ::: info WASM-Renderer in Penpot
 Penpot 2.x enthält den Rust/Skia-WASM-Renderer `render-wasm/v1`. Er wird über Serveroptionen oder `?wasm=true` aktiviert; standardmäßig kommt weiterhin der SVG-Renderer zum Einsatz. Der Vergleich berücksichtigt beide Varianten.
@@ -8,7 +8,7 @@ Penpot 2.x enthält den Rust/Skia-WASM-Renderer `render-wasm/v1`. Er wird über 
 
 ## 1. Umfang der Codebasis
 
-| Metrik | OpenPencil | Penpot |
+| Metrik | Redrob Design | Penpot |
 |--------|------------|--------|
 | Lines of code | **rund 26.000** | **rund 299.000** |
 | Quelldateien | rund 143 | rund 2.900 |
@@ -18,11 +18,11 @@ Penpot 2.x enthält den Rust/Skia-WASM-Renderer `render-wasm/v1`. Er wird über 
 | Serverseite | Keine, lokale Architektur | 32.600 Zeilen und 151 SQL-Dateien |
 | Verhältnis | **1×** | **rund 11×** |
 
-OpenPencil ist ungefähr elfmal kleiner. Der Unterschied entsteht vor allem durch die Architektur, nicht nur durch den Funktionsumfang.
+Redrob Design ist ungefähr elfmal kleiner. Der Unterschied entsteht vor allem durch die Architektur, nicht nur durch den Funktionsumfang.
 
 ## 2. Architektur
 
-### OpenPencil: ein Clientprozess
+### Redrob Design: ein Clientprozess
 
 ```text
 ┌─────────────────────────────────┐
@@ -51,11 +51,11 @@ Editor, SceneGraph, Dateicodec und Renderer laufen in einem Prozess. Ein separat
 
 Ein vollständiger Penpot-Betrieb umfasst Oberfläche, JVM-Serverseite, PostgreSQL, Valkey, MinIO und einen Exportdienst auf Grundlage von Chromium ohne Oberfläche. Die Entwicklungsumgebung benötigt Docker Compose, JVM, Node und Rust-Werkzeuge.
 
-OpenPencil vermeidet Netzwerklatenz, Serialisierung zwischen Diensten, Containerverwaltung und Datenbankabfragen für gewöhnliche Editorvorgänge. Penpot ist auf eine zentral gehostete Mehrbenutzerplattform ausgerichtet; OpenPencil auf lokale Bearbeitung mit geringer Latenz.
+Redrob Design vermeidet Netzwerklatenz, Serialisierung zwischen Diensten, Containerverwaltung und Datenbankabfragen für gewöhnliche Editorvorgänge. Penpot ist auf eine zentral gehostete Mehrbenutzerplattform ausgerichtet; Redrob Design auf lokale Bearbeitung mit geringer Latenz.
 
 ## 3. Renderablauf
 
-### OpenPencil: TypeScript → CanvasKit WASM
+### Redrob Design: TypeScript → CanvasKit WASM
 
 ```typescript
 renderSceneToCanvas(canvas, graph, pageId) {
@@ -84,9 +84,9 @@ Ohne WASM wird jedes Shape als SVG DOM element über React/Reagent gerendert.
 
 Im WASM-Modus wird eine UUID in vier `u32` zerlegt, eine Transformation in sechs `f32`, Füllungen und Konturen werden binär codiert und grundlegende Formeigenschaften in einer 104-Byte-Struktur gespeichert. Der Renderer verwendet Kachelcache, Interessenbereiche, elf Renderflächen und globalen veränderlichen Zustand über `unsafe { STATE.as_mut() }`.
 
-Das Tile system bereitet Bereiche um den Viewport vor und hält bis zu 1.024 Textures im Cache. OpenPencil rendert dagegen den sichtbaren Bereich vollständig neu.
+Das Tile system bereitet Bereiche um den Viewport vor und hält bis zu 1.024 Textures im Cache. Redrob Design rendert dagegen den sichtbaren Bereich vollständig neu.
 
-| Aspekt | OpenPencil | Penpot |
+| Aspekt | Redrob Design | Penpot |
 |--------|------------|--------|
 | JavaScript → WASM | Direkte Calls mit TypeScript objects | Binär gepackte Structures |
 | Rendering model | Vollständiger sichtbarer Viewport | Tile cache |
@@ -99,7 +99,7 @@ Für kleine und mittlere Dokumente benötigt der direkte CanvasKit path weniger 
 
 ## 4. SceneGraph und Datenmodell
 
-### OpenPencil
+### Redrob Design
 
 ```typescript
 nodes: Map<string, SceneNode>
@@ -113,11 +113,11 @@ nodes: Map<string, SceneNode>
 
 Penpot pflegt eigene Type definitions in Clojure/ClojureScript und Rust. Separate Modules behandeln Colors, Components, Containers, Fills, Grid, Modifiers, Pages und Paths. Malli validiert Schemas zur Runtime, während Rendering data die Grenze von CLJS zu Rust überschreiten.
 
-OpenPencil verwendet das Kiwi schema direkt. Penpot muss sein eigenes Datenmodell zwischen mehreren Sprachen synchron halten.
+Redrob Design verwendet das Kiwi schema direkt. Penpot muss sein eigenes Datenmodell zwischen mehreren Sprachen synchron halten.
 
 ## 5. Anordnungs-Engine
 
-OpenPencil verwendet Yoga WASM synchron:
+Redrob Design verwendet Yoga WASM synchron:
 
 ```typescript
 import Yoga from 'yoga-layout'
@@ -129,11 +129,11 @@ applyYogaLayout(graph, frame, yogaRoot)
 
 Penpot pflegt eigene Flex- und Grid-Implementations in ClojureScript und Rust WASM. Beide Engines müssen dasselbe Ergebnis liefern.
 
-OpenPencil nutzt die etablierte Bibliothek Yoga einschließlich einer Variante mit Grid. Penpot wartet mehrere Tausend Zeilen eigenen Anordnungscode in zwei Sprachen.
+Redrob Design nutzt die etablierte Bibliothek Yoga einschließlich einer Variante mit Grid. Penpot wartet mehrere Tausend Zeilen eigenen Anordnungscode in zwei Sprachen.
 
 ## 6. Dateiformate und Figma
 
-### OpenPencil
+### Redrob Design
 
 - Native Kiwi binary format von Figma.
 - Direkter Import von `.fig`.
@@ -147,19 +147,19 @@ OpenPencil nutzt die etablierte Bibliothek Yoga einschließlich einer Variante m
 - Kein nativer `.fig`-Import.
 - Mehrere Format generations mit Migration system.
 
-OpenPencil liest `.fig` und Figmas Clipboard direkt. Penpot benötigt einen getrennten Import- oder Exportweg.
+Redrob Design liest `.fig` und Figmas Clipboard direkt. Penpot benötigt einen getrennten Import- oder Exportweg.
 
 ## 7. Zustand und Rückgängig
 
-OpenPencil verwendet inverse Befehle. Vorwärts- und Rückwärtsfunktionen speichern nur den benötigten Zustand; Stapel fassen mehrere Vorgänge zusammen.
+Redrob Design verwendet inverse Befehle. Vorwärts- und Rückwärtsfunktionen speichern nur den benötigten Zustand; Stapel fassen mehrere Vorgänge zusammen.
 
 Penpot verwendet Potok. `UpdateEvent` ändert den Zustand, `WatchEvent` führt Nebenwirkungen über RxJS aus. Rückgängig speichert inverse Änderungsvektoren, begrenzt die Historie auf 50 Einträge und gruppiert schnelle Änderungen in Transaktionen.
 
-Serialisierbare Änderungen passen gut zu Penpots serverbasierter Zusammenarbeit, erhöhen jedoch die Komplexität. OpenPencils Ansatz ist für den Editor in einem Prozess direkter.
+Serialisierbare Änderungen passen gut zu Penpots serverbasierter Zusammenarbeit, erhöhen jedoch die Komplexität. Redrob Designs Ansatz ist für den Editor in einem Prozess direkter.
 
 ## 8. Development
 
-| Metrik | OpenPencil | Penpot |
+| Metrik | Redrob Design | Penpot |
 |--------|------------|--------|
 | Setup | `bun install && bun dev` | Docker Compose, JVM, Node und Rust |
 | HMR | Vite | shadow-cljs |
@@ -169,7 +169,7 @@ Serialisierbare Änderungen passen gut zu Penpots serverbasierter Zusammenarbeit
 
 ## 9. Performance characteristics
 
-| Szenario | OpenPencil | Penpot |
+| Szenario | Redrob Design | Penpot |
 |----------|------------|--------|
 | Kaltstart | unter 2 s einschließlich WASM | über 10 s für Server, Client und WASM |
 | Gewöhnliche Operation | Innerhalb eines Process | Möglicher Network round trip |
@@ -184,7 +184,7 @@ Serialisierbare Änderungen passen gut zu Penpots serverbasierter Zusammenarbeit
 2. **PDF export:** eigener Chromium exporter.
 3. **Plugin system:** Sandboxed execution und Plugin API.
 4. **Design tokens:** integrierte Unterstützung.
-5. **CSS Grid:** eigene Implementation; OpenPencil verwendet einen Yoga fork mit Grid.
+5. **CSS Grid:** eigene Implementation; Redrob Design verwendet einen Yoga fork mit Grid.
 6. **Self-hosting:** Team platform über Docker deploybar.
 7. **Reife:** mehrjährige Verwendung in Production.
 
@@ -198,15 +198,15 @@ Penpot besitzt isoliert ausgeführte Plugins, aber keine vergleichbare Skript-AP
 
 | Bereich | Vorteil | Grund |
 |---------|---------|-------|
-| Einfachheit | OpenPencil | Ein Prozess statt mehrerer Dienste |
-| Darstellung | OpenPencil | Direkter CanvasKit-Pfad |
-| Codebasis | OpenPencil | Rund 26.000 statt 299.000 Zeilen |
-| Figma compatibility | OpenPencil | Native Kiwi und `.fig` |
-| Development setup | OpenPencil | TypeScript und Vue statt Clojure, Rust und Docker |
-| Desktop app | OpenPencil | Native Tauri application |
-| Layout | OpenPencil | Yoga statt zwei eigener Implementations |
-| Collaboration | Unterschiedliche Stärken | Penpot: Server und Access control; OpenPencil: P2P ohne Hosting |
+| Einfachheit | Redrob Design | Ein Prozess statt mehrerer Dienste |
+| Darstellung | Redrob Design | Direkter CanvasKit-Pfad |
+| Codebasis | Redrob Design | Rund 26.000 statt 299.000 Zeilen |
+| Figma compatibility | Redrob Design | Native Kiwi und `.fig` |
+| Development setup | Redrob Design | TypeScript und Vue statt Clojure, Rust und Docker |
+| Desktop app | Redrob Design | Native Tauri application |
+| Layout | Redrob Design | Yoga statt zwei eigener Implementations |
+| Collaboration | Unterschiedliche Stärken | Penpot: Server und Access control; Redrob Design: P2P ohne Hosting |
 | Selbsthosting | Penpot | Docker-Bereitstellung |
 | Ökosystemreife | Penpot | Mehrjährige Produktionserfahrung |
 
-OpenPencil ist ein kompakter Editor in einem Prozess mit CanvasKit-Renderer und nativer `.fig`-Unterstützung. Penpot ist eine vollständige Client-Server-Plattform mit Clojure, ClojureScript, Rust, Datenbanken und Docker-Diensten. Beide unterstützen Zusammenarbeit mit unterschiedlichen Modellen. Penpot bietet ein Plugin-Ökosystem und PDF-Export; OpenPencil eine Figma-kompatible API ohne Oberfläche, 90 AI/MCP-Werkzeuge, SVG-Export und eine Desktop-App.
+Redrob Design ist ein kompakter Editor in einem Prozess mit CanvasKit-Renderer und nativer `.fig`-Unterstützung. Penpot ist eine vollständige Client-Server-Plattform mit Clojure, ClojureScript, Rust, Datenbanken und Docker-Diensten. Beide unterstützen Zusammenarbeit mit unterschiedlichen Modellen. Penpot bietet ein Plugin-Ökosystem und PDF-Export; Redrob Design eine Figma-kompatible API ohne Oberfläche, 90 AI/MCP-Werkzeuge, SVG-Export und eine Desktop-App.

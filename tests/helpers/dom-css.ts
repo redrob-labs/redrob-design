@@ -1,5 +1,5 @@
-import { colorToCSS } from '@open-pencil/core/color'
-import type { DesignDocument, DesignElement, DesignNode } from '@open-pencil/dom-css'
+import { colorToCSS } from '@redrob-design/core/color'
+import type { DesignDocument, DesignElement, DesignNode } from '@redrob-design/dom-css'
 
 export function findTextElement(nodes: DesignNode[]): DesignElement | undefined {
   for (const node of nodes) {

@@ -1,5 +1,5 @@
 {
-  "name": "@open-pencil/lint-tools",
+  "name": "@redrob-design/lint-tools",
   "private": true,
   "type": "module",
   "imports": {

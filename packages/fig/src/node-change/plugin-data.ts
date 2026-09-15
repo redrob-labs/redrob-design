@@ -1,5 +1,5 @@
-import type { NodeChange, PluginData, PluginRelaunchData } from '@open-pencil/kiwi/fig/codec'
-import { guidToString } from '@open-pencil/kiwi/fig/guid'
+import type { NodeChange, PluginData, PluginRelaunchData } from '@redrob-design/kiwi/fig/codec'
+import { guidToString } from '@redrob-design/kiwi/fig/guid'
 import {
   clampExportScale,
   type ExportFormatId,
@@ -7,8 +7,8 @@ import {
   type PluginDataEntry,
   type PluginRelaunchDataEntry,
   type SceneNode
-} from '@open-pencil/scene-graph'
-import type { Rect } from '@open-pencil/scene-graph/primitives'
+} from '@redrob-design/scene-graph'
+import type { Rect } from '@redrob-design/scene-graph/primitives'
 
 import { readEffectiveFigmaRawField } from '../source-metadata'
 import { resolveVariableConsumptionEntry } from './variable-bindings'

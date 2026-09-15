@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'bun:test'
 
-import { createEditor } from '@open-pencil/core/editor'
-import { SceneGraph } from '@open-pencil/scene-graph'
+import { createEditor } from '@redrob-design/core/editor'
+import { SceneGraph } from '@redrob-design/scene-graph'
 
 import { scopeLibraryUpdateGroups } from '@/app/libraries/update-groups'
 

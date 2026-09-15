@@ -1,6 +1,6 @@
 import { markRaw, shallowRef } from 'vue'
 
-import { reapplyInstanceComponentProperties } from '@open-pencil/core/editor'
+import { reapplyInstanceComponentProperties } from '@redrob-design/core/editor'
 import {
   materializeLibraryAsset,
   ensureLibraryAssetKeys,
@@ -13,7 +13,7 @@ import {
   discoverPublishableLibraryChanges,
   readSourceLibraryPublication,
   writeSourceLibraryPublication
-} from '@open-pencil/core/library'
+} from '@redrob-design/core/library'
 import type {
   ComponentLibraryRevision,
   LibraryCatalog,
@@ -22,12 +22,12 @@ import type {
   LibraryUpdateSummary,
   PublishLibraryInput,
   LibraryAssetChange
-} from '@open-pencil/core/library'
+} from '@redrob-design/core/library'
 import type {
   ComponentCatalog,
   ComponentCatalogInsertInput,
   ComponentCatalogLibraryAsset
-} from '@open-pencil/core/tools'
+} from '@redrob-design/core/tools'
 
 import type { EditorStore } from '@/app/editor/session'
 import { LocalLibraryCatalog } from '@/app/libraries/catalog/local'

@@ -5,7 +5,7 @@ description: Tworzenie paneli właściwości za pomocą composables i komponent�
 
 # Panele właściwości
 
-Panele właściwości w `@open-pencil/vue` są budowane przede wszystkim za pomocą composables.
+Panele właściwości w `@redrob-design/vue` są budowane przede wszystkim za pomocą composables.
 
 Jeśli panel potrzebuje wartości obliczonych z zaznaczenia i działań do ich zmiany, użyj composable. Jeśli ważna jest wielokrotnego użytku struktura tablicy lub listy, wybierz komponent bez narzuconego wyglądu, na przykład `PropertyListRoot`.
 
@@ -35,13 +35,13 @@ Jeśli wartość pola można powiązać ze zmienną albo zewnętrznym tokenem pr
 - Osobne działanie usunięcia powiązania lepiej umieścić w oknie wyboru niż w łatwej do przypadkowego użycia ikonie obok pola.
 - Zmianę powiązania, jego usunięcie podczas edycji i zmianę wielu obiektów wykonuj w jednej operacji zbiorczej dostawcy.
 
-Aplikacja OpenPencil pokazuje nazwę zmiennej na fioletowym tle, gdy pole nie jest edytowane. Po rozpoczęciu edycji `NumberField` pokazuje obliczoną wartość liczbową. Własny interfejs może przedstawić ten sam stan inaczej.
+Aplikacja Redrob Design pokazuje nazwę zmiennej na fioletowym tle, gdy pole nie jest edytowane. Po rozpoczęciu edycji `NumberField` pokazuje obliczoną wartość liczbową. Własny interfejs może przedstawić ten sam stan inaczej.
 
 ## Przykład: położenie i rozmiar
 
 ```vue
 <script setup lang="ts">
-import { usePosition } from '@open-pencil/vue'
+import { usePosition } from '@redrob-design/vue'
 
 const { x, y, width, height, updateProp, commitProp } = usePosition()
 </script>
@@ -64,7 +64,7 @@ import {
   PropertyListRoot,
   useEditorPropertyList,
   useFillControls
-} from '@open-pencil/vue'
+} from '@redrob-design/vue'
 
 const fillControls = useFillControls()
 const fills = useEditorPropertyList('fills')

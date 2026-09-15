@@ -1,6 +1,6 @@
 import type { Canvas } from 'canvaskit-wasm'
 
-import type { SceneGraph } from '@open-pencil/scene-graph'
+import type { SceneGraph } from '@redrob-design/scene-graph'
 
 import { drawGuides } from '#core/canvas/guides/draw'
 import { drawMeasurementSegment } from '#core/canvas/overlays/measurement'

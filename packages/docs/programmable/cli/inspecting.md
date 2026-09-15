@@ -9,7 +9,7 @@ The CLI lets you explore design documents without opening the editor. Every comm
 
 ::: tip Install
 ```sh
-npm install -g @open-pencil/cli
+npm install -g @redrob-design/cli
 # or
 brew install open-pencil/tap/open-pencil
 ```
@@ -20,7 +20,7 @@ brew install open-pencil/tap/open-pencil
 Get a quick overview — page count, total nodes, fonts used, file size:
 
 ```sh
-openpencil info design.fig
+redrob-design info design.fig
 ```
 
 ## Node Tree
@@ -28,7 +28,7 @@ openpencil info design.fig
 Print the full node hierarchy:
 
 ```sh
-openpencil tree design.fig
+redrob-design tree design.fig
 ```
 
 ```
@@ -45,13 +45,13 @@ openpencil tree design.fig
 Search by type:
 
 ```sh
-openpencil find design.fig --type TEXT
+redrob-design find design.fig --type TEXT
 ```
 
 Search by name:
 
 ```sh
-openpencil find design.fig --name "Button"
+redrob-design find design.fig --name "Button"
 ```
 
 Both flags can be combined to narrow results further.
@@ -61,7 +61,7 @@ Both flags can be combined to narrow results further.
 Use XPath selectors to find nodes by type, attributes, and tree structure:
 
 ```sh
-openpencil query design.fig "//FRAME"
+redrob-design query design.fig "//FRAME"
 ```
 
 ### Useful patterns
@@ -69,34 +69,34 @@ openpencil query design.fig "//FRAME"
 **By type:**
 
 ```sh
-openpencil query design.fig "//TEXT"                    # All text nodes
-openpencil query design.fig "//COMPONENT"               # All components
-openpencil query design.fig "//INSTANCE"                # All instances
+redrob-design query design.fig "//TEXT"                    # All text nodes
+redrob-design query design.fig "//COMPONENT"               # All components
+redrob-design query design.fig "//INSTANCE"                # All instances
 ```
 
 **By attributes:**
 
 ```sh
-openpencil query design.fig "//FRAME[@width < 300]"                # Frames under 300px wide
-openpencil query design.fig "//*[@cornerRadius > 0]"               # Rounded corners
-openpencil query design.fig "//*[@visible = false]"                # Hidden nodes
-openpencil query design.fig "//TEXT[@fontSize >= 24]"              # Large text
-openpencil query design.fig "//*[@opacity < 1]"                    # Semi-transparent nodes
+redrob-design query design.fig "//FRAME[@width < 300]"                # Frames under 300px wide
+redrob-design query design.fig "//*[@cornerRadius > 0]"               # Rounded corners
+redrob-design query design.fig "//*[@visible = false]"                # Hidden nodes
+redrob-design query design.fig "//TEXT[@fontSize >= 24]"              # Large text
+redrob-design query design.fig "//*[@opacity < 1]"                    # Semi-transparent nodes
 ```
 
 **By name and text content:**
 
 ```sh
-openpencil query design.fig "//TEXT[contains(@name, 'Button')]"    # Name contains 'Button'
-openpencil query design.fig "//TEXT[contains(@text, 'Hello')]"     # Text content contains 'Hello'
+redrob-design query design.fig "//TEXT[contains(@name, 'Button')]"    # Name contains 'Button'
+redrob-design query design.fig "//TEXT[contains(@text, 'Hello')]"     # Text content contains 'Hello'
 ```
 
 **By hierarchy:**
 
 ```sh
-openpencil query design.fig "//SECTION//TEXT"            # Text inside sections
-openpencil query design.fig "//FRAME/TEXT"               # Direct text children of frames
-openpencil query design.fig "//COMPONENT_SET//INSTANCE"  # Instances inside component sets
+redrob-design query design.fig "//SECTION//TEXT"            # Text inside sections
+redrob-design query design.fig "//FRAME/TEXT"               # Direct text children of frames
+redrob-design query design.fig "//COMPONENT_SET//INSTANCE"  # Instances inside component sets
 ```
 
 ### Queryable attributes
@@ -120,7 +120,7 @@ openpencil query design.fig "//COMPONENT_SET//INSTANCE"  # Instances inside comp
 Inspect all properties of a specific node by its ID:
 
 ```sh
-openpencil node design.fig --id 1:23
+redrob-design node design.fig --id 1:23
 ```
 
 ## Pages
@@ -136,7 +136,7 @@ openpencil pages design.fig
 List design variables and their collections:
 
 ```sh
-openpencil variables design.fig
+redrob-design variables design.fig
 ```
 
 ## Live App Mode
@@ -144,23 +144,23 @@ openpencil variables design.fig
 When the desktop app is running, omit the file argument — the CLI connects via RPC and operates on the live canvas:
 
 ```sh
-openpencil documents         # list open document/page IDs
-openpencil tree              # inspect the active live document
-openpencil tree --document-id tab-123 --page-id 0:1
-openpencil eval --document-id tab-123 --page-id 0:1 -c "..."
+redrob-design documents         # list open document/page IDs
+redrob-design tree              # inspect the active live document
+redrob-design tree --document-id tab-123 --page-id 0:1
+redrob-design eval --document-id tab-123 --page-id 0:1 -c "..."
 ```
 
-Use `openpencil documents --json` in agent workflows, then pass `--document-id` and `--page-id` explicitly instead of relying on the visible active tab/page.
+Use `redrob-design documents --json` in agent workflows, then pass `--document-id` and `--page-id` explicitly instead of relying on the visible active tab/page.
 
 ## Lint Designs
 
 Check documents for naming, layout, structure, and accessibility issues:
 
 ```sh
-openpencil lint design.fig
-openpencil lint design.pen --preset strict
-openpencil lint design.fig --rule color-contrast
-openpencil lint design.fig --list-rules
+redrob-design lint design.fig
+redrob-design lint design.pen --preset strict
+redrob-design lint design.fig --rule color-contrast
+redrob-design lint design.fig --list-rules
 ```
 
 Use `--json` for machine-readable output.
@@ -170,5 +170,5 @@ Use `--json` for machine-readable output.
 All commands support `--json` for machine-readable output — pipe into `jq`, feed to CI scripts, or process with other tools:
 
 ```sh
-openpencil tree design.fig --json | jq '.[] | .name'
+redrob-design tree design.fig --json | jq '.[] | .name'
 ```

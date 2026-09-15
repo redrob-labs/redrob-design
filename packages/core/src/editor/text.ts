@@ -3,8 +3,8 @@ import {
   setInstanceOverride,
   type InstanceOverrideState,
   type SceneNode
-} from '@open-pencil/scene-graph'
-import { copyDerivedGlyphs, copyGeometryPaths } from '@open-pencil/scene-graph/copy'
+} from '@redrob-design/scene-graph'
+import { copyDerivedGlyphs, copyGeometryPaths } from '@redrob-design/scene-graph/copy'
 
 import { weightToStyle } from '#core/text/fonts'
 import { hasGlyphOutlines } from '#core/text/opentype'

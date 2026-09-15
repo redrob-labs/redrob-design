@@ -1,10 +1,10 @@
 import { describe, expect, test } from 'bun:test'
 
-import type { Editor } from '@open-pencil/core/editor'
-import { parseFigBuffer } from '@open-pencil/fig'
-import { SceneGraph } from '@open-pencil/scene-graph'
-import type { Fill, SceneNode, Stroke, VectorNetwork } from '@open-pencil/scene-graph'
-import { copyGeometryPaths, copyStrokes } from '@open-pencil/scene-graph/copy'
+import type { Editor } from '@redrob-design/core/editor'
+import { parseFigBuffer } from '@redrob-design/fig'
+import { SceneGraph } from '@redrob-design/scene-graph'
+import type { Fill, SceneNode, Stroke, VectorNetwork } from '@redrob-design/scene-graph'
+import { copyGeometryPaths, copyStrokes } from '@redrob-design/scene-graph/copy'
 
 import { exportFigFile } from '#core/io/formats/fig/export'
 import { getTextPathData, layoutPathTextFromAdvances } from '#core/text/path'

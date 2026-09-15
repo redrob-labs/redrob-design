@@ -1,6 +1,6 @@
 # Compatibilità con Figma
 
-Confronto tra le funzioni di Figma Design e lo stato attuale di OpenPencil.
+Confronto tra le funzioni di Figma Design e lo stato attuale di Redrob Design.
 
 ::: tip Stato
 ✅ Supportato · 🟡 Parziale · 🔲 Non implementato

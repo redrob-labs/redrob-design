@@ -1,5 +1,5 @@
-import type { BlendMode, Effect } from '@open-pencil/scene-graph'
-import type { Color, Vector } from '@open-pencil/scene-graph/primitives'
+import type { BlendMode, Effect } from '@redrob-design/scene-graph'
+import type { Color, Vector } from '@redrob-design/scene-graph/primitives'
 
 import { parseColor } from '#core/color'
 import { TRANSPARENT } from '#core/constants'

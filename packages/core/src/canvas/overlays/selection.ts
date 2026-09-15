@@ -1,10 +1,10 @@
 import type { Canvas } from 'canvaskit-wasm'
 
-import type { SceneGraph, SceneNode } from '@open-pencil/scene-graph'
-import { getWorldMatrix } from '@open-pencil/scene-graph/coordinate'
-import { rotatedCorners } from '@open-pencil/scene-graph/geometry'
-import Matrix from '@open-pencil/scene-graph/matrix'
-import type { Vector } from '@open-pencil/scene-graph/primitives'
+import type { SceneGraph, SceneNode } from '@redrob-design/scene-graph'
+import { getWorldMatrix } from '@redrob-design/scene-graph/coordinate'
+import { rotatedCorners } from '@redrob-design/scene-graph/geometry'
+import Matrix from '@redrob-design/scene-graph/matrix'
+import type { Vector } from '@redrob-design/scene-graph/primitives'
 
 import type { RenderOverlays, SkiaRenderer } from '#core/canvas/renderer'
 import { HANDLE_HALF_SIZE, SELECTION_DASH_ALPHA } from '#core/constants'

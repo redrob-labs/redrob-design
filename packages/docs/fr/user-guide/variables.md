@@ -33,7 +33,7 @@ Ouvrir ou sélectionner le champ ne modifie pas le lien. Seule la première modi
 
 ## Alias
 
-Une variable peut en référencer une autre. OpenPencil résout la chaîne selon le mode actif et détecte les cycles.
+Une variable peut en référencer une autre. Redrob Design résout la chaîne selon le mode actif et détecte les cycles.
 
 ## Importation et exportation
 

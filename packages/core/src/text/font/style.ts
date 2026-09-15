@@ -1,5 +1,5 @@
-import { normalizeFontFamily } from '@open-pencil/scene-graph'
-import type { FontFamilyStyle } from '@open-pencil/scene-graph'
+import { normalizeFontFamily } from '@redrob-design/scene-graph'
+import type { FontFamilyStyle } from '@redrob-design/scene-graph'
 
 export {
   FONT_WEIGHT_NAMES,
@@ -7,7 +7,7 @@ export {
   styleToVariant,
   styleToWeight,
   weightToStyle
-} from '@open-pencil/scene-graph'
+} from '@redrob-design/scene-graph'
 
 import { parseFontStyle } from '#core/text/face'
 
@@ -61,4 +61,4 @@ export function isVariableFont(data: ArrayBuffer): boolean {
   return false
 }
 
-export { weightToFigmaStyle } from '@open-pencil/fig/node-change'
+export { weightToFigmaStyle } from '@redrob-design/fig/node-change'

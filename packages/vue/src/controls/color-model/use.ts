@@ -1,7 +1,7 @@
 import { computed, ref, toValue } from 'vue'
 
-import { colorToHexRaw, okhclToRGBA, parseColor } from '@open-pencil/core/color'
-import type { Color } from '@open-pencil/scene-graph/primitives'
+import { colorToHexRaw, okhclToRGBA, parseColor } from '@redrob-design/core/color'
+import type { Color } from '@redrob-design/scene-graph/primitives'
 
 import {
   applyOkHCLPatch,

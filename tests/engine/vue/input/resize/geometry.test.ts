@@ -1,10 +1,10 @@
 import { describe, expect, test } from 'bun:test'
 
-import { createEditor } from '@open-pencil/core/editor'
-import type { Fill, GeometryPath, SceneNode, VectorNetwork } from '@open-pencil/scene-graph'
-import { cloneVectorNetwork } from '@open-pencil/scene-graph'
-import { copyGeometryPaths } from '@open-pencil/scene-graph/copy'
-import { collectResizeDescendants } from '@open-pencil/scene-graph/resize'
+import { createEditor } from '@redrob-design/core/editor'
+import type { Fill, GeometryPath, SceneNode, VectorNetwork } from '@redrob-design/scene-graph'
+import { cloneVectorNetwork } from '@redrob-design/scene-graph'
+import { copyGeometryPaths } from '@redrob-design/scene-graph/copy'
+import { collectResizeDescendants } from '@redrob-design/scene-graph/resize'
 
 import { applyResize, commitResizePreview } from '#vue/shared/input/resize'
 import type { DragResize } from '#vue/shared/input/types'

@@ -8,7 +8,7 @@ import {
   SceneGraph,
   setNodeFillOkHCL,
   setNodeStrokeOkHCL
-} from '@open-pencil/core'
+} from '@redrob-design/core'
 
 import { getNodeOrThrow } from '#tests/helpers/assert'
 

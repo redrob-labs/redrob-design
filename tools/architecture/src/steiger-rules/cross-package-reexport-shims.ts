@@ -10,7 +10,7 @@ export function isCrossPackageReexportShim(sourceRel: string, content: string): 
     (statement) =>
       ts.isExportDeclaration(statement) &&
       ts.isStringLiteral(statement.moduleSpecifier) &&
-      statement.moduleSpecifier.text.startsWith('@open-pencil/')
+      statement.moduleSpecifier.text.startsWith('@redrob-design/')
   )
 }
 

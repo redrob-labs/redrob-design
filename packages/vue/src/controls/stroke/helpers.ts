@@ -1,9 +1,9 @@
 import { computed, type ComputedRef, type Ref } from 'vue'
 
-import { BLACK } from '@open-pencil/core/constants'
-import type { Editor } from '@open-pencil/core/editor'
-import { cloneVectorNetwork } from '@open-pencil/scene-graph'
-import type { SceneNode, Stroke, StrokeCap, StrokeJoin } from '@open-pencil/scene-graph'
+import { BLACK } from '@redrob-design/core/constants'
+import type { Editor } from '@redrob-design/core/editor'
+import { cloneVectorNetwork } from '@redrob-design/scene-graph'
+import type { SceneNode, Stroke, StrokeCap, StrokeJoin } from '@redrob-design/scene-graph'
 
 import { MIXED } from '#vue/controls/node-props/use'
 import type { MixedValue } from '#vue/controls/node-props/use'

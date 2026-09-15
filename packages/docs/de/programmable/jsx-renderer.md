@@ -5,7 +5,7 @@ description: Designs deklarativ mit JSX erstellen und als JSX oder HTML mit Tail
 
 # JSX-Renderer
 
-OpenPencil kann einen Designbaum aus JSX erstellen. Die deklarative Syntax eignet sich für AI-Agenten, Skripte und wiederholbare Erzeugung von Oberflächen.
+Redrob Design kann einen Designbaum aus JSX erstellen. Die deklarative Syntax eignet sich für AI-Agenten, Skripte und wiederholbare Erzeugung von Oberflächen.
 
 JSX dient außerdem als lesbare Darstellung eines vorhandenen Designs. Änderungen erscheinen als gewöhnlicher Codevergleich und lassen sich prüfen und versionieren.
 
@@ -22,7 +22,7 @@ Das Werkzeug `render`, verfügbar in AI-Chat, MCP und CLI `eval`, akzeptiert JSX
 
 ## Elemente
 
-JSX-Elemente wie `<Frame>`, `<Rectangle>`, `<Ellipse>`, `<Text>`, `<Line>`, `<Vector>`, `<Group>` und `<Section>` erzeugen die entsprechenden OpenPencil-Objekte.
+JSX-Elemente wie `<Frame>`, `<Rectangle>`, `<Ellipse>`, `<Text>`, `<Line>`, `<Vector>`, `<Group>` und `<Section>` erzeugen die entsprechenden Redrob Design-Objekte.
 
 ## Eigenschaften
 
@@ -36,8 +36,8 @@ Die Eigenschaftsnamen bleiben Teil der JSX-API:
 ## Export
 
 ```sh
-openpencil export design.fig -f jsx
-openpencil export design.fig -f jsx --style tailwind
+redrob-design export design.fig -f jsx
+redrob-design export design.fig -f jsx --style tailwind
 ```
 
 Exportiertes JSX kann als Code verändert und erneut gerendert werden. Unterschiede können in Pull Requests geprüft und in der Versionsverwaltung gespeichert werden.

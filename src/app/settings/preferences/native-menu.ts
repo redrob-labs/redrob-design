@@ -1,4 +1,4 @@
-import type { SnappingPreferences } from '@open-pencil/core/editor'
+import type { SnappingPreferences } from '@redrob-design/core/editor'
 
 import { isTauri } from '@/app/tauri/env'
 

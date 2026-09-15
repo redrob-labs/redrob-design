@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useEditorCommands } from '@open-pencil/vue'
+import { useEditorCommands } from '@redrob-design/vue'
 
 import BooleanOperationsControl from '@/components/properties/BooleanOperationsControl.vue'
 import IconButton from '@/components/ui/IconButton.vue'

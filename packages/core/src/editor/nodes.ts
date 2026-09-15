@@ -1,6 +1,6 @@
 import { pick } from 'es-toolkit/object'
 
-import { styleDetachmentChanges, type SceneNode } from '@open-pencil/scene-graph'
+import { styleDetachmentChanges, type SceneNode } from '@redrob-design/scene-graph'
 
 import { createLayoutModeActions } from './layout-mode'
 import { createNudgeActions } from './nudge'

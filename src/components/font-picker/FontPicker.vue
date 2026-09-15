@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { FontPickerRoot, useI18n } from '@open-pencil/vue'
+import { FontPickerRoot, useI18n } from '@redrob-design/vue'
 
 import { useSelectUI } from '@/components/ui/select'
 import { usePopoverUI } from '@/components/ui/popover'
@@ -11,9 +11,9 @@ import {
   requestLocalFontAccess
 } from '@/app/editor/fonts'
 
-import { WEB_FONT_PROVIDER_IDS } from '@open-pencil/core/text'
+import { WEB_FONT_PROVIDER_IDS } from '@redrob-design/core/text'
 
-import type { FontPickerUI } from '@open-pencil/vue'
+import type { FontPickerUI } from '@redrob-design/vue'
 
 const { panels } = useI18n()
 const { label: labelProp } = defineProps<{ label?: string }>()

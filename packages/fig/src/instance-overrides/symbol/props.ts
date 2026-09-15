@@ -12,11 +12,11 @@ import {
   convertStrokes,
   convertEffects,
   extractBoundVariables
-} from '@open-pencil/fig/node-change'
-import type { NodeChange, Paint, Effect as KiwiEffect } from '@open-pencil/kiwi/fig/codec'
-import type { SceneNode, ArcData, TextAutoResize } from '@open-pencil/scene-graph'
-import { styleToWeight } from '@open-pencil/scene-graph'
-import type { Vector } from '@open-pencil/scene-graph/primitives'
+} from '@redrob-design/fig/node-change'
+import type { NodeChange, Paint, Effect as KiwiEffect } from '@redrob-design/kiwi/fig/codec'
+import type { SceneNode, ArcData, TextAutoResize } from '@redrob-design/scene-graph'
+import { styleToWeight } from '@redrob-design/scene-graph'
+import type { Vector } from '@redrob-design/scene-graph/primitives'
 
 function applyOverridePaints(ov: Record<string, unknown>, updates: Partial<SceneNode>): void {
   if (ov.textData != null) {

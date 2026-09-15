@@ -27,7 +27,7 @@ export function requireBuiltWorkspacePackages(): void {
   const coreDist = repoPath('packages/core/dist/index.js')
   if (!existsSync(coreDist)) {
     throw new Error(
-      'CLI integration tests require built workspace packages. Run `bun run check` or `bun run --filter @open-pencil/core build` first.'
+      'CLI integration tests require built workspace packages. Run `bun run check` or `bun run --filter @redrob-design/core build` first.'
     )
   }
 }

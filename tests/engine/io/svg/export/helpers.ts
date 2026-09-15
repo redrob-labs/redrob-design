@@ -1,4 +1,4 @@
-import { SceneGraph, renderNodesToSVG } from '@open-pencil/core'
+import { SceneGraph, renderNodesToSVG } from '@redrob-design/core'
 
 import { expectDefined } from '#tests/helpers/assert'
 

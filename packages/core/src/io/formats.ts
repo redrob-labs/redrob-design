@@ -1,4 +1,4 @@
-import { parsePenFile } from '@open-pencil/pen'
+import { parsePenFile } from '@redrob-design/pen'
 
 import { sceneNodeToJSX, selectionToJSX } from '#core/design-jsx'
 
@@ -140,7 +140,7 @@ function rasterFormat(format: RasterExportFormat): IOFormatAdapter {
 
 export const figFormat: IOFormatAdapter = {
   id: 'fig',
-  label: 'OpenPencil Document',
+  label: 'Redrob Design Document',
   role: 'native-document',
   category: 'document',
   extensions: ['fig'],

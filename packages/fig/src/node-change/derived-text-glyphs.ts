@@ -1,5 +1,5 @@
-import type { NodeChange } from '@open-pencil/kiwi/fig/codec'
-import type { DerivedTextGlyph } from '@open-pencil/scene-graph'
+import type { NodeChange } from '@redrob-design/kiwi/fig/codec'
+import type { DerivedTextGlyph } from '@redrob-design/scene-graph'
 
 /**
  * Resolve Figma derivedTextData.glyphs into scene glyphs.

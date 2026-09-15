@@ -1,8 +1,8 @@
-import { SceneGraph } from '@open-pencil/scene-graph'
-import type { LayoutMode, LayoutSizing, SceneNode, VectorNetwork } from '@open-pencil/scene-graph'
-import { copyEffects, copyFills, copyStrokes } from '@open-pencil/scene-graph/copy'
-import { populateInstanceChildren } from '@open-pencil/scene-graph/instances'
-import { parseSVGPath } from '@open-pencil/scene-graph/parse-path'
+import { SceneGraph } from '@redrob-design/scene-graph'
+import type { LayoutMode, LayoutSizing, SceneNode, VectorNetwork } from '@redrob-design/scene-graph'
+import { copyEffects, copyFills, copyStrokes } from '@redrob-design/scene-graph/copy'
+import { populateInstanceChildren } from '@redrob-design/scene-graph/instances'
+import { parseSVGPath } from '@redrob-design/scene-graph/parse-path'
 
 import {
   applyCornerRadius,

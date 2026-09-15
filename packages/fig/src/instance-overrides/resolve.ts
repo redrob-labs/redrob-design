@@ -1,7 +1,7 @@
-import { guidToString } from '@open-pencil/fig/node-change'
-import type { GUID } from '@open-pencil/kiwi/fig/codec'
-import { copyInstanceComponentProps, type SceneNode } from '@open-pencil/scene-graph'
-import { copyStrokes } from '@open-pencil/scene-graph/copy'
+import { guidToString } from '@redrob-design/fig/node-change'
+import type { GUID } from '@redrob-design/kiwi/fig/codec'
+import { copyInstanceComponentProps, type SceneNode } from '@redrob-design/scene-graph'
+import { copyStrokes } from '@redrob-design/scene-graph/copy'
 
 import {
   indexCloneSubtree,

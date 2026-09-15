@@ -7,9 +7,9 @@ import {
   resolveTextDirection,
   SceneGraph,
   SkiaRenderer as SkiaRendererClass
-} from '@open-pencil/core'
-import type { SceneNode } from '@open-pencil/scene-graph'
-import { createDefaultSourceMetadata } from '@open-pencil/scene-graph/node-defaults'
+} from '@redrob-design/core'
+import type { SceneNode } from '@redrob-design/scene-graph'
+import { createDefaultSourceMetadata } from '@redrob-design/scene-graph/node-defaults'
 
 import { initCanvasKit } from '#cli/headless'
 import type { SkiaRenderer } from '#core/canvas/renderer'

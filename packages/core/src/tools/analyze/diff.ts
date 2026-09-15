@@ -1,7 +1,7 @@
 import { safeDestr } from 'destr'
 import { createTwoFilesPatch } from 'diff'
 
-import type { SceneNode } from '@open-pencil/scene-graph'
+import type { SceneNode } from '@redrob-design/scene-graph'
 
 import { colorToHex, parseColor } from '#core/color'
 import type { FigmaAPI } from '#core/figma-api'

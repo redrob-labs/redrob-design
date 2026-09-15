@@ -1,42 +1,43 @@
-# OpenPencil
+# Redrob Design
 
-Open-source design editor. Opens `.fig` and `.pen` design files, includes built-in AI, and ships as a programmable toolkit with a headless Vue SDK for building custom editors.
+Prompt-driven design editor. Opens `.fig` and `.pen` design files, designs by prompt through the Redrob Code engine, and ships as a programmable toolkit with a headless Vue SDK for building custom editors.
 
 > **Status:** Active development. Usable today, with some rough edges as features evolve.
 
-**[Try it online →](https://app.openpencil.dev/demo)** · [Download](https://github.com/open-pencil/open-pencil/releases/latest) · [Documentation](https://openpencil.dev) · [Roadmap](https://openpencil.dev/development/roadmap) · [llms.txt](https://openpencil.dev/llms.txt)
+> Redrob Design is derived from [OpenPencil](https://github.com/open-pencil/open-pencil) (MIT). See [License](#license).
 
-![OpenPencil](packages/docs/public/screenshot.png)
+![Redrob Design](packages/docs/public/screenshot.png)
 
 ## Installation
 
-**macOS (Homebrew):**
+Download from the releases page, or build the desktop app from source (see [Contributing](#contributing)).
 
-```sh
-brew install openpencil
-```
+## Design by prompt with Redrob Code
 
-Or download from the [releases page](https://github.com/open-pencil/open-pencil/releases/latest), or [use the web app](https://app.openpencil.dev) — no install needed.
+Redrob Design routes natural-language design turns through the **Redrob Code** engine, wired as the default Agent Client Protocol (ACP) Design agent. Describe what you want in chat and the engine drives the editor's 90+ design tools to create and modify the scene graph.
+
+If the Redrob Code engine is not installed, the app guides you through installing it (set `REDROB_CODE_BIN` or install the `redrob` CLI), then reconnects the Design agent automatically.
 
 ## What it does
 
-- **Opens `.fig` and `.pen` files** — read and write native Figma files, open supported Pencil documents from the app or OS file browser, copy & paste nodes between apps
-- **AI builds designs** — describe what you want in chat, 90+ tools create and modify nodes. Connect OpenRouter, Anthropic, OpenAI, Google AI, Z.ai, MiniMax, or compatible endpoints
-- **Fully programmable** — headless CLI, XPath queries, Figma Plugin API via `eval`, MCP server for AI agents, and desktop agent integrations for Claude Code, Codex, and Gemini CLI
+- **Opens `.fig` and `.pen` files** — read and write native Figma files, open Redrob Design documents from the app or OS file browser, copy & paste nodes between apps
+- **AI builds designs** — describe what you want in chat, 90+ tools create and modify nodes. Route design through the Redrob Code engine, or connect OpenRouter, Anthropic, OpenAI, Google AI, Z.ai, MiniMax, or compatible endpoints
+- **Fully programmable** — headless CLI, XPath queries, Figma Plugin API via `eval`, MCP server for AI agents, and desktop agent integrations for Redrob Code and other ACP agents
 - **Lint, convert, and extract tokens** — inspect documents, lint naming/layout/accessibility, convert between supported formats, analyze colors/typography/spacing/clusters, and extract design tokens
+- **Design tokens & theme library** — import design tokens (DTCG, CSS variables, Tailwind), and the built-in Redrob brand theme/deck library
 - **Components and variants** — create reusable components, group variants into component sets, insert local assets as instances, and switch variants from the inspector
 - **Image vectorization** — convert image layers into editable vector layers with Recraft or fal.ai
 - **Design-to-code export** — export selections as JSX/Tailwind, generate token outputs, and map designs into component-oriented code workflows
-- **Vue SDK for custom editors** — headless components and composables for embedding OpenPencil into other apps or building workflow-specific editing surfaces. [Read the SDK docs →](https://openpencil.dev/programmable/sdk/)
+- **Vue SDK for custom editors** — headless components and composables for embedding Redrob Design into other apps or building workflow-specific editing surfaces
 - **Real-time collaboration** — P2P via WebRTC, no server, no account. Cursors, presence, follow mode
 - **Auto layout & CSS Grid** — flex and grid layout via Yoga WASM, with gap, padding, alignment, track sizing
-- **~7 MB desktop app** — Tauri v2 for macOS, Windows, Linux. Also runs in the browser as a PWA
+- **Compact desktop app** — Tauri v2 for macOS, Windows, Linux. Also runs in the browser as a PWA
 
 ## CLI
 
 ```sh
-npm install -g @open-pencil/cli
-# or: bun add -g @open-pencil/cli
+npm install -g @redrob-design/cli
+# or: bun add -g @redrob-design/cli
 ```
 
 ### Inspect design files
@@ -44,10 +45,10 @@ npm install -g @open-pencil/cli
 Browse node trees, search by name or type, dig into properties — all without opening the editor:
 
 ```sh
-openpencil tree design.fig
-openpencil find design.pen --type TEXT
-openpencil node design.fig --id 1:23
-openpencil info design.fig
+redrob-design tree design.fig
+redrob-design find design.pen --type TEXT
+redrob-design node design.fig --id 1:23
+redrob-design info design.fig
 ```
 
 ```
@@ -64,11 +65,11 @@ openpencil info design.fig
 Use XPath selectors to find nodes by type, attributes, and structure:
 
 ```sh
-openpencil query design.fig "//FRAME"                              # All frames
-openpencil query design.fig "//FRAME[@width < 300]"                # Frames under 300px
-openpencil query design.fig "//TEXT[contains(@name, 'Button')]"     # Text with 'Button' in name
-openpencil query design.fig "//*[@cornerRadius > 0]"               # Rounded corners
-openpencil query design.fig "//SECTION//TEXT"                       # Text inside sections
+redrob-design query design.fig "//FRAME"                              # All frames
+redrob-design query design.fig "//FRAME[@width < 300]"                # Frames under 300px
+redrob-design query design.fig "//TEXT[contains(@name, 'Button')]"     # Text with 'Button' in name
+redrob-design query design.fig "//*[@cornerRadius > 0]"               # Rounded corners
+redrob-design query design.fig "//SECTION//TEXT"                       # Text inside sections
 ```
 
 ### Export
@@ -76,21 +77,21 @@ openpencil query design.fig "//SECTION//TEXT"                       # Text insid
 Render to PNG, JPG, WEBP, SVG, `.fig`, or JSX — or export selections/pages as `.fig` and convert whole documents between supported formats:
 
 ```sh
-openpencil export design.fig                           # PNG
-openpencil export design.fig -f jpg -s 2 -q 90        # JPG at 2x, quality 90
-openpencil export design.fig -f fig --page "Page 1"   # Export a page as .fig
-openpencil export design.fig -f jsx --style tailwind   # Tailwind JSX
-openpencil export design.fig -f html --css tailwind    # Tailwind HTML fragment
-openpencil export design.fig -f html --html standalone --assets external # HTML + assets
-openpencil convert design.pen output.fig               # Convert between document formats
-openpencil import page.html --css styles.css -o page.fig # HTML/CSS → editable .fig
+redrob-design export design.fig                           # PNG
+redrob-design export design.fig -f jpg -s 2 -q 90         # JPG at 2x, quality 90
+redrob-design export design.fig -f fig --page "Page 1"    # Export a page as .fig
+redrob-design export design.fig -f jsx --style tailwind   # Tailwind JSX
+redrob-design export design.fig -f html --css tailwind    # Tailwind HTML fragment
+redrob-design export design.fig -f html --html standalone --assets external # HTML + assets
+redrob-design convert design.pen output.fig               # Convert between document formats
+redrob-design import page.html --css styles.css -o page.fig # HTML/CSS → editable .fig
 ```
 
-DOM/CSS input flows through `@open-pencil/dom-css`, so HTML, authored CSS, and Tailwind utility CSS can become editable OpenPencil layers:
+DOM/CSS input flows through `@redrob-design/dom-css`, so HTML, authored CSS, and Tailwind utility CSS can become editable design layers:
 
 ```sh
-openpencil import card.html --css card.css -o card.fig
-openpencil import card.html --tailwind "flex flex-col gap-3 w-80 p-6 rounded-xl bg-white" -o card.fig
+redrob-design import card.html --css card.css -o card.fig
+redrob-design import card.html --tailwind "flex flex-col gap-3 w-80 p-6 rounded-xl bg-white" -o card.fig
 ```
 
 ```html
@@ -105,10 +106,10 @@ openpencil import card.html --tailwind "flex flex-col gap-3 w-80 p-6 rounded-xl 
 Catch naming, layout, structure, and accessibility issues from the terminal:
 
 ```sh
-openpencil lint design.fig
-openpencil lint design.pen --preset strict
-openpencil lint design.fig --rule color-contrast
-openpencil lint design.fig --list-rules
+redrob-design lint design.fig
+redrob-design lint design.pen --preset strict
+redrob-design lint design.fig --rule color-contrast
+redrob-design lint design.fig --list-rules
 ```
 
 ### Analyze and extract design tokens
@@ -116,12 +117,12 @@ openpencil lint design.fig --list-rules
 Audit an entire design system from the terminal — find inconsistencies, extract the real palette, and spot components waiting to be extracted:
 
 ```sh
-openpencil analyze colors design.fig
-openpencil analyze typography design.fig
-openpencil analyze spacing design.fig
-openpencil analyze clusters design.fig
-openpencil analyze overlaps design.fig
-openpencil variables design.fig
+redrob-design analyze colors design.fig
+redrob-design analyze typography design.fig
+redrob-design analyze spacing design.fig
+redrob-design analyze clusters design.fig
+redrob-design analyze overlaps design.fig
+redrob-design variables design.fig
 ```
 
 ```
@@ -142,8 +143,8 @@ openpencil variables design.fig
 `eval` gives you the full Figma Plugin API. Modify the file, write it back:
 
 ```sh
-openpencil eval design.fig -c "figma.currentPage.children.length"
-openpencil eval design.fig -c "figma.currentPage.selection.forEach(n => n.opacity = 0.5)" -w
+redrob-design eval design.fig -c "figma.currentPage.children.length"
+redrob-design eval design.fig -c "figma.currentPage.selection.forEach(n => n.opacity = 0.5)" -w
 ```
 
 ### Control the running app
@@ -151,9 +152,9 @@ openpencil eval design.fig -c "figma.currentPage.selection.forEach(n => n.opacit
 When the desktop app is running, omit the file argument — the CLI connects via RPC and operates on the live canvas. Useful for automation scripts, CI pipelines, or AI agents that need to interact with the editor:
 
 ```sh
-openpencil tree                               # Inspect the live document
-openpencil export -f png                      # Screenshot the current canvas
-openpencil eval -c "figma.currentPage.name"   # Query the editor
+redrob-design tree                               # Inspect the live document
+redrob-design export -f png                      # Screenshot the current canvas
+redrob-design eval -c "figma.currentPage.name"   # Query the editor
 ```
 
 All commands support `--json` for machine-readable output.
@@ -162,38 +163,23 @@ All commands support `--json` for machine-readable output.
 
 ### Built-in chat
 
-Press <kbd>⌘</kbd><kbd>J</kbd> to open the AI assistant. It has 100+ tools that can create shapes, set fills and strokes, manage auto-layout, work with components and variables, run boolean operations, analyze design tokens, and export assets. Bring your own API key for OpenRouter, Anthropic, OpenAI, Google AI, Z.ai, MiniMax, or compatible endpoints. No backend, no account.
-
-Not every provider works in the browser, and not every model streams tool calls correctly. See [BYOK provider & model compatibility](packages/docs/programmable/byok-provider-compatibility.md) for measured results — contributions welcome.
+Press <kbd>⌘</kbd><kbd>J</kbd> to open the AI assistant. It has 100+ tools that can create shapes, set fills and strokes, manage auto-layout, work with components and variables, run boolean operations, analyze design tokens, and export assets. Design turns route through the Redrob Code engine by default, or bring your own API key for OpenRouter, Anthropic, OpenAI, Google AI, Z.ai, MiniMax, or compatible endpoints. No backend, no account.
 
 ### Coding agents (desktop)
 
-Use Claude Code, Codex, or Gemini CLI directly in the chat panel. The agent connects to the editor's MCP server and uses all 100+ design tools. Requires the desktop app and the agent CLI installed locally.
+Use Redrob Code or other ACP-compatible coding agents directly in the chat panel. The agent connects to the editor's MCP server and uses all 100+ design tools. Requires the desktop app and the agent CLI installed locally.
 
-Pi is also available as an optional AI SDK Harness provider. Install its companion CLI with `npm install -g @open-pencil/harness`, then add a **Pi** model profile in **Settings → AI & agents**. The companion is installed separately so OpenPencil does not bundle a JavaScript runtime for users who do not enable Harness providers.
-
-**Setup (Claude Code):**
-
-1. Install the ACP adapter: `npm install -g @agentclientprotocol/claude-agent-acp`
-2. Add MCP permission to `~/.claude/settings.json`:
-   ```json
-   {
-     "permissions": {
-       "allow": ["mcp__open-pencil__*"]
-     }
-   }
-   ```
-3. Open the desktop app → <kbd>Ctrl</kbd><kbd>J</kbd> → select **Claude Code** from the provider dropdown
+Pi is also available as an optional AI SDK Harness provider. Install its companion CLI with `npm install -g @redrob-design/harness`, then add a **Pi** model profile in **Settings → AI & agents**. The companion is installed separately so Redrob Design does not bundle a JavaScript runtime for users who do not enable Harness providers.
 
 ### MCP server
 
-Connect Claude Code, Cursor, Windsurf, or any MCP client to inspect, modify, and export design documents headlessly. 100+ tools. [Full docs →](https://openpencil.dev/reference/mcp-tools)
+Connect Claude Code, Cursor, Windsurf, or any MCP client to inspect, modify, and export design documents headlessly. 100+ tools.
 
 **Stdio** (Claude Code, Cursor, Windsurf):
 
 ```sh
-npm install -g @open-pencil/mcp
-claude mcp add --scope user open-pencil -- openpencil-mcp
+npm install -g @redrob-design/mcp
+claude mcp add --scope user redrob-design -- redrob-design-mcp
 ```
 
 For other MCP clients:
@@ -201,8 +187,8 @@ For other MCP clients:
 ```json
 {
   "mcpServers": {
-    "open-pencil": {
-      "command": "openpencil-mcp"
+    "redrob-design": {
+      "command": "redrob-design-mcp"
     }
   }
 }
@@ -211,41 +197,21 @@ For other MCP clients:
 **HTTP** (scripts, CI):
 
 ```sh
-openpencil-mcp-http   # Unix socket on macOS/Linux + http://127.0.0.1:7600/mcp
+redrob-design-mcp-http   # Unix socket on macOS/Linux + http://127.0.0.1:7600/mcp
 ```
 
 Local clients discover the private Unix socket automatically and fall back to localhost TCP. Set `PORT=0` to disable TCP on macOS/Linux.
 
-**File access:** Set `OPENPENCIL_MCP_ROOT` to scope file operations (`open_file`, `new_document`, export `path` param) to a directory. Defaults to the current working directory.
-
-### AI agent skill
-
-Teach your AI coding agent to use OpenPencil — inspect designs, export assets, analyze tokens, modify .fig files:
-
-```sh
-npx skills add open-pencil/skills@open-pencil
-```
-
-Works with Claude Code, Cursor, Windsurf, Codex, and any agent that supports [skills](https://skills.sh).
-
-For documentation-aware agents, the docs site publishes [llms.txt](https://openpencil.dev/llms.txt), [llms-full.txt](https://openpencil.dev/llms-full.txt), and per-page Markdown files generated from the VitePress docs.
+**File access:** Set `OPENPENCIL_MCP_ROOT` to scope file operations (`open_file`, `new_document`, export `path` param) to a directory. Defaults to the current working directory. (This environment variable name is retained for compatibility with the underlying MCP server.)
 
 ## Collaboration
 
 Share a link to co-edit in real time. No server, no account — peers connect directly via WebRTC.
 
 1. Click the share button in the top-right panel
-2. Share the generated link (`app.openpencil.dev/share/<room-id>`)
+2. Share the generated link (`app.redrob.design/share/<room-id>`)
 3. Collaborators see your cursor, selection, and edits in real time
 4. Click a peer's avatar to follow their viewport
-
-## Why
-
-Figma is a closed platform that actively fights programmatic access. Their MCP server is read-only. [figma-use](https://github.com/dannote/figma-use) added full read/write automation via CDP — then [Figma 126 killed CDP](https://forum.figma.com/report-a-problem-6/remote-debugging-port-not-working-in-figma-desktop-126-1-2-50858). Your design files are in a proprietary binary format that only their software can fully read. Your workflows break when they decide to ship a point release.
-
-OpenPencil is the alternative: open source (MIT), reads .fig files natively, every operation is scriptable, and your data never leaves your machine.
-
-See the [roadmap](https://openpencil.dev/development/roadmap) for product direction and current Figma compatibility gaps.
 
 ## Contributing
 
@@ -253,16 +219,12 @@ See the [roadmap](https://openpencil.dev/development/roadmap) for product direct
 
 ```sh
 bun install
-bun run dev:portless  # Web editor at https://open-pencil.localhost
+bun run dev:portless  # Web editor at https://redrob-design.localhost
 bun run dev           # Direct Vite server at http://localhost:1420
 bun run tauri dev     # Desktop app (requires Rust)
 ```
 
-The first Portless run creates and trusts a local HTTPS certificate. Linked Git worktrees automatically receive branch-prefixed URLs such as `https://fix-ui.open-pencil.localhost`, so concurrent development servers do not compete for port 1420. Their development MCP bridges are exposed through matching sibling URLs such as `https://fix-ui.mcp.open-pencil.localhost`, with isolated TCP ports and runtime socket files. Run `bunx portless doctor` if local routing or certificate trust fails.
-
-Alternatively, open the repository in any [Dev Container](https://containers.dev/)-compatible tool. The container pins Bun, installs the workspace dependencies, and forwards the direct web editor on port 1420. Start it with `bun run dev` after the container is ready.
-
-The Dev Container supports the web editor, packages, CLI, and automated checks. Native Tauri development still requires the host setup described below because desktop windows and platform WebView dependencies are not provided in the container.
+The first Portless run creates and trusts a local HTTPS certificate. Linked Git worktrees automatically receive branch-prefixed URLs such as `https://fix-ui.redrob-design.localhost`, so concurrent development servers do not compete for port 1420. Their development MCP bridges are exposed through matching sibling URLs such as `https://fix-ui.mcp.redrob-design.localhost`, with isolated TCP ports and runtime socket files. Run `bunx portless doctor` if local routing or certificate trust fails.
 
 ### Quality gates
 
@@ -277,16 +239,17 @@ The Dev Container supports the web editor, packages, CLI, and automated checks. 
 
 ```
 packages/
-  scene-graph/    @open-pencil/scene-graph — nodes, primitives, hit testing, copy/snap/undo
-  pen/            @open-pencil/pen — Pencil document format helpers
-  kiwi/           @open-pencil/kiwi — Kiwi runtime and low-level .fig container parsing
-  fig/            @open-pencil/fig — .fig archives, SceneGraph conversion, instances, metadata
-  core/           @open-pencil/core — editor engine, renderer, layout, tools, RPC, document I/O
-  dom-css/        @open-pencil/dom-css — HTML/CSS/Tailwind to editable design documents
-  vue/            @open-pencil/vue — headless Vue SDK
-  cli/            @open-pencil/cli — headless CLI
-  mcp/            @open-pencil/mcp — MCP server (stdio + HTTP)
-  docs/           Documentation site (openpencil.dev)
+  scene-graph/    @redrob-design/scene-graph — nodes, primitives, hit testing, copy/snap/undo
+  pen/            @redrob-design/pen — Pencil document format helpers
+  kiwi/           @redrob-design/kiwi — Kiwi runtime and low-level .fig container parsing
+  fig/            @redrob-design/fig — .fig archives, SceneGraph conversion, instances, metadata
+  core/           @redrob-design/core — editor engine, renderer, layout, tools, RPC, document I/O
+  dom-css/        @redrob-design/dom-css — HTML/CSS/Tailwind to editable design documents
+  vue/            @redrob-design/vue — headless Vue SDK
+  cli/            @redrob-design/cli — headless CLI
+  mcp/            @redrob-design/mcp — MCP server (stdio + HTTP)
+  brand/          @redrob-design/brand — design tokens + brand theme library
+  docs/           Documentation site
 src/              Vue app (editor shell, AI, collaboration, document I/O)
 desktop/          Tauri v2 desktop app (Rust + config)
 tests/            E2E, visual, engine, and integration tests
@@ -302,7 +265,7 @@ tests/            E2E, visual, engine, and integration tests
 | File format   | Kiwi binary + Zstd + ZIP                                                          |
 | Collaboration | Trystero (WebRTC P2P) + Yjs (CRDT)                                                |
 | Desktop       | Tauri v2                                                                          |
-| AI/MCP        | Multi-provider (Anthropic, OpenAI, Google AI, OpenRouter), MCP SDK, Hono          |
+| AI/MCP        | Redrob Code engine (ACP), multi-provider (Anthropic, OpenAI, Google AI, OpenRouter), MCP SDK, Hono |
 
 ### Desktop builds
 
@@ -314,10 +277,16 @@ bun run tauri build
 
 ## Acknowledgments
 
-Thanks to [@sld0Ant](https://github.com/sld0Ant) (Anton Soldatov) for creating and maintaining the [documentation site](https://openpencil.dev).
+Redrob Design is derived from [OpenPencil](https://github.com/open-pencil/open-pencil), an open-source design editor created by Danila Poyarkov and the OpenPencil contributors. We are grateful for their work, which forms the foundation of this project.
 
 ## License
 
-OpenPencil is licensed under the [MIT License](./LICENSE).
+Redrob Design is licensed under the [MIT License](./LICENSE).
+
+Copyright (c) 2026 Redrob and Redrob Design contributors.
+
+Redrob Design is derived from OpenPencil, which is also MIT licensed:
 
 Copyright (c) 2026 Danila Poyarkov and OpenPencil contributors.
+
+The original OpenPencil copyright notice is retained in the [LICENSE](./LICENSE) and [NOTICE](./NOTICE) files as required by the MIT License.

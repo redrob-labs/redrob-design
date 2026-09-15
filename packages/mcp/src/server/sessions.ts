@@ -102,7 +102,7 @@ export function createMCPSessionManager({
     if (inFlight) return inFlight
 
     const promise = (async () => {
-      const server = new McpServer({ name: 'open-pencil', version: serverVersion })
+      const server = new McpServer({ name: 'redrob-design', version: serverVersion })
       registerTools(server)
 
       const transport = new WebStandardStreamableHTTPServerTransport({

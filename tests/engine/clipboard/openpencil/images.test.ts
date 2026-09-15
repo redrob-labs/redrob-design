@@ -7,10 +7,10 @@ import {
   FigmaAPI,
   parseOpenPencilClipboard,
   SceneGraph
-} from '@open-pencil/core'
-import type { SceneNode } from '@open-pencil/core'
-import { encodeBase64 } from '@open-pencil/core/bytes'
-import { getInstanceOverride, setInstanceOverride } from '@open-pencil/scene-graph'
+} from '@redrob-design/core'
+import type { SceneNode } from '@redrob-design/core'
+import { encodeBase64 } from '@redrob-design/core/bytes'
+import { getInstanceOverride, setInstanceOverride } from '@redrob-design/scene-graph'
 
 import { expectDefined } from '#tests/helpers/assert'
 

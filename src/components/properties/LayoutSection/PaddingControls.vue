@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import VariableNumberField from '@/components/properties/VariableNumberField.vue'
-import { useLayoutControlsContext } from '@open-pencil/vue'
+import { useLayoutControlsContext } from '@redrob-design/vue'
 
 import type { PaddingProp } from '@/components/properties/LayoutSection/types'
 

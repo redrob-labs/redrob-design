@@ -3,8 +3,8 @@ import { useClipboard, useDebounceFn } from '@vueuse/core'
 import { computed, defineAsyncComponent, onBeforeUnmount, ref, shallowRef, watch } from 'vue'
 import { tv } from 'tailwind-variants'
 
-import { JSX_REFERENCE, selectionToJSX } from '@open-pencil/core/design-jsx'
-import { useI18n, useSceneComputed } from '@open-pencil/vue'
+import { JSX_REFERENCE, selectionToJSX } from '@redrob-design/core/design-jsx'
+import { useI18n, useSceneComputed } from '@redrob-design/vue'
 
 import {
   commitDesignJSXSession,

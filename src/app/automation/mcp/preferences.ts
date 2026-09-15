@@ -1,7 +1,7 @@
 import { useLocalStorage } from '@vueuse/core'
 import { ref } from 'vue'
 
-import type { ToolDescriptor, ToolEffect } from '@open-pencil/mcp/tools'
+import type { ToolDescriptor, ToolEffect } from '@redrob-design/mcp/tools'
 
 const DISABLED_TOOLS_STORAGE_KEY = 'open-pencil:mcp:disabled-tools'
 const ROOT_DIRECTORY_STORAGE_KEY = 'open-pencil:mcp:root-directory'

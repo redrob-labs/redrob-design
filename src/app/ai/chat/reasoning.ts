@@ -1,4 +1,4 @@
-import type { AIProviderID } from '@open-pencil/core/constants'
+import type { AIProviderID } from '@redrob-design/core/constants'
 
 type JSONValue = null | boolean | number | string | JSONValue[] | { [key: string]: JSONValue }
 export type AIProviderOptions = Record<string, { [key: string]: JSONValue }>

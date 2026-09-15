@@ -1,11 +1,11 @@
 ---
 title: useColorBindingProvider
-description: OpenPencil COLOR variable provider for BindableValue fields.
+description: Redrob Design COLOR variable provider for BindableValue fields.
 ---
 
 # useColorBindingProvider
 
-`useColorBindingProvider()` adapts OpenPencil COLOR variables to the generic `BindingProvider<Color>`
+`useColorBindingProvider()` adapts Redrob Design COLOR variables to the generic `BindingProvider<Color>`
 contract. It resolves current-mode colors, binds indexed paint paths, creates variables in a Colors
 collection, updates all collection modes when requested, and exposes editor undo transactions.
 
@@ -14,9 +14,9 @@ Use it with `BindableValueRoot` and explicit targets such as `fills/0/color` or
 actual color mutation begins and commits.
 
 ```ts twoslash
-import type { Color } from '@open-pencil/scene-graph'
-import type { BindingTarget } from '@open-pencil/vue'
-import { useColorBindingProvider } from '@open-pencil/vue'
+import type { Color } from '@redrob-design/scene-graph'
+import type { BindingTarget } from '@redrob-design/vue'
+import { useColorBindingProvider } from '@redrob-design/vue'
 
 const provider = useColorBindingProvider()
 const targets: BindingTarget[] = [

@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'bun:test'
 
-import { createEditor } from '@open-pencil/core/editor'
-import { getAxisAlignedWorldBounds } from '@open-pencil/scene-graph/coordinate'
+import { createEditor } from '@redrob-design/core/editor'
+import { getAxisAlignedWorldBounds } from '@redrob-design/scene-graph/coordinate'
 
 import { expectDefined } from '#tests/helpers/assert'
 

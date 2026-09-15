@@ -1,4 +1,4 @@
-import type { SceneGraph, SceneNode, NodeType } from '@open-pencil/scene-graph'
+import type { SceneGraph, SceneNode, NodeType } from '@redrob-design/scene-graph'
 
 import { DEFAULT_FONT_FAMILY } from '#core/constants'
 import { resolveNodeTextDirection } from '#core/text/direction'

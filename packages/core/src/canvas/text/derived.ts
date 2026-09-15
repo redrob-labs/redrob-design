@@ -8,7 +8,7 @@ import type {
   Stroke,
   StyleRun,
   TextDecorationStyle
-} from '@open-pencil/scene-graph'
+} from '@redrob-design/scene-graph'
 
 import { encodeBase64 } from '#core/bytes'
 import type { SkiaRenderer } from '#core/canvas/renderer'

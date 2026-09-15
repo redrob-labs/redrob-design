@@ -1,5 +1,5 @@
-import type { SceneNode } from '@open-pencil/scene-graph'
-import { deriveSlashVariantProperties } from '@open-pencil/scene-graph/variant-properties'
+import type { SceneNode } from '@redrob-design/scene-graph'
+import { deriveSlashVariantProperties } from '@redrob-design/scene-graph/variant-properties'
 
 import { randomHex } from '#core/random'
 

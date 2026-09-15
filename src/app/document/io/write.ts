@@ -1,4 +1,4 @@
-import type { EditorState } from '@open-pencil/core/editor'
+import type { EditorState } from '@redrob-design/core/editor'
 
 import { describeDiagnosticError, recordDocumentFailure } from '@/app/diagnostics'
 import type { StorageDocumentBinding } from '@/app/integrations/storage/types'

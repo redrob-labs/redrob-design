@@ -1,8 +1,8 @@
 import { describe, expect, test } from 'bun:test'
 
-import { importNodeChanges } from '@open-pencil/core'
-import { nodeChangeToProps } from '@open-pencil/fig/node-change'
-import type { NodeChange } from '@open-pencil/kiwi/fig/codec'
+import { importNodeChanges } from '@redrob-design/core'
+import { nodeChangeToProps } from '@redrob-design/fig/node-change'
+import type { NodeChange } from '@redrob-design/kiwi/fig/codec'
 
 import { canvas, doc, node } from '../helpers'
 

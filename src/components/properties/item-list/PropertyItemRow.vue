@@ -1,10 +1,10 @@
 <script setup lang="ts" generic="K extends PropertyListKey">
-import { PropertyListItem, PropertyListRemove, PropertyListVisibility } from '@open-pencil/vue'
+import { PropertyListItem, PropertyListRemove, PropertyListVisibility } from '@redrob-design/vue'
 
 import PanelItemRow from '@/components/ui/panel/PanelItemRow.vue'
 import Tip from '@/components/ui/Tip.vue'
 
-import type { PropertyListItemSlotProps, PropertyListKey } from '@open-pencil/vue'
+import type { PropertyListItemSlotProps, PropertyListKey } from '@redrob-design/vue'
 import type { ClassValue } from 'tailwind-variants'
 import type { VNode } from 'vue'
 

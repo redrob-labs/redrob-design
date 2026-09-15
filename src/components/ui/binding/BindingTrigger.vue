@@ -2,7 +2,7 @@
 import type { PrimitiveProps } from 'reka-ui'
 import type { HTMLAttributes } from 'vue'
 
-import type { BindingState } from '@open-pencil/vue'
+import type { BindingState } from '@redrob-design/vue'
 
 import type { BindingFieldUI } from './ui'
 

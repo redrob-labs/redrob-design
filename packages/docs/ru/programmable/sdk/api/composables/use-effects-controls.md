@@ -17,7 +17,7 @@ description: Управление тенями и blur effects в панели �
 ## Использование
 
 ```ts
-import { useEffectsControls } from '@open-pencil/vue'
+import { useEffectsControls } from '@redrob-design/vue'
 
 const effects = useEffectsControls()
 ```

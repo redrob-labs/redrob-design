@@ -1,7 +1,7 @@
-import { encodeBase64 } from '@open-pencil/core/bytes'
-import { colorToCSS } from '@open-pencil/core/color'
-import type { SceneGraph, SceneNode } from '@open-pencil/scene-graph'
-import { BLACK } from '@open-pencil/scene-graph/constants'
+import { encodeBase64 } from '@redrob-design/core/bytes'
+import { colorToCSS } from '@redrob-design/core/color'
+import type { SceneGraph, SceneNode } from '@redrob-design/scene-graph'
+import { BLACK } from '@redrob-design/scene-graph/constants'
 
 import {
   dropShadowToCSS,

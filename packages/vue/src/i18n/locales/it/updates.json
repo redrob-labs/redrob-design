@@ -1,11 +1,11 @@
 {
-  "upToDate": "OpenPencil è aggiornato",
-  "availableTitle": "Aggiorna OpenPencil",
-  "available": "OpenPencil {version} è disponibile.",
+  "upToDate": "Redrob Design è aggiornato",
+  "availableTitle": "Aggiorna Redrob Design",
+  "available": "Redrob Design {version} è disponibile.",
   "installPrompt": "Scaricare e installare ora? L’app verrà riavviata dopo l’installazione dell’aggiornamento.",
-  "downloading": "Download di OpenPencil {version}",
+  "downloading": "Download di Redrob Design {version}",
   "installedTitle": "Aggiornamento installato",
-  "installed": "OpenPencil {version} è stato installato{size}. Riavvio in corso.",
+  "installed": "Redrob Design {version} è stato installato{size}. Riavvio in corso.",
   "unavailable": "Gli aggiornamenti non sono ancora disponibili. Pubblica prima una release firmata con latest.json.",
   "checkFailed": "Impossibile controllare gli aggiornamenti: {error}"
 }

@@ -15,7 +15,7 @@ import {
   weightToStyle,
   FontManager,
   SceneGraph
-} from '@open-pencil/core'
+} from '@redrob-design/core'
 
 import { expectDefined } from '#tests/helpers/assert'
 

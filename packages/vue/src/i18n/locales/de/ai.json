@@ -97,7 +97,7 @@
   "chatAuthenticationFailed": "Der API-Schlüssel des Anbieters ist ungültig oder abgelaufen. Ersetze ihn in den Einstellungen.",
   "chatForbidden": "Dieser API-Schlüssel kann das ausgewählte Modell nicht verwenden. Prüfe den Modellzugriff.",
   "chatModelNotFound": "Das ausgewählte Modell ist nicht verfügbar. Wähle in den Einstellungen ein anderes Modell.",
-  "chatNetworkFailed": "OpenPencil konnte den Anbieter nicht erreichen. Prüfe die Verbindung und den Endpunkt.",
+  "chatNetworkFailed": "Redrob Design konnte den Anbieter nicht erreichen. Prüfe die Verbindung und den Endpunkt.",
   "chatRateLimited": "Das Anfragelimit des Anbieters wurde erreicht. Warte kurz und versuche es erneut.",
   "openProviderSettingsAction": "Einstellungen öffnen",
   "chatInsufficientCredit": "Das Anbieterkonto hat nicht genügend Guthaben oder Kontingent. Lade es auf und versuche es erneut.",

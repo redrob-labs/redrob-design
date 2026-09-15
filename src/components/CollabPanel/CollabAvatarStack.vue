@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { tv } from 'tailwind-variants'
 
-import { colorToCSS } from '@open-pencil/core/color'
+import { colorToCSS } from '@redrob-design/core/color'
 
 import Tip from '@/components/ui/Tip.vue'
 import { initials } from '@/app/shell/ui'
 import { useCollabPanelContext } from '@/components/CollabPanel/context'
 import collaborationTheme from '@/theme/collaboration'
-import { useI18n } from '@open-pencil/vue'
+import { useI18n } from '@redrob-design/vue'
 
 const collab = useCollabPanelContext()
 const { common, collaboration: collaborationMessages } = useI18n()

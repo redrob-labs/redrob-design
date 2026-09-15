@@ -1,5 +1,5 @@
-import { cloneNodeProps, SceneGraph } from '@open-pencil/scene-graph'
-import type { SceneNode } from '@open-pencil/scene-graph'
+import { cloneNodeProps, SceneGraph } from '@redrob-design/scene-graph'
+import type { SceneNode } from '@redrob-design/scene-graph'
 
 import { contentHash } from './hash'
 import { assertLibraryAssetKey } from './identity'

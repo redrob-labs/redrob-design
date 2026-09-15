@@ -18,7 +18,7 @@ Przydaje się podczas tworzenia:
 ## Użycie
 
 ```ts
-import { useEditorCommands } from '@open-pencil/vue'
+import { useEditorCommands } from '@redrob-design/vue'
 
 const { commands, menuItem, runCommand, moveSelectionToPage, otherPages } = useEditorCommands()
 ```

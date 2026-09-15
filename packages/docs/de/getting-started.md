@@ -2,9 +2,9 @@
 
 ## Webversion
 
-OpenPencil läuft direkt im Browser und muss nicht installiert werden. Öffnen Sie [app.openpencil.dev](https://app.openpencil.dev), um mit der Gestaltung zu beginnen.
+Redrob Design läuft direkt im Browser und muss nicht installiert werden. Öffnen Sie [app.redrob.design](https://app.redrob.design), um mit der Gestaltung zu beginnen.
 
-Wenn Sie ein eigenes Produkt auf OpenPencil aufbauen möchten, lesen Sie den Bereich [Automatisierung](/programmable/) und die Dokumentation zum [Vue SDK](/programmable/sdk/).
+Wenn Sie ein eigenes Produkt auf Redrob Design aufbauen möchten, lesen Sie den Bereich [Automatisierung](/programmable/) und die Dokumentation zum [Vue SDK](/programmable/sdk/).
 
 ## Desktop-Anwendung
 

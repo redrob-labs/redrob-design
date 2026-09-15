@@ -1,10 +1,10 @@
 import { describe, test, expect } from 'bun:test'
 
-import { SceneGraph, TextEditor, UndoManager } from '@open-pencil/core'
-import type { DerivedTextGlyph, StyleRun } from '@open-pencil/core'
-import { createTextActions } from '@open-pencil/core/editor'
-import type { EditorContext, EditorState } from '@open-pencil/core/editor'
-import { getInstanceOverride } from '@open-pencil/scene-graph'
+import { SceneGraph, TextEditor, UndoManager } from '@redrob-design/core'
+import type { DerivedTextGlyph, StyleRun } from '@redrob-design/core'
+import { createTextActions } from '@redrob-design/core/editor'
+import type { EditorContext, EditorState } from '@redrob-design/core/editor'
+import { getInstanceOverride } from '@redrob-design/scene-graph'
 
 import { fontManager } from '#core/text/fonts'
 

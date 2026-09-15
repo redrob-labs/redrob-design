@@ -41,20 +41,20 @@ describe('transport/paths', () => {
       try {
         const dir = await getSocketDir()
         if (process.platform === 'darwin') {
-          expect(dir).toContain('Library/Application Support/OpenPencil')
+          expect(dir).toContain('Library/Application Support/RedrobDesign')
         } else if (process.platform === 'win32') {
           const localAppData = process.env.LOCALAPPDATA
           if (localAppData) {
             expect(dir.toLowerCase()).toContain(localAppData.toLowerCase())
           }
-          expect(dir.toLowerCase()).toContain('openpencil')
+          expect(dir.toLowerCase()).toContain('redrobdesign')
         } else {
           // Linux / other Unix
           const xdg = process.env.XDG_RUNTIME_DIR
           if (xdg) {
             expect(dir).toContain(xdg)
           } else {
-            expect(dir).toContain('.openpencil')
+            expect(dir).toContain('.redrob-design')
           }
         }
       } finally {

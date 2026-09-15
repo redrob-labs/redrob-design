@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test'
 
-import { encodePathCommandsBlob } from '@open-pencil/fig/node-change'
+import { encodePathCommandsBlob } from '@redrob-design/fig/node-change'
 
 import { createAPI } from '../helpers'
 

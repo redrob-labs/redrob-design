@@ -1,4 +1,4 @@
-import { copyInstanceComponentProps, type SceneNode } from '@open-pencil/scene-graph'
+import { copyInstanceComponentProps, type SceneNode } from '@redrob-design/scene-graph'
 
 export function cloneInstanceUpdate(
   source: SceneNode,

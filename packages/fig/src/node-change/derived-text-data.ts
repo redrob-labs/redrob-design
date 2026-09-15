@@ -1,5 +1,5 @@
-import type { NodeChange } from '@open-pencil/kiwi/fig/codec'
-import type { SceneNode } from '@open-pencil/scene-graph'
+import type { NodeChange } from '@redrob-design/kiwi/fig/codec'
+import type { SceneNode } from '@redrob-design/scene-graph'
 
 interface DerivedTextDataOptions {
   node: SceneNode

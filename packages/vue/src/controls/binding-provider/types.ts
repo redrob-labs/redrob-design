@@ -1,6 +1,6 @@
 import type { Ref } from 'vue'
 
-import type { Variable } from '@open-pencil/scene-graph'
+import type { Variable } from '@redrob-design/scene-graph'
 
 export type BindingState = 'unbound' | 'bound' | 'mixed'
 export type BoundEditPolicy = 'detach-on-edit' | 'readonly-when-bound' | 'edit-variable'

@@ -6,10 +6,10 @@ import type {
   GeometryPath,
   SceneNode,
   SourceMetadata
-} from '@open-pencil/scene-graph'
-import { copyFills } from '@open-pencil/scene-graph/copy'
-import { createDefaultSourceMetadata } from '@open-pencil/scene-graph/node-defaults'
-import type { Matrix, Vector } from '@open-pencil/scene-graph/primitives'
+} from '@redrob-design/scene-graph'
+import { copyFills } from '@redrob-design/scene-graph/copy'
+import { createDefaultSourceMetadata } from '@redrob-design/scene-graph/node-defaults'
+import type { Matrix, Vector } from '@redrob-design/scene-graph/primitives'
 
 const DERIVED_NODE_FIELDS = new Set<keyof SceneNode>(['textPicture'])
 const FILL_TYPES = new Set<FillType>([

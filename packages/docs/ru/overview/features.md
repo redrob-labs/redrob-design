@@ -2,9 +2,9 @@
 
 ## Файлы Figma
 
-OpenPencil открывает и сохраняет `.fig` без предварительного преобразования. Импорт и экспорт используют бинарный кодек Kiwi из формата Figma: 194 определения схемы и около 390 полей для каждого объекта. Для сохранения нажмите <kbd>⌘</kbd><kbd>S</kbd>, для сохранения под новым именем — <kbd>⇧</kbd><kbd>⌘</kbd><kbd>S</kbd>.
+Redrob Design открывает и сохраняет `.fig` без предварительного преобразования. Импорт и экспорт используют бинарный кодек Kiwi из формата Figma: 194 определения схемы и около 390 полей для каждого объекта. Для сохранения нажмите <kbd>⌘</kbd><kbd>S</kbd>, для сохранения под новым именем — <kbd>⇧</kbd><kbd>⌘</kbd><kbd>S</kbd>.
 
-**Копирование между Figma и OpenPencil:** скопируйте объекты в одном редакторе и вставьте в другом. Сохраняются заливки, обводки, автоматическая компоновка, текст, эффекты, радиусы углов и векторные сети. Обмен работает в обе стороны.
+**Копирование между Figma и Redrob Design:** скопируйте объекты в одном редакторе и вставьте в другом. Сохраняются заливки, обводки, автоматическая компоновка, текст, эффекты, радиусы углов и векторные сети. Обмен работает в обе стороны.
 
 ## Рисование и редактирование
 
@@ -31,7 +31,7 @@ OpenPencil открывает и сохраняет `.fig` без предвар
 
 ## Отрисовка
 
-OpenPencil использует Skia через CanvasKit WASM — тот же графический движок, что и Figma:
+Redrob Design использует Skia через CanvasKit WASM — тот же графический движок, что и Figma:
 
 - линейные, радиальные, угловые и ромбические градиенты;
 - заливки изображениями с разными режимами масштабирования;
@@ -62,7 +62,7 @@ OpenPencil использует Skia через CanvasKit WASM — тот же �
 - **Копировать как:** текст, SVG, PNG или JSX через контекстное меню.
 
 ```sh
-openpencil export design.fig -f jsx --style tailwind
+redrob-design export design.fig -f jsx --style tailwind
 ```
 
 ## Чат с ИИ
@@ -78,7 +78,7 @@ openpencil export design.fig -f jsx --style tailwind
 Claude Code, Cursor, Windsurf и другие клиенты MCP могут читать и изменять `.fig` без интерфейса. Доступно более 90 инструментов и два транспорта: stdio и HTTP.
 
 ```sh
-npm install -g @open-pencil/mcp
+npm install -g @redrob-design/mcp
 ```
 
 Полный список находится в [справочнике инструментов MCP](/programmable/mcp-server).
@@ -86,17 +86,17 @@ npm install -g @open-pencil/mcp
 ## CLI
 
 ```sh
-openpencil tree design.fig              # Дерево объектов
-openpencil find design.fig --type TEXT  # Поиск
-openpencil export design.fig -f png     # Экспорт
-openpencil analyze colors design.fig    # Анализ цветов
-openpencil analyze clusters design.fig  # Повторяющиеся структуры
-openpencil eval design.fig -c "..."     # Figma Plugin API
+redrob-design tree design.fig              # Дерево объектов
+redrob-design find design.fig --type TEXT  # Поиск
+redrob-design export design.fig -f png     # Экспорт
+redrob-design analyze colors design.fig    # Анализ цветов
+redrob-design analyze clusters design.fig  # Повторяющиеся структуры
+redrob-design eval design.fig -c "..."     # Figma Plugin API
 ```
 
 Если настольное приложение запущено, файл можно не указывать: CLI подключится по RPC к открытому документу.
 
-Все команды поддерживают `--json`. Установка: `npm install -g @open-pencil/cli` или `bun add -g @open-pencil/cli`.
+Все команды поддерживают `--json`. Установка: `npm install -g @redrob-design/cli` или `bun add -g @redrob-design/cli`.
 
 ## Совместная работа
 
@@ -112,7 +112,7 @@ openpencil eval design.fig -c "..."     # Figma Plugin API
 
 **Настольное приложение:** Tauri v2, около 7 МБ, версии для macOS, Windows и Linux, системные меню, работа без сети и автосохранение.
 
-**Веб-приложение:** [app.openpencil.dev](https://app.openpencil.dev), установка как PWA и интерфейс для сенсорных экранов.
+**Веб-приложение:** [app.redrob.design](https://app.redrob.design), установка как PWA и интерфейс для сенсорных экранов.
 
 ```sh
 brew install open-pencil/tap/open-pencil
@@ -120,4 +120,4 @@ brew install open-pencil/tap/open-pencil
 
 ## Резервная загрузка Google Fonts
 
-Если нужного шрифта нет на компьютере, OpenPencil автоматически загружает его из Google Fonts. При открытии `.fig` с незнакомыми шрифтами вручную устанавливать их не нужно.
+Если нужного шрифта нет на компьютере, Redrob Design автоматически загружает его из Google Fonts. При открытии `.fig` с незнакомыми шрифтами вручную устанавливать их не нужно.

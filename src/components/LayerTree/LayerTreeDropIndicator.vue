@@ -6,7 +6,7 @@ import { useLayerTreeUI } from './ui'
 
 import layerTreeTheme from '@/theme/layer-tree'
 
-import type { LayerDragInstruction } from '@open-pencil/vue'
+import type { LayerDragInstruction } from '@redrob-design/vue'
 
 const { active, instruction, level, indent } = defineProps<{
   active: boolean

@@ -7,8 +7,8 @@ import { join } from 'node:path'
 
 import type { Plugin } from 'vite'
 
-import { serializeDisabledTools } from '@open-pencil/mcp/tools'
-import { platformHasUnixSockets } from '@open-pencil/mcp/transport'
+import { serializeDisabledTools } from '@redrob-design/mcp/tools'
+import { platformHasUnixSockets } from '@redrob-design/mcp/transport'
 
 import {
   DEV_MCP_RESTART_PATH,
@@ -217,7 +217,7 @@ export function automationPlugin(
       const text = data.toString()
       if (text.includes('EADDRINUSE')) {
         console.error(
-          `\x1b[31m[MCP] MCP bind failed (${options.browserURL}${socketPath ? ` or socket ${socketPath}` : ''}). Is another OpenPencil instance running?\x1b[0m`
+          `\x1b[31m[MCP] MCP bind failed (${options.browserURL}${socketPath ? ` or socket ${socketPath}` : ''}). Is another Redrob Design instance running?\x1b[0m`
         )
         spawned.kill()
         if (child === spawned) child = null

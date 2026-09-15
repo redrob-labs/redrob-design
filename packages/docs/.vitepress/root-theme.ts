@@ -20,7 +20,7 @@ export const rootThemeConfig = (): DefaultTheme.Config => ({
     { text: 'SDK', link: '/programmable/sdk/' },
     { text: 'Reference', link: '/reference/keyboard-shortcuts' },
     { text: 'Development', link: '/development/contributing' },
-    { text: 'Open App', link: 'https://app.openpencil.dev' },
+    { text: 'Open App', link: 'https://app.redrob.design' },
   ],
 
   sidebar: {
@@ -32,10 +32,10 @@ export const rootThemeConfig = (): DefaultTheme.Config => ({
     '/': guideSidebar('', EN),
   },
 
-  socialLinks: [{ icon: 'github', link: 'https://github.com/open-pencil/open-pencil' }],
+  socialLinks: [{ icon: 'github', link: 'https://github.com/redrob-labs/redrob-design' }],
 
   editLink: {
-    pattern: 'https://github.com/open-pencil/open-pencil/edit/main/packages/docs/:path',
+    pattern: 'https://github.com/redrob-labs/redrob-design/edit/main/packages/docs/:path',
   },
 
   footer: {

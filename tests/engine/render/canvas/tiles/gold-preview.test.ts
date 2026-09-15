@@ -1,7 +1,7 @@
 import { beforeAll, expect, setDefaultTimeout, test } from 'bun:test'
 import { readFileSync } from 'node:fs'
 
-import { initCodec, parseFigFile } from '@open-pencil/core'
+import { initCodec, parseFigFile } from '@redrob-design/core'
 
 import { initCanvasKit } from '#cli/headless'
 import { SkiaRenderer } from '#core/canvas'

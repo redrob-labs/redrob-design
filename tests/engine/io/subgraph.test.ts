@@ -1,11 +1,11 @@
 import { describe, expect, test } from 'bun:test'
 import { readFileSync } from 'node:fs'
 
-import { exportFigFile, extractExportGraph, parseFigFile } from '@open-pencil/core/io'
-import { initCodec } from '@open-pencil/core/kiwi'
-import { parseFigBuffer } from '@open-pencil/fig'
-import { guidToString } from '@open-pencil/kiwi/fig/guid'
-import { SceneGraph } from '@open-pencil/scene-graph'
+import { exportFigFile, extractExportGraph, parseFigFile } from '@redrob-design/core/io'
+import { initCodec } from '@redrob-design/core/kiwi'
+import { parseFigBuffer } from '@redrob-design/fig'
+import { guidToString } from '@redrob-design/kiwi/fig/guid'
+import { SceneGraph } from '@redrob-design/scene-graph'
 
 describe('export subgraph extraction', () => {
   test('page extraction keeps the source root and page descendants', () => {

@@ -1,7 +1,7 @@
 import type { Paragraph } from 'canvaskit-wasm'
 
-import type { NodeChange } from '@open-pencil/kiwi/fig/codec'
-import type { SceneNode } from '@open-pencil/scene-graph'
+import type { NodeChange } from '@redrob-design/kiwi/fig/codec'
+import type { SceneNode } from '@redrob-design/scene-graph'
 
 import { buildParagraph } from '#core/canvas/text'
 import { getCanvasKit } from '#core/canvaskit'

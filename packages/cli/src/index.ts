@@ -24,8 +24,8 @@ const { version } = await import('../package.json')
 
 const main = defineCommand({
   meta: {
-    name: 'openpencil',
-    description: 'OpenPencil CLI — inspect, export, and lint OpenPencil design documents',
+    name: 'redrob-design',
+    description: 'Redrob Design CLI — inspect, export, and lint Redrob Design design documents',
     version
   },
   subCommands: {

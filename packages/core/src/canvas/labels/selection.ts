@@ -1,8 +1,8 @@
 import type { Canvas } from 'canvaskit-wasm'
 
-import type { SceneNode, SceneGraph } from '@open-pencil/scene-graph'
-import { getAbsolutePosition, getWorldMatrix } from '@open-pencil/scene-graph/coordinate'
-import { rotatedCorners } from '@open-pencil/scene-graph/geometry'
+import type { SceneNode, SceneGraph } from '@redrob-design/scene-graph'
+import { getAbsolutePosition, getWorldMatrix } from '@redrob-design/scene-graph/coordinate'
+import { rotatedCorners } from '@redrob-design/scene-graph/geometry'
 
 import type { SkiaRenderer, RenderOverlays } from '#core/canvas/renderer'
 import {

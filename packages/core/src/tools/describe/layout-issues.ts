@@ -1,8 +1,8 @@
 import { wcagLuminance } from 'culori'
 import { sumBy } from 'es-toolkit/math'
 
-import type { SceneGraph, SceneNode } from '@open-pencil/scene-graph'
-import type { Color } from '@open-pencil/scene-graph/primitives'
+import type { SceneGraph, SceneNode } from '@redrob-design/scene-graph'
+import type { Color } from '@redrob-design/scene-graph/primitives'
 
 import { colorToHex } from '#core/color'
 

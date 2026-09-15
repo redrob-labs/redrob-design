@@ -3,7 +3,7 @@ import { describe, expect, test } from 'bun:test'
 import {
   DESIGN_JSX_SUPPORTED_PROPERTIES,
   transformDesignJSXExpression
-} from '@open-pencil/core/design-jsx'
+} from '@redrob-design/core/design-jsx'
 
 describe('Design JSX schema', () => {
   test('includes renderer compatibility properties', () => {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-import { useI18n } from '@open-pencil/vue'
+import { useI18n } from '@redrob-design/vue'
 
 import ColorPicker from '@/components/ColorPicker/ColorPicker.vue'
 import PaintField from '@/components/properties/paint/PaintField.vue'
@@ -10,7 +10,7 @@ import FillSwatch from '@/components/ui/FillSwatch.vue'
 import PanelSection from '@/components/ui/panel/PanelSection.vue'
 import { useEditorStore } from '@/app/editor/active-store'
 
-import type { Color, Fill } from '@open-pencil/scene-graph'
+import type { Color, Fill } from '@redrob-design/scene-graph'
 
 const editor = useEditorStore()
 const pageColor = computed(() => editor.state.pageColor)

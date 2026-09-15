@@ -3,7 +3,7 @@ import { computed, onUnmounted, ref, watch, type Component } from 'vue'
 import {
   AUTO_LAYOUT_PADDING_EDITOR_OFFSET_X,
   AUTO_LAYOUT_PADDING_EDITOR_OFFSET_Y
-} from '@open-pencil/core/constants'
+} from '@redrob-design/core/constants'
 import {
   ContextMenuPortal,
   ContextMenuRoot,
@@ -20,7 +20,7 @@ import {
   useCanvasInput,
   useCanvasVirtualReference,
   useTextEdit
-} from '@open-pencil/vue'
+} from '@redrob-design/vue'
 import { useCollabInjected } from '@/app/collab/use'
 import { useEditorStore } from '@/app/editor/active-store'
 import { appRuntimeConfig } from '@/app/runtime/config'

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { ToolEffect } from '@open-pencil/mcp/tools'
+import type { ToolEffect } from '@redrob-design/mcp/tools'
 import { computed, onMounted, ref } from 'vue'
-import { useI18n } from '@open-pencil/vue'
+import { useI18n } from '@redrob-design/vue'
 
 import {
   configurableMCPTools,

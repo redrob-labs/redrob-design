@@ -5,8 +5,8 @@ import {
   type Mat3,
   type SceneGraph,
   type SceneNode
-} from '@open-pencil/scene-graph'
-import { computeDescendantVisualBounds } from '@open-pencil/scene-graph/geometry'
+} from '@redrob-design/scene-graph'
+import { computeDescendantVisualBounds } from '@redrob-design/scene-graph/geometry'
 
 import type { SkiaRenderer } from '#core/canvas'
 import type { RenderColorSpace } from '#core/color/management'

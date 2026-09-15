@@ -10,7 +10,7 @@ Kilka osób może jednocześnie edytować jeden dokument. Uczestnicy łączą si
 ## Udostępnianie pokoju
 
 1. Kliknij przycisk „Udostępnij” w prawym górnym rogu.
-2. Skopiuj odnośnik `app.openpencil.dev/share/<room-id>`.
+2. Skopiuj odnośnik `app.redrob.design/share/<room-id>`.
 3. Wyślij go innym uczestnikom.
 
 Dołączyć może każda osoba znająca odnośnik. Pokój pozostaje dostępny, dopóki co najmniej jeden uczestnik ma otwartą stronę.

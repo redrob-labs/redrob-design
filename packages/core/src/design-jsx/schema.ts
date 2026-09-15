@@ -145,7 +145,7 @@ export const DESIGN_JSX_SUPPORTED_PROPERTIES = new Set<string>(DESIGN_JSX_SUPPOR
 export const DESIGN_JSX_PROPERTIES: DesignJSXPropertyDefinition[] =
   DESIGN_JSX_SUPPORTED_PROPERTY_NAMES.map((name) => ({
     name,
-    description: `OpenPencil ${name} property.`
+    description: `Redrob Design ${name} property.`
   }))
 
 export const DESIGN_JSX_HELPERS: DesignJSXHelperDefinition[] = [
@@ -162,4 +162,4 @@ export const DESIGN_JSX_HELPERS: DesignJSXHelperDefinition[] = [
   'foregroundBlur',
   'designVar',
   'defineVars'
-].map((name) => ({ name, description: `OpenPencil ${name} helper.` }))
+].map((name) => ({ name, description: `Redrob Design ${name} helper.` }))

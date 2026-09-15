@@ -19,7 +19,7 @@ Zwraca:
 ## Użycie
 
 ```ts
-import { usePageList } from '@open-pencil/vue'
+import { usePageList } from '@redrob-design/vue'
 
 const pageList = usePageList()
 ```

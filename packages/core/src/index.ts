@@ -69,7 +69,7 @@ export {
   type StyleRun,
   type SceneGraphEvents,
   type DocumentColorSpace
-} from '@open-pencil/scene-graph'
+} from '@redrob-design/scene-graph'
 
 export { FigmaAPI, FigmaNodeProxy, computeImageHash, type FigmaFontName } from './figma-api'
 export {
@@ -251,8 +251,8 @@ export {
   type NearestResult,
   type NetworkNearestResult
 } from './vector/bezier'
-export { computeSelectionBounds, computeSnap, type SnapGuide } from '@open-pencil/scene-graph/snap'
-export { UndoManager, type UndoEntry, type UndoManagerOptions } from '@open-pencil/scene-graph/undo'
+export { computeSelectionBounds, computeSnap, type SnapGuide } from '@redrob-design/scene-graph/snap'
+export { UndoManager, type UndoEntry, type UndoManagerOptions } from '@redrob-design/scene-graph/undo'
 export { TextEditor, type TextCaret, type TextEditorState } from './text/editor'
 export {
   getStyleAt,
@@ -282,7 +282,7 @@ export {
   type SVGExportOptions
 } from './io/formats/svg/export'
 export { svg, renderSVGNode, type SVGNode } from './io/formats/svg/node'
-export { parseSVGPath } from '@open-pencil/scene-graph/parse-path'
+export { parseSVGPath } from '@redrob-design/scene-graph/parse-path'
 export {
   fetchIcon,
   fetchIcons,
@@ -381,7 +381,7 @@ export {
 } from './clipboard'
 export { probeGlyphOutlineCommands, type GlyphOutlineProbe } from './text/opentype'
 
-export { readPenFile, parsePenFile } from '@open-pencil/pen'
+export { readPenFile, parsePenFile } from '@redrob-design/pen'
 
 export {
   readFigFile,

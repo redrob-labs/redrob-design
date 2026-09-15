@@ -2,10 +2,10 @@ import process from 'node:process'
 
 import type { Page } from '@playwright/test'
 
-import type { DesignDocument } from '@open-pencil/dom-css'
+import type { DesignDocument } from '@redrob-design/dom-css'
 
 const BROWSER_RUNTIME_MODULE = `http://localhost:1420/@fs${process.cwd()}/packages/dom-css/src/runtime/browser.ts`
-const DOM_CSS_BROWSER_MODULE = 'http://localhost:1420/@id/@open-pencil/dom-css/browser'
+const DOM_CSS_BROWSER_MODULE = 'http://localhost:1420/@id/@redrob-design/dom-css/browser'
 
 async function ensureAppPage(page: Page) {
   if (!page.url().startsWith('http://localhost:1420')) {

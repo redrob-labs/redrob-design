@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useI18n, useLayoutControlsContext } from '@open-pencil/vue'
+import { useI18n, useLayoutControlsContext } from '@redrob-design/vue'
 
 import SizeAxisField from '@/components/properties/LayoutSection/size/SizeAxisField.vue'
 import SizeLimitField from '@/components/properties/LayoutSection/size/SizeLimitField.vue'

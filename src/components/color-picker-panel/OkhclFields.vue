@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { colorToCSS } from '@open-pencil/core/color'
-import { fromPercent, toPercent, useI18n } from '@open-pencil/vue'
+import { colorToCSS } from '@redrob-design/core/color'
+import { fromPercent, toPercent, useI18n } from '@redrob-design/vue'
 
 import OkhclChannelSlider from '@/components/color-picker-panel/OkhclChannelSlider.vue'
 import { useColorPickerPanelContext } from '@/components/color-picker-panel/context'

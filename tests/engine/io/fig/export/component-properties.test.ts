@@ -1,8 +1,8 @@
 import { beforeAll, describe, expect, test } from 'bun:test'
 
-import { exportFigFile, initCodec } from '@open-pencil/core'
-import { parseFigBuffer } from '@open-pencil/fig'
-import { SceneGraph } from '@open-pencil/scene-graph'
+import { exportFigFile, initCodec } from '@redrob-design/core'
+import { parseFigBuffer } from '@redrob-design/fig'
+import { SceneGraph } from '@redrob-design/scene-graph'
 
 import { importNodeChanges } from '#core/kiwi/fig/import'
 

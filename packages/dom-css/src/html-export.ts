@@ -1,13 +1,13 @@
 import { CSSFontFaceRule } from '@acemir/cssom'
 import { parseFragment, serialize, type DefaultTreeAdapterTypes } from 'parse5'
 
-import { decodeBase64 } from '@open-pencil/core/bytes'
-import { normalizeFontFamily } from '@open-pencil/core/text'
+import { decodeBase64 } from '@redrob-design/core/bytes'
+import { normalizeFontFamily } from '@redrob-design/core/text'
 import {
   exportWebFontFaceAssets,
   type WebFontFaceAsset,
   type WebFontFaceRequest
-} from '@open-pencil/core/text/web-font/assets'
+} from '@redrob-design/core/text/web-font/assets'
 
 import { mergeClassNames, serializeHTML, splitWhitespace } from './serialize'
 import type { DesignDocument, DesignElement, DesignNode, DesignStyleDeclaration } from './types'

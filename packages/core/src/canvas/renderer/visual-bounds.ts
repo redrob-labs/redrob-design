@@ -1,11 +1,11 @@
-import type { SceneGraph, SceneNode } from '@open-pencil/scene-graph'
-import { getWorldMatrix } from '@open-pencil/scene-graph/coordinate'
+import type { SceneGraph, SceneNode } from '@redrob-design/scene-graph'
+import { getWorldMatrix } from '@redrob-design/scene-graph/coordinate'
 import {
   effectOverflow,
   strokeOverflow,
   type VisualBounds
-} from '@open-pencil/scene-graph/geometry'
-import Matrix from '@open-pencil/scene-graph/matrix'
+} from '@redrob-design/scene-graph/geometry'
+import Matrix from '@redrob-design/scene-graph/matrix'
 
 export function worldNodeVisualBounds(graph: SceneGraph, node: SceneNode): VisualBounds {
   const stroke = strokeOverflow(node.strokes, node.strokeCap, node.vectorNetwork)

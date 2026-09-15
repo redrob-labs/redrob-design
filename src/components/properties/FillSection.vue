@@ -5,7 +5,7 @@ import {
   useFillControls,
   useI18n,
   useOkHCL
-} from '@open-pencil/vue'
+} from '@redrob-design/vue'
 
 import FillPicker from '@/components/fill-picker/FillPicker.vue'
 import PropertyItemRow from '@/components/properties/item-list/PropertyItemRow.vue'
@@ -31,10 +31,10 @@ import IconButton from '@/components/ui/IconButton.vue'
 import PanelFieldGroup from '@/components/ui/panel/PanelFieldGroup.vue'
 import PanelSection from '@/components/ui/panel/PanelSection.vue'
 
-import { colorToHexRaw } from '@open-pencil/core/color'
-import type { Fill } from '@open-pencil/scene-graph'
-import type { Color } from '@open-pencil/scene-graph/primitives'
-import type { BindableValueActions } from '@open-pencil/vue'
+import { colorToHexRaw } from '@redrob-design/core/color'
+import type { Fill } from '@redrob-design/scene-graph'
+import type { Color } from '@redrob-design/scene-graph/primitives'
+import type { BindableValueActions } from '@redrob-design/vue'
 
 const fillCtx = useFillControls()
 const okhcl = useOkHCL()

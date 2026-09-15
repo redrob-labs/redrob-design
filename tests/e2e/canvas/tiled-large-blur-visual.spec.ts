@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs'
 
-import type { RecordedWheelSample } from '@open-pencil/core/profiler'
+import type { RecordedWheelSample } from '@redrob-design/core/profiler'
 
 import { expect, test, useEditorSetup } from '#tests/e2e/fixtures'
 

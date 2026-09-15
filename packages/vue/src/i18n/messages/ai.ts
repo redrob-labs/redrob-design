@@ -114,7 +114,7 @@ export const aiMessageDefaults = {
   chatOutputLimit:
     'The model ran out of output tokens while reasoning. Raise Max output tokens or lower reasoning effort.',
   chatModelNotFound: 'The selected model is unavailable. Choose another model in Settings.',
-  chatNetworkFailed: 'OpenPencil could not reach the provider. Check your connection and endpoint.',
+  chatNetworkFailed: 'Redrob Design could not reach the provider. Check your connection and endpoint.',
   chatRateLimited: 'The provider rate limit was reached. Wait a moment and try again.',
   chatRequestFailed: 'The model request failed. Check the provider settings and try again.',
   openProviderSettingsAction: 'Open settings',

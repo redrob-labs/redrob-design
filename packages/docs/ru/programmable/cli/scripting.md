@@ -5,18 +5,18 @@ description: Выполнение JavaScript через совместимый �
 
 # Сценарии
 
-`openpencil eval` выполняет JavaScript для документа OpenPencil и предоставляет глобальный объект `figma`, совместимый с Figma Plugin API. Команда подходит для пакетных изменений, проверки документов, подготовки тестовых данных и другой автоматизации без интерфейса редактора.
+`redrob-design eval` выполняет JavaScript для документа Redrob Design и предоставляет глобальный объект `figma`, совместимый с Figma Plugin API. Команда подходит для пакетных изменений, проверки документов, подготовки тестовых данных и другой автоматизации без интерфейса редактора.
 
 ## Первый вызов
 
 ```sh
-openpencil eval design.fig -c "return figma.currentPage.children.length"
+redrob-design eval design.fig -c "return figma.currentPage.children.length"
 ```
 
-Параметр `-c` принимает JavaScript. Если код не начинается с `return`, OpenPencil помещает его в асинхронную функцию и возвращает её результат, когда он есть.
+Параметр `-c` принимает JavaScript. Если код не начинается с `return`, Redrob Design помещает его в асинхронную функцию и возвращает её результат, когда он есть.
 
 ```sh
-openpencil eval design.fig -c "
+redrob-design eval design.fig -c "
   const frame = figma.createFrame()
   frame.name = 'Card'
   frame.resize(300, 200)
@@ -29,7 +29,7 @@ openpencil eval design.fig -c "
 ## Поиск объектов
 
 ```sh
-openpencil eval design.fig -c "
+redrob-design eval design.fig -c "
   return figma.currentPage
     .findAll((node) => node.type === 'FRAME' && node.name.includes('Button'))
     .map((button) => ({
@@ -48,7 +48,7 @@ openpencil eval design.fig -c "
 ## Сценарий из стандартного ввода
 
 ```sh
-cat transform.js | openpencil eval design.fig --stdin --write
+cat transform.js | redrob-design eval design.fig --stdin --write
 ```
 
 ## Открытое приложение
@@ -56,7 +56,7 @@ cat transform.js | openpencil eval design.fig --stdin --write
 Не указывайте файл, чтобы выполнить сценарий для текущего документа в настольном приложении:
 
 ```sh
-openpencil eval -c "return figma.currentPage.name"
+redrob-design eval -c "return figma.currentPage.name"
 ```
 
 ## Вывод
@@ -65,7 +65,7 @@ openpencil eval -c "return figma.currentPage.name"
 
 ## Доступный API
 
-API намеренно близок к Figma Plugin API, но работает с SceneGraph и форматами OpenPencil.
+API намеренно близок к Figma Plugin API, но работает с SceneGraph и форматами Redrob Design.
 
 ### Документ и страницы
 
@@ -138,7 +138,7 @@ API намеренно близок к Figma Plugin API, но работает �
 
 - `figma.mixed`
 - `figma.createImage(data)`
-- `figma.loadFontAsync(fontName)` ничего не делает, поскольку OpenPencil не блокирует изменение текста до загрузки шрифта плагином
+- `figma.loadFontAsync(fontName)` ничего не делает, поскольку Redrob Design не блокирует изменение текста до загрузки шрифта плагином
 - `figma.listAvailableFontsAsync()` возвращает доступные системные шрифты
 - `figma.notify(message)` записывает предупреждение в режиме без интерфейса
 - `figma.viewport`
@@ -154,4 +154,4 @@ API намеренно близок к Figma Plugin API, но работает �
 - API стилей Figma, например `figma.createPaintStyle()` и `figma.createTextStyle()`
 - полная совместимость логических операций над векторами
 
-Вместо них используйте команды экспорта OpenPencil CLI, инструменты основного пакета или прямые вспомогательные функции SceneGraph, когда они доступны.
+Вместо них используйте команды экспорта Redrob Design CLI, инструменты основного пакета или прямые вспомогательные функции SceneGraph, когда они доступны.

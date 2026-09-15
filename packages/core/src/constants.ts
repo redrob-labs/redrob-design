@@ -1,5 +1,5 @@
-import type { Fill, Stroke } from '@open-pencil/scene-graph'
-import type { Color } from '@open-pencil/scene-graph/primitives'
+import type { Fill, Stroke } from '@redrob-design/scene-graph'
+import type { Color } from '@redrob-design/scene-graph/primitives'
 
 export const IS_BROWSER = typeof window !== 'undefined'
 export const IS_TAURI = IS_BROWSER && '__TAURI_INTERNALS__' in window
@@ -143,7 +143,7 @@ export const TEXT_SELECTION_COLOR = { r: 0.26, g: 0.52, b: 0.96, a: 0.3 }
 export const TEXT_CARET_COLOR = BLACK
 export const TEXT_CARET_WIDTH = 1
 
-export type ACPAgentID = 'claude-code' | 'codex' | 'gemini-cli'
+export type ACPAgentID = 'redrob-code' | 'claude-code' | 'codex' | 'gemini-cli'
 
 export interface ACPAgentDef {
   id: ACPAgentID
@@ -153,7 +153,102 @@ export interface ACPAgentDef {
   installCommand?: string
 }
 
+/** The Redrob Code engine ID. Redrob Design's design-by-prompt loop runs on it. */
+export const REDROB_CODE_AGENT_ID = 'redrob-code' as const
+
+/** The Design agent provider ID Redrob Design defaults to. */
+export const REDROB_CODE_PROVIDER_ID = `acp:${REDROB_CODE_AGENT_ID}` as const
+
+/** The one supported way to install the Redrob Code engine. */
+export const REDROB_CODE_INSTALL_COMMAND = 'curl -fsSL https://code.redrob.ai/install | bash'
+
+/**
+ * A minimal environment shape so {@link resolveRedrobCodeCommand} can run both
+ * in the browser (fed `import.meta.env`) and under bun/node tests (fed
+ * `process.env`) without depending on either global existing.
+ */
+export type RedrobCodeEnv = Record<string, string | undefined>
+
+export interface RedrobCodeCommand {
+  command: string
+  args: string[]
+  /** Where the command was found, for diagnostics and log lines. */
+  source: 'REDROB_CODE_BIN' | 'REDROB_CODE_DEV_ROOT' | 'PATH'
+}
+
+/**
+ * Locate the Redrob Code engine, mirroring the resolution the standalone engine
+ * sidecar used. `REDROB_CODE_BIN` is the packaged-binary override, and
+ * `REDROB_CODE_DEV_ROOT` runs a source checkout through bun; otherwise the
+ * `redrob` binary is expected on PATH.
+ *
+ * Kept pure (env passed in) so the ACP wiring can be unit-tested without a live
+ * engine or any host environment.
+ */
+export function resolveRedrobCodeCommand(env: RedrobCodeEnv = {}): RedrobCodeCommand {
+  const bin = env.REDROB_CODE_BIN?.trim()
+  if (bin) return { command: bin, args: [], source: 'REDROB_CODE_BIN' }
+
+  const devRoot = env.REDROB_CODE_DEV_ROOT?.trim()
+  if (devRoot) {
+    return {
+      command: env.REDROB_CODE_BUN?.trim() || 'bun',
+      args: ['run', `${devRoot}/packages/redrob/src/index.ts`],
+      source: 'REDROB_CODE_DEV_ROOT'
+    }
+  }
+
+  return { command: 'redrob', args: [], source: 'PATH' }
+}
+
+/**
+ * What to tell someone when the Redrob Code engine cannot be found or started.
+ *
+ * Redrob Code is the only engine Redrob Design runs on, so a missing engine is a
+ * setup problem to fix, not a reason to quietly run another provider.
+ */
+export function redrobCodeMissingMessage(reason?: string): string {
+  return [
+    'Redrob Design runs on the Redrob Code engine, and it could not be started.',
+    reason,
+    `Install the engine with "${REDROB_CODE_INSTALL_COMMAND}", or point REDROB_CODE_BIN at the binary.`
+  ]
+    .filter((part): part is string => Boolean(part?.trim()))
+    .join(' ')
+}
+
+/**
+ * The ambient environment used to resolve the built-in Redrob Code command at
+ * module load. Reads `import.meta.env` (Vite build-time / renderer) first, then
+ * `process.env` (bun/node), so an override configured either way is honored.
+ */
+function ambientRedrobCodeEnv(): RedrobCodeEnv {
+  const env: RedrobCodeEnv = {}
+  if ('env' in import.meta) {
+    const meta = import.meta.env as RedrobCodeEnv
+    env.REDROB_CODE_BIN = meta.REDROB_CODE_BIN ?? meta.VITE_REDROB_CODE_BIN
+    env.REDROB_CODE_DEV_ROOT = meta.REDROB_CODE_DEV_ROOT ?? meta.VITE_REDROB_CODE_DEV_ROOT
+    env.REDROB_CODE_BUN = meta.REDROB_CODE_BUN ?? meta.VITE_REDROB_CODE_BUN
+  }
+  const proc = typeof process === 'undefined' ? undefined : (process.env as RedrobCodeEnv)
+  if (proc) {
+    env.REDROB_CODE_BIN ??= proc.REDROB_CODE_BIN
+    env.REDROB_CODE_DEV_ROOT ??= proc.REDROB_CODE_DEV_ROOT
+    env.REDROB_CODE_BUN ??= proc.REDROB_CODE_BUN
+  }
+  return env
+}
+
+const REDROB_CODE_COMMAND = resolveRedrobCodeCommand(ambientRedrobCodeEnv())
+
 export const ACP_AGENTS: ACPAgentDef[] = [
+  {
+    id: REDROB_CODE_AGENT_ID,
+    name: 'Redrob Code',
+    command: REDROB_CODE_COMMAND.command,
+    args: REDROB_CODE_COMMAND.args,
+    installCommand: REDROB_CODE_INSTALL_COMMAND
+  },
   {
     id: 'claude-code',
     name: 'Claude Code',
@@ -393,7 +488,13 @@ export const AI_PROVIDERS: AIProviderDef[] = [
   }
 ]
 
-export const DEFAULT_AI_PROVIDER: AIProviderID = 'openai-compatible'
+/**
+ * Redrob Code is the only engine Redrob Design's design-by-prompt loop runs on,
+ * so the Design agent role defaults to it. The built-in direct providers
+ * (OpenRouter/Anthropic/OpenAI/…) stay available in code but do not silently
+ * drive the design loop unless a user explicitly assigns one.
+ */
+export const DEFAULT_AI_PROVIDER: AIProviderID = REDROB_CODE_PROVIDER_ID
 export const DEFAULT_AI_MODEL =
   AI_PROVIDERS.find((provider) => provider.id === DEFAULT_AI_PROVIDER)?.defaultModel ?? ''
 

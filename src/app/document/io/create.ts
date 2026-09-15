@@ -1,5 +1,5 @@
-import type { Editor, EditorState } from '@open-pencil/core/editor'
-import { prefetchFigmaSchema } from '@open-pencil/core/kiwi'
+import type { Editor, EditorState } from '@redrob-design/core/editor'
+import { prefetchFigmaSchema } from '@redrob-design/core/kiwi'
 
 import { createDocumentViewportActions, downloadBlob } from '@/app/document/io/browser'
 import { createDOMOpenActions } from '@/app/document/io/dom'

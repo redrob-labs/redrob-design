@@ -38,7 +38,7 @@ Abre el selector de variables desde el control de color y elige una variable com
 
 ## Alias
 
-Una variable puede hacer referencia a otra. OpenPencil resuelve la cadena según el modo activo y detecta referencias circulares.
+Una variable puede hacer referencia a otra. Redrob Design resuelve la cadena según el modo activo y detecta referencias circulares.
 
 ## Importación y exportación
 

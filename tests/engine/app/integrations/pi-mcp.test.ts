@@ -36,7 +36,7 @@ describe('Pi MCP configuration', () => {
       headers: { Authorization: 'Bearer external-token' },
       auth: false
     })
-    expect(servers['open-pencil']).toEqual({
+    expect(servers['redrob-design']).toEqual({
       url: expect.stringContaining('/mcp'),
       headers: { Authorization: 'Bearer built-in-token' },
       auth: false

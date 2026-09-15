@@ -1,6 +1,6 @@
-import type { SceneGraph, SceneNode, VectorNetwork } from '@open-pencil/scene-graph'
-import { copyGeometryPaths, scaleGeometryPaths } from '@open-pencil/scene-graph/copy'
-import { constrainedChildRect } from '@open-pencil/scene-graph/resize'
+import type { SceneGraph, SceneNode, VectorNetwork } from '@redrob-design/scene-graph'
+import { copyGeometryPaths, scaleGeometryPaths } from '@redrob-design/scene-graph/copy'
+import { constrainedChildRect } from '@redrob-design/scene-graph/resize'
 
 import { readEffectiveFigmaRawField } from '../source-metadata'
 import { isFieldProtected } from './patches'

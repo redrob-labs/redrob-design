@@ -97,7 +97,7 @@
   "chatAuthenticationFailed": "プロバイダーのAPIキーが無効か期限切れです。設定で置き換えてください。",
   "chatForbidden": "このAPIキーでは選択したモデルを使用できません。モデルへのアクセス権を確認してください。",
   "chatModelNotFound": "選択したモデルは利用できません。設定で別のモデルを選択してください。",
-  "chatNetworkFailed": "OpenPencilからプロバイダーに接続できませんでした。接続とエンドポイントを確認してください。",
+  "chatNetworkFailed": "Redrob Designからプロバイダーに接続できませんでした。接続とエンドポイントを確認してください。",
   "chatRateLimited": "プロバイダーのリクエスト制限に達しました。少し待ってから再試行してください。",
   "openProviderSettingsAction": "設定を開く",
   "chatInsufficientCredit": "プロバイダーのアカウントに十分なクレジットまたは割り当てがありません。チャージして再試行してください。",

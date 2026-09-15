@@ -2,8 +2,8 @@ import {
   applyStyleRefsToFields,
   guidToString,
   VARIABLE_BINDING_FIELDS_INVERSE
-} from '@open-pencil/fig/node-change'
-import type { GUID } from '@open-pencil/kiwi/fig/codec'
+} from '@redrob-design/fig/node-change'
+import type { GUID } from '@redrob-design/kiwi/fig/codec'
 
 import type { OverridePatch } from '../patches'
 import type { OverrideContext, SymbolOverride, SymbolOverrideFields } from '../types'

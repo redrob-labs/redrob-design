@@ -1,6 +1,6 @@
-import type { VariableConsumptionEntry } from '@open-pencil/kiwi/fig/codec'
-import { guidToString } from '@open-pencil/kiwi/fig/guid'
-import type { SceneNode } from '@open-pencil/scene-graph'
+import type { VariableConsumptionEntry } from '@redrob-design/kiwi/fig/codec'
+import { guidToString } from '@redrob-design/kiwi/fig/guid'
+import type { SceneNode } from '@redrob-design/scene-graph'
 
 export const VARIABLE_BINDING_FIELDS: Record<string, string> = {
   cornerRadius: 'CORNER_RADIUS',

@@ -2,7 +2,7 @@ import type {
   ComponentPropertyDefinition,
   ComponentPropertyType,
   SceneNode
-} from '@open-pencil/scene-graph'
+} from '@redrob-design/scene-graph'
 
 import { MIXED, type MixedValue } from '#vue/controls/node-props/helpers'
 

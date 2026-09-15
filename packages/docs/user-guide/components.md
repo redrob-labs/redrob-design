@@ -1,6 +1,6 @@
 ---
 title: Components
-description: Creating reusable components, instances, component sets, overrides, and live sync in OpenPencil.
+description: Creating reusable components, instances, component sets, overrides, and live sync in Redrob Design.
 ---
 
 # Components
@@ -25,7 +25,7 @@ Components display a purple label with a diamond icon above them.
 
 Select two or more components and press <kbd>⇧</kbd><kbd>⌘</kbd><kbd>K</kbd> (<kbd>Shift</kbd> + <kbd>Ctrl</kbd> + <kbd>K</kbd>) to combine them into a component set — a container with a dashed purple border and 40 px padding around its children.
 
-Each component in a set can define values across multiple variant dimensions, such as `Size=Small`, `State=Hover`, and `Theme=Dark`. OpenPencil supports sparse combinations, so a set does not need every possible combination. The top-left variant is the default and is used as the fallback when an update no longer contains an exact combination.
+Each component in a set can define values across multiple variant dimensions, such as `Size=Small`, `State=Hover`, and `Theme=Dark`. Redrob Design supports sparse combinations, so a set does not need every possible combination. The top-left variant is the default and is used as the fallback when an update no longer contains an exact combination.
 
 Use the component properties panel to add, rename, reorder, and remove variant dimensions and values. Duplicate combinations are rejected.
 
@@ -64,7 +64,7 @@ Open **Manage libraries → Updates** to discover newer revisions. Discovery doe
 - Instances on the current page
 - Instances across all pages
 
-OpenPencil preserves compatible text, visibility, and instance-swap assignments. If an exact variant no longer exists, the review identifies the top-left fallback before you accept it. Applying an update creates an undo entry.
+Redrob Design preserves compatible text, visibility, and instance-swap assignments. If an exact variant no longer exists, the review identifies the top-left fallback before you accept it. Applying an update creates an undo entry.
 
 ### Local, Storage, and Offline Use
 

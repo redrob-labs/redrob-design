@@ -4,7 +4,7 @@ export * from './okhcl'
 
 import { parse, formatHex, formatHex8, formatRgb, converter, differenceEuclidean } from 'culori'
 
-import type { Color } from '@open-pencil/scene-graph/primitives'
+import type { Color } from '@redrob-design/scene-graph/primitives'
 
 import { BLACK } from '#core/constants'
 

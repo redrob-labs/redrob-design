@@ -19,9 +19,9 @@ import VariableNumberField from '@/components/properties/VariableNumberField.vue
 import ClipContentControl from '@/components/properties/LayoutSection/ClipContentControl.vue'
 import PaddingControls from '@/components/properties/LayoutSection/PaddingControls.vue'
 import { useSelectUI } from '@/components/ui/select'
-import { useI18n, useLayoutControlsContext } from '@open-pencil/vue'
+import { useI18n, useLayoutControlsContext } from '@redrob-design/vue'
 
-import type { LayoutDirection, LayoutAlign } from '@open-pencil/scene-graph'
+import type { LayoutDirection, LayoutAlign } from '@redrob-design/scene-graph'
 
 const ctx = useLayoutControlsContext()
 const layoutAlignment = tv(layoutAlignmentTheme)

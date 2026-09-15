@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import { refAutoReset, useClipboard } from '@vueuse/core'
 import { isReasoningUIPart, isTextUIPart, isToolUIPart, getToolName } from 'ai'
 import { CollapsibleContent, CollapsibleRoot, CollapsibleTrigger } from 'reka-ui'
-import { useI18n, vTestId } from '@open-pencil/vue'
+import { useI18n, vTestId } from '@redrob-design/vue'
 
 import { attachmentsForMessage } from '@/app/ai/attachment/presentation/store'
 import { visibleUserMessageText } from '@/app/ai/chat/presentation'

@@ -1,7 +1,7 @@
 import { isNotNil } from 'es-toolkit/predicate'
 
-import { populateAndApplyOverrides } from '@open-pencil/fig/instance-overrides'
-import type { InstanceNodeChange } from '@open-pencil/fig/instance-overrides'
+import { populateAndApplyOverrides } from '@redrob-design/fig/instance-overrides'
+import type { InstanceNodeChange } from '@redrob-design/fig/instance-overrides'
 import {
   applyStyleRefsToFields,
   ENABLED_LIBRARIES_PLUGIN_KEY,
@@ -13,14 +13,14 @@ import {
   sortChildren,
   resolveVariableConsumptionEntry,
   setVariableColorResolver
-} from '@open-pencil/fig/node-change'
-import type { NodeChange, VariableDataValuesEntry, Color, GUID } from '@open-pencil/kiwi/fig/codec'
-import { SceneGraph } from '@open-pencil/scene-graph'
+} from '@redrob-design/fig/node-change'
+import type { NodeChange, VariableDataValuesEntry, Color, GUID } from '@redrob-design/kiwi/fig/codec'
+import { SceneGraph } from '@redrob-design/scene-graph'
 import type {
   ComponentPropertyDefinition,
   VariableType,
   VariableValue
-} from '@open-pencil/scene-graph'
+} from '@redrob-design/scene-graph'
 
 import { BLACK } from '#core/constants'
 import { setLazyFigImportContext } from '#core/kiwi/fig/lazy-import'
@@ -76,7 +76,7 @@ function applyImportedDocumentMetadata(graph: SceneGraph, docNc: NodeChange | un
       })
     }
   } catch (error) {
-    console.warn('Ignored malformed OpenPencil library metadata', error)
+    console.warn('Ignored malformed Redrob Design library metadata', error)
   }
 }
 

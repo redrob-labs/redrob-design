@@ -1,13 +1,13 @@
-import { decodeBase64 } from '@open-pencil/core/bytes'
+import { decodeBase64 } from '@redrob-design/core/bytes'
 import {
   SceneGraph,
   type Fill,
   type ImageScaleMode,
   type SceneNode,
   type Stroke
-} from '@open-pencil/scene-graph'
-import { TRANSPARENT } from '@open-pencil/scene-graph/constants'
-import { computeImageHash } from '@open-pencil/scene-graph/images'
+} from '@redrob-design/scene-graph'
+import { TRANSPARENT } from '@redrob-design/scene-graph/constants'
+import { computeImageHash } from '@redrob-design/scene-graph/images'
 
 import {
   colorToFillFromCSS,

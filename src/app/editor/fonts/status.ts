@@ -1,8 +1,8 @@
 import { computed, ref } from 'vue'
 
-import { computeAllLayouts } from '@open-pencil/core/layout'
-import { documentFontStatus, fontManager, fontResolver } from '@open-pencil/core/text'
-import { useEditorEvent } from '@open-pencil/vue'
+import { computeAllLayouts } from '@redrob-design/core/layout'
+import { documentFontStatus, fontManager, fontResolver } from '@redrob-design/core/text'
+import { useEditorEvent } from '@redrob-design/vue'
 
 import { useEditorStore } from '@/app/editor/active-store'
 import { loadFont, requestLocalFontAccess } from '@/app/editor/fonts'

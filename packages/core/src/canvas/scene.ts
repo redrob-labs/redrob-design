@@ -7,16 +7,16 @@ import {
   type SceneNode,
   type SceneGraph,
   type Fill
-} from '@open-pencil/scene-graph'
-import type { ArrowEndpoint } from '@open-pencil/scene-graph/arrow-caps'
+} from '@redrob-design/scene-graph'
+import type { ArrowEndpoint } from '@redrob-design/scene-graph/arrow-caps'
 import {
   arrowCapOverflow,
   collectArrowEndpoints,
   lineArrowEndpoints
-} from '@open-pencil/scene-graph/arrow-caps'
-import { computeDescendantVisualBounds } from '@open-pencil/scene-graph/geometry'
-import Matrix from '@open-pencil/scene-graph/matrix'
-import type { Color } from '@open-pencil/scene-graph/primitives'
+} from '@redrob-design/scene-graph/arrow-caps'
+import { computeDescendantVisualBounds } from '@redrob-design/scene-graph/geometry'
+import Matrix from '@redrob-design/scene-graph/matrix'
+import type { Color } from '@redrob-design/scene-graph/primitives'
 
 import { DROP_HIGHLIGHT_ALPHA, DROP_HIGHLIGHT_STROKE, SECTION_CORNER_RADIUS } from '#core/constants'
 import { transformTextCase } from '#core/text/case'

@@ -7,7 +7,7 @@ import { useLayerTreeUI } from './ui'
 
 import layerTreeTheme from '@/theme/layer-tree'
 
-import type { LayerNode } from '@open-pencil/vue'
+import type { LayerNode } from '@redrob-design/vue'
 import type { LayerRenameControls, LayerTreeItemActions } from './types'
 
 const { renameControls, expanded } = defineProps<{

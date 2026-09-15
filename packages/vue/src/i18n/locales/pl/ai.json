@@ -97,7 +97,7 @@
   "chatAuthenticationFailed": "Klucz API dostawcy jest nieprawidłowy lub wygasł. Zastąp go w Ustawieniach.",
   "chatForbidden": "Ten klucz API nie może używać wybranego modelu. Sprawdź dostęp do modelu.",
   "chatModelNotFound": "Wybrany model jest niedostępny. Wybierz inny model w Ustawieniach.",
-  "chatNetworkFailed": "OpenPencil nie mógł połączyć się z dostawcą. Sprawdź połączenie i endpoint.",
+  "chatNetworkFailed": "Redrob Design nie mógł połączyć się z dostawcą. Sprawdź połączenie i endpoint.",
   "chatRateLimited": "Osiągnięto limit żądań dostawcy. Poczekaj chwilę i spróbuj ponownie.",
   "openProviderSettingsAction": "Otwórz ustawienia",
   "chatInsufficientCredit": "Konto dostawcy nie ma wystarczających środków lub limitu. Doładuj je i spróbuj ponownie.",

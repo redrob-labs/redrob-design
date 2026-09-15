@@ -4,7 +4,7 @@ import { computed } from 'vue'
 import type { FillRootSlots } from './types'
 import { useFill } from './useFill'
 
-import type { Fill } from '@open-pencil/scene-graph'
+import type { Fill } from '@redrob-design/scene-graph'
 
 const { fill } = defineProps<{ fill: Fill }>()
 const emit = defineEmits<{ update: [fill: Fill] }>()

@@ -6,7 +6,7 @@ import {
   shortcutPlatform,
   useCommandMessages,
   useCommonMessages
-} from '@open-pencil/vue'
+} from '@redrob-design/vue'
 import { DialogDescription, DialogTitle, VisuallyHidden } from 'reka-ui'
 
 import Search from '~icons/lucide/search'
