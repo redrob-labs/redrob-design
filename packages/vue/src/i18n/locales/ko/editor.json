@@ -1,0 +1,5 @@
+{
+  "toolOptions": "{tool} 옵션",
+  "removeGradientStop": "그라디언트 스톱 제거",
+  "showUI": "UI 표시 ({shortcut})"
+}

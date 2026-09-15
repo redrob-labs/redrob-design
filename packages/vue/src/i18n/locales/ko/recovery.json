@@ -1,0 +1,11 @@
+{
+  "preserveUnsavedWork": "저장하지 않은 작업 자동 보존",
+  "preserveUnsavedWorkDescription": "예기치 않게 종료된 뒤에도 문서를 복구할 수 있도록 로컬 복구 사본을 저장합니다.",
+  "dialogTitle": "저장하지 않은 작업 복구",
+  "dialogDescription": "Redrob Design이 이전 세션의 문서를 찾았습니다.",
+  "restoreFailed": "이 문서를 복구할 수 없습니다.",
+  "settingsTitle": "복구",
+  "settingsDescription": "저장하지 않은 문서의 로컬 크래시 복구 사본을 관리합니다.",
+  "restore": "복구",
+  "discard": "버리기"
+}

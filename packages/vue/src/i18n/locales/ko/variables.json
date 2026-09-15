@@ -1,0 +1,13 @@
+{
+  "createCollection": "컬렉션 만들기",
+  "renameCollection": "컬렉션 이름 변경",
+  "deleteCollection": "컬렉션 삭제",
+  "localVariables": "로컬 변수",
+  "noVariableCollections": "변수 컬렉션 없음",
+  "modes": "모드",
+  "addMode": "모드 추가",
+  "renameMode": "모드 이름 변경",
+  "duplicateMode": "모드 복제",
+  "deleteMode": "모드 삭제",
+  "setDefaultMode": "기본값으로 설정"
+}

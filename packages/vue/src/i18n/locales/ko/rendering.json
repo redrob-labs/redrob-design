@@ -1,0 +1,8 @@
+{
+  "settingsTitle": "렌더링",
+  "settingsDescription": "Redrob Design이 큰 캔버스를 표시하는 방식을 선택합니다.",
+  "progressiveTiled": "점진적 타일 캔버스 렌더링",
+  "progressiveTiledDescription": "이동하는 동안 큰 캔버스를 제한된 타일 단위로 갱신합니다. 실험 기능이며 새로 고침이 필요합니다.",
+  "reloadRequired": "이 변경을 적용하려면 Redrob Design을 새로 고치세요.",
+  "urlOverride": "현재 세션의 렌더러는 URL 재정의로 결정됩니다. 재정의를 제거하면 저장된 설정이 적용됩니다."
+}

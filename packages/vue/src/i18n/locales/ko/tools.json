@@ -1,0 +1,13 @@
+{
+  "move": "이동",
+  "frame": "프레임",
+  "section": "섹션",
+  "rectangle": "사각형",
+  "ellipse": "타원",
+  "line": "직선",
+  "polygon": "다각형",
+  "star": "별",
+  "pen": "펜",
+  "text": "텍스트",
+  "hand": "손 도구"
+}

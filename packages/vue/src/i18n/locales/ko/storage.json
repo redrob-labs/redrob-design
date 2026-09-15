@@ -1,0 +1,19 @@
+{
+  "newStoredDocument": "새 문서",
+  "emptyStorageWorkspace": "저장된 문서가 없습니다.",
+  "loadingDocuments": "문서를 불러오는 중…",
+  "workspace": "스토리지 워크스페이스",
+  "openWorkspace": "워크스페이스 열기",
+  "loadingWorkspace": "스토리지 워크스페이스를 불러오는 중…",
+  "notConfigured": "이 워크스페이스를 사용하기 전에 스토리지를 설정하세요.",
+  "providerS3": "S3 스토리지",
+  "providerR2": "Cloudflare R2 스토리지",
+  "providerAmazonS3": "Amazon S3 스토리지",
+  "providerBackblaze": "Backblaze B2 스토리지",
+  "copyCors": "CORS JSON 복사",
+  "endpoint": "엔드포인트",
+  "bucket": "버킷",
+  "region": "리전",
+  "accessKeyID": "액세스 키 ID",
+  "secretAccessKey": "시크릿 액세스 키"
+}

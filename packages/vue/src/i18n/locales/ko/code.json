@@ -1,0 +1,15 @@
+{
+  "copyJSXReference": "JSX 속성 참조를 클립보드에 복사",
+  "jsxUpToDate": "최신 상태",
+  "source": "코드 소스",
+  "sourceDesignJSX": "디자인 JSX 코드",
+  "sourceTailwindJSX": "Tailwind JSX 코드",
+  "sourceHTMLCSS": "HTML/CSS 코드",
+  "editorDesignLabel": "디자인 JSX",
+  "editorHTMLCSSLabel": "HTML 및 CSS",
+  "updating": "업데이트 중…",
+  "updatedLive": "실시간 업데이트됨",
+  "previewFailed": "미리보기 실패",
+  "generatedReadOnly": "자동 생성됨, 읽기 전용",
+  "reset": "초기화"
+}
