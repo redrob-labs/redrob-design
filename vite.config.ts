@@ -31,11 +31,9 @@ const redrobCodeDevRoot =
 // Shell capabilities allowlist `cmd: "bun"` by bare name. An absolute
 // `REDROB_CODE_BUN` from the host would fail the Tauri spawn scope check, so
 // collapse path-shaped values to the allowlisted command and rely on PATH.
-const redrobCodeBunRaw =
-  process.env.VITE_REDROB_CODE_BUN || process.env.REDROB_CODE_BUN || ''
-const redrobCodeBun = redrobCodeBunRaw.includes('/') || redrobCodeBunRaw.includes('\\')
-  ? 'bun'
-  : redrobCodeBunRaw
+const redrobCodeBunRaw = process.env.VITE_REDROB_CODE_BUN || process.env.REDROB_CODE_BUN || ''
+const redrobCodeBun =
+  redrobCodeBunRaw.includes('/') || redrobCodeBunRaw.includes('\\') ? 'bun' : redrobCodeBunRaw
 const redrobCodeBin = process.env.VITE_REDROB_CODE_BIN || process.env.REDROB_CODE_BIN || ''
 
 // Promote onto `process.env.VITE_*` BEFORE Vite snapshots `import.meta.env`.

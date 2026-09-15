@@ -1,6 +1,6 @@
 # Contributing
 
-The root [`CONTRIBUTING.md`](https://github.com/redrob-design/redrob-design/blob/master/CONTRIBUTING.md) is the source of truth for setup, pull-request requirements, validation, and commit expectations. Developers and coding agents should also read [`AGENTS.md`](https://github.com/redrob-design/redrob-design/blob/master/AGENTS.md) for current package ownership and architecture rules.
+The root [`CONTRIBUTING.md`](https://github.com/redrob-labs/redrob-design/blob/master/CONTRIBUTING.md) is the source of truth for setup, pull-request requirements, validation, and commit expectations. Developers and coding agents should also read [`AGENTS.md`](https://github.com/redrob-labs/redrob-design/blob/master/AGENTS.md) for current package ownership and architecture rules.
 
 ## Project structure
 

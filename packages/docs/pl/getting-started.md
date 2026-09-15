@@ -8,7 +8,7 @@ Jeśli chcesz zbudować własny produkt na bazie Redrob Design, a nie tylko korz
 
 ## Aplikacja na komputer
 
-Gotowe wersje dla macOS, Windows i Linux są dostępne na [stronie wydań](https://github.com/redrob-design/redrob-design/releases/latest).
+Gotowe wersje dla macOS, Windows i Linux są dostępne na [stronie wydań](https://github.com/redrob-labs/redrob-design/releases/latest).
 
 | Platforma | Plik |
 |-----------|------|
@@ -36,7 +36,7 @@ Polecenie instaluje najnowszą podpisaną wersję dla komputerów Mac z Apple Si
 ### Instalacja
 
 ```sh
-git clone https://github.com/redrob-design/redrob-design.git
+git clone https://github.com/redrob-labs/redrob-design.git
 cd redrob-design
 bun install
 ```

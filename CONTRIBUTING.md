@@ -1,9 +1,11 @@
 # Contributing
 
+**English** · [한국어](./CONTRIBUTING.ko.md)
+
 ## Setup
 
 ```bash
-git clone https://github.com/redrob-design/redrob-design.git
+git clone https://github.com/redrob-labs/redrob-design.git
 cd redrob-design
 bun install
 ```

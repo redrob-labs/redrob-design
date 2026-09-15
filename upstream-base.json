@@ -1,0 +1,56 @@
+{
+  "$comment": [
+    "Machine-readable record of what this fork was taken from, and of the boundary",
+    "scripts/check-upstream-boundary.mjs enforces. Update `lastSyncedUpstream` every",
+    "time scripts/upstream-sync.mjs lands upstream work; leave `base` alone - it is a",
+    "measurement of the port, not a moving pointer."
+  ],
+  "upstream": {
+    "project": "OpenPencil",
+    "remoteName": "upstream",
+    "remote": "https://github.com/open-pencil/open-pencil.git",
+    "defaultBranch": "master",
+    "license": "MIT",
+    "copyrightHolder": "Danila Poyarkov and OpenPencil contributors"
+  },
+  "fork": {
+    "license": "MIT",
+    "copyrightHolder": "Janghoon Lee (Redrob) and contributors",
+    "model": "port",
+    "modelNote": [
+      "This repository shares no commit ancestry with upstream. Its root commit is a",
+      "different product entirely (802 files, zero blobs in common with any upstream",
+      "commit); the OpenPencil tree arrived later, rebranded, at the import commit",
+      "below. `git merge-base HEAD upstream/master` therefore resolves to nothing and",
+      "upstream work is taken file by file rather than by three-way merge."
+    ]
+  },
+  "base": {
+    "commit": "d82aaff9ea4317f71fcf26dd2051e1ca3b8f70e6",
+    "date": "2026-09-04",
+    "subject": "Merge pull request #644 from open-pencil/fix-i18n-placeholder-baseline",
+    "measuredBy": "blob-hash set intersection between this tree and every upstream first-parent commit; the peak is the base. Path-keyed comparison scores zero here because the port restructured directories, and a name-only diff is dominated by the brand sweep.",
+    "sharedBlobs": 1636,
+    "treeBlobs": 3605
+  },
+  "importCommit": {
+    "commit": "120e80584",
+    "subject": "Merge pull request #18 from redrob-labs/feat/openpencil-port-tauri"
+  },
+  "doc": "UPSTREAM.md",
+  "lastSyncedUpstream": null,
+  "excludedPrefixes": [],
+  "excludedReason": "Upstream is MIT throughout and ships no separately-licensed directory, so nothing is excluded. The list stays here so a future upstream split has one place to be recorded.",
+  "attribution": [
+    {
+      "path": "LICENSE",
+      "mustContain": ["MIT License", "Danila Poyarkov", "OpenPencil", "Janghoon Lee (Redrob)"],
+      "why": "The MIT licence requires upstream's copyright notice to be retained in every copy."
+    },
+    {
+      "path": "NOTICE",
+      "mustContain": ["OpenPencil", "Danila Poyarkov", "Janghoon Lee (Redrob)"],
+      "why": "NOTICE is where the derivation is stated in prose; it must keep naming upstream."
+    }
+  ]
+}

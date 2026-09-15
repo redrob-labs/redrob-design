@@ -6,7 +6,7 @@ Please do not report security vulnerabilities through public GitHub issues or pu
 
 If you believe you have found a security issue in RedrobDesign, report it privately using GitHub Security Advisories:
 
-https://github.com/redrob-design/redrob-design/security/advisories/new
+https://github.com/redrob-labs/redrob-design/security/advisories/new
 
 Please include as much detail as possible:
 

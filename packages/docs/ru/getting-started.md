@@ -8,7 +8,7 @@ Redrob Design работает прямо в браузере и не требу
 
 ## Приложение для компьютера
 
-Готовые версии для macOS, Windows и Linux опубликованы на [странице релизов](https://github.com/redrob-design/redrob-design/releases/latest).
+Готовые версии для macOS, Windows и Linux опубликованы на [странице релизов](https://github.com/redrob-labs/redrob-design/releases/latest).
 
 | Платформа | Файл |
 |----------|------|
@@ -36,7 +36,7 @@ brew install redrob-design/tap/redrob-design
 ### Установка
 
 ```sh
-git clone https://github.com/redrob-design/redrob-design.git
+git clone https://github.com/redrob-labs/redrob-design.git
 cd redrob-design
 bun install
 ```

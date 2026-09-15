@@ -8,7 +8,7 @@ Wenn Sie ein eigenes Produkt auf Redrob Design aufbauen möchten, lesen Sie den 
 
 ## Desktop-Anwendung
 
-Fertige Versionen für macOS, Windows und Linux finden Sie auf der [Release-Seite](https://github.com/redrob-design/redrob-design/releases/latest).
+Fertige Versionen für macOS, Windows und Linux finden Sie auf der [Release-Seite](https://github.com/redrob-labs/redrob-design/releases/latest).
 
 | Plattform | Datei |
 |-----------|-------|
@@ -36,7 +36,7 @@ Der Befehl installiert die aktuelle signierte Version für Macs mit Apple Silico
 ### Installation
 
 ```sh
-git clone https://github.com/redrob-design/redrob-design.git
+git clone https://github.com/redrob-labs/redrob-design.git
 cd redrob-design
 bun install
 ```

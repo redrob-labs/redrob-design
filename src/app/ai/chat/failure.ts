@@ -46,6 +46,69 @@ export function providerErrorStatus(error: unknown): number | null {
   )
 }
 
+/** Fields a provider or JSON-RPC error is known to carry a human-readable message in. */
+const MESSAGE_KEYS = ['message', 'safeMessage', 'errorText', 'detail', 'reason'] as const
+/** A nested `data` payload carries fewer of them. */
+const NESTED_MESSAGE_KEYS = ['message', 'safeMessage'] as const
+
+export type MessageBearingError = {
+  [Key in (typeof MESSAGE_KEYS)[number]]?: unknown
+} & {
+  data?: unknown
+  code?: unknown
+  name?: unknown
+}
+
+/** Narrow an unknown throwable to the shape above, or null when it is not an object. */
+export function asMessageBearingError(error: unknown): MessageBearingError | null {
+  if (typeof error !== 'object' || error === null) return null
+  return error as MessageBearingError
+}
+
+function firstMessageField(
+  shape: MessageBearingError,
+  keys: readonly (keyof MessageBearingError)[]
+): string | null {
+  for (const key of keys) {
+    const value = shape[key]
+    if (typeof value === 'string' && value.trim()) return value.trim()
+  }
+  return null
+}
+
+function primitiveErrorText(error: unknown): string | null {
+  if (typeof error === 'string') return error
+  if (typeof error === 'number' || typeof error === 'boolean' || typeof error === 'bigint') {
+    return String(error)
+  }
+  return null
+}
+
+function serializedErrorText(error: object): string | null {
+  try {
+    const json = JSON.stringify(error)
+    return json && json !== '{}' ? json : null
+  } catch {
+    // A circular structure has no serialisation to offer, and the caller already has a
+    // fallback string. Warning here would fire on every rendered message of a failing stream.
+    return null
+  }
+}
+
+function objectErrorText(error: object): string | null {
+  const shape = asMessageBearingError(error)
+  if (!shape) return null
+
+  const direct = firstMessageField(shape, MESSAGE_KEYS)
+  if (direct) return direct
+
+  const nested = asMessageBearingError(shape.data)
+  const nestedText = nested ? firstMessageField(nested, NESTED_MESSAGE_KEYS) : null
+  if (nestedText) return nestedText
+
+  return serializedErrorText(error)
+}
+
 /** Prefer message / nested JSON-RPC fields over opaque `[object Object]`. */
 export function formatUnknownError(error: unknown): string {
   if (error instanceof Error) {
@@ -53,40 +116,17 @@ export function formatUnknownError(error: unknown): string {
     if (message && message !== '[object Object]') return message
     if (error.name && error.name !== 'Error') return error.name
   }
-  if (typeof error === 'string') return error
-  if (typeof error === 'number' || typeof error === 'boolean' || typeof error === 'bigint') {
-    return String(error)
-  }
+  const primitive = primitiveErrorText(error)
+  if (primitive !== null) return primitive
   if (error && typeof error === 'object') {
-    const record = error as Record<string, unknown>
-    for (const key of ['message', 'safeMessage', 'errorText', 'detail', 'reason'] as const) {
-      const value = record[key]
-      if (typeof value === 'string' && value.trim()) return value.trim()
-    }
-    const nested = record.data
-    if (nested && typeof nested === 'object') {
-      const nestedRecord = nested as Record<string, unknown>
-      for (const key of ['message', 'safeMessage'] as const) {
-        const value = nestedRecord[key]
-        if (typeof value === 'string' && value.trim()) return value.trim()
-      }
-    }
-    try {
-      const json = JSON.stringify(error)
-      if (json && json !== '{}') return json
-    } catch {
-      // Circular structures fall through.
-    }
+    const text = objectErrorText(error)
+    if (text) return text
   }
   return 'Unknown error'
 }
 
-function errorText(error: unknown): string {
-  return formatUnknownError(error)
-}
-
 function normalizedErrorText(error: unknown): string {
-  return errorText(error).toLowerCase()
+  return formatUnknownError(error).toLowerCase()
 }
 
 export function isInsufficientCreditError(error: unknown): boolean {
@@ -118,10 +158,10 @@ function statusFailureReason(status: number | null): AIChatFailureReason | null 
 function isAuthRequiredError(error: unknown): boolean {
   const text = normalizedErrorText(error)
   if (text.includes('authentication required') || text.includes('auth required')) return true
-  if (typeof error !== 'object' || error === null) return false
-  const record = error as Record<string, unknown>
-  if (record.code === -32000) return true
-  if (record.name === 'RequestError' && text.includes('authentication')) return true
+  const shape = asMessageBearingError(error)
+  if (!shape) return false
+  if (shape.code === -32000) return true
+  if (shape.name === 'RequestError' && text.includes('authentication')) return true
   return false
 }
 
@@ -157,7 +197,7 @@ export function classifyAIChatFinish(finishReason?: string): AIChatFailure | nul
 export function classifyAIChatError(error: unknown): AIChatFailure {
   return {
     reason: failureReason(error),
-    detail: errorText(error),
+    detail: formatUnknownError(error),
     statusCode: providerErrorStatus(error) ?? undefined,
     retryable: APICallError.isInstance(error) ? error.isRetryable : undefined
   }

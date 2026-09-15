@@ -2,7 +2,7 @@ name: Preview
 
 on:
   pull_request:
-    branches: [master]
+    branches: [main, master]
     paths-ignore:
       - 'packages/docs/**'
       - 'openspec/**'

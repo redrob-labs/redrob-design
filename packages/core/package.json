@@ -4,7 +4,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/redrob-design/redrob-design.git",
+    "url": "git+https://github.com/redrob-labs/redrob-design.git",
     "directory": "packages/core"
   },
   "files": [

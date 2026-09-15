@@ -324,8 +324,12 @@ export class ACPChatTransport implements ChatTransport<UIMessage> {
           configId: 'model',
           value: this.modelId
         })
-      } catch {
-        // Model config is best-effort; keep the session on the agent default.
+      } catch (error) {
+        console.warn(
+          '[ACP] Session model config was refused; keeping the agent default.',
+          this.modelId,
+          error
+        )
       }
     }
 

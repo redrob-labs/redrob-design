@@ -2,7 +2,7 @@ name: CI
 
 on:
   pull_request:
-    branches: [master]
+    branches: [main, master]
     paths-ignore:
       - 'packages/docs/**'
       - 'openspec/**'
@@ -17,6 +17,21 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  fork-boundary:
+    name: Fork boundary
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+
+      # Reads upstream-base.json, LICENSE and NOTICE only, so it needs no install and
+      # no Bun. Kept in its own job so a deleted upstream copyright line fails fast
+      # instead of hiding behind the quality matrix.
+      - name: Verify upstream attribution and pin
+        run: node scripts/check-upstream-boundary.mjs
+
   source-quality:
     name: Code quality
     timeout-minutes: 10
@@ -117,7 +132,13 @@ jobs:
     timeout-minutes: 8
     runs-on: ubuntu-24.04
     container:
-      image: ghcr.io/redrob-design/native-contracts-ci@sha256:64e6b1b50a988c1cefe2b69ac9d58076fd743b18391fa2dbd1d153eba2be9521
+      # Published by .github/workflows/native-contracts-image.yml into this repository
+      # owner's GHCR namespace. It used to name ghcr.io/redrob-design, an organisation
+      # that does not exist, so every run failed at `Initialize containers` with
+      # `manifest unknown` -- invisible while this workflow filtered pull requests on
+      # `master` and never ran. Referenced by tag rather than digest until the first
+      # image is published; pin the digest once it is.
+      image: ghcr.io/${{ github.repository_owner }}/native-contracts-ci:ubuntu-24.04
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}

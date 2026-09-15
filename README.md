@@ -1,16 +1,31 @@
 # Redrob Design
 
+**English** · [한국어](./README.ko.md)
+
 Prompt-driven design editor. Opens `.fig` and `.pen` design files, designs by prompt through the Redrob Code engine, and ships as a programmable toolkit with a headless Vue SDK for building custom editors.
 
 > **Status:** Active development. Usable today, with some rough edges as features evolve.
 
-> Redrob Design is derived from [OpenPencil](https://github.com/open-pencil/open-pencil) (MIT). See [License](#license).
+> Redrob Design is derived from [OpenPencil](https://github.com/open-pencil/open-pencil) (MIT). See [License](#license) and [UPSTREAM.md](./UPSTREAM.md).
 
 ![Redrob Design](packages/docs/public/screenshot.png)
 
 ## Installation
 
 Download from the releases page, or build the desktop app from source (see [Contributing](#contributing)).
+
+## Connect Redrob
+
+Redrob Design does not hold a workspace key of its own. It reaches Redrob through
+the **Redrob Code** engine over ACP, and Code is what signs in to a workspace: run
+`redrob providers login --provider redrob`, choose **Connect Redrob**, and approve
+the short code it shows in [Redrob Console](https://console.redrob.ai). Design then
+uses that connection through the engine.
+
+Console's one-click device flow is not wired into this app directly. If you would
+rather not route through the engine at all, **Settings → AI & agents** also takes
+your own key for OpenRouter, Anthropic, OpenAI, Google AI, Z.ai, MiniMax or a
+compatible endpoint.
 
 ## Design by prompt with Redrob Code
 
@@ -275,6 +290,19 @@ Requires [Rust](https://rustup.rs/) and platform-specific prerequisites ([Tauri 
 bun run tauri build
 ```
 
+## Upstream
+
+Redrob Design is a port, not a git fork: it shares no commit ancestry with
+OpenPencil, so upstream work is taken file by file rather than merged. The commit
+this tree was measured against, how it was measured, and the sync procedure are in
+[UPSTREAM.md](./UPSTREAM.md); the machine-readable record is
+[upstream-base.json](./upstream-base.json).
+
+```sh
+bun run upstream:report          # what upstream did since our measured base
+bun run check:upstream-boundary  # the attribution the licence requires
+```
+
 ## Acknowledgments
 
 Redrob Design is derived from [OpenPencil](https://github.com/open-pencil/open-pencil), an open-source design editor created by Danila Poyarkov and the OpenPencil contributors. We are grateful for their work, which forms the foundation of this project.
@@ -283,10 +311,12 @@ Redrob Design is derived from [OpenPencil](https://github.com/open-pencil/open-p
 
 Redrob Design is licensed under the [MIT License](./LICENSE).
 
-Copyright (c) 2026 Redrob and Redrob Design contributors.
+Copyright (c) 2026-present Janghoon Lee (Redrob) and contributors.
 
 Redrob Design is derived from OpenPencil, which is also MIT licensed:
 
 Copyright (c) 2026 Danila Poyarkov and OpenPencil contributors.
 
-The original OpenPencil copyright notice is retained in the [LICENSE](./LICENSE) and [NOTICE](./NOTICE) files as required by the MIT License.
+The original OpenPencil copyright notice is retained in the [LICENSE](./LICENSE) and [NOTICE](./NOTICE) files as required by the MIT License. `bun run check:upstream-boundary` fails the build if either notice is ever removed.
+
+The licence covers the software, not the brand: the Redrob name and logos are not licensed under it.

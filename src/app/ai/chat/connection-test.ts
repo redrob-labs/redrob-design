@@ -1,6 +1,10 @@
 import { generateText } from 'ai'
 
-import { isInsufficientCreditError, providerErrorStatus } from '@/app/ai/chat/failure'
+import {
+  asMessageBearingError,
+  isInsufficientCreditError,
+  providerErrorStatus
+} from '@/app/ai/chat/failure'
 import { createLanguageModel, resolveLanguageModelID, type ModelConfig } from '@/app/ai/chat/model'
 import { isTauri } from '@/app/tauri/env'
 
@@ -42,16 +46,17 @@ function validateConfig(config: ModelConfig): ProviderConnectionTestFailureReaso
 
 function errorText(error: unknown): string {
   if (error instanceof Error) return `${error.name}: ${error.message}`
-  if (error && typeof error === 'object') {
-    const record = error as Record<string, unknown>
-    if (typeof record.message === 'string' && record.message.trim()) {
-      return record.message.trim()
+  const shape = asMessageBearingError(error)
+  if (shape) {
+    if (typeof shape.message === 'string' && shape.message.trim()) {
+      return shape.message.trim()
     }
     try {
       const json = JSON.stringify(error)
       if (json && json !== '{}') return json
     } catch {
-      // fall through
+      // A circular structure cannot be serialised; fall through to String(error).
+      return String(error)
     }
   }
   return String(error)

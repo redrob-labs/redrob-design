@@ -50,7 +50,7 @@ v0.14.0 established several foundations that earlier versions of this roadmap tr
 - Surface provider, model-budget, renderer, and automation failures with actionable recovery paths instead of silent stalls.
 - Make desktop automation recover from orphaned processes and renderer crashes without manual cleanup.
 - Prevent non-Latin font discovery and rendering crashes across platforms; add Arabic/Persian shaping and RTL layout, then broaden CJK and mixed-script visual fixtures.
-- Define a portable-font strategy for reproducible documents across machines, including curated redistributable fonts, embedded or linked document fonts, licensing metadata, fallback visibility, and agent-readable font availability ([#502](https://github.com/redrob-design/redrob-design/issues/502), [#503](https://github.com/redrob-design/redrob-design/issues/503)).
+- Define a portable-font strategy for reproducible documents across machines, including curated redistributable fonts, embedded or linked document fonts, licensing metadata, fallback visibility, and agent-readable font availability ([#502](https://github.com/redrob-labs/redrob-design/issues/502), [#503](https://github.com/redrob-labs/redrob-design/issues/503)).
 
 ### Cloud and self-hosting
 
@@ -111,7 +111,7 @@ v0.14.0 established several foundations that earlier versions of this roadmap tr
 
 - Expand the documented Vue SDK and core package platform with complete example applications for custom editor shells, embedded design surfaces, and automation-specific UIs.
 - Provide maintained examples for read-only previews, editable canvases, design review surfaces, and agent-controlled editors.
-- Ship an official VS Code/Cursor extension ([#81](https://github.com/redrob-design/redrob-design/issues/81)) for previewing and opening `.fig`/`.pen` documents, connecting to the running editor, invoking CLI/MCP workflows, handing selections between code and canvas, and navigating between generated code and design nodes. Reuse the app, SDK, and automation bridge rather than implementing a second editor inside the extension.
+- Ship an official VS Code/Cursor extension ([#81](https://github.com/redrob-labs/redrob-design/issues/81)) for previewing and opening `.fig`/`.pen` documents, connecting to the running editor, invoking CLI/MCP workflows, handing selections between code and canvas, and navigating between generated code and design nodes. Reuse the app, SDK, and automation bridge rather than implementing a second editor inside the extension.
 - Define public API stability and migration expectations across the reusable npm packages.
 - Keep the renderer, editor core, and tool registry framework-agnostic enough for headless and embedded use.
 

@@ -8,7 +8,7 @@ Si quieres crear un producto basado en Redrob Design en lugar de limitarte a la 
 
 ## Aplicación de escritorio
 
-Las versiones preparadas para macOS, Windows y Linux están disponibles en la [página de versiones](https://github.com/redrob-design/redrob-design/releases/latest).
+Las versiones preparadas para macOS, Windows y Linux están disponibles en la [página de versiones](https://github.com/redrob-labs/redrob-design/releases/latest).
 
 | Plataforma | Archivo |
 |------------|---------|
@@ -36,7 +36,7 @@ El comando instala la versión firmada más reciente para equipos Mac con Apple 
 ### Instalación
 
 ```sh
-git clone https://github.com/redrob-design/redrob-design.git
+git clone https://github.com/redrob-labs/redrob-design.git
 cd redrob-design
 bun install
 ```
