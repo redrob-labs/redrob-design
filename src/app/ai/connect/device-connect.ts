@@ -39,11 +39,16 @@ export type DeviceAuthorization = {
   interval: number
 }
 
+/**
+ * The key Console issues, plus what it says about the account it belongs to. The
+ * optional fields are spelled `?: string | undefined` to match Office's copy of this
+ * module, where `exactOptionalPropertyTypes` refuses the shorter form.
+ */
 export type DeviceKey = {
   apiKey: string
-  apiKeyName?: string
-  accountName?: string
-  apiBaseURL?: string
+  apiKeyName?: string | undefined
+  accountName?: string | undefined
+  apiBaseURL?: string | undefined
 }
 
 export type DeviceConnectOutcome =
