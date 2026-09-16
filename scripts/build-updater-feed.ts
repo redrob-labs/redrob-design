@@ -48,14 +48,14 @@ export interface FeedInput {
   fragments: UpdaterFragment[]
   version: string
   /** Where the files are published; a trailing slash is tolerated. */
-  baseUrl: string
+  baseURL: string
   publishedAt: Date
 }
 
 export function updaterFeed(input: FeedInput): { feed: UpdaterFeed; skipped: string[] } {
   const platforms: Record<string, { signature: string; url: string }> = {}
   const skipped: string[] = []
-  const base = input.baseUrl.replace(/\/+$/, '')
+  const base = input.baseURL.replace(/\/+$/, '')
 
   for (const fragment of input.fragments) {
     const platform = fragment.platform?.trim()
@@ -91,8 +91,8 @@ export function updaterFeed(input: FeedInput): { feed: UpdaterFeed; skipped: str
 }
 
 if (import.meta.main) {
-  const [fragmentsDir, version, baseUrl, output] = process.argv.slice(2)
-  if (!fragmentsDir || !version || !baseUrl || !output) {
+  const [fragmentsDir, version, baseURL, output] = process.argv.slice(2)
+  if (!fragmentsDir || !version || !baseURL || !output) {
     throw new Error(
       'Usage: bun scripts/build-updater-feed.ts <fragments-dir> <version> <base-url> <output-path>'
     )
@@ -106,7 +106,7 @@ if (import.meta.main) {
     fragments.push(JSON.parse(raw) as UpdaterFragment)
   }
 
-  const { feed, skipped } = updaterFeed({ fragments, version, baseUrl, publishedAt: new Date() })
+  const { feed, skipped } = updaterFeed({ fragments, version, baseURL, publishedAt: new Date() })
   await writeFile(output, `${JSON.stringify(feed, null, 2)}\n`)
   console.log(`Update feed for ${feed.version} covers: ${Object.keys(feed.platforms).join(', ')}.`)
   const missing = UPDATER_PLATFORMS.filter((platform) => !(platform in feed.platforms))

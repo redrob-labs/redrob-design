@@ -65,7 +65,7 @@ describe('updater feed', () => {
     const { feed } = updaterFeed({
       fragments,
       version: 'v0.14.0',
-      baseUrl: 'https://cdn.redrob.ai/design/latest/',
+      baseURL: 'https://cdn.redrob.ai/design/latest/',
       publishedAt
     })
     // Tauri's keys are <os>-<arch>, not the Rust target triples the build jobs use.
@@ -88,7 +88,7 @@ describe('updater feed', () => {
         { platform: 'windows-x86_64', file: 'redrob-design-x64-0.14.0.nsis.zip', signature: '' }
       ],
       version: '0.14.0',
-      baseUrl: 'https://cdn.redrob.ai/design/latest',
+      baseURL: 'https://cdn.redrob.ai/design/latest',
       publishedAt
     })
     expect(Object.keys(feed.platforms).sort()).toEqual(['darwin-aarch64', 'linux-x86_64'])
@@ -101,7 +101,7 @@ describe('updater feed', () => {
       updaterFeed({
         fragments: [{ platform: 'linux-amd64', file: 'x.AppImage', signature: 'sig' }],
         version: '0.14.0',
-        baseUrl: 'https://x.test',
+        baseURL: 'https://x.test',
         publishedAt
       })
     ).toThrow(/not a Tauri updater platform key/)
@@ -109,7 +109,7 @@ describe('updater feed', () => {
 
   test('refuses to write a feed with no signed platform at all', () => {
     expect(() =>
-      updaterFeed({ fragments: [], version: '0.14.0', baseUrl: 'https://x.test', publishedAt })
+      updaterFeed({ fragments: [], version: '0.14.0', baseURL: 'https://x.test', publishedAt })
     ).toThrow(/no platform can install/)
   })
 })
