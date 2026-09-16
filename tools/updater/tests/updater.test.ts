@@ -81,6 +81,30 @@ describe('updater feed', () => {
     expect(feed.pub_date).toBe('2026-09-16T00:00:00.000Z')
   })
 
+  test('takes the Windows installer as its own update artefact', () => {
+    // On Windows the artefact IS the NSIS setup.exe, signed in place -- there is no
+    // `-setup.nsis.zip`, which an earlier version of the workflow looked for and never found, so
+    // every release shipped a feed with no Windows entry. tauri-plugin-updater runs a non-zip
+    // download as the installer, so the published installer is the right target.
+    const { feed, skipped } = updaterFeed({
+      fragments: [
+        {
+          platform: 'windows-x86_64',
+          file: 'redrob-design-x64-0.14.0-setup.exe',
+          signature: 'sig-windows'
+        }
+      ],
+      version: '0.14.0',
+      baseURL: 'https://cdn.redrob.ai/design/0.14.0',
+      publishedAt
+    })
+    expect(feed.platforms['windows-x86_64']).toEqual({
+      signature: 'sig-windows',
+      url: 'https://cdn.redrob.ai/design/0.14.0/redrob-design-x64-0.14.0-setup.exe'
+    })
+    expect(skipped).toEqual([])
+  })
+
   test('drops a fragment with no signature instead of advertising it', () => {
     // An entry without a signature hands the app an update it must reject, which is worse than that
     // platform having no update at all.

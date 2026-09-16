@@ -106,8 +106,8 @@ jobs:
 
       # Layered rather than committed, for the same reason as the other jobs: both
       # updater settings make `tauri build` demand the signing key, and a local build
-      # must not need the release keypair. The NSIS bundle emits its own
-      # `-setup.nsis.zip` update archive when artefacts are enabled.
+      # must not need the release keypair. On Windows the update artefact is the NSIS
+      # `-setup.exe` itself, signed in place as `<installer>.exe.sig`.
       - name: Prepare the updater configuration
         shell: bash
         env:
@@ -145,15 +145,21 @@ jobs:
           Write-Host "Signed by: $($signature.SignerCertificate.Subject) status=$($signature.Status)"
           New-Item -ItemType Directory -Force -Path staging | Out-Null
           Copy-Item $installer.FullName "staging/redrob-design-x64-$($env:APP_VERSION)-setup.exe"
-          # The update archive and its signature exist only when the signing key was
-          # configured; their absence is the normal no-updater build.
-          $archive = Get-ChildItem -Recurse -Filter "*-setup.nsis.zip" -Path "desktop/target/x86_64-pc-windows-msvc/release/bundle" | Select-Object -First 1
-          if ($archive -and (Test-Path "$($archive.FullName).sig")) {
-            $name = "redrob-design-x64-$($env:APP_VERSION)-setup.nsis.zip"
-            Copy-Item $archive.FullName "staging/$name"
-            Copy-Item "$($archive.FullName).sig" "staging/$name.sig"
+          # On Windows the update artefact IS the installer: with updater artefacts on,
+          # tauri signs the NSIS setup.exe itself and writes `<installer>.exe.sig`
+          # beside it -- there is no `-setup.nsis.zip`, which an earlier version of this
+          # step looked for and never found. tauri-plugin-updater accepts either form:
+          # it extracts the download when the bytes are a zip and otherwise runs them as
+          # the installer (updater.rs `extract`), so pointing the feed at the installer
+          # already being published is correct and adds no second artefact.
+          #
+          # The signature's absence is the normal no-updater build, not a failure.
+          $sig = "$($installer.FullName).sig"
+          if (Test-Path $sig) {
+            $name = "redrob-design-x64-$($env:APP_VERSION)-setup.exe"
+            Copy-Item $sig "staging/$name.sig"
             New-Item -ItemType Directory -Force -Path updater | Out-Null
-            $signature = (Get-Content "$($archive.FullName).sig" -Raw).Trim()
+            $signature = (Get-Content $sig -Raw).Trim()
             @{ platform = "windows-x86_64"; file = $name; signature = $signature } |
               ConvertTo-Json | Set-Content -Path "updater/windows-x86_64.updater.json" -Encoding utf8
           }
