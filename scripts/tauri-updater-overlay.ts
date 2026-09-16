@@ -61,7 +61,7 @@ export function updaterOverlay(env: UpdaterOverlayEnvironment): UpdaterOverlay |
       throw new Error(
         'TAURI_SIGNING_PRIVATE_KEY is set but TAURI_SIGNING_PUBLIC_KEY is not. ' +
           'Signed update artefacts the app cannot verify are worse than no updater at all: ' +
-          'set both, or neither.',
+          'set both, or neither.'
       )
     }
     return null
@@ -74,20 +74,25 @@ export function updaterOverlay(env: UpdaterOverlayEnvironment): UpdaterOverlay |
 
   return {
     bundle: { createUpdaterArtifacts: true },
-    plugins: { updater: { endpoints: [endpoint], pubkey } },
+    plugins: { updater: { endpoints: [endpoint], pubkey } }
   }
 }
 
 if (import.meta.main) {
   const output = process.argv[2]
-  if (!output) throw new Error('An output path is required: bun scripts/tauri-updater-overlay.ts <path>')
+  if (!output)
+    throw new Error('An output path is required: bun scripts/tauri-updater-overlay.ts <path>')
 
   const overlay = updaterOverlay(process.env)
   if (!overlay) {
-    console.log('::notice::TAURI_SIGNING_PUBLIC_KEY is not set, so this build produces no update artefacts.')
+    console.log(
+      '::notice::TAURI_SIGNING_PUBLIC_KEY is not set, so this build produces no update artefacts.'
+    )
     process.exit(0)
   }
 
   await writeFile(output, `${JSON.stringify(overlay, null, 2)}\n`)
-  console.log(`Updater overlay written to ${output} (endpoint ${overlay.plugins.updater.endpoints[0]}).`)
+  console.log(
+    `Updater overlay written to ${output} (endpoint ${overlay.plugins.updater.endpoints[0]}).`
+  )
 }

@@ -21,7 +21,12 @@ import { readdir, readFile, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 
 /** Tauri's platform keys are `<os>-<arch>`, not the Rust target triples the build jobs use. */
-export const UPDATER_PLATFORMS = ['darwin-aarch64', 'darwin-x86_64', 'linux-x86_64', 'windows-x86_64'] as const
+export const UPDATER_PLATFORMS = [
+  'darwin-aarch64',
+  'darwin-x86_64',
+  'linux-x86_64',
+  'windows-x86_64'
+] as const
 
 export type UpdaterPlatform = (typeof UPDATER_PLATFORMS)[number]
 
@@ -62,7 +67,7 @@ export function updaterFeed(input: FeedInput): { feed: UpdaterFeed; skipped: str
     }
     if (!(UPDATER_PLATFORMS as readonly string[]).includes(platform)) {
       throw new Error(
-        `${platform} is not a Tauri updater platform key. Expected one of: ${UPDATER_PLATFORMS.join(', ')}.`,
+        `${platform} is not a Tauri updater platform key. Expected one of: ${UPDATER_PLATFORMS.join(', ')}.`
       )
     }
     platforms[platform] = { signature, url: `${base}/${file}` }
@@ -70,7 +75,7 @@ export function updaterFeed(input: FeedInput): { feed: UpdaterFeed; skipped: str
 
   if (Object.keys(platforms).length === 0) {
     throw new Error(
-      'No signed update artefacts were found, so a feed would advertise an update no platform can install.',
+      'No signed update artefacts were found, so a feed would advertise an update no platform can install.'
     )
   }
 
@@ -79,16 +84,18 @@ export function updaterFeed(input: FeedInput): { feed: UpdaterFeed; skipped: str
       // The plugin compares against the app's own semver, which carries no leading v.
       version: input.version.replace(/^v/, ''),
       pub_date: input.publishedAt.toISOString(),
-      platforms,
+      platforms
     },
-    skipped,
+    skipped
   }
 }
 
 if (import.meta.main) {
   const [fragmentsDir, version, baseUrl, output] = process.argv.slice(2)
   if (!fragmentsDir || !version || !baseUrl || !output) {
-    throw new Error('Usage: bun scripts/build-updater-feed.ts <fragments-dir> <version> <base-url> <output-path>')
+    throw new Error(
+      'Usage: bun scripts/build-updater-feed.ts <fragments-dir> <version> <base-url> <output-path>'
+    )
   }
 
   const entries = await readdir(fragmentsDir, { recursive: true, withFileTypes: true })
@@ -104,5 +111,6 @@ if (import.meta.main) {
   console.log(`Update feed for ${feed.version} covers: ${Object.keys(feed.platforms).join(', ')}.`)
   const missing = UPDATER_PLATFORMS.filter((platform) => !(platform in feed.platforms))
   if (missing.length > 0) console.log(`::warning::No signed artefact for: ${missing.join(', ')}.`)
-  if (skipped.length > 0) console.log(`::warning::Fragments without a signature: ${skipped.join(', ')}.`)
+  if (skipped.length > 0)
+    console.log(`::warning::Fragments without a signature: ${skipped.join(', ')}.`)
 }
