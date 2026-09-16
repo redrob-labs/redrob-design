@@ -1,0 +1,17 @@
+{
+  "inThisRoom": "이 방의 참여자",
+  "followingPeerStop": "{name} 따라가는 중(클릭하면 중지)",
+  "clickToFollowPeer": "클릭하여 {name} 따라가기",
+  "yourName": "이름",
+  "enterYourName": "이름을 입력하세요",
+  "shareThisFile": "이 파일 공유",
+  "joinRoom": "방 참여",
+  "join": "참여",
+  "roomLink": "방 링크",
+  "joinCollaboration": "공동 작업 참여",
+  "orJoinRoom": "또는 방에 참여",
+  "pasteRoomLinkOrId": "방 링크 또는 ID 붙여넣기",
+  "connected": "연결됨",
+  "disconnect": "연결 해제",
+  "share": "공유"
+}

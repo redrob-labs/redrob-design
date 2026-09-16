@@ -1,0 +1,11 @@
+{
+  "vectorization": "이미지 벡터화",
+  "vectorizationDescription": "이미지 레이어를 Recraft 또는 fal.ai로 보내 편집 가능한 벡터로 받습니다. 제공자 요금이 부과될 수 있습니다.",
+  "vectorizeProvider": "벡터화 서비스",
+  "pexelsAPIKey": "Pexels API 키 (스톡 사진)",
+  "unsplashAccessKey": "Unsplash 액세스 키",
+  "stockPhotoToolOptional": "선택 사항 — stock_photo 도구용",
+  "pexelsAlternativeOptional": "선택 사항 — Pexels 대체용",
+  "getPexelsAPIKey": "무료 Pexels API 키 발급 →",
+  "getUnsplashAccessKey": "무료 Unsplash 액세스 키 발급 →"
+}

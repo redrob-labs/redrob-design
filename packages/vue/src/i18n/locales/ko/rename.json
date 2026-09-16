@@ -1,0 +1,13 @@
+{
+  "title": "이름 변경",
+  "layers": "레이어 {count}개 이름 변경",
+  "preview": "미리보기",
+  "match": "찾을 패턴",
+  "to": "변경 후 이름",
+  "currentName": "현재 이름",
+  "numberAscending": "번호 ↑",
+  "numberDescending": "번호 ↓",
+  "startAscendingFrom": "오름차순 시작 번호",
+  "stopDescendingAt": "내림차순 종료 번호",
+  "invalidPattern": "잘못된 정규식"
+}

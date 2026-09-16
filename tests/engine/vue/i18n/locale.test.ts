@@ -20,7 +20,12 @@ describe('browser locale matching', () => {
     expect(resolveBrowserLocale(['zh-TW', 'fr-CA'])).toBe('fr')
   })
 
+  test('resolves a Korean browser preference to the ko locale', () => {
+    expect(resolveBrowserLocale(['ko-KR'])).toBe('ko')
+    expect(resolveBrowserLocale(['ko'])).toBe('ko')
+  })
+
   test('falls back to English when no locale matches', () => {
-    expect(resolveBrowserLocale(['ko-KR'])).toBe('en')
+    expect(resolveBrowserLocale(['sv-SE'])).toBe('en')
   })
 })

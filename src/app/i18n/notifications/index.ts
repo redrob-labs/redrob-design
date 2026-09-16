@@ -36,6 +36,7 @@ const localeLoaders = {
   fr: () => import('./locales/fr.json'),
   it: () => import('./locales/it.json'),
   ja: () => import('./locales/ja.json'),
+  ko: () => import('./locales/ko.json'),
   pl: () => import('./locales/pl.json'),
   ru: () => import('./locales/ru.json'),
   'zh-CN': () => import('./locales/zh-cn.json')

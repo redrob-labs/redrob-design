@@ -10,6 +10,7 @@ const localeLoaders = {
   fr: () => import('#vue/i18n/locales/fr'),
   it: () => import('#vue/i18n/locales/it'),
   ja: () => import('#vue/i18n/locales/ja'),
+  ko: () => import('#vue/i18n/locales/ko'),
   pl: () => import('#vue/i18n/locales/pl'),
   ru: () => import('#vue/i18n/locales/ru'),
   'zh-CN': () => import('#vue/i18n/locales/zh-cn')
