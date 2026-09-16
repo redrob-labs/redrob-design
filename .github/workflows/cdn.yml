@@ -332,7 +332,21 @@ jobs:
             cp "$archive" "staging/redrob-design-$APP_ARCH-$APP_VERSION.app.tar.gz"
             cp "$sig" "staging/redrob-design-$APP_ARCH-$APP_VERSION.app.tar.gz.sig"
             mkdir -p updater
-            node -e 'const fs=require("node:fs");const platform=process.env.APP_ARCH==="arm64"?"darwin-aarch64":"darwin-x86_64";fs.writeFileSync(`updater/${platform}.updater.json`,JSON.stringify({platform,file:`redrob-design-${process.env.APP_ARCH}-${process.env.APP_VERSION}.app.tar.gz`,signature:fs.readFileSync(process.argv[1],"utf8").trim()},null,2)+"\n")' "$sig"
+            # The matrix arch is `aarch64` / `x64`, which is also what the published file
+            # name carries. Mapped explicitly and made to FAIL on anything else: an
+            # unrecognised value silently defaulting to darwin-x86_64 would label the
+            # Apple-silicon build as Intel, and hand every arm64 Mac an archive it
+            # cannot run.
+            case "$APP_ARCH" in
+            aarch64) PLATFORM=darwin-aarch64 ;;
+            x64) PLATFORM=darwin-x86_64 ;;
+            *)
+              echo "Unknown macOS arch '$APP_ARCH'; refusing to guess an updater platform." >&2
+              exit 1
+              ;;
+            esac
+            export PLATFORM
+            node -e 'const fs=require("node:fs");fs.writeFileSync(`updater/${process.env.PLATFORM}.updater.json`,JSON.stringify({platform:process.env.PLATFORM,file:`redrob-design-${process.env.APP_ARCH}-${process.env.APP_VERSION}.app.tar.gz`,signature:fs.readFileSync(process.argv[1],"utf8").trim()},null,2)+"\n")' "$sig"
           fi
 
       - name: Hand the updater fragment to the feed job
@@ -534,10 +548,13 @@ jobs:
             exit 0
           fi
           mkdir -p feed
-          # The feed lives beside the aliased bundles it points at, so a shipped app
-          # keeps resolving it after the next release moves the alias.
+          # The VERSION directory, not latest/. cdn-publish.sh deliberately drops the
+          # "-<version>" segment when it moves the latest/ alias, so a versioned name
+          # under latest/ is a 403 -- measured. The versioned directory is also the
+          # right thing for an updater feed on its own terms: a feed for 0.14.0 must
+          # keep pointing at 0.14.0's bytes after the alias has moved on.
           bun scripts/build-updater-feed.ts fragments "$APP_VERSION" \
-            "https://$CDN_PUBLIC_HOST/$CDN_PREFIX/latest" feed/latest.json
+            "https://$CDN_PUBLIC_HOST/$CDN_PREFIX/$APP_VERSION" feed/latest.json
           cat feed/latest.json
           if [ -z "${REDROB_CDN_BUCKET:-}" ] || [ -z "${AWS_ACCESS_KEY_ID:-}" ]; then
             echo "::notice::CDN credentials are not configured, so the feed was built but not uploaded."

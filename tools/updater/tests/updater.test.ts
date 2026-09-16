@@ -31,6 +31,8 @@ describe('updater config overlay', () => {
     })
     // The default endpoint is the version-free alias, so a shipped build keeps resolving after the
     // next release moves it.
+    // The endpoint is the version-free ALIAS, unlike the download URLs inside the feed: a shipped
+    // build must keep resolving the feed after the next release moves the alias on.
     expect(DEFAULT_UPDATER_ENDPOINT).toBe('https://cdn.redrob.ai/design/latest/latest.json')
   })
 
@@ -65,13 +67,13 @@ describe('updater feed', () => {
     const { feed } = updaterFeed({
       fragments,
       version: 'v0.14.0',
-      baseURL: 'https://cdn.redrob.ai/design/latest/',
+      baseURL: 'https://cdn.redrob.ai/design/0.14.0/',
       publishedAt
     })
     // Tauri's keys are <os>-<arch>, not the Rust target triples the build jobs use.
     expect(feed.platforms['darwin-aarch64']).toEqual({
       signature: 'sig-darwin-arm',
-      url: 'https://cdn.redrob.ai/design/latest/redrob-design-arm64-0.14.0.app.tar.gz'
+      url: 'https://cdn.redrob.ai/design/0.14.0/redrob-design-arm64-0.14.0.app.tar.gz'
     })
     expect(feed.platforms['linux-x86_64']?.signature).toBe('sig-linux')
     // The leading v is dropped: the plugin compares against the app's own semver.
@@ -88,7 +90,7 @@ describe('updater feed', () => {
         { platform: 'windows-x86_64', file: 'redrob-design-x64-0.14.0.nsis.zip', signature: '' }
       ],
       version: '0.14.0',
-      baseURL: 'https://cdn.redrob.ai/design/latest',
+      baseURL: 'https://cdn.redrob.ai/design/0.14.0',
       publishedAt
     })
     expect(Object.keys(feed.platforms).sort()).toEqual(['darwin-aarch64', 'linux-x86_64'])
