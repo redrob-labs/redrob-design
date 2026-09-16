@@ -36,6 +36,12 @@ fi
 content_type() {
   case "$1" in
   *.sha256) echo "text/plain" ;;
+  # Updater artefacts: the signature is read as text by the plugin, and the
+  # archives are ordinary downloads.
+  *.sig) echo "text/plain" ;;
+  *.json) echo "application/json" ;;
+  *.tar.gz) echo "application/gzip" ;;
+  *.zip) echo "application/zip" ;;
   *.exe) echo "application/x-msdownload" ;;
   *.deb) echo "application/vnd.debian.binary-package" ;;
   *.rpm) echo "application/x-rpm" ;;
