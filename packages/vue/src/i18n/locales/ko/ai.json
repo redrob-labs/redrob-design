@@ -109,5 +109,14 @@
   "connectProvider": "채팅을 시작하려면 AI 제공자를 연결하세요.",
   "getProviderAPIKey": "{provider} API 키 받기 →",
   "provider": "AI 제공자",
-  "modelsTitle": "모델"
+  "modelsTitle": "모델",
+  "connectRedrob": "Redrob 연결",
+  "connectRedrobHint": "Redrob Console에 로그인하면 키가 저장됩니다.",
+  "connectRedrobWaiting": "{url}에서 {code}를 입력하세요 — 승인을 기다리고 있습니다.",
+  "connectRedrobConnected": "연결되었습니다. 워크스페이스 키를 저장했습니다.",
+  "connectRedrobDenied": "Console에서 요청이 거절되었습니다.",
+  "connectRedrobExpired": "승인되기 전에 코드가 만료되었습니다. 다시 시도하세요.",
+  "connectRedrobUnreachable": "Redrob Console에 연결할 수 없습니다. 네트워크를 확인하세요.",
+  "connectRedrobFailed": "연결이 완료되지 않았습니다. 다시 시도하세요.",
+  "connectRedrobCancel": "취소"
 }
