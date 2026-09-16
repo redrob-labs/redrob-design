@@ -90,8 +90,13 @@ export function updaterFeed(input: FeedInput): { feed: UpdaterFeed; skipped: str
   }
 }
 
-if (import.meta.main) {
-  const [fragmentsDir, version, baseURL, output] = process.argv.slice(2)
+/**
+ * CLI entrypoint, exported rather than left behind an `import.meta.main` guard, for the same reason
+ * as config-overlay.ts: the shim imports this module, `import.meta.main` is false there, and a guard
+ * would make the shim exit 0 having written no feed at all.
+ */
+export async function main(argv: string[] = process.argv.slice(2)): Promise<void> {
+  const [fragmentsDir, version, baseURL, output] = argv
   if (!fragmentsDir || !version || !baseURL || !output) {
     throw new Error(
       'Usage: bun scripts/build-updater-feed.ts <fragments-dir> <version> <base-url> <output-path>'

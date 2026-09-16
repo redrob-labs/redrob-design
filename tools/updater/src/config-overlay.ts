@@ -78,8 +78,17 @@ export function updaterOverlay(env: UpdaterOverlayEnvironment): UpdaterOverlay |
   }
 }
 
-if (import.meta.main) {
-  const output = process.argv[2]
+/**
+ * CLI entrypoint, exported rather than left behind an `import.meta.main` guard.
+ *
+ * This module is reached through the shim at scripts/tauri-updater-overlay.ts, which the
+ * architecture gate requires. `import.meta.main` is FALSE in an imported module, so a guard here
+ * makes the shim a no-op -- and a silent one: it exits 0 having written nothing, the build runs
+ * without the overlay, and the release quietly produces no update artefacts. That is exactly what
+ * happened on the first release after the move. The shim calls this function instead.
+ */
+export async function main(argv: string[] = process.argv.slice(2)): Promise<void> {
+  const output = argv[0]
   if (!output)
     throw new Error('An output path is required: bun scripts/tauri-updater-overlay.ts <path>')
 
@@ -88,7 +97,7 @@ if (import.meta.main) {
     console.log(
       '::notice::TAURI_SIGNING_PUBLIC_KEY is not set, so this build produces no update artefacts.'
     )
-    process.exit(0)
+    return
   }
 
   await writeFile(output, `${JSON.stringify(overlay, null, 2)}\n`)
