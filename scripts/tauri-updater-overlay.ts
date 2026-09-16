@@ -3,16 +3,22 @@
  * Emit the Tauri config overlay that turns updater artefacts on for a release build.
  *
  * `desktop/tauri.conf.json` deliberately keeps `createUpdaterArtifacts: false` and carries no
- * `plugins.updater` section, because both of those make `tauri build` demand a signing key: a
+ * `plugins.updater` section, because both of those make `tauri build` demand the signing key: a
  * contributor running a local build must not need the release keypair. The release workflow already
  * layers per-runner settings through `--config <overlay>` (Windows signs by certificate thumbprint
  * that way), so the updater is layered the same way instead of being switched on in the committed
  * config.
  *
- * Without a public key this prints nothing and exits 0. That is the state the repository shipped in
- * for every release so far, and the app already handles it: `updater_configured()` in
- * desktop/src/lib.rs reports no `plugins.updater` section and src/app/shell/updater.ts skips the
- * check rather than failing. An absent feed must not redden a build; it must only mean no updates.
+ * The names are the ones this organization already publishes and `.github/workflows/build.yml`
+ * already consumes: TAURI_SIGNING_PRIVATE_KEY and TAURI_SIGNING_PRIVATE_KEY_PASSWORD as org
+ * secrets, and the public key as the org VARIABLE `TAURI_SIGNING_PUBLIC_KEY` -- a public key is not
+ * a secret. Do not invent a second name for either half; build.yml and this overlay must agree, or
+ * one pipeline signs with a key the other does not advertise.
+ *
+ * Without a public key this prints nothing and exits 0. The app already handles that state:
+ * `updater_configured()` in desktop/src/lib.rs reports no `plugins.updater` section and
+ * src/app/shell/updater.ts skips the check rather than failing. A fork with no keypair must still be
+ * able to build; it just gets no updates.
  *
  * A signing key WITHOUT a public key is the one hard error. That combination produces signed
  * artefacts the app can never verify, which looks like a working release until an update is
@@ -20,7 +26,7 @@
  *
  * Usage: bun scripts/tauri-updater-overlay.ts <output-path>
  * Environment:
- *   TAURI_UPDATER_PUBKEY   base64 minisign public key from `tauri signer generate`
+ *   TAURI_SIGNING_PUBLIC_KEY   base64 minisign public key (org variable)
  *   TAURI_SIGNING_PRIVATE_KEY  read by the bundler itself, only checked for consistency here
  *   REDROB_UPDATER_ENDPOINT    override the feed URL (defaults to the CDN feed)
  */
@@ -30,7 +36,7 @@ import { writeFile } from 'node:fs/promises'
 export const DEFAULT_UPDATER_ENDPOINT = 'https://cdn.redrob.ai/design/latest/latest.json'
 
 export interface UpdaterOverlayEnvironment {
-  TAURI_UPDATER_PUBKEY?: string
+  TAURI_SIGNING_PUBLIC_KEY?: string
   TAURI_SIGNING_PRIVATE_KEY?: string
   REDROB_UPDATER_ENDPOINT?: string
 }
@@ -47,13 +53,13 @@ export interface UpdaterOverlay {
  * artefacts nothing can verify.
  */
 export function updaterOverlay(env: UpdaterOverlayEnvironment): UpdaterOverlay | null {
-  const pubkey = env.TAURI_UPDATER_PUBKEY?.trim()
+  const pubkey = env.TAURI_SIGNING_PUBLIC_KEY?.trim()
   const signingKey = env.TAURI_SIGNING_PRIVATE_KEY?.trim()
 
   if (!pubkey) {
     if (signingKey) {
       throw new Error(
-        'TAURI_SIGNING_PRIVATE_KEY is set but TAURI_UPDATER_PUBKEY is not. ' +
+        'TAURI_SIGNING_PRIVATE_KEY is set but TAURI_SIGNING_PUBLIC_KEY is not. ' +
           'Signed update artefacts the app cannot verify are worse than no updater at all: ' +
           'set both, or neither.',
       )
@@ -78,7 +84,7 @@ if (import.meta.main) {
 
   const overlay = updaterOverlay(process.env)
   if (!overlay) {
-    console.log('::notice::TAURI_UPDATER_PUBKEY is not set, so this build produces no update artefacts.')
+    console.log('::notice::TAURI_SIGNING_PUBLIC_KEY is not set, so this build produces no update artefacts.')
     process.exit(0)
   }
 

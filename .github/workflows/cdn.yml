@@ -111,7 +111,7 @@ jobs:
       - name: Prepare the updater configuration
         shell: bash
         env:
-          TAURI_UPDATER_PUBKEY: ${{ secrets.TAURI_UPDATER_PUBKEY }}
+          TAURI_SIGNING_PUBLIC_KEY: ${{ vars.TAURI_SIGNING_PUBLIC_KEY }}
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
         run: |
           bun scripts/tauri-updater-overlay.ts "$RUNNER_TEMP/tauri-updater.conf.json"
@@ -280,7 +280,7 @@ jobs:
       - name: Prepare the updater configuration
         shell: bash
         env:
-          TAURI_UPDATER_PUBKEY: ${{ secrets.TAURI_UPDATER_PUBKEY }}
+          TAURI_SIGNING_PUBLIC_KEY: ${{ vars.TAURI_SIGNING_PUBLIC_KEY }}
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
         run: |
           bun scripts/tauri-updater-overlay.ts "$RUNNER_TEMP/tauri-updater.conf.json"
@@ -432,7 +432,7 @@ jobs:
       - name: Prepare the updater configuration
         shell: bash
         env:
-          TAURI_UPDATER_PUBKEY: ${{ secrets.TAURI_UPDATER_PUBKEY }}
+          TAURI_SIGNING_PUBLIC_KEY: ${{ vars.TAURI_SIGNING_PUBLIC_KEY }}
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
         run: |
           bun scripts/tauri-updater-overlay.ts "$RUNNER_TEMP/tauri-updater.conf.json"

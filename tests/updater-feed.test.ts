@@ -9,19 +9,19 @@ describe('updater config overlay', () => {
     // the app already degrades cleanly: no plugins.updater section means updater_configured() is
     // false and the front end skips the check.
     expect(updaterOverlay({})).toBeNull()
-    expect(updaterOverlay({ TAURI_UPDATER_PUBKEY: '   ' })).toBeNull()
+    expect(updaterOverlay({ TAURI_SIGNING_PUBLIC_KEY: '   ' })).toBeNull()
   })
 
   test('refuses a signing key without a public key', () => {
     // Signed artefacts nothing can verify look like a working release until an update is attempted,
     // so half-configured secrets fail the build rather than shipping.
     expect(() => updaterOverlay({ TAURI_SIGNING_PRIVATE_KEY: 'private' })).toThrow(
-      /TAURI_SIGNING_PRIVATE_KEY is set but TAURI_UPDATER_PUBKEY is not/,
+      /TAURI_SIGNING_PRIVATE_KEY is set but TAURI_SIGNING_PUBLIC_KEY is not/,
     )
   })
 
   test('turns artefacts on and points at the feed', () => {
-    const overlay = updaterOverlay({ TAURI_UPDATER_PUBKEY: 'pubkey-base64', TAURI_SIGNING_PRIVATE_KEY: 'private' })
+    const overlay = updaterOverlay({ TAURI_SIGNING_PUBLIC_KEY: 'pubkey-base64', TAURI_SIGNING_PRIVATE_KEY: 'private' })
     expect(overlay).toEqual({
       bundle: { createUpdaterArtifacts: true },
       plugins: { updater: { endpoints: [DEFAULT_UPDATER_ENDPOINT], pubkey: 'pubkey-base64' } },
@@ -33,11 +33,11 @@ describe('updater config overlay', () => {
 
   test('takes an endpoint override, but only over https', () => {
     expect(
-      updaterOverlay({ TAURI_UPDATER_PUBKEY: 'k', REDROB_UPDATER_ENDPOINT: 'https://example.test/feed.json' })?.plugins
+      updaterOverlay({ TAURI_SIGNING_PUBLIC_KEY: 'k', REDROB_UPDATER_ENDPOINT: 'https://example.test/feed.json' })?.plugins
         .updater.endpoints,
     ).toEqual(['https://example.test/feed.json'])
     expect(() =>
-      updaterOverlay({ TAURI_UPDATER_PUBKEY: 'k', REDROB_UPDATER_ENDPOINT: 'http://insecure.test/feed.json' }),
+      updaterOverlay({ TAURI_SIGNING_PUBLIC_KEY: 'k', REDROB_UPDATER_ENDPOINT: 'http://insecure.test/feed.json' }),
     ).toThrow(/must be an https URL/)
   })
 })
