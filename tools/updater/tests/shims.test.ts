@@ -67,7 +67,7 @@ describe('scripts/build-updater-feed.ts', () => {
         'scripts/build-updater-feed.ts',
         dir,
         '0.14.0',
-        'https://cdn.redrob.ai/design/latest',
+        'https://cdn.redrob.ai/design/0.14.0',
         output
       ],
       cwd: repoRoot
@@ -81,7 +81,7 @@ describe('scripts/build-updater-feed.ts', () => {
     expect(feed.version).toBe('0.14.0')
     expect(feed.platforms['linux-x86_64']).toEqual({
       signature: 'sig-linux',
-      url: 'https://cdn.redrob.ai/design/latest/redrob-design-x64-0.14.0.AppImage'
+      url: 'https://cdn.redrob.ai/design/0.14.0/redrob-design-x64-0.14.0.AppImage'
     })
   })
 
@@ -95,7 +95,7 @@ describe('scripts/build-updater-feed.ts', () => {
         'scripts/build-updater-feed.ts',
         dir,
         '0.14.0',
-        'https://cdn.redrob.ai/design/latest',
+        'https://cdn.redrob.ai/design/0.14.0',
         join(dir, 'latest.json')
       ],
       cwd: repoRoot
