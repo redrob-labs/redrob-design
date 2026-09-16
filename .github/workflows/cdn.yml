@@ -104,8 +104,27 @@ jobs:
           } | ConvertTo-Json -Depth 5 | Set-Content -Path $overlay -Encoding utf8
           "overlay=$overlay" >> $env:GITHUB_OUTPUT
 
+      # Layered rather than committed, for the same reason as the other jobs: both
+      # updater settings make `tauri build` demand the signing key, and a local build
+      # must not need the release keypair. The NSIS bundle emits its own
+      # `-setup.nsis.zip` update archive when artefacts are enabled.
+      - name: Prepare the updater configuration
+        shell: bash
+        env:
+          TAURI_SIGNING_PUBLIC_KEY: ${{ vars.TAURI_SIGNING_PUBLIC_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+        run: |
+          bun scripts/tauri-updater-overlay.ts "$RUNNER_TEMP/tauri-updater.conf.json"
+          if [ -f "$RUNNER_TEMP/tauri-updater.conf.json" ]; then
+            echo "TAURI_UPDATER_CONFIG=$RUNNER_TEMP/tauri-updater.conf.json" >> "$GITHUB_ENV"
+          fi
+
       - name: Build the signed Windows installer
-        run: bunx @tauri-apps/cli@2.11.4 build --target x86_64-pc-windows-msvc --bundles nsis --config "${{ steps.certificate.outputs.overlay }}"
+        shell: bash
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        run: bunx @tauri-apps/cli@2.11.4 build --target x86_64-pc-windows-msvc --bundles nsis --config "${{ steps.certificate.outputs.overlay }}" ${TAURI_UPDATER_CONFIG:+--config "$TAURI_UPDATER_CONFIG"}
 
       - name: Verify the Authenticode signature
         shell: pwsh
@@ -126,13 +145,35 @@ jobs:
           Write-Host "Signed by: $($signature.SignerCertificate.Subject) status=$($signature.Status)"
           New-Item -ItemType Directory -Force -Path staging | Out-Null
           Copy-Item $installer.FullName "staging/redrob-design-x64-$($env:APP_VERSION)-setup.exe"
+          # The update archive and its signature exist only when the signing key was
+          # configured; their absence is the normal no-updater build.
+          $archive = Get-ChildItem -Recurse -Filter "*-setup.nsis.zip" -Path "desktop/target/x86_64-pc-windows-msvc/release/bundle" | Select-Object -First 1
+          if ($archive -and (Test-Path "$($archive.FullName).sig")) {
+            $name = "redrob-design-x64-$($env:APP_VERSION)-setup.nsis.zip"
+            Copy-Item $archive.FullName "staging/$name"
+            Copy-Item "$($archive.FullName).sig" "staging/$name.sig"
+            New-Item -ItemType Directory -Force -Path updater | Out-Null
+            $signature = (Get-Content "$($archive.FullName).sig" -Raw).Trim()
+            @{ platform = "windows-x86_64"; file = $name; signature = $signature } |
+              ConvertTo-Json | Set-Content -Path "updater/windows-x86_64.updater.json" -Encoding utf8
+          }
         env:
           APP_VERSION: ${{ steps.version.outputs.version }}
+
+      - name: Hand the updater fragment to the feed job
+        if: hashFiles('updater/*.updater.json') != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: updater-windows
+          path: updater
 
       - uses: actions/upload-artifact@v4
         with:
           name: signed-windows
-          path: staging/redrob-design-x64-*-setup.exe
+          # Widened from the installer alone: the update archive and its signature
+          # are staged here too and must reach the publish job, or the feed would
+          # point at files the CDN never received.
+          path: staging/redrob-design-x64-*
           if-no-files-found: error
           retention-days: 3
 
@@ -232,8 +273,29 @@ jobs:
           node -e 'const fs=require("node:fs"),p=require("node:path");fs.writeFileSync(p.join(process.env.RUNNER_TEMP,"tauri-cdn.conf.json"),JSON.stringify({build:{beforeBuildCommand:"bun run generate:tauri-menu && bun run build:packages && bunx vite build"}},null,2)+"\n")'
           echo "TAURI_CDN_CONFIG=$RUNNER_TEMP/tauri-cdn.conf.json" >> "$GITHUB_ENV"
 
+      # Layered rather than committed, for the same reason as the Linux job: both
+      # updater settings make `tauri build` demand the signing key. `app` joins the
+      # bundle list because the macOS update artefact is the `.app.tar.gz` the app
+      # bundle produces -- a dmg-only build emits no updater archive at all.
+      - name: Prepare the updater configuration
+        shell: bash
+        env:
+          TAURI_SIGNING_PUBLIC_KEY: ${{ vars.TAURI_SIGNING_PUBLIC_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+        run: |
+          bun scripts/tauri-updater-overlay.ts "$RUNNER_TEMP/tauri-updater.conf.json"
+          if [ -f "$RUNNER_TEMP/tauri-updater.conf.json" ]; then
+            echo "TAURI_UPDATER_CONFIG=$RUNNER_TEMP/tauri-updater.conf.json" >> "$GITHUB_ENV"
+            echo "TAURI_BUNDLES=app,dmg" >> "$GITHUB_ENV"
+          else
+            echo "TAURI_BUNDLES=dmg" >> "$GITHUB_ENV"
+          fi
+
       - name: Build the signed and notarized macOS DMG
-        run: bunx @tauri-apps/cli@2.11.4 build --target ${{ matrix.target }} --bundles dmg --config "${{ env.TAURI_CDN_CONFIG }}"
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        run: bunx @tauri-apps/cli@2.11.4 build --target ${{ matrix.target }} --bundles "${TAURI_BUNDLES:-dmg}" --config "${{ env.TAURI_CDN_CONFIG }}" ${TAURI_UPDATER_CONFIG:+--config "$TAURI_UPDATER_CONFIG"}
 
       - name: Verify signing and notarization, then stage the DMG
         shell: bash
@@ -260,11 +322,33 @@ jobs:
           trap - EXIT
           mkdir -p staging
           cp "$dmg" "staging/redrob-design-$APP_ARCH-$APP_VERSION.dmg"
+          # The update artefact is the .app.tar.gz the app bundle wrote, signed only
+          # when the signing key was configured; its absence is the normal
+          # no-updater build rather than a failure. The tar carries the already
+          # notarized .app, so nothing is re-signed here.
+          archive="$(find "$bundle/macos" -maxdepth 1 -type f -name '*.app.tar.gz' | head -n 1 || true)"
+          sig="${archive:+$archive.sig}"
+          if [ -n "$archive" ] && [ -f "${sig:-}" ]; then
+            cp "$archive" "staging/redrob-design-$APP_ARCH-$APP_VERSION.app.tar.gz"
+            cp "$sig" "staging/redrob-design-$APP_ARCH-$APP_VERSION.app.tar.gz.sig"
+            mkdir -p updater
+            node -e 'const fs=require("node:fs");const platform=process.env.APP_ARCH==="arm64"?"darwin-aarch64":"darwin-x86_64";fs.writeFileSync(`updater/${platform}.updater.json`,JSON.stringify({platform,file:`redrob-design-${process.env.APP_ARCH}-${process.env.APP_VERSION}.app.tar.gz`,signature:fs.readFileSync(process.argv[1],"utf8").trim()},null,2)+"\n")' "$sig"
+          fi
+
+      - name: Hand the updater fragment to the feed job
+        if: hashFiles('updater/*.updater.json') != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: updater-macos-${{ matrix.arch }}
+          path: updater
 
       - uses: actions/upload-artifact@v4
         with:
           name: signed-macos-${{ matrix.arch }}
-          path: staging/redrob-design-*.dmg
+          # Widened from *.dmg: the update archive and its signature are staged here
+          # too and must reach the publish job, or the feed would point at files the
+          # CDN never received.
+          path: staging/redrob-design-*
           if-no-files-found: error
           retention-days: 3
 
@@ -341,8 +425,26 @@ jobs:
           node -e 'const fs=require("node:fs"),p=require("node:path");fs.writeFileSync(p.join(process.env.RUNNER_TEMP,"tauri-cdn.conf.json"),JSON.stringify({build:{beforeBuildCommand:"bun run generate:tauri-menu && bun run build:packages && bunx vite build"}},null,2)+"\n")'
           echo "TAURI_CDN_CONFIG=$RUNNER_TEMP/tauri-cdn.conf.json" >> "$GITHUB_ENV"
 
+      # Layered rather than committed: createUpdaterArtifacts and a plugins.updater
+      # section both make `tauri build` demand the signing key, and a contributor's
+      # local build must not need the release keypair. With no key configured this
+      # writes nothing and the build behaves exactly as it did before.
+      - name: Prepare the updater configuration
+        shell: bash
+        env:
+          TAURI_SIGNING_PUBLIC_KEY: ${{ vars.TAURI_SIGNING_PUBLIC_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+        run: |
+          bun scripts/tauri-updater-overlay.ts "$RUNNER_TEMP/tauri-updater.conf.json"
+          if [ -f "$RUNNER_TEMP/tauri-updater.conf.json" ]; then
+            echo "TAURI_UPDATER_CONFIG=$RUNNER_TEMP/tauri-updater.conf.json" >> "$GITHUB_ENV"
+          fi
+
       - name: Build the Linux bundles (unsigned)
-        run: bunx @tauri-apps/cli@2.11.4 build --target x86_64-unknown-linux-gnu --bundles appimage,deb,rpm --config "${{ env.TAURI_CDN_CONFIG }}"
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        run: bunx @tauri-apps/cli@2.11.4 build --target x86_64-unknown-linux-gnu --bundles appimage,deb,rpm --config "${{ env.TAURI_CDN_CONFIG }}" ${TAURI_UPDATER_CONFIG:+--config "$TAURI_UPDATER_CONFIG"}
 
       # Tauri names its bundles from productName, which carries a space and the
       # distribution's own arch spelling. Console links one name per format, so
@@ -359,9 +461,89 @@ jobs:
             test -n "$file" || { echo "No .$ext bundle was produced"; find "$bundle" -type f; exit 1; }
             cp "$file" "staging/redrob-design-x64-$APP_VERSION.$ext"
           done
+          # The AppImage is also the Linux update artefact. Its signature is written
+          # beside it only when the signing key was configured, so its absence is the
+          # normal no-updater build rather than a failure.
+          sig="$(find "$bundle" -type f -name "*.AppImage.sig" | head -n 1)"
+          if [ -n "$sig" ]; then
+            cp "$sig" "staging/redrob-design-x64-$APP_VERSION.AppImage.sig"
+            mkdir -p updater
+            node -e 'const fs=require("node:fs");fs.writeFileSync("updater/linux-x86_64.updater.json",JSON.stringify({platform:"linux-x86_64",file:`redrob-design-x64-${process.env.APP_VERSION}.AppImage`,signature:fs.readFileSync(process.argv[1],"utf8").trim()},null,2)+"\n")' "$sig"
+          fi
           ls -la staging
 
       - name: Publish to cdn.redrob.ai
         env:
           APP_VERSION: ${{ steps.version.outputs.version }}
         run: bash .github/scripts/cdn-publish.sh staging
+
+      - name: Hand the updater fragment to the feed job
+        if: hashFiles('updater/*.updater.json') != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: updater-linux
+          path: updater
+
+
+  # The updater plugin reads ONE document and picks its own platform out of it, so
+  # the feed can only be written once every platform has reported. A platform that
+  # produced no signature contributes no fragment and is simply absent from the
+  # feed: an entry the app cannot verify is worse than no update for that platform.
+  #
+  # Depends on the PUBLISH jobs, not the build jobs, and deliberately does not run
+  # with always(): a feed is a promise that those bytes are retrievable, so it must
+  # not be written while an upload is still in flight or has failed.
+  #
+  # With no signing key configured no job produces a fragment, this job finds
+  # nothing, and it says so and exits green -- which is exactly how every release
+  # before this one behaved.
+  publish-updater-feed:
+    needs: [publish-windows, publish-macos, linux]
+    if: github.repository == 'redrob-labs/redrob-design'
+    runs-on: ubuntu-latest
+    env:
+      REDROB_CDN_BUCKET: ${{ vars.REDROB_CDN_BUCKET }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.REDROB_CDN_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.REDROB_CDN_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: us-east-1
+      CDN_PUBLIC_HOST: cdn.redrob.ai
+      CDN_PREFIX: design
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: ./.github/actions/setup-bun
+
+      - name: Read the application version
+        id: version
+        run: echo "version=$(node -p "require('./desktop/tauri.conf.json').version")" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: updater-*
+          path: fragments
+          merge-multiple: true
+        continue-on-error: true
+
+      - name: Build and publish the update feed
+        env:
+          APP_VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          if ! ls fragments/*.updater.json >/dev/null 2>&1; then
+            echo "::notice::No signed update artefacts were produced, so no feed was published."
+            exit 0
+          fi
+          mkdir -p feed
+          # The feed lives beside the aliased bundles it points at, so a shipped app
+          # keeps resolving it after the next release moves the alias.
+          bun scripts/build-updater-feed.ts fragments "$APP_VERSION" \
+            "https://$CDN_PUBLIC_HOST/$CDN_PREFIX/latest" feed/latest.json
+          cat feed/latest.json
+          if [ -z "${REDROB_CDN_BUCKET:-}" ] || [ -z "${AWS_ACCESS_KEY_ID:-}" ]; then
+            echo "::notice::CDN credentials are not configured, so the feed was built but not uploaded."
+            exit 0
+          fi
+          aws s3 cp feed/latest.json "s3://$REDROB_CDN_BUCKET/$CDN_PREFIX/$APP_VERSION/latest.json" \
+            --content-type application/json --cache-control "public, max-age=60"
+          aws s3 cp feed/latest.json "s3://$REDROB_CDN_BUCKET/$CDN_PREFIX/latest/latest.json" \
+            --content-type application/json --cache-control "public, max-age=60"
