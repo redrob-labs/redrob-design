@@ -11,6 +11,8 @@ import {
   testProviderConnection,
   type ProviderConnectionTestFailureReason
 } from '@/app/ai/chat/connection-test'
+import { awaitRedrobConnect, beginRedrobConnect } from '@/app/ai/connect/app-connect'
+import type { DeviceAuthorization } from '@/app/ai/connect/device-connect'
 import {
   aiModelSettings,
   createModelProfileDraft,
@@ -25,6 +27,9 @@ import {
   type AIModelCapability
 } from '@/app/ai/models'
 import ProviderConnectionTestButton from '@/components/chat/ProviderConnectionTestButton.vue'
+import RedrobConnectButton, {
+  type RedrobConnectStatus
+} from '@/components/chat/RedrobConnectButton.vue'
 import ProviderSelect from '@/components/settings/provider-select/ProviderSelect.vue'
 import ProviderSettingsField from '@/components/settings/provider/ProviderSettingsField.vue'
 import ProviderSettingsInput from '@/components/settings/provider/ProviderSettingsInput.vue'
@@ -47,6 +52,9 @@ const saveError = ref<string | null>(null)
 const connectionTestStatus = ref<'idle' | 'testing' | 'success' | 'error'>('idle')
 const connectionTestReason = ref<ProviderConnectionTestFailureReason | null>(null)
 const deleteOpen = ref(false)
+const connectStatus = ref<RedrobConnectStatus>('idle')
+const connectAuthorization = ref<DeviceAuthorization | null>(null)
+let connectCancelled = false
 const advancedOpen = ref(Boolean(draft.customModelID.trim()))
 const customModelSelected = ref(
   Boolean(draft.customModelID.trim()) || draft.providerID === 'harness:pi'
@@ -225,6 +233,51 @@ async function clearKey(): Promise<void> {
   await refreshKeyStatus()
 }
 
+/**
+ * Run the device flow and persist what it returns straight away.
+ *
+ * Console issues the workspace key exactly once, so this does not leave it sitting in
+ * the form waiting for a Save that the user might never press: on success it goes
+ * through the same save path a typed key does, which writes it to the credential store.
+ */
+async function connectRedrob(): Promise<void> {
+  connectCancelled = false
+  connectStatus.value = 'starting'
+  connectAuthorization.value = null
+  let authorization: DeviceAuthorization
+  try {
+    authorization = await beginRedrobConnect()
+  } catch {
+    connectStatus.value = 'unreachable'
+    return
+  }
+  connectAuthorization.value = authorization
+  connectStatus.value = 'waiting'
+
+  const outcome = await awaitRedrobConnect(authorization, () => connectCancelled)
+  connectAuthorization.value = null
+  if (outcome.status === 'cancelled') {
+    connectStatus.value = 'idle'
+    return
+  }
+  if (outcome.status !== 'connected') {
+    connectStatus.value = outcome.status
+    return
+  }
+
+  connectStatus.value = 'connected'
+  keyInput.value = outcome.key.apiKey
+  // A key minted for a self-hosted Console carries its own base URL.
+  if (outcome.key.apiBaseURL) draft.customBaseURL = outcome.key.apiBaseURL
+  await save()
+}
+
+function cancelConnect(): void {
+  connectCancelled = true
+  connectStatus.value = 'idle'
+  connectAuthorization.value = null
+}
+
 async function testConnection(): Promise<void> {
   connectionTestStatus.value = 'testing'
   connectionTestReason.value = null
@@ -369,6 +422,14 @@ void refreshKeyStatus()
             ]"
           />
         </ProviderSettingsField>
+
+        <RedrobConnectButton
+          v-if="draft.providerID === 'redrob'"
+          :status="connectStatus"
+          :authorization="connectAuthorization"
+          @connect="connectRedrob"
+          @cancel="cancelConnect"
+        />
 
         <ProviderSettingsKeyField
           v-model="keyInput"

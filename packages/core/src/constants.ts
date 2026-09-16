@@ -324,6 +324,7 @@ export const ACP_AGENTS: ACPAgentDef[] = [
 ]
 
 export type AIProviderID =
+  | 'redrob'
   | 'openrouter'
   | 'anthropic'
   | 'openai'
@@ -357,7 +358,34 @@ export interface AIProviderDef {
 
 export const HARNESS_PROVIDER_ID = 'harness:pi' as const
 
+/**
+ * Redrob Console's inference base. It is OpenAI-compatible on
+ * `POST /v1/chat/completions` and relays tool definitions without executing them,
+ * which is what Design's tool loop needs.
+ */
+export const REDROB_CONSOLE_API_BASE = 'https://console.redrob.ai/api/backend/v1'
+
+/**
+ * The wire model id Console's chat/completions accepts (route `redrob/auto`). Console
+ * picks the serving model, so there is nothing else to choose here.
+ */
+export const REDROB_CONSOLE_MODEL = 'auto'
+
 export const AI_PROVIDERS: AIProviderDef[] = [
+  {
+    id: 'redrob',
+    name: 'Redrob',
+    keyPlaceholder: 'rrk_…',
+    keyURL: 'https://console.redrob.ai',
+    defaultModel: REDROB_CONSOLE_MODEL,
+    models: [
+      {
+        id: REDROB_CONSOLE_MODEL,
+        name: 'Redrob Auto',
+        capabilities: ['tools']
+      }
+    ]
+  },
   {
     id: HARNESS_PROVIDER_ID,
     name: 'Pi',

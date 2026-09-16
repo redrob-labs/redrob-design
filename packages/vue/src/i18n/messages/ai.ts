@@ -121,7 +121,16 @@ export const aiMessageDefaults = {
   openProviderSettingsAction: 'Open settings',
   visionModelUnavailable: 'Choose a Vision model in Settings before attaching images.',
   completions: 'Completions',
-  responses: 'Responses'
+  responses: 'Responses',
+  connectRedrob: 'Connect Redrob',
+  connectRedrobHint: 'Sign in to Redrob Console and the key is stored for you.',
+  connectRedrobWaiting: params('Enter {code} at {url} — waiting for approval.'),
+  connectRedrobConnected: 'Connected. The workspace key is stored.',
+  connectRedrobDenied: 'The request was declined in Console.',
+  connectRedrobExpired: 'The code expired before it was approved. Try again.',
+  connectRedrobUnreachable: 'Could not reach Redrob Console. Check your connection.',
+  connectRedrobFailed: 'Connect did not complete. Try again.',
+  connectRedrobCancel: 'Cancel'
 } as const
 
 export const aiMessages = i18n('ai', aiMessageDefaults)
