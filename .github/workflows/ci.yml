@@ -132,13 +132,20 @@ jobs:
     timeout-minutes: 8
     runs-on: ubuntu-24.04
     container:
-      # Published by .github/workflows/native-contracts-image.yml into this repository
-      # owner's GHCR namespace. It used to name ghcr.io/redrob-design, an organisation
-      # that does not exist, so every run failed at `Initialize containers` with
-      # `manifest unknown` -- invisible while this workflow filtered pull requests on
-      # `master` and never ran. Referenced by tag rather than digest until the first
-      # image is published; pin the digest once it is.
-      image: ghcr.io/${{ github.repository_owner }}/native-contracts-ci:ubuntu-24.04
+      # Published by .github/workflows/native-contracts-image.yml into a package owned by
+      # THIS repository (ghcr.io/<owner>/<repo>/...), not by the organisation namespace.
+      #
+      # An org-level name (ghcr.io/<owner>/native-contracts-ci) belongs to whichever
+      # repository first published it, and access does not follow a rename: the package
+      # created before this repository was renamed stayed linked to the old one, so this
+      # repository's GITHUB_TOKEN could neither pull it (`denied` at Initialize
+      # containers) nor republish over it (`permission_denied: read_package`), and no
+      # workflow change could grant it. A repository-scoped name is auto-linked to the
+      # repository that publishes it, so the two stay together through any rename.
+      #
+      # Referenced by tag rather than digest until the first image is published; pin the
+      # digest once it is.
+      image: ghcr.io/${{ github.repository }}/native-contracts-ci:ubuntu-24.04
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
