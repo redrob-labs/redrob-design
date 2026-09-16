@@ -1,0 +1,8 @@
+{
+  "name": "@redrob-design/updater-tools",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "bun test"
+  }
+}

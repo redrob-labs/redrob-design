@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'bun:test'
 
-import { updaterFeed } from '../scripts/build-updater-feed'
-import { DEFAULT_UPDATER_ENDPOINT, updaterOverlay } from '../scripts/tauri-updater-overlay'
+import { updaterFeed } from '../src/build-feed'
+import { DEFAULT_UPDATER_ENDPOINT, updaterOverlay } from '../src/config-overlay'
 
 describe('updater config overlay', () => {
   test('stays absent when no public key is configured, which is how builds worked before', () => {
