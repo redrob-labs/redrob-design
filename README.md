@@ -2,7 +2,7 @@
 
 **English** · [한국어](./README.ko.md)
 
-Prompt-driven design editor. Opens `.fig` and `.pen` design files, designs by prompt through the Redrob Code engine, and ships as a programmable toolkit with a headless Vue SDK for building custom editors.
+Redrob Design is a prompt-driven design editor that opens .fig and .pen files and designs by prompt. It reads and writes native `.fig` and `.pen` documents, routes design through the Redrob Code engine, and ships as a programmable toolkit with a headless Vue SDK for building custom editors.
 
 > **Status:** Active development. Usable today, with some rough edges as features evolve.
 
@@ -35,18 +35,18 @@ If the Redrob Code engine is not installed, the app guides you through installin
 
 ## What it does
 
-- **Opens `.fig` and `.pen` files** — read and write native Figma files, open Redrob Design documents from the app or OS file browser, copy & paste nodes between apps
-- **AI builds designs** — describe what you want in chat, 90+ tools create and modify nodes. Route design through the Redrob Code engine, or connect OpenRouter, Anthropic, OpenAI, Google AI, Z.ai, MiniMax, or compatible endpoints
-- **Fully programmable** — headless CLI, XPath queries, Figma Plugin API via `eval`, MCP server for AI agents, and desktop agent integrations for Redrob Code and other ACP agents
-- **Lint, convert, and extract tokens** — inspect documents, lint naming/layout/accessibility, convert between supported formats, analyze colors/typography/spacing/clusters, and extract design tokens
-- **Design tokens & theme library** — import design tokens (DTCG, CSS variables, Tailwind), and the built-in Redrob brand theme/deck library
-- **Components and variants** — create reusable components, group variants into component sets, insert local assets as instances, and switch variants from the inspector
-- **Image vectorization** — convert image layers into editable vector layers with Recraft or fal.ai
-- **Design-to-code export** — export selections as JSX/Tailwind, generate token outputs, and map designs into component-oriented code workflows
-- **Vue SDK for custom editors** — headless components and composables for embedding Redrob Design into other apps or building workflow-specific editing surfaces
-- **Real-time collaboration** — P2P via WebRTC, no server, no account. Cursors, presence, follow mode
-- **Auto layout & CSS Grid** — flex and grid layout via Yoga WASM, with gap, padding, alignment, track sizing
-- **Compact desktop app** — Tauri v2 for macOS, Windows, Linux. Also runs in the browser as a PWA
+- **Opens `.fig` and `.pen` files**: read and write native Figma files, open Redrob Design documents from the app or OS file browser, copy & paste nodes between apps
+- **AI builds designs**: describe what you want in chat, 90+ tools create and modify nodes. Route design through the Redrob Code engine, or connect OpenRouter, Anthropic, OpenAI, Google AI, Z.ai, MiniMax, or compatible endpoints
+- **Fully programmable**: headless CLI, XPath queries, Figma Plugin API via `eval`, MCP server for AI agents, and desktop agent integrations for Redrob Code and other ACP agents
+- **Lint, convert, and extract tokens**: inspect documents, lint naming/layout/accessibility, convert between supported formats, analyze colors/typography/spacing/clusters, and extract design tokens
+- **Design tokens & theme library**: import design tokens (DTCG, CSS variables, Tailwind), and the built-in Redrob brand theme/deck library
+- **Components and variants**: create reusable components, group variants into component sets, insert local assets as instances, and switch variants from the inspector
+- **Image vectorization**: convert image layers into editable vector layers with Recraft or fal.ai
+- **Design-to-code export**: export selections as JSX/Tailwind, generate token outputs, and map designs into component-oriented code workflows
+- **Vue SDK for custom editors**: headless components and composables for embedding Redrob Design into other apps or building workflow-specific editing surfaces
+- **Real-time collaboration**: P2P via WebRTC, no server, no account. Cursors, presence, follow mode
+- **Auto layout & CSS Grid**: flex and grid layout via Yoga WASM, with gap, padding, alignment, track sizing
+- **Compact desktop app**: Tauri v2 for macOS, Windows, Linux. Also runs in the browser as a PWA
 
 ## CLI
 
@@ -57,7 +57,7 @@ npm install -g @redrob-design/cli
 
 ### Inspect design files
 
-Browse node trees, search by name or type, dig into properties — all without opening the editor:
+Browse node trees, search by name or type, dig into properties, all without opening the editor:
 
 ```sh
 redrob-design tree design.fig
@@ -89,7 +89,7 @@ redrob-design query design.fig "//SECTION//TEXT"                       # Text in
 
 ### Export
 
-Render to PNG, JPG, WEBP, SVG, `.fig`, or JSX — or export selections/pages as `.fig` and convert whole documents between supported formats:
+Render to PNG, JPG, WEBP, SVG, `.fig`, or JSX, or export selections/pages as `.fig` and convert whole documents between supported formats:
 
 ```sh
 redrob-design export design.fig                           # PNG
@@ -129,7 +129,7 @@ redrob-design lint design.fig --list-rules
 
 ### Analyze and extract design tokens
 
-Audit an entire design system from the terminal — find inconsistencies, extract the real palette, and spot components waiting to be extracted:
+Audit an entire design system from the terminal: find inconsistencies, extract the real palette, and spot components waiting to be extracted:
 
 ```sh
 redrob-design analyze colors design.fig
@@ -164,7 +164,7 @@ redrob-design eval design.fig -c "figma.currentPage.selection.forEach(n => n.opa
 
 ### Control the running app
 
-When the desktop app is running, omit the file argument — the CLI connects via RPC and operates on the live canvas. Useful for automation scripts, CI pipelines, or AI agents that need to interact with the editor:
+When the desktop app is running, omit the file argument: the CLI connects via RPC and operates on the live canvas. Useful for automation scripts, CI pipelines, or AI agents that need to interact with the editor:
 
 ```sh
 redrob-design tree                               # Inspect the live document
@@ -221,7 +221,7 @@ Local clients discover the private Unix socket automatically and fall back to lo
 
 ## Collaboration
 
-Share a link to co-edit in real time. No server, no account — peers connect directly via WebRTC.
+Share a link to co-edit in real time. No server, no account: peers connect directly via WebRTC.
 
 1. Click the share button in the top-right panel
 2. Share the generated link (`app.redrob.design/share/<room-id>`)
@@ -254,16 +254,16 @@ The first Portless run creates and trusts a local HTTPS certificate. Linked Git 
 
 ```
 packages/
-  scene-graph/    @redrob-design/scene-graph — nodes, primitives, hit testing, copy/snap/undo
-  pen/            @redrob-design/pen — Pencil document format helpers
-  kiwi/           @redrob-design/kiwi — Kiwi runtime and low-level .fig container parsing
-  fig/            @redrob-design/fig — .fig archives, SceneGraph conversion, instances, metadata
-  core/           @redrob-design/core — editor engine, renderer, layout, tools, RPC, document I/O
-  dom-css/        @redrob-design/dom-css — HTML/CSS/Tailwind to editable design documents
-  vue/            @redrob-design/vue — headless Vue SDK
-  cli/            @redrob-design/cli — headless CLI
-  mcp/            @redrob-design/mcp — MCP server (stdio + HTTP)
-  brand/          @redrob-design/brand — design tokens + brand theme library
+  scene-graph/    @redrob-design/scene-graph: nodes, primitives, hit testing, copy/snap/undo
+  pen/            @redrob-design/pen: Pencil document format helpers
+  kiwi/           @redrob-design/kiwi: Kiwi runtime and low-level .fig container parsing
+  fig/            @redrob-design/fig: .fig archives, SceneGraph conversion, instances, metadata
+  core/           @redrob-design/core: editor engine, renderer, layout, tools, RPC, document I/O
+  dom-css/        @redrob-design/dom-css: HTML/CSS/Tailwind to editable design documents
+  vue/            @redrob-design/vue: headless Vue SDK
+  cli/            @redrob-design/cli: headless CLI
+  mcp/            @redrob-design/mcp: MCP server (stdio + HTTP)
+  brand/          @redrob-design/brand: design tokens + brand theme library
   docs/           Documentation site
 src/              Vue app (editor shell, AI, collaboration, document I/O)
 desktop/          Tauri v2 desktop app (Rust + config)
