@@ -18,6 +18,7 @@ Bun workspace packages:
 - `cli` — headless `.fig` inspection, export, and linting with `citty` and `agentfmt`.
 - `mcp` — stdio and Hono HTTP MCP server reusing Core tools.
 - `harness` — optional Node companion for HarnessAgent sessions and its bounded JSONL host protocol; Tauri launches the separately installed command.
+- `brand`: private brand tokens, fonts, and Node helpers (`@redrob-design/brand`); its tests run as part of `bun run test:unit`.
 - `docs` — published VitePress site. Use `bun run docs:dev`, `bun run docs:build` for fast checks, and `bun run docs:build:production` for deployment output.
 
 The root Tauri/Vite app lives in `src/`; app services and state belong under `src/app/**`, views under `src/views/**`, and app UI under `src/components/**`.
@@ -66,19 +67,32 @@ App dialogs compose the Reka-backed components under `src/components/ui/dialog/`
 - `bun run format` — format and sort imports.
 - `bun run test:unit` / `bun run test` — engine/unit and Playwright suites.
 - `bun run tauri dev` — desktop app with hot reload.
-- `bun redrob-design --help` — current CLI command list.
+- `bun redrob-design --help` lists the current CLI commands. Run `bun run build:packages` first; on a clean tree the CLI exits 1 with `Cannot find module '@redrob-design/core/color'`.
 
 ## Git worktrees and development servers
 
 Prefer `dev:portless`, especially in worktrees. It assigns branch-specific app and `mcp.redrob-design` sibling URLs with isolated runtime discovery. Use fixed-port `dev` only for Playwright, Tauri, and Dev Container flows.
 
+## Branches
+
+`develop` is the default branch and the base of every pull request. `main` is released state and moves only by merging `develop` into it. Release tags are cut from `main`. This repository was single-trunk on `main` until 2026-09-17, so treat any older instruction that assumes work lands on `main` as stale.
+
+A hotfix branches from `main`, merges into `main`, releases, and then `main` is merged back into `develop`. Do not skip that back-merge. The sibling repository redrob-code spent a month with a lockfile its own default branch could not install from because the back-merge was missed.
+
+Both `develop` and `main` are protected: pull requests only, force pushes and deletions blocked, 0 required reviews, admin enforcement off. **No status check is required**, and that is a decision rather than an omission: every candidate here either cannot report on a pull request or would stall an ordinary one. `fixture-heavy-unit-tests` was required for about an hour and had to be removed, because it can never report (see below) and a pull request waiting on a check that never runs is blocked forever. `ci.yml` can report, but it carries `paths-ignore` for `*.md`, `packages/docs/**` and `openspec/**`, so requiring it would leave every documentation-only pull request permanently pending. Read the checks yourself before merging.
+
+Two trigger gaps are open right now and a pull request based on `develop` will hit them:
+
+- `heavy-tests.yml` triggers only on `workflow_dispatch` and a nightly `schedule` (`17 3 * * *`). It never runs on `pull_request`, which is why `fixture-heavy-unit-tests` cannot be a required check. Dispatch it by hand when a change touches the fixture-bound paths.
+- `ci.yml`, `preview.yml` and `native-contracts-image.yml` filtered their triggers to `branches: [main, master]`. `develop` was absent from all three, so after `develop` became the default no CI ran on a pull request at all. This change adds `develop` to each filter. `master` is still listed and still does not exist in this repository; it is left alone as a separate cleanup rather than mixed into this one.
+
 ## Releases & CI
 
-For releases, update versions in the root and publishable package manifests plus `desktop/tauri.conf.json` and `desktop/Cargo.toml`; move `Unreleased` into `## x.y.z — YYYY-MM-DD`; commit `Release vX.Y.Z`; then tag and push `vX.Y.Z`.
+For releases, update versions in the root and publishable package manifests plus `desktop/tauri.conf.json` and `desktop/Cargo.toml`; move `Unreleased` into a `## x.y.z (YYYY-MM-DD)` heading; commit `Release vX.Y.Z`; then tag and push `vX.Y.Z` from `main`.
 
 `.github/workflows/build.yml` is the source of truth: `v*` tags build signed desktop artifacts, create a draft release from the exact changelog section, upload updater files, and publish the package set defined there and in `tools/release-packages/src/publish-dirs.ts`. Publishing uses prepared, validated npm tarballs—do not publish package directories manually. Ensure Tauri and Apple signing/notarization secrets are configured. Verify the draft title/body and artifacts, then publish it; `homebrew.yml` updates the cask on publication.
 
-App/docs production workflows run on `v*` tags or `workflow_dispatch`, not ordinary `master` pushes. `ci.yml` and `heavy-tests.yml` define validation gates.
+App/docs production workflows (`app.yml`, `docs.yml`) run on `v*` tags or `workflow_dispatch`, not on ordinary branch pushes. `ci.yml` is the pull request gate (fork boundary, source/package/repository quality, Storybook, native-test contracts, and seven sharded engine test groups) and `heavy-tests.yml` holds the fixture-heavy suite; see Branches above for the trigger filters that currently keep both off `develop` pull requests.
 
 ## Documentation
 
@@ -221,7 +235,7 @@ Keep responsibilities distinct: engine tests cover state contracts, Playwright b
 - File System Access APIs are browser APIs, not Tauri-only. Keep Safari download fallback and defer `revokeObjectURL`.
 - Detect desktop with `IS_TAURI`, never ad-hoc `__TAURI_INTERNALS__` checks.
 - Browser FIG export uses fflate/`@redrob-design/fig`; Tauri uses `build_fig_file`.
-- Changes to `.fig` behavior require round-trip validation in Figma. Fixtures under `tests/fixtures/*.fig` use Git LFS; use normal `git push` when they change.
+- Changes to `.fig` behavior require round-trip validation in Figma. `.gitattributes` tracks `tests/fixtures/*.fig`, `tests/fixtures/fonts/*.ttf`, and `packages/core/vendor/canvaskit-webgpu/*.wasm` with Git LFS; use normal `git push` when they change.
 
 ## Tauri
 
