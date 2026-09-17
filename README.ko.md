@@ -41,27 +41,27 @@ Redrob Code 엔진이 설치돼 있지 않으면 앱이 설치 과정을 안내�
 
 ## 기능
 
-- **`.fig`·`.pen` 파일 열기** — 네이티브 Figma 파일 읽기·쓰기, 앱이나 OS 파일 탐색기에서 레드롭
+- **`.fig`·`.pen` 파일 열기**: 네이티브 Figma 파일 읽기·쓰기, 앱이나 OS 파일 탐색기에서 레드롭
   디자인 문서 열기, 앱 사이 노드 복사·붙여넣기
-- **AI가 디자인을 만듦** — 채팅으로 원하는 것을 설명하면 90여 개 도구가 노드를 만들고 수정합니다.
+- **AI가 디자인을 만듦**: 채팅으로 원하는 것을 설명하면 90여 개 도구가 노드를 만들고 수정합니다.
   Redrob Code 엔진으로 보내거나 OpenRouter, Anthropic, OpenAI, Google AI, Z.ai, MiniMax, 호환
   엔드포인트를 연결합니다
-- **완전한 프로그래밍 가능성** — 헤드리스 CLI, XPath 질의, `eval`을 통한 Figma Plugin API, AI
+- **완전한 프로그래밍 가능성**: 헤드리스 CLI, XPath 질의, `eval`을 통한 Figma Plugin API, AI
   에이전트용 MCP 서버, Redrob Code와 다른 ACP 에이전트를 위한 데스크톱 연동
-- **린트·변환·토큰 추출** — 문서 점검, 이름·레이아웃·접근성 린트, 지원 포맷 간 변환,
+- **린트·변환·토큰 추출**: 문서 점검, 이름·레이아웃·접근성 린트, 지원 포맷 간 변환,
   색·타이포그래피·간격·클러스터 분석, 디자인 토큰 추출
-- **디자인 토큰과 테마 라이브러리** — 디자인 토큰 가져오기(DTCG, CSS 변수, Tailwind)와 내장 Redrob
+- **디자인 토큰과 테마 라이브러리**: 디자인 토큰 가져오기(DTCG, CSS 변수, Tailwind)와 내장 Redrob
   브랜드 테마·덱 라이브러리
-- **컴포넌트와 변형** — 재사용 컴포넌트 생성, 변형을 컴포넌트 세트로 묶기, 로컬 자산을 인스턴스로
+- **컴포넌트와 변형**: 재사용 컴포넌트 생성, 변형을 컴포넌트 세트로 묶기, 로컬 자산을 인스턴스로
   삽입, 인스펙터에서 변형 전환
-- **이미지 벡터화** — Recraft 또는 fal.ai로 이미지 레이어를 편집 가능한 벡터 레이어로 변환
-- **디자인을 코드로 내보내기** — 선택 영역을 JSX/Tailwind로 내보내기, 토큰 산출물 생성, 디자인을
+- **이미지 벡터화**: Recraft 또는 fal.ai로 이미지 레이어를 편집 가능한 벡터 레이어로 변환
+- **디자인을 코드로 내보내기**: 선택 영역을 JSX/Tailwind로 내보내기, 토큰 산출물 생성, 디자인을
   컴포넌트 중심 코드 작업으로 옮기기
-- **커스텀 편집기용 Vue SDK** — 레드롭 디자인을 다른 앱에 넣거나 업무에 맞춘 편집 화면을 만드는
+- **커스텀 편집기용 Vue SDK**: 레드롭 디자인을 다른 앱에 넣거나 업무에 맞춘 편집 화면을 만드는
   헤드리스 컴포넌트와 컴포저블
-- **실시간 협업** — WebRTC P2P, 서버 없음, 계정 없음. 커서·프레즌스·따라가기 모드
-- **오토 레이아웃과 CSS Grid** — Yoga WASM 기반 flex·grid 레이아웃, gap·padding·정렬·트랙 크기
-- **가벼운 데스크톱 앱** — macOS, Windows, Linux용 Tauri v2. 브라우저에서 PWA로도 동작
+- **실시간 협업**: WebRTC P2P, 서버 없음, 계정 없음. 커서·프레즌스·따라가기 모드
+- **오토 레이아웃과 CSS Grid**: Yoga WASM 기반 flex·grid 레이아웃, gap·padding·정렬·트랙 크기
+- **가벼운 데스크톱 앱**: macOS, Windows, Linux용 Tauri v2. 브라우저에서 PWA로도 동작
 
 ## CLI
 
@@ -242,16 +242,16 @@ Portless 첫 실행 때 로컬 HTTPS 인증서를 만들고 신뢰 등록합니�
 
 ```
 packages/
-  scene-graph/    @redrob-design/scene-graph — nodes, primitives, hit testing, copy/snap/undo
-  pen/            @redrob-design/pen — Pencil document format helpers
-  kiwi/           @redrob-design/kiwi — Kiwi runtime and low-level .fig container parsing
-  fig/            @redrob-design/fig — .fig archives, SceneGraph conversion, instances, metadata
-  core/           @redrob-design/core — editor engine, renderer, layout, tools, RPC, document I/O
-  dom-css/        @redrob-design/dom-css — HTML/CSS/Tailwind to editable design documents
-  vue/            @redrob-design/vue — headless Vue SDK
-  cli/            @redrob-design/cli — headless CLI
-  mcp/            @redrob-design/mcp — MCP server (stdio + HTTP)
-  brand/          @redrob-design/brand — design tokens + brand theme library
+  scene-graph/    @redrob-design/scene-graph: nodes, primitives, hit testing, copy/snap/undo
+  pen/            @redrob-design/pen: Pencil document format helpers
+  kiwi/           @redrob-design/kiwi: Kiwi runtime and low-level .fig container parsing
+  fig/            @redrob-design/fig: .fig archives, SceneGraph conversion, instances, metadata
+  core/           @redrob-design/core: editor engine, renderer, layout, tools, RPC, document I/O
+  dom-css/        @redrob-design/dom-css: HTML/CSS/Tailwind to editable design documents
+  vue/            @redrob-design/vue: headless Vue SDK
+  cli/            @redrob-design/cli: headless CLI
+  mcp/            @redrob-design/mcp: MCP server (stdio + HTTP)
+  brand/          @redrob-design/brand: design tokens + brand theme library
   docs/           Documentation site
 src/              Vue app (editor shell, AI, collaboration, document I/O)
 desktop/          Tauri v2 desktop app (Rust + config)
