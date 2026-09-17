@@ -67,7 +67,7 @@ App dialogs compose the Reka-backed components under `src/components/ui/dialog/`
 - `bun run format` — format and sort imports.
 - `bun run test:unit` / `bun run test` — engine/unit and Playwright suites.
 - `bun run tauri dev` — desktop app with hot reload.
-- `bun redrob-design --help` — current CLI command list. Run `bun run build:packages` first; on a clean tree the CLI exits 1 with `Cannot find module '@redrob-design/core/color'`.
+- `bun redrob-design --help` lists the current CLI commands. Run `bun run build:packages` first; on a clean tree the CLI exits 1 with `Cannot find module '@redrob-design/core/color'`.
 
 ## Git worktrees and development servers
 
@@ -79,18 +79,16 @@ Prefer `dev:portless`, especially in worktrees. It assigns branch-specific app a
 
 A hotfix branches from `main`, merges into `main`, releases, and then `main` is merged back into `develop`. Do not skip that back-merge. The sibling repository redrob-code spent a month with a lockfile its own default branch could not install from because the back-merge was missed.
 
-Both `develop` and `main` are protected: pull requests only, force pushes and deletions blocked, 0 required reviews, admin enforcement off. The required status check on both is `fixture-heavy-unit-tests`.
-
-`fixture-heavy-unit-tests` is the single job in `.github/workflows/heavy-tests.yml`. It runs the fixture-bound unit tests, the exact path list `HEAVY_UNIT_TEST_PATTERNS` in `tools/unit-tests/src/shards.ts`, selected with `bun tools/unit-tests/src/list.ts all --heavy-only` and run locally by `bun run test:unit:heavy`. Those tests parse real Figma-authored `.fig` archives and TTF fonts under `tests/fixtures/`, which is why they need a 180s timeout and a Git LFS checkout. Nothing regenerates the binary fixtures: they are authored in Figma and committed through LFS, and `tests/helpers/fig-fixtures.ts` returns `null` for an unfetched LFS pointer so optional tests skip instead of throwing. The JSON oracles beside them in `tests/fixtures/figma-oracles/` are captured from the live Figma API, and `tools/visual-oracles/src/cli.ts` compares against them. `BUN_HEAVY_TESTS` gates the heavy tests at runtime and defaults to running them when unset; `ci.yml` sets it to `false` and `heavy-tests.yml` sets it to `true`.
+Both `develop` and `main` are protected: pull requests only, force pushes and deletions blocked, 0 required reviews, admin enforcement off. **No status check is required**, and that is a decision rather than an omission: every candidate here either cannot report on a pull request or would stall an ordinary one. `fixture-heavy-unit-tests` was required for about an hour and had to be removed, because it can never report (see below) and a pull request waiting on a check that never runs is blocked forever. `ci.yml` can report, but it carries `paths-ignore` for `*.md`, `packages/docs/**` and `openspec/**`, so requiring it would leave every documentation-only pull request permanently pending. Read the checks yourself before merging.
 
 Two trigger gaps are open right now and a pull request based on `develop` will hit them:
 
-- `heavy-tests.yml` triggers only on `workflow_dispatch` and a nightly `schedule` (`17 3 * * *`). It never runs on `pull_request`, so the required `fixture-heavy-unit-tests` check cannot report on a pull request and every pull request stays pending until someone dispatches the workflow.
-- `ci.yml` and `preview.yml` trigger on `pull_request` filtered to `branches: [main, master]`, and `native-contracts-image.yml` pushes on `branches: [main, master]`. `master` does not exist in this repository, and `develop` is absent from all three filters, so no CI runs on a pull request targeting `develop`.
+- `heavy-tests.yml` triggers only on `workflow_dispatch` and a nightly `schedule` (`17 3 * * *`). It never runs on `pull_request`, which is why `fixture-heavy-unit-tests` cannot be a required check. Dispatch it by hand when a change touches the fixture-bound paths.
+- `ci.yml`, `preview.yml` and `native-contracts-image.yml` filtered their triggers to `branches: [main, master]`. `develop` was absent from all three, so after `develop` became the default no CI ran on a pull request at all. This change adds `develop` to each filter. `master` is still listed and still does not exist in this repository; it is left alone as a separate cleanup rather than mixed into this one.
 
 ## Releases & CI
 
-For releases, update versions in the root and publishable package manifests plus `desktop/tauri.conf.json` and `desktop/Cargo.toml`; move `Unreleased` into `## x.y.z — YYYY-MM-DD`; commit `Release vX.Y.Z`; then tag and push `vX.Y.Z` from `main`.
+For releases, update versions in the root and publishable package manifests plus `desktop/tauri.conf.json` and `desktop/Cargo.toml`; move `Unreleased` into a `## x.y.z (YYYY-MM-DD)` heading; commit `Release vX.Y.Z`; then tag and push `vX.Y.Z` from `main`.
 
 `.github/workflows/build.yml` is the source of truth: `v*` tags build signed desktop artifacts, create a draft release from the exact changelog section, upload updater files, and publish the package set defined there and in `tools/release-packages/src/publish-dirs.ts`. Publishing uses prepared, validated npm tarballs—do not publish package directories manually. Ensure Tauri and Apple signing/notarization secrets are configured. Verify the draft title/body and artifacts, then publish it; `homebrew.yml` updates the cask on publication.
 
