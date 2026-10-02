@@ -9,15 +9,31 @@ import { getActiveEditorStoreOrNull, useActiveEditorStoreRef } from '@/app/edito
 
 export type AppTheme = 'dark' | 'light' | 'auto'
 
-const THEME_STORAGE_KEY = 'redrob-design:theme'
-const DEFAULT_THEME: AppTheme = 'dark'
+export const THEME_STORAGE_KEY = 'redrob-design:theme'
+/**
+ * Light, the Redrob design system's own default. Only installs with no saved choice see it: VueUse
+ * writes the default on first read, so anyone who has launched the app before already has their
+ * theme stored and keeps it. `index.html` repeats this resolution inline so the boot splash paints
+ * in the right theme before this module loads.
+ */
+export const DEFAULT_APP_THEME: AppTheme = 'light'
 
-const theme = useLocalStorage<AppTheme>(THEME_STORAGE_KEY, DEFAULT_THEME)
+function isAppTheme(value: unknown): value is AppTheme {
+  return value === 'dark' || value === 'light' || value === 'auto'
+}
+
+/** The theme to paint for a stored setting, falling back to the default for anything unknown. */
+export function resolveAppTheme(stored: unknown, prefersDark: boolean): 'dark' | 'light' {
+  const setting = isAppTheme(stored) ? stored : DEFAULT_APP_THEME
+  if (setting === 'auto') return prefersDark ? 'dark' : 'light'
+  return setting
+}
+
+const theme = useLocalStorage<AppTheme>(THEME_STORAGE_KEY, DEFAULT_APP_THEME)
 const prefersDark = usePreferredDark()
-export const resolvedAppTheme = computed<'dark' | 'light'>(() => {
-  if (theme.value === 'auto') return prefersDark.value ? 'dark' : 'light'
-  return theme.value
-})
+export const resolvedAppTheme = computed<'dark' | 'light'>(() =>
+  resolveAppTheme(theme.value, prefersDark.value)
+)
 
 function readRulerTheme(): RulerTheme | null {
   if (!IS_BROWSER || !('document' in globalThis)) return null

@@ -13,7 +13,7 @@ const preview: Preview = {
         dark: 'dark',
         light: 'light'
       },
-      defaultTheme: 'dark',
+      defaultTheme: 'light',
       attributeName: 'data-theme'
     }),
     (story, context) => ({
@@ -22,7 +22,7 @@ const preview: Preview = {
         const { setTheme } = useAppTheme()
         watch(
           () => context.globals.theme,
-          (theme) => setTheme(theme === 'light' ? 'light' : 'dark'),
+          (theme) => setTheme(theme === 'dark' ? 'dark' : 'light'),
           { immediate: true }
         )
       },
