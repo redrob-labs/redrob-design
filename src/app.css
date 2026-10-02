@@ -129,6 +129,8 @@
   --color-warning-text: var(--rd-warning-text);
   --color-warning-action: var(--rd-warning-action);
   --color-error: var(--status-danger);
+  /* The design system calls this role danger; components use both names. */
+  --color-danger: var(--status-danger);
   --color-error-bg: color-mix(in srgb, var(--status-danger) 10%, transparent);
   --color-error-border: color-mix(in srgb, var(--status-danger) 40%, transparent);
 

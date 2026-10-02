@@ -61,6 +61,25 @@ describe('design-token contract', () => {
     expect([...missing].sort()).toEqual([])
   })
 
+  it('declares every semantic colour a utility class names in app UI', () => {
+    // Tailwind silently emits nothing for `text-danger` when `--color-danger` is undeclared, so the
+    // element inherits whatever colour is around it. Names below are checked against app.css.
+    const appCSS = readFileSync(repoPath('src/app.css'), 'utf8')
+    const declared = declaredProperties(appCSS)
+    const suspect =
+      /(?<![\w-])(?:bg|text|border|ring|fill|stroke|outline|divide)-(danger|primary|secondary|foreground|destructive|background|card|popover|warning|info|success|error|subtle|brand-ink|on-accent|material|scrim|ai|product-[a-z]+)(?![\w-])/g
+    const glob = new Bun.Glob('**/*.{vue,ts}')
+    const missing = new Set<string>()
+    for (const root of ['src/components', 'src/theme', 'src/views']) {
+      for (const file of glob.scanSync({ cwd: repoPath(root), absolute: true })) {
+        for (const match of readFileSync(file, 'utf8').matchAll(suspect)) {
+          if (!declared.has(`--color-${match[1]}`)) missing.add(match[0])
+        }
+      }
+    }
+    expect([...missing].sort()).toEqual([])
+  })
+
   it('reports a misspelled token instead of letting it fail silently', () => {
     const typo = '.x { color: var(--ink-primry); background: var(--surface-base); }'
     expect(unresolvedReferences([typo], [designSystemCSS])).toEqual(['--ink-primry'])

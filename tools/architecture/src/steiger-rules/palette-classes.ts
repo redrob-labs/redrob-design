@@ -68,23 +68,18 @@ export const PALETTE_CLASS_MIGRATION_ALLOWLIST: ReadonlySet<string> = new Set<st
   'src/components/settings/models/ModelsPanel.vue',
   'src/components/settings/models/ProfileEditor.vue',
   'src/components/settings/storage/StorageSettingsPanel.vue',
-  'src/components/ui/AppCheckbox.vue',
   'src/components/ui/AppPlaceholder.stories.ts',
-  'src/components/ui/button.ts',
   'src/components/ui/menu.ts',
   'src/components/ui/popover.ts',
   'src/components/ui/surface.ts',
   'src/components/ui/toast.ts',
   'src/components/ui/tooltip.ts',
   'src/components/variables/VariablesDialog.vue',
-  'src/theme/button.ts',
   'src/theme/collaboration.ts',
   'src/theme/color-slider.ts',
   'src/theme/dialog.ts',
   'src/theme/fill-picker.ts',
   'src/theme/layer-tree.ts',
-  'src/theme/select.ts',
-  'src/theme/switch.ts',
   'src/theme/toolbar.ts'
 ])
 

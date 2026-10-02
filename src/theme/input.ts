@@ -1,7 +1,7 @@
 import { panelFieldBase, panelFieldState } from './panel/field'
 
 const defaultInputBase =
-  'min-w-0 rounded-md border border-border bg-input text-surface outline-none hover:border-muted/60 focus:border-panel-focus focus:ring-1 focus:ring-accent/25 disabled:cursor-not-allowed disabled:opacity-60'
+  'min-w-0 rounded-sm border border-border-strong bg-input text-surface outline-none transition-colors placeholder:text-subtle hover:border-muted focus:border-panel-focus focus:ring-1 focus:ring-panel-focus disabled:cursor-not-allowed disabled:opacity-60'
 
 export default {
   base: 'w-full tabular-nums',
