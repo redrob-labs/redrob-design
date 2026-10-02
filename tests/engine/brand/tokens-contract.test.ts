@@ -8,6 +8,7 @@ import {
   referencedProperties,
   unresolvedReferences
 } from '#tests/helpers/design-tokens'
+import { repoPath } from '#tests/helpers/paths'
 
 const designSystemCSS = readFileSync(designSystemPath('tokens.css'), 'utf8')
 
@@ -16,7 +17,7 @@ const designSystemCSS = readFileSync(designSystemPath('tokens.css'), 'utf8')
  * against the union of every declaration in this list plus the design system, so a stylesheet may
  * read a token another one declares, but never one nobody does.
  */
-const STYLESHEETS_UNDER_CONTRACT: readonly string[] = []
+const STYLESHEETS_UNDER_CONTRACT: readonly string[] = [repoPath('packages/brand/src/tokens.css')]
 
 /** Variables the browser or Tailwind provides at runtime rather than any stylesheet here. */
 const RUNTIME_PROVIDED = new Set<string>()
