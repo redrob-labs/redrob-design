@@ -143,7 +143,7 @@ function submit() {
       <button
         type="button"
         :disabled="!canSubmit"
-        class="h-8 cursor-pointer rounded bg-accent px-3 text-xs font-medium text-white disabled:cursor-default disabled:opacity-40"
+        class="h-8 cursor-pointer rounded bg-accent px-3 text-xs font-medium text-on-accent disabled:cursor-default disabled:opacity-40"
         @click="submit"
       >
         {{ rename.title }}

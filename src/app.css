@@ -80,6 +80,9 @@
  * `--color-surface` is the app's TEXT colour (`text-surface`), not a background. The name predates
  * the design system and is kept so this change does not touch every component; it maps to ink.
  */
+/* Floating surfaces drop their translucent material when the user asks for less transparency. */
+@custom-variant reduce-transparency (@media (prefers-reduced-transparency: reduce));
+
 @theme inline static {
   /* Surfaces */
   --color-panel: var(--surface-base);

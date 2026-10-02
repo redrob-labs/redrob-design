@@ -7,8 +7,8 @@ const surface = tv({
     elevation: {
       md: 'shadow-md',
       lg: 'shadow-lg',
-      xl: 'shadow-xl',
-      overlay: 'shadow-[0_8px_30px_rgb(0_0_0/0.4)]'
+      xl: 'shadow-lg',
+      overlay: 'shadow-md'
     },
     radius: {
       md: 'rounded-md',

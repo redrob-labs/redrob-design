@@ -89,7 +89,7 @@ const navigationClass =
           <icon-lucide-refresh-cw class="size-3.5" /> {{ panels.libraryUpdates }}
           <span
             v-if="visibleUpdateGroups.length"
-            class="ml-auto rounded-full bg-accent px-1.5 text-[10px] text-white"
+            class="ml-auto rounded-full bg-accent px-1.5 text-[10px] text-on-accent"
             >{{ visibleUpdateGroups.length }}</span
           >
         </button>
@@ -188,7 +188,7 @@ const navigationClass =
           <AppSwitch v-model="showAllPages" :label="panels.showUpdatesForAllPages" />
           <button
             type="button"
-            class="rounded bg-accent px-3 py-1.5 text-xs text-white disabled:opacity-50"
+            class="rounded bg-accent px-3 py-1.5 text-xs text-on-accent disabled:opacity-50"
             :disabled="visibleUpdateGroups.length === 0 || applying !== null"
             @click="updateAll"
           >

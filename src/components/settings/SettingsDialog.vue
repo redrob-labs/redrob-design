@@ -192,7 +192,7 @@ const navigationClass =
       <DialogClose as-child>
         <button
           type="button"
-          class="rounded bg-accent px-3 py-1.5 text-[11px] font-medium text-white hover:bg-accent/90"
+          class="rounded bg-accent px-3 py-1.5 text-[11px] font-medium text-on-accent hover:bg-accent-hover"
           data-test-id="app-settings-done"
         >
           {{ common.done }}

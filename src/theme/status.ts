@@ -5,9 +5,9 @@ const statusTheme = {
   variants: {
     tone: {
       neutral: { text: 'text-muted' },
-      success: { text: 'text-[var(--color-success)]' },
-      warning: { text: 'text-[var(--color-warning-text)]' },
-      error: { text: 'text-[var(--color-error)]' }
+      success: { text: 'text-success' },
+      warning: { text: 'text-warning-text' },
+      error: { text: 'text-error' }
     }
   },
   defaultVariants: {
