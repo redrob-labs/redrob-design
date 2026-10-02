@@ -1,6 +1,6 @@
 const tabBarTheme = {
   slots: {
-    root: 'scrollbar-none flex h-9 shrink-0 items-end overflow-x-auto border-b border-border bg-canvas',
+    root: 'scrollbar-none flex h-9 shrink-0 items-end overflow-x-auto border-b border-product-line bg-canvas bg-linear-to-r from-product-wash via-product-wash/40 to-canvas [[data-theme=dark]_&]:from-product-wash/55 [[data-theme=dark]_&]:via-product-wash/15',
     list: 'flex h-full items-end',
     trigger:
       'group/tab flex h-full max-w-48 min-w-0 cursor-pointer touch-manipulation items-center gap-1.5 border-r border-border px-3 text-[11px] transition-colors outline-none select-none focus-visible:ring-1 focus-visible:ring-accent',

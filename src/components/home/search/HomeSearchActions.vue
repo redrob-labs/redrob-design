@@ -55,7 +55,7 @@ watch(
       </button>
       <button
         type="button"
-        class="flex h-9 min-w-0 items-center justify-center rounded bg-accent px-3 text-xs font-medium text-white hover:bg-accent/90 sm:h-auto sm:flex-none sm:py-2"
+        class="flex h-9 min-w-0 items-center justify-center rounded bg-accent px-3 text-xs font-medium text-on-accent hover:bg-accent-hover sm:h-auto sm:flex-none sm:py-2"
         data-test-id="home-new-document"
         @click="emit('new-document')"
       >

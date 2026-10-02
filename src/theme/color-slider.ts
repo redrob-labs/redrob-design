@@ -7,7 +7,7 @@ export default {
     slider: 'relative flex h-3 flex-1 touch-none items-center rounded-md select-none',
     track: 'absolute inset-0 overflow-hidden rounded-md',
     thumb:
-      'block size-3.5 rounded-full border-2 border-white shadow-sm outline-none ring-offset-1 focus-visible:ring-2 focus-visible:ring-panel-focus',
+      'block size-3.5 rounded-full border-2 border-ink-light shadow-sm outline-none ring-offset-1 focus-visible:ring-2 focus-visible:ring-panel-focus',
     input: 'w-14 flex-none shrink-0'
   },
   variants: {

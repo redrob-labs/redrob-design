@@ -1,14 +1,15 @@
 const collaborationTheme = {
   slots: {
     avatar:
-      'flex shrink-0 items-center justify-center rounded-full text-[10px] font-semibold text-white',
+      'flex shrink-0 items-center justify-center rounded-full text-[10px] font-semibold text-ink-light',
     peerAvatar: 'cursor-pointer transition-all',
     shareButton:
       'flex h-7 cursor-pointer items-center gap-1.5 rounded border-none px-3 text-[11px] font-medium transition-colors outline-none focus-visible:ring-1 focus-visible:ring-accent',
     presenceTrigger:
-      'flex h-8 cursor-pointer items-center gap-1.5 rounded-full border border-white/10 bg-panel/70 px-3 shadow-md backdrop-blur-xl outline-none select-none active:bg-hover focus-visible:ring-1 focus-visible:ring-accent',
-    presenceDot: 'size-2 rounded-full bg-green-500',
-    presenceContent: 'z-50 w-56 rounded-xl bg-panel p-3 shadow-[0_8px_30px_rgb(0_0_0/0.4)]',
+      'flex h-8 cursor-pointer items-center gap-1.5 rounded-full border border-border bg-panel/70 px-3 shadow-md backdrop-blur-xl outline-none select-none active:bg-hover focus-visible:ring-1 focus-visible:ring-accent',
+    presenceDot: 'size-2 rounded-full bg-success',
+    presenceContent:
+      'z-50 w-56 rounded-lg border border-border bg-material p-3 shadow-md backdrop-blur-xl reduce-transparency:bg-panel reduce-transparency:backdrop-blur-none',
     peerRow:
       'flex cursor-pointer items-center gap-2 rounded-md px-0.5 py-0.5 outline-none select-none active:bg-hover focus-visible:ring-1 focus-visible:ring-accent',
     disconnect:
@@ -16,7 +17,7 @@ const collaborationTheme = {
   },
   variants: {
     following: {
-      true: { avatar: 'ring-2 ring-white/40' },
+      true: { avatar: 'ring-2 ring-ink-light/40' },
       false: {}
     },
     bordered: {
@@ -24,14 +25,13 @@ const collaborationTheme = {
       false: {}
     },
     connection: {
-      idle: { shareButton: 'bg-accent text-white hover:bg-accent/90' },
+      idle: { shareButton: 'bg-accent text-on-accent hover:bg-accent-hover' },
       joining: {
         shareButton:
           'animate-pulse border border-[var(--color-warning-border)] bg-[var(--color-warning-bg)] text-[var(--color-warning-text)]'
       },
       connected: {
-        shareButton:
-          'bg-[var(--color-success-bg)] text-white hover:bg-[var(--color-success-bg-hover)]'
+        shareButton: 'bg-success-bg text-ink-light hover:bg-success-bg-hover'
       }
     },
     size: {
@@ -43,7 +43,7 @@ const collaborationTheme = {
     {
       following: true,
       bordered: true,
-      class: { avatar: 'border-white' }
+      class: { avatar: 'border-ink-light' }
     }
   ],
   defaultVariants: {

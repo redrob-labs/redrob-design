@@ -93,7 +93,7 @@ function partKey(part: UIMessagePart<UIDataTypes, UITools>, index: number): stri
           />
 
           <!-- Tool call -->
-          <div v-if="isToolUIPart(part)" class="rounded-lg border border-border bg-canvas p-2">
+          <div v-if="isToolUIPart(part)" class="rounded-lg border border-ai-border bg-ai p-2">
             <CollapsibleRoot>
               <CollapsibleTrigger
                 class="flex w-full items-center gap-2 rounded px-1 py-0.5 hover:bg-hover"
@@ -102,8 +102,8 @@ function partKey(part: UIMessagePart<UIDataTypes, UITools>, index: number): stri
                   class="flex size-4 items-center justify-center rounded-full"
                   :class="{
                     'bg-accent/20 text-accent': toolState(part) === 'pending',
-                    'bg-green-500/20 text-green-400': toolState(part) === 'done',
-                    'bg-red-500/20 text-red-400': toolState(part) === 'error'
+                    'bg-success/15 text-success': toolState(part) === 'done',
+                    'bg-error-bg text-error': toolState(part) === 'error'
                   }"
                 >
                   <icon-lucide-loader-circle
@@ -149,7 +149,7 @@ function partKey(part: UIMessagePart<UIDataTypes, UITools>, index: number): stri
           <div
             v-else-if="isTextUIPart(part) && part.text"
             data-test-id="chat-text-bubble"
-            class="group/response relative rounded-xl rounded-tl-md bg-hover px-3 py-2 text-xs leading-relaxed text-surface"
+            class="group/response relative rounded-xl rounded-tl-md border border-ai-border bg-ai px-3 py-2 text-xs leading-relaxed text-surface"
           >
             <ChatMarkdown :content="part.text" :mode="markdownMode" />
             <IconButton
@@ -160,7 +160,7 @@ function partKey(part: UIMessagePart<UIDataTypes, UITools>, index: number): stri
               class="absolute right-1 bottom-1 opacity-0 focus-visible:opacity-100 group-hover/response:opacity-100"
               @click="copyResponse"
             >
-              <icon-lucide-check v-if="copied" class="size-3 text-green-400" />
+              <icon-lucide-check v-if="copied" class="size-3 text-success" />
               <icon-lucide-copy v-else class="size-3" />
             </IconButton>
           </div>
@@ -172,7 +172,7 @@ function partKey(part: UIMessagePart<UIDataTypes, UITools>, index: number): stri
         <AttachmentList v-if="attachments.length" :attachments="attachments" />
         <div
           data-test-id="chat-text-bubble"
-          class="rounded-xl rounded-br-md bg-accent px-3 py-2 text-xs leading-relaxed whitespace-pre-wrap text-white"
+          class="rounded-xl rounded-br-md bg-accent px-3 py-2 text-xs leading-relaxed whitespace-pre-wrap text-on-accent"
         >
           {{
             visibleUserMessageText(

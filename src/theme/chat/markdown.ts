@@ -15,7 +15,7 @@ export const chatMarkdownTheme = tv({
       '[--popover:var(--color-panel)]',
       '[--popover-foreground:var(--color-surface)]',
       '[--primary:var(--color-accent)]',
-      '[--primary-foreground:white]'
+      '[--primary-foreground:var(--color-on-accent)]'
     ]
   }
 })

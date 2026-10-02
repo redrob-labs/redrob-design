@@ -133,7 +133,7 @@ async function exportDiagnostics() {
         <span class="flex min-w-0 items-center gap-2">
           <icon-lucide-circle-alert
             v-if="event.level === 'error'"
-            class="size-3.5 shrink-0 text-red-400"
+            class="size-3.5 shrink-0 text-error"
           />
           <icon-lucide-info v-else class="size-3.5 shrink-0 text-muted" />
           <span class="truncate text-surface">{{ event.label }}</span>

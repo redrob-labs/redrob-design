@@ -18,7 +18,7 @@ const collab = useCollabPanelContext()
     />
     <button
       data-test-id="collab-copy-link"
-      class="flex h-7 cursor-pointer items-center gap-1 rounded border-none bg-accent px-2 text-xs text-white hover:bg-accent/90"
+      class="flex h-7 cursor-pointer items-center gap-1 rounded border-none bg-accent px-2 text-xs text-on-accent hover:bg-accent-hover"
       @click="collab.copyLink"
     >
       <icon-lucide-check v-if="collab.copied" class="size-3" />

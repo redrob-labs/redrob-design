@@ -1,13 +1,6 @@
 import { describe, expect, test } from 'bun:test'
-import { readFileSync } from 'node:fs'
-import { join } from 'node:path'
 
-import {
-  PALETTE_CLASS_MIGRATION_ALLOWLIST,
-  paletteClassDiagnostics
-} from '../src/steiger-rules/palette-classes'
-
-const repoRoot = join(import.meta.dir, '..', '..', '..')
+import { paletteClassDiagnostics } from '../src/steiger-rules/palette-classes'
 
 const VUE = 'src/components/example/Example.vue'
 const THEME = 'src/theme/example.ts'
@@ -22,7 +15,7 @@ describe('raw palette classes', () => {
       paletteClassDiagnostics(
         VUE,
         vue(
-          'bg-panel text-surface border-border hover:bg-hover bg-accent/10 text-on-accent ring-panel-focus text-xs shadow-md from-transparent'
+          'bg-panel text-surface border-border hover:bg-hover bg-accent/10 text-on-accent ring-panel-focus text-xs shadow-md from-transparent border-ink-light hover:bg-current/15'
         )
       )
     ).toEqual([])
@@ -52,10 +45,8 @@ describe('raw palette classes', () => {
     expect(diagnostic?.line).toBe(2)
   })
 
-  test('skips allowlisted files and files outside app UI', () => {
-    const source = vue('bg-white')
-    expect(paletteClassDiagnostics(VUE, source, new Set([VUE]))).toEqual([])
-    expect(paletteClassDiagnostics('packages/vue/src/Demo.vue', source)).toEqual([])
+  test('skips files outside app UI', () => {
+    expect(paletteClassDiagnostics('packages/vue/src/Demo.vue', vue('bg-white'))).toEqual([])
     expect(paletteClassDiagnostics('src/app/editor/export.ts', "'bg-white'")).toEqual([])
   })
 
@@ -63,15 +54,5 @@ describe('raw palette classes', () => {
     expect(
       paletteClassDiagnostics(VUE, vue('text-warning-text bg-success-bg accent-hover text-red'))
     ).toEqual([])
-  })
-})
-
-describe('palette migration allow-list', () => {
-  test('only lists files that still need it, so a cleaned file cannot regress silently', () => {
-    const stale = [...PALETTE_CLASS_MIGRATION_ALLOWLIST].filter((file) => {
-      const source = readFileSync(join(repoRoot, file), 'utf8')
-      return paletteClassDiagnostics(file, source, new Set()).length === 0
-    })
-    expect(stale).toEqual([])
   })
 })

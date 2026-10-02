@@ -183,7 +183,7 @@ onMounted(() => void refreshStatuses())
 
     <button
       type="button"
-      class="mt-1 rounded bg-accent px-3 py-1.5 text-[11px] font-medium text-white hover:bg-accent/90 disabled:opacity-50"
+      class="mt-1 rounded bg-accent px-3 py-1.5 text-[11px] font-medium text-on-accent hover:bg-accent-hover disabled:opacity-50"
       :disabled="busy"
       data-test-id="settings-storage-test"
       @click="testConnection"

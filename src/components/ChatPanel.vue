@@ -268,7 +268,7 @@ function handleClearChat() {
       >
         <AppButton v-if="IS_DEV" color="neutral" variant="ghost" size="xs" @click="handleCopyDebug">
           <icon-lucide-clipboard-copy v-if="!debugCopied" class="size-3" />
-          <icon-lucide-check v-else class="size-3 text-green-400" />
+          <icon-lucide-check v-else class="size-3 text-success" />
           {{ debugCopied ? 'Copied' : 'Copy log' }}
         </AppButton>
         <AppButton
@@ -279,7 +279,7 @@ function handleClearChat() {
           @click="handleCopyACPLog"
         >
           <icon-lucide-bug v-if="!acpLogCopied" class="size-3" />
-          <icon-lucide-check v-else class="size-3 text-green-400" />
+          <icon-lucide-check v-else class="size-3 text-success" />
           {{ acpLogCopied ? 'Copied' : 'ACP log' }}
         </AppButton>
         <AppButton color="error" variant="ghost" size="xs" @click="handleClearChat">

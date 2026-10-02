@@ -48,6 +48,8 @@
   --rd-code-number: var(--accent-red-4);
   --rd-warning-text: var(--accent-orange-5);
   --rd-warning-action: var(--accent-orange-4);
+  /* The product mark (step 6) is 3.3:1 on white, too light for 11px component labels; step 7 is 6:1. */
+  --rd-component: var(--product-design-7);
 }
 
 [data-theme='dark'] {
@@ -57,6 +59,7 @@
   --rd-code-number: var(--accent-red-2);
   --rd-warning-text: var(--accent-orange-2);
   --rd-warning-action: var(--accent-orange-3);
+  --rd-component: var(--product-design-5);
 }
 
 /*
@@ -110,13 +113,23 @@
   --color-subtle: var(--ink-muted);
   --color-brand-ink: var(--ink-brand);
   --color-on-accent: var(--ink-on-brand);
+  /*
+   * Ink that does not follow the theme, for marks drawn on a colour the user or a peer chose rather
+   * than on a surface: colour-picker handles, avatar initials, canvas label text.
+   */
+  --color-ink-light: var(--redrob-white);
+  --color-ink-dark: var(--redrob-black);
 
   /* Action */
   --color-accent: var(--action-primary);
   --color-accent-hover: var(--action-primary-hover);
 
-  /* Product identity: Redrob Design's own colour, for components and the shell wash. */
-  --color-component: var(--product-design);
+  /*
+   * Product identity: Redrob Design's own colour (--product-design) for components and the shell
+   * wash. UI text and icons take a step of the same ramp that clears 4.5:1 in each theme; the canvas
+   * draws the mark itself.
+   */
+  --color-component: var(--rd-component);
   --color-product-wash: var(--product-design-wash);
   --color-product-fill: var(--product-design-fill);
   --color-product-line: var(--product-design-line);

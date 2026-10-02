@@ -20,7 +20,7 @@ const ctx = useColorPickerPanelContext()
       :style="style"
     >
       <ColorAreaThumb
-        class="pointer-events-none absolute size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white shadow-sm"
+        class="pointer-events-none absolute size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-ink-light shadow-sm"
       />
     </ColorAreaArea>
   </ColorAreaRoot>

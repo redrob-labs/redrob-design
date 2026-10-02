@@ -18,7 +18,7 @@ const collab = useCollabPanelContext()
 
   <button
     data-test-id="collab-share-file"
-    class="mb-3 flex h-8 w-full cursor-pointer items-center justify-center gap-1.5 rounded border-none bg-accent text-xs font-medium text-white hover:bg-accent/90 disabled:opacity-50"
+    class="mb-3 flex h-8 w-full cursor-pointer items-center justify-center gap-1.5 rounded border-none bg-accent text-xs font-medium text-on-accent hover:bg-accent-hover disabled:opacity-50"
     :disabled="!collab.nameDraft.trim()"
     @click="collab.share"
   >
@@ -42,7 +42,7 @@ const collab = useCollabPanelContext()
     />
     <button
       data-test-id="collab-join-room-button"
-      class="flex h-7 cursor-pointer items-center rounded border-none bg-accent px-3 text-xs text-white hover:bg-accent/90 disabled:opacity-50"
+      class="flex h-7 cursor-pointer items-center rounded border-none bg-accent px-3 text-xs text-on-accent hover:bg-accent-hover disabled:opacity-50"
       :disabled="!collab.joinInput.trim() || !collab.nameDraft.trim()"
       @click="collab.join"
     >

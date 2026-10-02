@@ -96,9 +96,9 @@ function enableAllTools(): void {
             class="size-2 rounded-full"
             :class="
               mcpRuntime.status === 'running'
-                ? 'bg-green-500'
+                ? 'bg-success'
                 : mcpRuntime.status === 'error'
-                  ? 'bg-red-500'
+                  ? 'bg-error'
                   : 'bg-muted'
             "
           />
@@ -166,7 +166,7 @@ function enableAllTools(): void {
 
     <p
       v-if="mcpRuntime.error"
-      class="rounded border border-red-500/30 bg-red-500/10 p-3 text-[11px] text-red-400"
+      class="rounded border border-error-border bg-error-bg p-3 text-[11px] text-error"
     >
       {{ mcpRuntime.error }}
     </p>
@@ -255,7 +255,7 @@ function enableAllTools(): void {
     <div>
       <button
         type="button"
-        class="rounded bg-accent px-3 py-1.5 text-[11px] font-medium text-white hover:bg-accent/90 disabled:opacity-50"
+        class="rounded bg-accent px-3 py-1.5 text-[11px] font-medium text-on-accent hover:bg-accent-hover disabled:opacity-50"
         :disabled="mcpRuntime.status === 'starting' || mcpRuntime.externallyManaged"
         data-test-id="settings-mcp-restart"
         @click="restart"
