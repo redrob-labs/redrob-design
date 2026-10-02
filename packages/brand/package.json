@@ -10,28 +10,28 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "bun": "./src/index.ts",
       "types": "./dist/index.d.ts",
+      "bun": "./src/index.ts",
       "import": "./dist/index.js",
       "default": "./dist/index.js"
     },
     "./tokens.css": "./src/tokens.css",
     "./fonts": "./src/fonts.ts",
     "./node": {
-      "bun": "./src/node.ts",
       "types": "./dist/node.d.ts",
+      "bun": "./src/node.ts",
       "import": "./dist/node.js",
       "default": "./dist/node.js"
     },
     "./preset": {
-      "bun": "./src/preset.ts",
       "types": "./dist/preset.d.ts",
+      "bun": "./src/preset.ts",
       "import": "./dist/preset.js",
       "default": "./dist/preset.js"
     },
     "./importer": {
-      "bun": "./src/importer/index.ts",
       "types": "./dist/importer/index.d.ts",
+      "bun": "./src/importer/index.ts",
       "import": "./dist/importer/index.js",
       "default": "./dist/importer/index.js"
     }
@@ -45,6 +45,7 @@
   },
   "dependencies": {
     "@fontsource-variable/jetbrains-mono": "5.3.0",
+    "@redrob-labs/ui": "1.0.2",
     "yaml": "^2.8.4",
     "zod": "^4.4.3"
   },
