@@ -17,7 +17,10 @@ const designSystemCSS = readFileSync(designSystemPath('tokens.css'), 'utf8')
  * against the union of every declaration in this list plus the design system, so a stylesheet may
  * read a token another one declares, but never one nobody does.
  */
-const STYLESHEETS_UNDER_CONTRACT: readonly string[] = [repoPath('packages/brand/src/tokens.css')]
+const STYLESHEETS_UNDER_CONTRACT: readonly string[] = [
+  repoPath('packages/brand/src/tokens.css'),
+  repoPath('src/app.css')
+]
 
 /** Variables the browser or Tailwind provides at runtime rather than any stylesheet here. */
 const RUNTIME_PROVIDED = new Set<string>()
@@ -39,6 +42,23 @@ describe('design-token contract', () => {
     expect(unresolvedReferences(sources, [designSystemCSS, ...sources], RUNTIME_PROVIDED)).toEqual(
       []
     )
+  })
+
+  it('declares every --color-* token the app reads from script or templates', () => {
+    const appCSS = readFileSync(repoPath('src/app.css'), 'utf8')
+    const declared = declaredProperties(appCSS)
+    const glob = new Bun.Glob('**/*.{vue,ts}')
+    const missing = new Set<string>()
+    for (const root of ['src', '.storybook']) {
+      for (const file of glob.scanSync({ cwd: repoPath(root), absolute: true })) {
+        const source = readFileSync(file, 'utf8')
+        for (const match of source.matchAll(/var\((--color-[\w-]+)\s*\)/g)) {
+          const name = match[1]
+          if (name && !declared.has(name)) missing.add(`${name} (${file.slice(repoPath().length)})`)
+        }
+      }
+    }
+    expect([...missing].sort()).toEqual([])
   })
 
   it('reports a misspelled token instead of letting it fail silently', () => {
