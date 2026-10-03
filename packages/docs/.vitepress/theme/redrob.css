@@ -1,0 +1,55 @@
+/*
+ * Redrob Group Design System 2026 for the docs site. The tokens come from @redrob-labs/ui through
+ * @redrob-design/brand, the same source the app uses. VitePress switches dark mode with `.dark` on
+ * <html>; `data-theme.ts` mirrors it onto `data-theme`, which is what the design system reads.
+ */
+@import '@redrob-design/brand/tokens.css';
+
+:root {
+  --vp-font-family-base: var(--font-sans);
+  --vp-font-family-mono: var(--font-mono);
+
+  --vp-c-bg: var(--surface-base);
+  --vp-c-bg-alt: var(--surface-raised);
+  --vp-c-bg-elv: var(--surface-base);
+  --vp-c-bg-soft: var(--surface-sunken);
+
+  --vp-c-text-1: var(--ink-primary);
+  --vp-c-text-2: var(--ink-secondary);
+  --vp-c-text-3: var(--ink-muted);
+
+  --vp-c-border: var(--border-strong);
+  --vp-c-divider: var(--border-subtle);
+  --vp-c-gutter: var(--border-subtle);
+
+  --vp-c-brand-1: var(--ink-brand);
+  --vp-c-brand-2: var(--action-primary-hover);
+  --vp-c-brand-3: var(--action-primary);
+  --vp-c-brand-soft: color-mix(in srgb, var(--action-primary) 14%, transparent);
+
+  --vp-c-tip-1: var(--ink-brand);
+  --vp-c-tip-soft: var(--surface-brand-subtle);
+  --vp-c-success-1: var(--status-success);
+  --vp-c-warning-1: var(--status-warning);
+  --vp-c-danger-1: var(--status-danger);
+
+  --vp-button-brand-bg: var(--action-primary);
+  --vp-button-brand-hover-bg: var(--action-primary-hover);
+  --vp-button-brand-active-bg: var(--action-primary-hover);
+  --vp-button-brand-text: var(--ink-on-brand);
+  --vp-button-brand-hover-text: var(--ink-on-brand);
+  --vp-button-brand-active-text: var(--ink-on-brand);
+
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: var(--gradient-brand);
+
+  --vp-shadow-2: var(--shadow-sm);
+  --vp-shadow-3: var(--shadow-md);
+  --vp-shadow-4: var(--shadow-md);
+  --vp-shadow-5: var(--shadow-lg);
+}
+
+/* Redrob Design's product wash on the top bar, matching the app shell. */
+.VPNavBar:not(.home.top) .wrapper {
+  background-image: linear-gradient(90deg, var(--product-design-wash), transparent 60%);
+}

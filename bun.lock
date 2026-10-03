@@ -228,6 +228,7 @@
       "version": "0.1.0",
       "dependencies": {
         "@iconify/vue": "^5.0.1",
+        "@redrob-design/brand": "workspace:*",
       },
       "devDependencies": {
         "@shikijs/vitepress-twoslash": "^4.4.3",
