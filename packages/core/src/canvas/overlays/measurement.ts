@@ -7,8 +7,8 @@ import Matrix from '@redrob-design/scene-graph/matrix'
 import type { Rect } from '@redrob-design/scene-graph/primitives'
 
 import type { SkiaRenderer } from '#core/canvas/renderer'
+import { canvasThemeColor } from '#core/canvas/renderer/canvas-theme'
 import {
-  MEASUREMENT_COLOR,
   MEASUREMENT_PILL_HEIGHT,
   MEASUREMENT_PILL_PADDING_X,
   MEASUREMENT_PILL_RADIUS,
@@ -169,7 +169,7 @@ function drawPill(r: SkiaRenderer, canvas: Canvas, text: string, x: number, y: n
     MEASUREMENT_PILL_RADIUS,
     MEASUREMENT_PILL_RADIUS
   )
-  r.auxFill.setColor(r.ck.Color4f(MEASUREMENT_COLOR.r, MEASUREMENT_COLOR.g, MEASUREMENT_COLOR.b, 1))
+  r.auxFill.setColor(measurementColor4f(r))
   canvas.drawRRect(rect, r.auxFill)
   r.auxFill.setColor(r.ck.WHITE)
   canvas.drawText(
@@ -211,9 +211,7 @@ export function drawMeasurementSegment(
   segment: MeasurementSegment
 ): void {
   r.auxStroke.setStrokeWidth(1)
-  r.auxStroke.setColor(
-    r.ck.Color4f(MEASUREMENT_COLOR.r, MEASUREMENT_COLOR.g, MEASUREMENT_COLOR.b, 1)
-  )
+  r.auxStroke.setColor(measurementColor4f(r))
   r.auxStroke.setPathEffect(null)
   if (segment.axis === 'x') {
     const x1 = segment.from * r.zoom + r.panX
@@ -245,13 +243,16 @@ export function drawMeasurements(
   const segments = computeMeasurementSegments(from, to)
 
   r.auxStroke.setStrokeWidth(1)
-  r.auxStroke.setColor(
-    r.ck.Color4f(MEASUREMENT_COLOR.r, MEASUREMENT_COLOR.g, MEASUREMENT_COLOR.b, 1)
-  )
+  r.auxStroke.setColor(measurementColor4f(r))
   r.auxStroke.setPathEffect(null)
 
   drawTargetOutline(r, canvas, graph, target)
   if (segments.length === 0) return
 
   for (const segment of segments) drawMeasurementSegment(r, canvas, segment)
+}
+
+function measurementColor4f(r: SkiaRenderer) {
+  const c = canvasThemeColor(r.canvasTheme, 'measurement')
+  return r.ck.Color4f(c.r, c.g, c.b, 1)
 }

@@ -12,6 +12,25 @@ export interface RulerTheme {
   label: Color
 }
 
+/**
+ * Overlay colours the host app resolves from its design tokens and hands to the renderer, because
+ * CanvasKit cannot read CSS. Every field is optional per frame: `null`/absent falls back to the
+ * constants in `#core/constants`, which carry the same design-system light values, so headless and
+ * CLI rendering match the app's light theme.
+ */
+export interface CanvasTheme {
+  selection: Color
+  component: Color
+  snap: Color
+  measurement: Color
+  /** Auto-layout padding hover: ticks and striped padding bands. */
+  layoutPadding: Color
+  /** Auto-layout gap hover: striped spacing bands between children. */
+  layoutGap: Color
+}
+
+export type CanvasThemeColor = keyof CanvasTheme
+
 export type MeasurementMode = 'off' | 'shallow' | 'deep'
 
 export interface RenderOverlays {

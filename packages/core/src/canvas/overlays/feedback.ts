@@ -6,6 +6,7 @@ import type { SnapGuide } from '@redrob-design/scene-graph/snap'
 
 import { drawNodeHighlightRect } from '#core/canvas/highlight-rect'
 import type { RenderOverlays, SkiaRenderer } from '#core/canvas/renderer'
+import { canvasThemeColorAt } from '#core/canvas/renderer/canvas-theme'
 import {
   FLASH_ATTACK_MS,
   FLASH_COLOR,
@@ -79,7 +80,8 @@ export function drawFlashes(r: SkiaRenderer, canvas: Canvas, graph: SceneGraph):
       extraPad = 0
     }
 
-    if (!drawNodeHighlightRect(r, canvas, graph, flash.nodeId, FLASH_COLOR, opacity, extraPad)) {
+    const flashColor = canvasThemeColorAt(r.canvasTheme, 'selection', FLASH_COLOR.a)
+    if (!drawNodeHighlightRect(r, canvas, graph, flash.nodeId, flashColor, opacity, extraPad)) {
       r._flashes.splice(i, 1)
     }
   }

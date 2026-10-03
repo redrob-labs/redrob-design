@@ -74,15 +74,19 @@ export function getShareURL(roomId: string): string {
   return `${base}/share/${roomId}`
 }
 
+/**
+ * Remote collaborator colours, from the Redrob design system accent families (tokens.json). Each is
+ * vivid enough to read as a cursor on either canvas theme and carries white avatar initials.
+ */
 export const PEER_COLORS: Color[] = [
-  { r: 0.96, g: 0.26, b: 0.21, a: 1 },
-  { r: 0.13, g: 0.59, b: 0.95, a: 1 },
-  { r: 0.3, g: 0.69, b: 0.31, a: 1 },
-  { r: 1.0, g: 0.76, b: 0.03, a: 1 },
-  { r: 0.61, g: 0.15, b: 0.69, a: 1 },
-  { r: 1.0, g: 0.34, b: 0.13, a: 1 },
-  { r: 0.0, g: 0.74, b: 0.83, a: 1 },
-  { r: 0.91, g: 0.12, b: 0.39, a: 1 }
+  { r: 0.1843, g: 0.5529, b: 1, a: 1 }, // accent-sky-3 #2f8dff
+  { r: 0.5373, g: 0.2667, b: 1, a: 1 }, // accent-violet-3 #8944ff
+  { r: 1, g: 0.2235, b: 0.7294, a: 1 }, // accent-pink-3 #ff39ba
+  { r: 0, g: 0.5255, b: 0.2902, a: 1 }, // accent-green-4 #00864a
+  { r: 0.6824, g: 0.3176, b: 0, a: 1 }, // accent-orange-4 #ae5100
+  { r: 1, g: 0.2941, b: 0.2941, a: 1 }, // accent-red-3 #ff4b4b
+  { r: 0, g: 0.4157, b: 0.4784, a: 1 }, // accent-teal-5 #006a7a
+  { r: 0.0549, g: 0.3176, b: 0.7137, a: 1 } // accent-sky-4 #0e51b6
 ]
 
 export {

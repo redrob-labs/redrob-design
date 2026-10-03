@@ -13,7 +13,7 @@ import type { SnapGuide } from '@redrob-design/scene-graph/snap'
 import type { UndoManager } from '@redrob-design/scene-graph/undo'
 
 import type { GuideOverlayState } from '#core/canvas/guides/types'
-import type { RulerTheme, SkiaRenderer } from '#core/canvas/renderer'
+import type { CanvasTheme, RulerTheme, SkiaRenderer } from '#core/canvas/renderer'
 import type { MeasurementMode, RenderOverlays } from '#core/canvas/renderer/types'
 import type { SnappingPreferences } from '#core/editor/preferences'
 import type { TextEditor } from '#core/text/editor'
@@ -44,6 +44,8 @@ export interface EditorSharedState {
   }>
   documentName: string
   rulerTheme?: RulerTheme
+  /** Overlay colours resolved by the host from its design tokens; absent means core defaults. */
+  canvasTheme?: CanvasTheme
   sceneVersion: number
 }
 

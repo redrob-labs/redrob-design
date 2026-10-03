@@ -1,7 +1,7 @@
 import { useLocalStorage, usePreferredDark } from '@vueuse/core'
 import { computed, watch } from 'vue'
 
-import type { RulerTheme } from '@redrob-design/core/canvas'
+import type { CanvasTheme, CanvasThemeColor, RulerTheme } from '@redrob-design/core/canvas'
 import { parseColor } from '@redrob-design/core/color'
 import { IS_BROWSER } from '@redrob-design/core/constants'
 
@@ -35,22 +35,51 @@ export const resolvedAppTheme = computed<'dark' | 'light'>(() =>
   resolveAppTheme(theme.value, prefersDark.value)
 )
 
-function readRulerTheme(): RulerTheme | null {
-  if (!IS_BROWSER || !('document' in globalThis)) return null
-  const style = getComputedStyle(document.documentElement)
+/** CSS custom properties `src/app.css` publishes for the canvas, by CanvasTheme field. */
+export const CANVAS_THEME_PROPERTIES: Record<CanvasThemeColor, string> = {
+  selection: '--color-canvas-selection',
+  component: '--color-canvas-component',
+  snap: '--color-canvas-snap',
+  measurement: '--color-canvas-measurement',
+  layoutPadding: '--color-canvas-layout-padding',
+  layoutGap: '--color-canvas-layout-gap'
+}
+
+/**
+ * Resolve the canvas overlay and ruler colours from design-token custom properties. CanvasKit
+ * cannot read CSS, so the app reads the computed values (already resolved per theme) and hands
+ * plain colours to the renderer.
+ */
+export function readCanvasTheme(read: (property: string) => string): {
+  ruler: RulerTheme
+  canvas: CanvasTheme
+} {
+  const color = (property: string) => parseColor(read(property).trim())
+  const canvas = {} as CanvasTheme
+  for (const [key, property] of Object.entries(CANVAS_THEME_PROPERTIES) as Array<
+    [CanvasThemeColor, string]
+  >) {
+    canvas[key] = color(property)
+  }
   return {
-    background: parseColor(style.getPropertyValue('--color-ruler-bg')),
-    tick: parseColor(style.getPropertyValue('--color-ruler-tick')),
-    text: parseColor(style.getPropertyValue('--color-ruler-text')),
-    label: parseColor(style.getPropertyValue('--color-ruler-label'))
+    ruler: {
+      background: color('--color-ruler-bg'),
+      tick: color('--color-ruler-tick'),
+      text: color('--color-ruler-text'),
+      label: color('--color-ruler-label')
+    },
+    canvas
   }
 }
 
 function updateCanvasTheme(): void {
-  if (!IS_BROWSER) return
+  if (!IS_BROWSER || !('document' in globalThis)) return
   const store = getActiveEditorStoreOrNull()
   if (!store) return
-  store.state.rulerTheme = readRulerTheme() ?? undefined
+  const style = getComputedStyle(document.documentElement)
+  const { ruler, canvas } = readCanvasTheme((name) => style.getPropertyValue(name))
+  store.state.rulerTheme = ruler
+  store.state.canvasTheme = canvas
   store.requestRepaint()
 }
 

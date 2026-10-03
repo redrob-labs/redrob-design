@@ -29,14 +29,7 @@ export function drawTextEditOverlay(
 
   const selRects = editor.getSelectionRects()
   if (selRects.length > 0) {
-    r.auxFill.setColor(
-      r.ck.Color4f(
-        TEXT_SELECTION_COLOR.r,
-        TEXT_SELECTION_COLOR.g,
-        TEXT_SELECTION_COLOR.b,
-        TEXT_SELECTION_COLOR.a
-      )
-    )
+    r.auxFill.setColor(r.selColor(TEXT_SELECTION_COLOR.a))
     for (const sel of selRects) {
       canvas.drawRect(r.ck.LTRBRect(sel.x, sel.y, sel.x + sel.width, sel.y + sel.height), r.auxFill)
     }

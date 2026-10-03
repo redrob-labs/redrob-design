@@ -7,10 +7,16 @@ export const IS_TAURI = IS_BROWSER && '__TAURI_INTERNALS__' in window
 export const BLACK: Color = { r: 0, g: 0, b: 0, a: 1 }
 export const TRANSPARENT: Color = { r: 0, g: 0, b: 0, a: 0 }
 export const DEFAULT_SHADOW_COLOR: Color = { r: 0, g: 0, b: 0, a: 0.25 }
-export const SELECTION_COLOR = { r: 0.23, g: 0.51, b: 0.96, a: 1 } satisfies Color
-export const COMPONENT_COLOR = { r: 0.592, g: 0.278, b: 1, a: 1 } satisfies Color
-export const SNAP_COLOR = { r: 1.0, g: 0.0, b: 0.56, a: 1 } satisfies Color
-export const MEASUREMENT_COLOR = { r: 0.949, g: 0.282, b: 0.133, a: 1 } satisfies Color
+// Overlay colours: the Redrob design system light values (see @redrob-labs/ui tokens.json). The app
+// replaces them per theme through EditorState.canvasTheme; headless rendering uses these.
+// action-primary #2b52ff
+export const SELECTION_COLOR = { r: 0.1686, g: 0.3216, b: 1, a: 1 } satisfies Color
+// product-design #c162f4, Redrob Design's product mark
+export const COMPONENT_COLOR = { r: 0.7569, g: 0.3843, b: 0.9569, a: 1 } satisfies Color
+// accent-pink-3 #ff39ba
+export const SNAP_COLOR = { r: 1, g: 0.2235, b: 0.7294, a: 1 } satisfies Color
+// accent-orange-3 #ff9c1b
+export const MEASUREMENT_COLOR = { r: 1, g: 0.6118, b: 0.1059, a: 1 } satisfies Color
 export const MEASUREMENT_PILL_PADDING_X = 5
 export const MEASUREMENT_PILL_HEIGHT = 18
 export const MEASUREMENT_PILL_RADIUS = 3
@@ -49,9 +55,10 @@ export function getDefaultCanvasBgColor(): Color {
 export const SNAP_THRESHOLD_SCREEN_PX = 5
 
 export const RULER_SIZE = 20
-export const RULER_BG_COLOR = { r: 0.14, g: 0.14, b: 0.14, a: 1 } satisfies Color
-export const RULER_TICK_COLOR = { r: 0.4, g: 0.4, b: 0.4, a: 1 } satisfies Color
-export const RULER_TEXT_COLOR = { r: 0.55, g: 0.55, b: 0.55, a: 1 } satisfies Color
+// surface-raised #f8f9fb, border-strong #7c8390, ink-muted #686e78 (light)
+export const RULER_BG_COLOR = { r: 0.9725, g: 0.9765, b: 0.9843, a: 1 } satisfies Color
+export const RULER_TICK_COLOR = { r: 0.4863, g: 0.5137, b: 0.5647, a: 1 } satisfies Color
+export const RULER_TEXT_COLOR = { r: 0.4078, g: 0.4314, b: 0.4706, a: 1 } satisfies Color
 export const RULER_BADGE_HEIGHT = 14
 export const RULER_BADGE_PADDING = 3
 export const RULER_BADGE_RADIUS = 2
@@ -102,10 +109,11 @@ export const AUTO_LAYOUT_HOVER_TICK_HIT_TOLERANCE = 8
 export const AUTO_LAYOUT_HOVER_PADDING_REGION_TOLERANCE = 20
 export const AUTO_LAYOUT_PADDING_EDITOR_OFFSET_X = 18
 export const AUTO_LAYOUT_PADDING_EDITOR_OFFSET_Y = 36
-export const AUTO_LAYOUT_HOVER_BLUE = { r: 0.28, g: 0.64, b: 1, a: 0.82 } satisfies Color
-export const AUTO_LAYOUT_HOVER_BLUE_FILL = { r: 0.28, g: 0.64, b: 1, a: 0.1 } satisfies Color
-export const AUTO_LAYOUT_HOVER_MAGENTA = { r: 1, g: 0.32, b: 0.68, a: 0.78 } satisfies Color
-export const AUTO_LAYOUT_HOVER_MAGENTA_FILL = { r: 1, g: 0.32, b: 0.68, a: 0.1 } satisfies Color
+// accent-sky-3 #2f8dff (padding) and accent-pink-3 #ff39ba (gap)
+export const AUTO_LAYOUT_HOVER_BLUE = { r: 0.1843, g: 0.5529, b: 1, a: 0.82 } satisfies Color
+export const AUTO_LAYOUT_HOVER_BLUE_FILL = { r: 0.1843, g: 0.5529, b: 1, a: 0.1 } satisfies Color
+export const AUTO_LAYOUT_HOVER_MAGENTA = { r: 1, g: 0.2235, b: 0.7294, a: 0.78 } satisfies Color
+export const AUTO_LAYOUT_HOVER_MAGENTA_FILL = { r: 1, g: 0.2235, b: 0.7294, a: 0.1 } satisfies Color
 
 export const SECTION_CORNER_RADIUS = 5
 export const SECTION_TITLE_HEIGHT = 24
@@ -139,7 +147,7 @@ export const AI_DONE_COLOR = { r: 0.16, g: 0.73, b: 0.36 }
 export const AI_PULSE_PERIOD_MS = 1500
 export const AI_DONE_DURATION_MS = 800
 
-export const TEXT_SELECTION_COLOR = { r: 0.26, g: 0.52, b: 0.96, a: 0.3 }
+export const TEXT_SELECTION_COLOR = { ...SELECTION_COLOR, a: 0.3 }
 export const TEXT_CARET_COLOR = BLACK
 export const TEXT_CARET_WIDTH = 1
 

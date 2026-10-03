@@ -7,6 +7,7 @@ import type { RenderOverlays, SkiaRenderer } from '#core/canvas/renderer'
 import type { EditorState } from '#core/editor/types'
 import { emitNavigationTrace } from '#core/profiler'
 
+import { applyCanvasThemePaints } from './canvas-theme'
 import { drawChromePass, drawLabelPass, drawOverlayPass } from './overlay-pass'
 import { renderSceneBacking, updateSceneBackingPreviewState } from './retained-backing'
 
@@ -49,6 +50,11 @@ export function renderFromEditorState(
   r.showRulers = showRulers
   r.pageColor = state.pageColor
   r.rulerTheme = state.rulerTheme ?? null
+  const canvasTheme = state.canvasTheme ?? null
+  if (canvasTheme !== r.canvasTheme) {
+    r.canvasTheme = canvasTheme
+    applyCanvasThemePaints(r)
+  }
   r.pageId = state.currentPageId
   r.navigationPhase = state.navigation.phase
   r.navigationGeneration = state.navigation.generation
