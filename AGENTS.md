@@ -178,6 +178,7 @@ Keep responsibilities distinct: engine tests cover state contracts, Playwright b
 ## Rendering
 
 - Canvas is CanvasKit (Skia WASM) on a WebGL surface, not DOM
+- Canvas overlay colours come from design tokens: `src/app.css` publishes `--color-canvas-*` and `--color-ruler-*`, `readCanvasTheme()` in `src/app/shell/theme.ts` resolves them into `EditorState.canvasTheme`/`rulerTheme`, and renderers read them through `canvasThemeColor()` (`packages/core/src/canvas/renderer/canvas-theme.ts`). Core constants hold the design system's light values as the headless fallback; never hardcode an overlay colour at a call site.
 - `renderVersion` vs `sceneVersion`: `renderVersion` = canvas repaint (pan/zoom/hover); `sceneVersion` = scene graph mutations. UI that only cares about graph data should avoid watching repaint-only state; use editor events for incremental surfaces such as the layer tree.
 - `requestRender()` bumps both counters; `requestRepaint()` bumps only `renderVersion`
 - `renderNow()` is only for surface recreation and font loading (need immediate draw)
@@ -198,7 +199,7 @@ Keep responsibilities distinct: engine tests cover state contracts, Playwright b
 
 ## Components & instances
 
-- Component types use `#9747ff`.
+- Component types use the Redrob Design product colour: `--product-design` (`#c162f4`, core `COMPONENT_COLOR`) on the canvas, and the `component` utility in UI, which takes an AA-safe step of the same ramp per theme.
 - Instance children map to component children through `componentId`; runtime overrides use structured `InstanceOverrideState` (`self` and `descendants` maps).
 - Component edits must propagate through editor/component sync—never hand-copy properties in app UI. Use Scene Graph copy helpers for nested values.
 
@@ -217,6 +218,8 @@ Keep responsibilities distinct: engine tests cover state contracts, Playwright b
 - Prefer accessible role/name, label, then text in tests. Use scoped `data-slot` anatomy or semantic attributes (`data-property`, `data-command`, `data-node-id`) when needed; reserve `data-test-id` for integration boundaries and never add test-hook props.
 - Use Reka UI primitives and typed Tailwind Variants themes under `src/theme/**`; merge per-instance `ui` slot overrides, expose `class` for single-root components, and do not add one-off class props. Use `UI` casing in type names.
 - Bind visual state through semantic `data-*` attributes; Steiger rejects template-time `use*UI()`, visual-state utility branches, and raw SVG app icons.
+- The visual language is the Redrob Group Design System 2026 (`@redrob-labs/ui`, pinned exactly, CSS layer only). `@redrob-design/brand/tokens.css` re-exports its tokens and fonts; do not use its React components, `styles.css` `rr-*` classes, or `preflight.css`. `src/app.css` maps the app's semantic Tailwind names (`bg-panel`, `text-surface`, `text-muted`, `border-border`, `bg-accent`, `text-on-accent`, `bg-material`, `bg-ai`, `text-error`...) onto design-system roles with `@theme inline static`, and pins Tailwind's colliding `--radius-*`, `--shadow-*`, `--font-sans` and `--font-mono` to the system values. Add a semantic token there rather than reaching for a palette class: Steiger's `no-raw-palette-classes` rejects Tailwind palette colours and arbitrary colour values in app UI, and the token contract test rejects `var()`s and colour utilities that name an undeclared token. Use `ink-light`/`ink-dark` only for marks drawn on user- or peer-chosen colours.
+- Light is the default theme for installs with no saved choice; the design system switches on `data-theme`, which `src/app/shell/theme.ts` and the inline boot script in `index.html` set together.
 - Storybook is the internal state workshop; VitePress is canonical public SDK documentation. Reuse colocated demos, derive API tables from source/JSDoc, and keep examples valid against public exports.
 - Prefer models/events/props over imperative slot actions except for explicitly renderless action primitives. Use VueUse for DOM refs/focus.
 - App wrappers around SDK primitives use shared UI helpers rather than scattered raw classes.
