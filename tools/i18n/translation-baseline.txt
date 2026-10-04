@@ -255,6 +255,7 @@ ja:panels.framePresetCategoryFigmaCommunity
 ja:storage.providerAmazonS3
 ja:storage.providerBackblaze
 ja:storage.providerR2
+ko:code.sourceTailwindJSX
 ko:composer.auto
 ko:panels.ai
 ko:thread.threadRegion

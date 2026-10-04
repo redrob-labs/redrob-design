@@ -3,7 +3,7 @@
   "jsxUpToDate": "Актуально",
   "source": "Источник кода",
   "sourceDesignJSX": "Design JSX",
-  "sourceTailwindJSX": "Tailwind JSX",
+  "sourceTailwindJSX": "React + Tailwind",
   "sourceHTMLCSS": "HTML/CSS",
   "editorDesignLabel": "Design JSX",
   "editorHTMLCSSLabel": "HTML и CSS",
@@ -11,5 +11,8 @@
   "updatedLive": "Обновлено в реальном времени",
   "previewFailed": "Ошибка предпросмотра",
   "generatedReadOnly": "Сгенерировано, только чтение",
-  "reset": "Сбросить"
+  "reset": "Сбросить",
+  "downloadTokens": "Скачать дизайн-токены (DTCG JSON)",
+  "copyTokensCSS": "Скопировать дизайн-токены как CSS-переменные",
+  "noTokens": "В этом файле пока нет переменных для экспорта"
 }

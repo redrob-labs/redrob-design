@@ -199,10 +199,10 @@ test('HTML/CSS uses the same editor and live reloads the canvas', async () => {
   expect(importedNodes.some((node) => node.type !== 'DOCUMENT' && node.type !== 'PAGE')).toBe(true)
 })
 
-test('Tailwind JSX is generated read-only in the same editor', async () => {
+test('React + Tailwind is generated read-only in the same editor', async () => {
   await editor.canvas.drawRect(100, 100, 200, 150)
   await openCodePanel()
-  await selectSource('Tailwind JSX')
+  await selectSource('React + Tailwind')
   await expect(editor.page.getByTestId('code-panel-status')).toContainText('Generated, read only')
   await expect(codeEditor()).toHaveAttribute('contenteditable', 'false')
 })

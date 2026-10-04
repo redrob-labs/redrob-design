@@ -43,6 +43,8 @@ ja:automation.searchTools
 ja:automation.serverURL
 ja:automation.toolsRestartNotice
 ja:code.copyJSXReference
+ja:code.copyTokensCSS
+ja:code.downloadTokens
 ja:code.editorHTMLCSSLabel
 ja:collaboration.pasteRoomLinkOrId
 ja:commands.paletteDescription
@@ -182,6 +184,8 @@ zh-cn:automation.searchTools
 zh-cn:automation.serverURL
 zh-cn:automation.toolsRestartNotice
 zh-cn:code.copyJSXReference
+zh-cn:code.copyTokensCSS
+zh-cn:code.downloadTokens
 zh-cn:code.editorHTMLCSSLabel
 zh-cn:collaboration.pasteRoomLinkOrId
 zh-cn:commands.paletteDescription
