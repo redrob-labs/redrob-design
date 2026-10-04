@@ -1,13 +1,20 @@
 import { shallowReactive } from 'vue'
 
-import { diffPageSnapshots, isEmptyPageChanges } from '@redrob-design/core/editor'
+import { diffPageSnapshots, isEmptyPageChanges, snapshotNodes } from '@redrob-design/core/editor'
 import type { NodeChange, PageChanges, PageSnapshot } from '@redrob-design/core/editor'
+import type { SceneGraph } from '@redrob-design/scene-graph'
 
 /** The part of an editor store a change set needs. */
 export interface ChangeOwner {
+  graph: SceneGraph
   state: { currentPageId: string }
   snapshotPage(pageId?: string): PageSnapshot
-  restoreNodes(from: PageSnapshot, to: PageSnapshot, pageId: string): void
+  restoreNodes(
+    from: PageSnapshot,
+    to: PageSnapshot,
+    pageId: string,
+    scope?: ReadonlySet<string>
+  ): void
   pushUndoEntry(entry: { label: string; forward(): void; inverse(): void }): void
   undo: { readonly undoLabel: string | null }
   undoAction(): void
@@ -27,14 +34,41 @@ export interface TurnChangeSet {
   owner: ChangeOwner
   pageId: string
   before: PageSnapshot
+  /** Only the nodes the answer touched; `scope` says which. */
   after: PageSnapshot
+  scope: ReadonlySet<string>
   items: ChangeDetail[]
   status: ChangeSetStatus
   /** Order of decision, so the latest kept change can offer Undo. */
   decidedAt: number
 }
 
-const openTurns = new WeakMap<ChangeOwner, { pageId: string; before: PageSnapshot }>()
+interface OpenTurn {
+  pageId: string
+  before: PageSnapshot
+  /** Nodes created, changed, moved or deleted since the answer began, and their parents. */
+  touched: Set<string>
+  stop: () => void
+}
+
+const openTurns = new WeakMap<ChangeOwner, OpenTurn>()
+
+/**
+ * Collects the ids an answer touches from graph events, so the end of the
+ * turn snapshots and compares those nodes rather than the whole page.
+ */
+function watchTouched(graph: SceneGraph, touched: Set<string>): () => void {
+  const add = (...ids: Array<string | null | undefined>) => {
+    for (const id of ids) if (id) touched.add(id)
+  }
+  return graph.onNodeEvents({
+    created: (node) => add(node.id, node.parentId),
+    updated: (id) => add(id),
+    deleted: (id, parentId) => add(id, parentId),
+    reparented: (id, oldParent, newParent) => add(id, oldParent, newParent),
+    reordered: (id, parentId, _index, previousParent) => add(id, parentId, previousParent)
+  })
+}
 
 /** Change sets by the id of the answer that made them. */
 export const changeSets = shallowReactive(new Map<string, TurnChangeSet>())
@@ -59,8 +93,15 @@ function detailed(changes: PageChanges, before: PageSnapshot, after: PageSnapsho
 
 /** An answer starts: remember the page as it is. */
 export function beginChangeTurn(owner: ChangeOwner): void {
+  openTurns.get(owner)?.stop()
   const pageId = owner.state.currentPageId
-  openTurns.set(owner, { pageId, before: owner.snapshotPage(pageId) })
+  const touched = new Set<string>()
+  openTurns.set(owner, {
+    pageId,
+    before: owner.snapshotPage(pageId),
+    touched,
+    stop: watchTouched(owner.graph, touched)
+  })
 }
 
 /**
@@ -71,16 +112,22 @@ export function finishChangeTurn(owner: ChangeOwner, messageId: string | undefin
   const turn = openTurns.get(owner)
   openTurns.delete(owner)
   if (!turn) return
-  const after = owner.snapshotPage(turn.pageId)
-  const changes = diffPageSnapshots(turn.before, after)
+  turn.stop()
+  // Nodes on other pages are out of this change set; the page node itself is in.
+  const scope = new Set(
+    [...turn.touched].filter((id) => turn.before.has(id) || owner.graph.getNode(id))
+  )
+  if (scope.size === 0) return
+  const after = snapshotNodes(owner.graph, scope)
+  const changes = diffPageSnapshots(turn.before, after, scope)
   if (isEmptyPageChanges(changes)) return
 
   const { before, pageId } = turn
   const id = messageId ?? `turn-${Date.now()}`
   owner.pushUndoEntry({
     label: undoLabelFor(id),
-    forward: () => owner.restoreNodes(before, after, pageId),
-    inverse: () => owner.restoreNodes(after, before, pageId)
+    forward: () => owner.restoreNodes(before, after, pageId, scope),
+    inverse: () => owner.restoreNodes(after, before, pageId, scope)
   })
   if (!messageId) return
   changeSets.set(messageId, {
@@ -89,6 +136,7 @@ export function finishChangeTurn(owner: ChangeOwner, messageId: string | undefin
     pageId,
     before,
     after,
+    scope,
     items: detailed(changes, before, after),
     status: 'open',
     decidedAt: 0
@@ -101,16 +149,16 @@ function decide(set: TurnChangeSet, status: ChangeSetStatus): void {
 
 /** Reverts the answer's changes as one undo step of their own. */
 function revert(set: TurnChangeSet): void {
-  const { owner, before, after, pageId } = set
+  const { owner, before, after, pageId, scope } = set
   if (owner.undo.undoLabel === undoLabelFor(set.id)) {
     owner.undoAction()
     return
   }
-  owner.restoreNodes(after, before, pageId)
+  owner.restoreNodes(after, before, pageId, scope)
   owner.pushUndoEntry({
     label: `Put back ${set.id}`,
-    forward: () => owner.restoreNodes(after, before, pageId),
-    inverse: () => owner.restoreNodes(before, after, pageId)
+    forward: () => owner.restoreNodes(after, before, pageId, scope),
+    inverse: () => owner.restoreNodes(before, after, pageId, scope)
   })
 }
 
@@ -157,6 +205,7 @@ export function openChangeCount(owner: ChangeOwner | null): number {
 
 /** The chat was cleared: its change cards go with it, the edits stay. */
 export function forgetChangeSets(owner: ChangeOwner): void {
+  openTurns.get(owner)?.stop()
   openTurns.delete(owner)
   for (const [id, set] of changeSets) if (set.owner === owner) changeSets.delete(id)
 }

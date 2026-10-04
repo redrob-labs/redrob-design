@@ -16,7 +16,12 @@ export { createDefaultEditorState, createEditor } from './create'
 export type { Editor } from './create'
 export { reapplyInstanceComponentProperties } from './components/properties'
 export { createGuideActions } from './guides'
-export { diffPageSnapshots, isEmptyPageChanges, restoreNodes } from './history/changes'
+export {
+  diffPageSnapshots,
+  isEmptyPageChanges,
+  restoreNodes,
+  snapshotNodes
+} from './history/changes'
 export type { NodeChange, PageChanges } from './history/changes'
 export type { PageSnapshot } from './history/snapshot'
 export { createTextActions } from './text'

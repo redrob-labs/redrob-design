@@ -54,6 +54,7 @@
 
 ### Fixed
 
+- Press focused buttons with Enter and Space again; the editor's Enter and space-hand shortcuts no longer take those keys from the control that has focus.
 - Translate the Redrob chat's Continue and Clear buttons in every interface language, and write credential and stock-photo hints without em dashes.
 - Propagate host `REDROB_KEY` into `REDROB_API_KEY` for Redrob Code ACP sessions, normalize empty or Design-only model ids to `redrob/auto`, and surface JSON-RPC auth failures as readable messages instead of `[object Object]`.
 - Start the desktop app again instead of aborting at launch when no in-app update feed is configured, and report updates as unavailable in those builds.

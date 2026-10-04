@@ -56,28 +56,49 @@ function describe(node: SceneNode, kind: NodeChange['kind'], keys: string[] = []
  * their topmost level only: a frame added with three children is one change.
  * A node inside an added or removed subtree is never reported as changed.
  */
-export function diffPageSnapshots(before: PageSnapshot, after: PageSnapshot): PageChanges {
+export function diffPageSnapshots(
+  before: PageSnapshot,
+  after: PageSnapshot,
+  scope?: ReadonlySet<string>
+): PageChanges {
   const added: NodeChange[] = []
   const removed: NodeChange[] = []
   const changed: NodeChange[] = []
+  const ids = scope ?? new Set([...before.keys(), ...after.keys()])
 
-  for (const [id, node] of after) {
-    if (before.has(id)) continue
-    if (node.parentId && after.has(node.parentId) && !before.has(node.parentId)) continue
-    added.push(describe(node, 'added'))
-  }
-  for (const [id, node] of before) {
-    if (after.has(id)) continue
-    if (node.parentId && before.has(node.parentId) && !after.has(node.parentId)) continue
-    removed.push(describe(node, 'removed'))
-  }
-  for (const [id, node] of after) {
+  for (const id of ids) {
     const previous = before.get(id)
-    if (!previous) continue
-    const keys = changedKeys(previous, node)
-    if (keys.length > 0) changed.push(describe(node, 'changed', keys))
+    const node = after.get(id)
+    if (node && !previous) {
+      const parentAdded = node.parentId && after.has(node.parentId) && !before.has(node.parentId)
+      if (!parentAdded) added.push(describe(node, 'added'))
+    } else if (previous && !node) {
+      // Out of scope means untouched, not gone: only a scoped parent can be removed.
+      const parentRemoved =
+        previous.parentId &&
+        before.has(previous.parentId) &&
+        !after.has(previous.parentId) &&
+        (!scope || scope.has(previous.parentId))
+      if (!parentRemoved) removed.push(describe(previous, 'removed'))
+    } else if (previous && node) {
+      const keys = changedKeys(previous, node)
+      if (keys.length > 0) changed.push(describe(node, 'changed', keys))
+    }
   }
   return { added, removed, changed }
+}
+
+/**
+ * Clones of just these nodes, for the far side of a scoped diff. Ids no
+ * longer in the graph are left out, so they read as removed.
+ */
+export function snapshotNodes(graph: SceneGraph, ids: Iterable<string>): PageSnapshot {
+  const snapshot: PageSnapshot = new Map()
+  for (const id of ids) {
+    const node = graph.getNode(id)
+    if (node) snapshot.set(id, structuredClone(node))
+  }
+  return snapshot
 }
 
 function recreate(graph: SceneGraph, snapshot: PageSnapshot, id: string): void {
@@ -102,8 +123,13 @@ function orderChildren(graph: SceneGraph, snapshot: PageSnapshot, parentId: stri
  * leaving every other node alone. Unlike restoring the whole page, a later
  * edit to an unrelated node survives.
  */
-export function restoreNodes(graph: SceneGraph, from: PageSnapshot, to: PageSnapshot): void {
-  const changes = diffPageSnapshots(from, to)
+export function restoreNodes(
+  graph: SceneGraph,
+  from: PageSnapshot,
+  to: PageSnapshot,
+  scope?: ReadonlySet<string>
+): void {
+  const changes = diffPageSnapshots(from, to, scope)
   // In `to` but not `from`: those were removed since, so recreate them.
   for (const change of changes.added) recreate(graph, to, change.id)
   for (const change of changes.removed) {

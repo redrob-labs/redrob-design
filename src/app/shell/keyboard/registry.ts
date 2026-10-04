@@ -8,7 +8,7 @@ import type { EditorCommandId } from '@redrob-design/vue'
 import { requestRenameSelection } from '@/app/editor/selection/rename-dialog'
 import { TOOL_SHORTCUTS } from '@/app/editor/session'
 import { openSettingsDialog } from '@/app/settings/dialog'
-import { isEditing } from '@/app/shell/keyboard/focus'
+import { isControlActivation, isEditing } from '@/app/shell/keyboard/focus'
 import { bindSpaceHandTool } from '@/app/shell/keyboard/space-tool'
 import type {
   KeyboardShortcutOptions,
@@ -90,6 +90,7 @@ function shouldIgnoreShortcut(event: KeyboardEvent, options: KeyboardShortcutOpt
     hasOpenDismissableLayer() ||
     originatedInOverlay(event) ||
     isEditing(event) ||
+    isControlActivation(event) ||
     options.inputFocused.value ||
     !!options.store.state.editingTextId ||
     !!options.store.state.numberFieldFocused

@@ -234,8 +234,13 @@ export function createUndoActions(ctx: EditorContext) {
    * their `to` state, then lays the page out again and drops removed nodes
    * from the selection.
    */
-  function restoreNodes(from: PageSnapshot, to: PageSnapshot, pageId: string) {
-    restoreSnapshotNodes(ctx.graph, from, to)
+  function restoreNodes(
+    from: PageSnapshot,
+    to: PageSnapshot,
+    pageId: string,
+    scope?: ReadonlySet<string>
+  ) {
+    restoreSnapshotNodes(ctx.graph, from, to, scope)
     computeAllLayouts(ctx.graph, pageId)
     const kept = [...ctx.state.selectedIds].filter((id) => ctx.graph.getNode(id))
     if (kept.length !== ctx.state.selectedIds.size) ctx.setSelectedIds(new Set(kept))

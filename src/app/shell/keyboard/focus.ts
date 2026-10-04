@@ -22,3 +22,17 @@ export function isInputElement(element: EventTarget | null | undefined): boolean
     (element instanceof HTMLElement && element.isContentEditable)
   )
 }
+
+const CONTROL_SELECTOR =
+  'button, a[href], [role="button"], [role="menuitem"], [role="option"], [role="tab"], select'
+
+/**
+ * Enter and Space on a focused control press that control. Editor bindings
+ * for those keys must not take them, or keyboard users cannot press buttons.
+ */
+export function isControlActivation(event: Pick<KeyboardEvent, 'code' | 'composedPath'>): boolean {
+  if (event.code !== 'Enter' && event.code !== 'NumpadEnter' && event.code !== 'Space') return false
+  return event
+    .composedPath()
+    .some((target) => target instanceof Element && target.matches(CONTROL_SELECTOR))
+}
