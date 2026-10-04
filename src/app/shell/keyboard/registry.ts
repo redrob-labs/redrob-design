@@ -26,6 +26,25 @@ type ShortcutDefinition = {
   global?: boolean
 }
 
+/**
+ * Shortcuts that still run while a file is view-only (Describe). Tool keys,
+ * selection, editing and arrange shortcuts stand down until Edit.
+ */
+const VIEW_ONLY_SHORTCUT_IDS: ReadonlySet<string> = new Set([
+  'edit.undo',
+  'edit.redo',
+  'view.zoom100',
+  'view.zoomFit',
+  'save',
+  'save-as',
+  'open-file',
+  'close-tab',
+  'new-tab',
+  'toggle-ai',
+  'toggle-ui',
+  'open-settings'
+])
+
 function commandShortcut(
   command: EditorCommandId,
   keys = editorCommandMetadata(command).keybinding
@@ -89,6 +108,7 @@ function bindToolShortcuts(bindings: KeyBindingMap, options: KeyboardShortcutRun
   for (const [code, tool] of Object.entries(TOOL_SHORTCUTS)) {
     if (!tool) continue
     bindings[code] = (event: KeyboardEvent) => {
+      if (options.store.state.viewOnly) return
       event.preventDefault()
       options.spaceTool.resetToolBeforeSpace()
       options.store.setTool(tool)
@@ -194,6 +214,8 @@ export function registerKeyboardShortcuts(options: KeyboardShortcutOptions) {
 
   for (const shortcut of shortcuts) {
     bindShortcut(shortcut.global ? globalBindings : bindings, shortcut.keys, (event) => {
+      // Describe is view-only: only looking, files and Redrob's own undo.
+      if (options.store.state.viewOnly && !VIEW_ONLY_SHORTCUT_IDS.has(shortcut.id)) return
       shortcut.run(runOptions(event))
       if (shortcut.shouldPreventDefault?.(event) ?? true) event.preventDefault()
     })

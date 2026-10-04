@@ -37,10 +37,14 @@ import { findTabByFileIdentity } from '@/app/tabs/open/identity'
 
 export type TabKind = 'home' | 'document'
 
+/** Describe: talk about the file and point at it. Edit: change it directly. */
+export type TabMode = 'describe' | 'edit'
+
 export interface Tab {
   id: string
   store: EditorStore
   kind: TabKind
+  mode: TabMode
 }
 
 const io = new IORegistry(BUILTIN_IO_FORMATS)
@@ -94,14 +98,14 @@ export function getTabsSnapshot(): Tab[] {
 
 export function createTab(store?: EditorStore, initialGraph?: SceneGraph): Tab {
   const s = store ?? createEditorStore(initialGraph)
-  const tab: Tab = { id: generateTabId(), store: s, kind: 'document' }
+  const tab: Tab = { id: generateTabId(), store: s, kind: 'document', mode: 'edit' }
   tabsRef.value = [...tabsRef.value, tab]
   activateTab(tab)
   return tab
 }
 
 export function createHomeTab(): Tab {
-  const tab: Tab = { id: generateTabId(), store: createEditorStore(), kind: 'home' }
+  const tab: Tab = { id: generateTabId(), store: createEditorStore(), kind: 'home', mode: 'edit' }
   tabsRef.value = [...tabsRef.value, tab]
   activateTab(tab)
   return tab
@@ -114,6 +118,18 @@ export function leaveHome(tabId: string): void {
   if (tab.kind !== 'home') return
   tabsRef.value = tabsRef.value.with(tabIndex, { ...tab, kind: 'document' })
 }
+
+/** Switches a tab between Describe and Edit; Describe stops direct editing. */
+export function setTabMode(tabId: string, mode: TabMode): void {
+  const tabIndex = tabsRef.value.findIndex((candidate) => candidate.id === tabId)
+  if (tabIndex === -1) return
+  const tab = tabsRef.value[tabIndex]
+  tab.store.setViewOnly(mode === 'describe')
+  if (tab.mode === mode) return
+  tabsRef.value = tabsRef.value.with(tabIndex, { ...tab, mode })
+}
+
+export const activeTabMode = computed<TabMode>(() => activeTab.value?.mode ?? 'edit')
 
 export function createDocumentInCurrentTab(): Tab {
   const current = activeTab.value

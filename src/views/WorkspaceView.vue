@@ -25,6 +25,7 @@ import FontStatusBanner from '@/components/font-status/FontStatusBanner.vue'
 import CommandPalette from '@/components/commands/CommandPalette.vue'
 import SafariBanner from '@/components/SafariBanner.vue'
 import TabBar from '@/components/TabBar.vue'
+import ModeSwitch from '@/components/editor/describe/ModeSwitch.vue'
 import RenameSelectionDialog from '@/components/selection/RenameSelectionDialog.vue'
 import EditorWorkspace from '@/components/editor/EditorWorkspace.vue'
 import HomeWorkspace from '@/components/home/HomeWorkspace.vue'
@@ -103,7 +104,11 @@ onUnmounted(() => {
     <FontStatusBanner />
     <RenameSelectionDialog />
     <CommandPalette v-model:open="commandPaletteOpen" />
-    <TabBar />
+    <TabBar>
+      <template #end>
+        <ModeSwitch v-if="activeTab && activeTab.kind !== 'home'" />
+      </template>
+    </TabBar>
     <HomeWorkspace v-show="activeTab?.kind === 'home'" @new-document="createDocumentInCurrentTab" />
     <EditorWorkspace v-if="activeTab?.kind !== 'home'" />
   </div>

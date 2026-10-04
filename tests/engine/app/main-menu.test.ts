@@ -56,6 +56,23 @@ describe('main menu model', () => {
     ])
   })
 
+  test('Describe keeps files, undo and looking around, and drops hand editing', () => {
+    const withObject: MainMenuGroup[] = [
+      ...groups,
+      { id: 'object', label: 'Object', items: [item('selection.group')] }
+    ]
+    const result = mainMenuGroups(withObject, 'describe', 'Language')
+    expect(result.map((group) => group.id)).toEqual(['file', 'edit', 'view'])
+    expect(ids(result[0].items)).toEqual(['new', 'open', '-', 'save', 'save-as', '-', 'close'])
+    expect(ids(result[1].items)).toEqual(['edit.undo'])
+    expect(result[2].items.map((entry) => ('label' in entry ? entry.label : '-'))).toEqual([
+      'view.zoomFit',
+      '-',
+      'theme',
+      'Language'
+    ])
+  })
+
   test('Home keeps only what works without a file', () => {
     const result = mainMenuGroups(groups, 'home', 'Language')
     expect(result.map((group) => group.id)).toEqual(['file', 'view'])

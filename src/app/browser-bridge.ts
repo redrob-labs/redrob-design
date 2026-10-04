@@ -1,5 +1,6 @@
 import type { ChatTransport, UIMessage } from 'ai'
 
+import { beginChangeTurn, finishChangeTurn } from '@/app/assistant/changes/store'
 import type { CollabReturn } from '@/app/collab/context'
 import type { EditorStore } from '@/app/editor/session/create'
 import { createNavigationBenchmarkHooks } from '@/app/performance/navigation/hooks'
@@ -12,6 +13,11 @@ export interface RedrobDesignTestHooks {
   mockHandle?: FileSystemFileHandle
   savedOpen?: Window['open']
   navigation?: NavigationBenchmarkHooks
+  /** Opens and closes an answer's change turn, as the tool loop does. */
+  changeTurn?: {
+    begin: () => void
+    finish: (messageId: string) => void
+  }
   collab?: Pick<
     CollabReturn,
     'connect' | 'disconnect' | 'updateCursor' | 'updateSelection' | 'setLocalName'
@@ -52,6 +58,14 @@ export function setRedrobDesignStore(store: EditorStore) {
   if (appRuntimeConfig.navigationBenchmark) {
     const testHooks = (api.test ??= {})
     testHooks.navigation = createNavigationBenchmarkHooks(store)
+  }
+  // Dev only, like the chat transport override the chat tests already use.
+  if (import.meta.env.DEV) {
+    const testHooks = (api.test ??= {})
+    testHooks.changeTurn = {
+      begin: () => beginChangeTurn(store),
+      finish: (messageId) => finishChangeTurn(store, messageId)
+    }
   }
 }
 

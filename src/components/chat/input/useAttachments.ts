@@ -80,6 +80,13 @@ export function useAttachmentDrafts(options: AttachmentDraftOptions) {
     nodeIds.value = nodeIds.value.filter((candidate) => candidate !== id)
   }
 
+  /** Adds one node as context, as pointing at it in Describe does. */
+  function addNode(id: string): void {
+    nodeIds.value = resolveReferencedNodes(options.editor.graph, [...nodeIds.value, id]).map(
+      (node) => node.id
+    )
+  }
+
   function toggleSelection(): void {
     if (selectedNodeIds.value.length > 0) {
       const selected = new Set(options.selectedIds.value)
@@ -135,6 +142,7 @@ export function useAttachmentDrafts(options: AttachmentDraftOptions) {
     addImages,
     removeImage,
     removeNode,
+    addNode,
     toggleSelection,
     handlePaste,
     takeSubmission

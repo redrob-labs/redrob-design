@@ -41,5 +41,14 @@
   "propLayout": "布局",
   "propOrder": "顺序",
   "propVisibility": "可见性",
-  "propOther": "其他属性"
+  "propOther": "其他属性",
+  "modeLabel": "模式",
+  "modeDescribe": "描述",
+  "modeEdit": "编辑",
+  "modeDescribeHint": "讨论文件并指向其中的部分",
+  "modeEditHint": "自己修改文件",
+  "pointHint": "指向一个框架来讨论它。",
+  "resizeThread": "调整面板大小",
+  "threadRegion": "对话",
+  "canvasRegion": "页面"
 }

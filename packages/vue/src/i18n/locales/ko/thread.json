@@ -41,5 +41,14 @@
   "propLayout": "레이아웃",
   "propOrder": "순서",
   "propVisibility": "표시 여부",
-  "propOther": "기타 속성"
+  "propOther": "기타 속성",
+  "modeLabel": "모드",
+  "modeDescribe": "설명",
+  "modeEdit": "편집",
+  "modeDescribeHint": "파일에 대해 이야기하고 가리키기",
+  "modeEditHint": "파일을 직접 변경하기",
+  "pointHint": "프레임을 가리켜 이야기해 보세요.",
+  "resizeThread": "Redrob 패널 크기 조정",
+  "threadRegion": "Redrob",
+  "canvasRegion": "페이지"
 }

@@ -41,5 +41,14 @@
   "propLayout": "レイアウト",
   "propOrder": "順序",
   "propVisibility": "表示",
-  "propOther": "その他のプロパティ"
+  "propOther": "その他のプロパティ",
+  "modeLabel": "モード",
+  "modeDescribe": "説明",
+  "modeEdit": "編集",
+  "modeDescribeHint": "ファイルについて話し、指し示す",
+  "modeEditHint": "ファイルを自分で変更する",
+  "pointHint": "フレームを指して話しかけてください。",
+  "resizeThread": "パネルのサイズを変更",
+  "threadRegion": "対話",
+  "canvasRegion": "ページ"
 }

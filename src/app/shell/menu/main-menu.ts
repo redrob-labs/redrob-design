@@ -17,9 +17,10 @@ export function useMainMenu() {
   const { topMenus } = useAppMenu()
   const { menu } = useI18n()
 
-  const screen = computed<MainMenuScreen>(() =>
-    activeTab.value?.kind === 'home' ? 'home' : 'edit'
-  )
+  const screen = computed<MainMenuScreen>(() => {
+    if (activeTab.value?.kind === 'home') return 'home'
+    return activeTab.value?.mode === 'describe' ? 'describe' : 'edit'
+  })
   const groups = computed(() => mainMenuGroups(topMenus.value, screen.value, menu.value.language))
 
   return {

@@ -67,6 +67,11 @@ export interface EditorViewState {
   } | null
   hoveredNodeId: string | null
   measurementMode: MeasurementMode
+  /**
+   * The person can look, pan and zoom but not edit. Tools, the AI and other
+   * programmatic edits still run; input layers read this to stand down.
+   */
+  viewOnly: boolean
   editingTextId: string | null
   penState: {
     vertices: VectorVertex[]
@@ -126,6 +131,8 @@ export interface EditorEvents extends SceneGraphEvents {
   'graph:replaced': (graph: SceneGraph) => void
   'selection:changed': (selectedIds: string[], previousIds: string[]) => void
   'tool:changed': (tool: Tool, previousTool: Tool) => void
+  /** Direct editing by the person was turned off (Describe) or back on (Edit). */
+  'view-only:changed': (viewOnly: boolean) => void
   'page:changed': (pageId: string, previousPageId: string) => void
   'guides:changed': (ownerId: string, guides: readonly CanvasGuide[]) => void
   'clipboard:images-missing': (resolution: ClipboardImageResolution) => void

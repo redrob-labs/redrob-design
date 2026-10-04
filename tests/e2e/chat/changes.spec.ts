@@ -8,14 +8,13 @@ import { expect, test } from '#tests/helpers/chat/fixture'
  * closes the turn for the answer the mock just gave (`mock-msg-1`).
  */
 async function answerAddsBadge(page: Page): Promise<string> {
-  return page.evaluate(async () => {
-    const modulePath = '/src/app/assistant/changes/store.ts'
-    const changes = await import(modulePath)
+  return page.evaluate(() => {
     const store = window.redrobDesign?.getStore?.()
-    if (!store) throw new Error('Editor store is not exposed')
-    changes.beginChangeTurn(store)
+    const turn = window.redrobDesign?.test?.changeTurn
+    if (!store || !turn) throw new Error('Editor store or change turn hooks are not exposed')
+    turn.begin()
     const node = store.graph.createNode('RECTANGLE', store.state.currentPageId, { name: 'Badge' })
-    changes.finishChangeTurn(store, 'mock-msg-1')
+    turn.finish('mock-msg-1')
     return node.id
   })
 }

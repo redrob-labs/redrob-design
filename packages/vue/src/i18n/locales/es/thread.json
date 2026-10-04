@@ -41,5 +41,14 @@
   "propLayout": "Diseño",
   "propOrder": "Orden",
   "propVisibility": "Visibilidad",
-  "propOther": "Otras propiedades"
+  "propOther": "Otras propiedades",
+  "modeLabel": "Modo",
+  "modeDescribe": "Describir",
+  "modeEdit": "Editar",
+  "modeDescribeHint": "Habla del archivo y señala partes de él",
+  "modeEditHint": "Cambia el archivo tú mismo",
+  "pointHint": "Señala un marco para hablar de él.",
+  "resizeThread": "Cambiar el tamaño del panel de Redrob",
+  "threadRegion": "Redrob",
+  "canvasRegion": "Página"
 }

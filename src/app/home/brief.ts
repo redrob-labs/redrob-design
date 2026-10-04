@@ -3,7 +3,7 @@ import { nextTick } from 'vue'
 import { askRedrob } from '@/app/ai/chat/ask'
 import type { ChatSubmission } from '@/app/ai/chat/submission/types'
 import type { EditorStore } from '@/app/editor/active-store'
-import { createDocumentInCurrentTab } from '@/app/tabs'
+import { createDocumentInCurrentTab, setTabMode } from '@/app/tabs'
 
 /** Briefs from Home waiting for their new file's Redrob tab to send them. */
 const pendingBriefs = new WeakMap<EditorStore, ChatSubmission>()
@@ -15,6 +15,8 @@ const pendingBriefs = new WeakMap<EditorStore, ChatSubmission>()
 export function startBrief(submission: ChatSubmission): EditorStore {
   const tab = createDocumentInCurrentTab()
   pendingBriefs.set(tab.store, submission)
+  // A brief is a conversation first: the file opens in Describe.
+  setTabMode(tab.id, 'describe')
   askRedrob()
   return tab.store
 }

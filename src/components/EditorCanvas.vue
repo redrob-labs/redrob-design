@@ -26,6 +26,7 @@ import { useEditorStore } from '@/app/editor/active-store'
 import { appRuntimeConfig } from '@/app/runtime/config'
 import { useCanvasCollaborationAwareness } from '@/app/editor/canvas/collaboration-awareness'
 import { createCanvasContextSelection } from '@/app/editor/canvas/context-selection'
+import { useDescribePointing } from '@/app/editor/canvas/describe-pointing'
 import IconLucidePanelBottom from '~icons/lucide/panel-bottom'
 import IconLucidePanelLeft from '~icons/lucide/panel-left'
 import IconLucidePanelRight from '~icons/lucide/panel-right'
@@ -115,7 +116,8 @@ watch(isActivePane, (active) => {
 })
 onUnmounted(cleanupInteractions)
 
-useTextEdit(canvasRef, store, { isEnabled: () => isActivePane.value })
+useTextEdit(canvasRef, store, { isEnabled: () => isActivePane.value && !store.state.viewOnly })
+useDescribePointing(canvasRef, store)
 const { isDraggingOver } = useCanvasDrop(canvasRef, store, activatePane)
 
 const paddingSideIcons = {
@@ -159,12 +161,19 @@ const paddingEditorIcon = computed(() => {
   return edit ? paddingSideIcons[edit.side] : IconLucidePanelTop
 })
 
-const cursor = computed(() => toolCursor(store.state.activeTool, cursorOverride.value))
+const cursor = computed(() => {
+  if (store.state.viewOnly) return store.state.hoveredNodeId ? 'pointer' : 'grab'
+  return toolCursor(store.state.activeTool, cursorOverride.value)
+})
 </script>
 
 <template>
   <ContextMenuRoot :modal="false">
-    <ContextMenuTrigger as-child @contextmenu.capture="selectAtContextPoint">
+    <ContextMenuTrigger
+      as-child
+      :disabled="store.state.viewOnly"
+      @contextmenu.capture="selectAtContextPoint"
+    >
       <div
         data-test-id="canvas-area"
         :data-pane-id="paneId"

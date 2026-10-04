@@ -41,5 +41,14 @@
   "propLayout": "Layout",
   "propOrder": "Reihenfolge",
   "propVisibility": "Sichtbarkeit",
-  "propOther": "Weitere Eigenschaften"
+  "propOther": "Weitere Eigenschaften",
+  "modeLabel": "Modus",
+  "modeDescribe": "Beschreiben",
+  "modeEdit": "Bearbeiten",
+  "modeDescribeHint": "Über die Datei sprechen und darauf zeigen",
+  "modeEditHint": "Die Datei selbst ändern",
+  "pointHint": "Zeige auf einen Rahmen, um darüber zu sprechen.",
+  "resizeThread": "Größe des Redrob-Bereichs ändern",
+  "threadRegion": "Redrob",
+  "canvasRegion": "Seite"
 }

@@ -1,7 +1,7 @@
 import type { MenuActionNode, MenuEntry } from '@redrob-design/vue'
 
 /** The screen the main menu is trimmed for. */
-export type MainMenuScreen = 'home' | 'edit'
+export type MainMenuScreen = 'home' | 'describe' | 'edit'
 
 export interface MainMenuGroup {
   id: string
@@ -15,10 +15,41 @@ export interface MainMenuGroup {
  */
 export type MenuTrimDecision = false | true | 'subtree'
 
+type ScreenItemIds = Partial<Record<string, ReadonlySet<string>>>
+
 /** Entries the Home screen can act on; everything else needs an open file. */
-const HOME_ITEM_IDS: Partial<Record<string, ReadonlySet<string>>> = {
+const HOME_ITEM_IDS: ScreenItemIds = {
   file: new Set(['new', 'open', 'open-storage-workspace', 'import-design-tokens']),
   view: new Set(['theme'])
+}
+
+/**
+ * Entries that make sense while describing a file: open, save and export it,
+ * undo what Redrob did, and look around. Editing by hand waits for Edit.
+ */
+const DESCRIBE_ITEM_IDS: ScreenItemIds = {
+  file: new Set([
+    'new',
+    'open',
+    'open-recent',
+    'open-storage-workspace',
+    'import-design-tokens',
+    'save',
+    'save-as',
+    'export-png',
+    'export-svg',
+    'export-pptx',
+    'export-fig',
+    'autosave',
+    'close'
+  ]),
+  edit: new Set(['edit.undo', 'edit.redo']),
+  view: new Set(['view.zoom100', 'view.zoomFit', 'zoom-in', 'zoom-out', 'theme'])
+}
+
+const SCREEN_ITEM_IDS: Partial<Record<MainMenuScreen, ScreenItemIds>> = {
+  home: HOME_ITEM_IDS,
+  describe: DESCRIBE_ITEM_IDS
 }
 
 /** Settings lives at the top level of the main menu, so nested copies are dropped. */
@@ -85,16 +116,19 @@ export function mainMenuGroups(
   languageLabel: string
 ): MainMenuGroup[] {
   const result: MainMenuGroup[] = []
+  const screenIds = SCREEN_ITEM_IDS[screen]
   for (const group of groups) {
-    const homeIds = HOME_ITEM_IDS[group.id]
-    if (screen === 'home' && !homeIds) continue
+    const allowed = screenIds?.[group.id]
+    if (screenIds && !allowed) continue
     const items = trimMenuEntries(group.items, (entry): MenuTrimDecision => {
       const id = menuIdOf(entry)
       if (id && TOP_LEVEL_ONLY_IDS.has(id)) return false
-      if (screen !== 'home' || !homeIds) return true
-      if (id) return homeIds.has(id) ? 'subtree' : false
+      if (!allowed) return true
+      if (id) return allowed.has(id) ? 'subtree' : false
       // The interface language entry has no menu id; it is useful everywhere.
-      return 'label' in entry && entry.label === languageLabel ? 'subtree' : false
+      if ('label' in entry && entry.label === languageLabel) return 'subtree'
+      // Other unnamed submenus (Export) keep whichever children are allowed.
+      return subOf(entry).length > 0
     })
     if (items.length > 0) result.push({ id: group.id, label: group.label, items })
   }

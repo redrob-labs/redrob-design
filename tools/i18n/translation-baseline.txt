@@ -62,6 +62,7 @@ de:thread.propName
 de:thread.propPosition
 de:thread.propText
 de:thread.textOf
+de:thread.threadRegion
 de:tools.ellipse
 de:tools.hand
 de:tools.polygon
@@ -106,6 +107,7 @@ es:storage.bucket
 es:storage.providerAmazonS3
 es:storage.providerBackblaze
 es:storage.providerR2
+es:thread.threadRegion
 es:variableTypes.color
 fr:ai.completions
 fr:ai.connectRedrob
@@ -172,7 +174,10 @@ fr:storage.bucket
 fr:storage.providerAmazonS3
 fr:storage.providerBackblaze
 fr:storage.providerR2
+fr:thread.canvasRegion
+fr:thread.modeLabel
 fr:thread.propPosition
+fr:thread.threadRegion
 fr:tools.ellipse
 fr:tools.rectangle
 fr:tools.section
@@ -218,6 +223,7 @@ it:storage.providerAmazonS3
 it:storage.providerBackblaze
 it:storage.providerR2
 it:thread.propLayout
+it:thread.threadRegion
 ja:ai.connectRedrob
 ja:ai.connectRedrobCancel
 ja:ai.connectRedrobConnected
@@ -243,6 +249,7 @@ ja:storage.providerBackblaze
 ja:storage.providerR2
 ko:composer.auto
 ko:panels.ai
+ko:thread.threadRegion
 pl:ai.completions
 pl:ai.connectRedrob
 pl:ai.connectRedrobCancel
@@ -280,6 +287,7 @@ pl:storage.providerAmazonS3
 pl:storage.providerBackblaze
 pl:storage.providerR2
 pl:storage.region
+pl:thread.threadRegion
 ru:ai.completions
 ru:ai.connectRedrob
 ru:ai.connectRedrobCancel
@@ -305,6 +313,7 @@ ru:panels.framePresetCategoryFigmaCommunity
 ru:storage.providerAmazonS3
 ru:storage.providerBackblaze
 ru:storage.providerR2
+ru:thread.threadRegion
 zh-cn:ai.completions
 zh-cn:ai.connectRedrob
 zh-cn:ai.connectRedrobCancel

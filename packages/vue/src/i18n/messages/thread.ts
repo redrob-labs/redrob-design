@@ -46,7 +46,16 @@ export const threadMessageDefaults = {
   propLayout: 'Layout',
   propOrder: 'Order',
   propVisibility: 'Visibility',
-  propOther: 'Other properties'
+  propOther: 'Other properties',
+  modeLabel: 'Mode',
+  modeDescribe: 'Describe',
+  modeEdit: 'Edit',
+  modeDescribeHint: 'Talk about the file and point at it',
+  modeEditHint: 'Change the file yourself',
+  pointHint: 'Point at a frame to talk about it.',
+  resizeThread: 'Resize the Redrob panel',
+  threadRegion: 'Redrob',
+  canvasRegion: 'Page'
 } as const
 
 export const threadMessages = i18n('thread', threadMessageDefaults)

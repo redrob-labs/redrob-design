@@ -15,6 +15,7 @@ import IconButton from '@/components/ui/IconButton.vue'
 import { MAX_IMAGE_ATTACHMENTS } from '@/app/ai/attachment/image/types'
 import type { ChatSubmission } from '@/app/ai/chat/submission/types'
 import { composerFocusRequest } from '@/app/ai/chat/ask'
+import { pointRequest } from '@/app/assistant/pointing/store'
 import { useAIChat } from '@/app/ai/chat/use'
 import { designModelProfile } from '@/app/ai/models'
 import { openSettingsDialog } from '@/app/settings/dialog'
@@ -56,10 +57,16 @@ const {
   openImageDialog,
   removeImage,
   removeNode: removeReferencedNode,
+  addNode: addReferencedNode,
   toggleSelection: toggleCurrentSelection,
   handlePaste,
   takeSubmission
 } = attachments
+
+// Pointing at the canvas in Describe adds that layer as context.
+watch(pointRequest, (request) => {
+  if (request) addReferencedNode(request.nodeId)
+})
 
 const isStreaming = computed(() => status === 'streaming' || status === 'submitted')
 const isAgentProvider = computed(

@@ -18,7 +18,8 @@ test('one sentence on Home opens a file with the brief as its first message', as
 
   await field.press('Enter')
   await expect(chat.page.getByTestId('recent-files-home')).toBeHidden()
-  await expect(chat.chatTab).toHaveAttribute('data-state', 'active')
+  // A brief opens in Describe, with the thread docked beside the canvas.
+  await expect(chat.page.getByTestId('describe-thread')).toBeVisible()
   await expect(chat.userMessage()).toContainText('A pricing page for Redrob Office')
 })
 

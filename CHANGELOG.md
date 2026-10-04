@@ -26,6 +26,7 @@
 - Inspect selected designs with a configured Vision model and attach images to AI chat with bounded analysis and previews. (#232, #471)
 - Start from one sentence on Home: "What are you making?" opens a new file with the brief as its first message, with suggestions, New presets for a phone app, website or social card, and a note on where files are kept.
 - Choose Plan or Run and Redrob Auto or a pinned model in the Redrob composer, and read Privacy, Memory and Cross-check in a status line under it.
+- Switch any file between Describe and Edit from the tab bar: Describe shows the canvas to look at and point at, with the Redrob thread beside it in a 340 to 720 pixel panel, and keeps hand edits and their shortcuts off; briefs from Home open in Describe.
 - Review what each Redrob answer changed on the page in plain words, then Keep it or Put it back; the whole answer is one undo step, the latest kept change has Undo, and the Redrob tab counts changes still waiting.
 - Keep each file's Redrob conversation across reloads and provider changes, follow Redrob's progress step by step while it works, and read a receipt under every answer with the model and who chose it, the price, what was kept private, and Fact check when it ran.
 - Pin selected layers as explicit AI chat context, show collapsible reasoning, copy individual responses, and grow the composer with multiline prompts. (#13)

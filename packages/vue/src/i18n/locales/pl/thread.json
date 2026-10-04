@@ -41,5 +41,14 @@
   "propLayout": "Układ",
   "propOrder": "Kolejność",
   "propVisibility": "Widoczność",
-  "propOther": "Inne właściwości"
+  "propOther": "Inne właściwości",
+  "modeLabel": "Tryb",
+  "modeDescribe": "Opisz",
+  "modeEdit": "Edytuj",
+  "modeDescribeHint": "Rozmawiaj o pliku i wskazuj jego części",
+  "modeEditHint": "Zmieniaj plik samodzielnie",
+  "pointHint": "Wskaż ramkę, aby o niej porozmawiać.",
+  "resizeThread": "Zmień rozmiar panelu Redrob",
+  "threadRegion": "Redrob",
+  "canvasRegion": "Strona"
 }

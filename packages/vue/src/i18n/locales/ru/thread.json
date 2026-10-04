@@ -41,5 +41,14 @@
   "propLayout": "Макет",
   "propOrder": "Порядок",
   "propVisibility": "Видимость",
-  "propOther": "Другие свойства"
+  "propOther": "Другие свойства",
+  "modeLabel": "Режим",
+  "modeDescribe": "Описание",
+  "modeEdit": "Правка",
+  "modeDescribeHint": "Обсуждайте файл и указывайте на его части",
+  "modeEditHint": "Меняйте файл сами",
+  "pointHint": "Укажите на фрейм, чтобы обсудить его.",
+  "resizeThread": "Изменить размер панели Redrob",
+  "threadRegion": "Redrob",
+  "canvasRegion": "Страница"
 }
