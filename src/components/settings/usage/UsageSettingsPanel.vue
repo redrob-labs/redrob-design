@@ -5,6 +5,8 @@ import { useI18n } from '@redrob-design/vue'
 import { diagnostics } from '@/app/diagnostics'
 import { isUsageEnabled } from '@/app/diagnostics/settings'
 import { summarizeUsage, type UsageSummary } from '@/app/usage'
+import SettingsSectionHeader from '@/components/settings/layout/SettingsSectionHeader.vue'
+import Stat from '@/components/ui/agent/Stat.vue'
 
 const { diagnostics: diagnosticMessages, settings } = useI18n()
 const summary = ref<UsageSummary>(summarizeUsage([]))
@@ -32,32 +34,22 @@ function formatTokenValue(value: number | null): string {
 
 <template>
   <section class="flex flex-col gap-4" data-test-id="settings-usage-panel">
-    <div>
-      <h3 class="text-xs font-semibold text-surface">{{ settings.usage }}</h3>
-      <p class="mt-1 text-[11px] text-muted">{{ diagnosticMessages.usageDescription }}</p>
-    </div>
+    <SettingsSectionHeader>
+      {{ settings.usage }}
+      <template #description>{{ diagnosticMessages.usageDescription }}</template>
+    </SettingsSectionHeader>
 
-    <div class="grid grid-cols-2 gap-2">
-      <div class="rounded border border-border p-3">
-        <div class="text-[10px] text-muted">{{ diagnosticMessages.usageRequests }}</div>
-        <div class="mt-1 text-sm font-semibold text-surface">{{ summary.requests }}</div>
-      </div>
-      <div class="rounded border border-border p-3">
-        <div class="text-[10px] text-muted">{{ diagnosticMessages.usageCompleted }}</div>
-        <div class="mt-1 text-sm font-semibold text-surface">{{ summary.completedRequests }}</div>
-      </div>
-      <div class="rounded border border-border p-3">
-        <div class="text-[10px] text-muted">{{ diagnosticMessages.usageInputTokens }}</div>
-        <div class="mt-1 text-sm font-semibold text-surface">
-          {{ formatTokenValue(summary.inputTokens) }}
-        </div>
-      </div>
-      <div class="rounded border border-border p-3">
-        <div class="text-[10px] text-muted">{{ diagnosticMessages.usageOutputTokens }}</div>
-        <div class="mt-1 text-sm font-semibold text-surface">
-          {{ formatTokenValue(summary.outputTokens) }}
-        </div>
-      </div>
+    <div class="grid grid-cols-2 gap-2 sm:grid-cols-4">
+      <Stat :label="diagnosticMessages.usageRequests" :value="summary.requests" />
+      <Stat :label="diagnosticMessages.usageCompleted" :value="summary.completedRequests" />
+      <Stat
+        :label="diagnosticMessages.usageInputTokens"
+        :value="formatTokenValue(summary.inputTokens)"
+      />
+      <Stat
+        :label="diagnosticMessages.usageOutputTokens"
+        :value="formatTokenValue(summary.outputTokens)"
+      />
     </div>
 
     <div class="flex flex-col gap-2">

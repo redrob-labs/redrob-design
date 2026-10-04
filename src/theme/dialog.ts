@@ -19,6 +19,7 @@ export default {
       sm: { content: 'w-[min(24rem,92vw)]' },
       md: { content: 'w-[min(32rem,94vw)]' },
       lg: { content: 'w-[min(46rem,94vw)]' },
+      wide: { content: 'w-[min(56.25rem,96vw)]' },
       xl: { content: 'w-[min(64rem,96vw)]' }
     },
     height: {

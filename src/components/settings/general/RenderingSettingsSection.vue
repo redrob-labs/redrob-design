@@ -5,8 +5,7 @@ import { useI18n } from '@redrob-design/vue'
 import { appRuntimeConfig } from '@/app/runtime/config'
 import { appPreferences, updateCanvasRenderingMode } from '@/app/settings/preferences/store'
 import AppSwitch from '@/components/ui/AppSwitch.vue'
-import SettingsGroup from '@/components/settings/layout/SettingsGroup.vue'
-import SettingsSectionHeader from '@/components/settings/layout/SettingsSectionHeader.vue'
+import SettingsRow from '@/components/settings/layout/SettingsRow.vue'
 
 const { rendering } = useI18n()
 const hasURLOverride = appRuntimeConfig.sceneRendererOverride
@@ -14,6 +13,11 @@ const tiledRendering = computed(() => appPreferences.value.rendering.canvasMode 
 const changed = computed(
   () => appPreferences.value.rendering.canvasMode !== appRuntimeConfig.sceneRenderer
 )
+const note = computed(() => {
+  if (hasURLOverride) return rendering.value.urlOverride
+  if (changed.value) return rendering.value.reloadRequired
+  return null
+})
 
 function setTiledRendering(enabled: boolean): void {
   updateCanvasRenderingMode(enabled ? 'tiled' : 'retained')
@@ -21,32 +25,18 @@ function setTiledRendering(enabled: boolean): void {
 </script>
 
 <template>
-  <SettingsSectionHeader>
-    {{ rendering.settingsTitle }}
-    <template #description>{{ rendering.settingsDescription }}</template>
-  </SettingsSectionHeader>
-
-  <SettingsGroup>
-    <label class="flex items-center justify-between gap-4 px-3 py-2.5">
-      <span>
-        <span class="block text-xs text-surface">{{ rendering.progressiveTiled }}</span>
-        <span class="block text-[10px] text-muted">{{
-          rendering.progressiveTiledDescription
-        }}</span>
-      </span>
+  <div>
+    <SettingsRow
+      :heading="rendering.progressiveTiled"
+      :description="rendering.progressiveTiledDescription"
+    >
       <AppSwitch
         :model-value="tiledRendering"
         :label="rendering.progressiveTiled"
         data-test-id="settings-progressive-tiled-rendering"
         @update:model-value="setTiledRendering"
       />
-    </label>
-  </SettingsGroup>
-
-  <p v-if="hasURLOverride" class="text-[10px] text-muted">
-    {{ rendering.urlOverride }}
-  </p>
-  <p v-else-if="changed" class="text-[10px] text-muted">
-    {{ rendering.reloadRequired }}
-  </p>
+    </SettingsRow>
+    <p v-if="note" class="pb-3 text-xs text-muted">{{ note }}</p>
+  </div>
 </template>

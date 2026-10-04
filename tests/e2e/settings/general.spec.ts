@@ -31,7 +31,7 @@ test('general snapping preferences persist and apply to editor sessions', async 
   await openSettingsFromMenu(page)
   await expect(page.getByTestId('settings-general-panel')).toBeVisible()
   const geometry = page.getByRole('switch', { name: 'Snap to geometry' })
-  const objects = page.getByRole('switch', { name: 'Snap to objects' })
+  const objects = page.getByRole('switch', { name: 'Snap to other layers' })
   const pixelGrid = page.getByRole('switch', { name: 'Snap to pixel grid' })
   await expect(geometry).toBeChecked()
   await expect(objects).toBeChecked()
@@ -125,8 +125,8 @@ test('Preferences menu snapping controls use the same preferences', async ({ pag
   await objects.click()
 
   await openSettingsFromMenu(page)
-  await expect(page.getByRole('switch', { name: 'Snap to objects' })).not.toBeChecked()
-  await page.getByRole('switch', { name: 'Snap to objects' }).click()
+  await expect(page.getByRole('switch', { name: 'Snap to other layers' })).not.toBeChecked()
+  await page.getByRole('switch', { name: 'Snap to other layers' }).click()
 })
 
 test('settings shortcut preserves the last visited section', async ({ page }) => {
@@ -135,7 +135,7 @@ test('settings shortcut preserves the last visited section', async ({ page }) =>
   await canvas.waitForInit()
 
   await openSettingsFromMenu(page)
-  await page.getByTestId('settings-section-media').click()
+  await page.getByTestId('settings-section-storage').click()
   await page.getByTestId('app-settings-done').click()
 
   await page.keyboard.press(process.platform === 'darwin' ? 'Meta+,' : 'Control+,')

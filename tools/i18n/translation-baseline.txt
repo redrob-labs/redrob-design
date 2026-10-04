@@ -47,6 +47,7 @@ de:panels.position
 de:panels.radialGradient
 de:panels.radius
 de:panels.textCaseOriginal
+de:settings.themeSystem
 de:storage.bucket
 de:storage.providerAmazonS3
 de:storage.providerBackblaze

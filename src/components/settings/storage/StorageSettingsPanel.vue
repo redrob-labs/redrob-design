@@ -20,6 +20,7 @@ import { credentialRef } from '@/app/settings/credentials/reference'
 import type { CredentialStatus } from '@/app/settings/credentials/types'
 import { toast } from '@/app/shell/ui'
 import { resumeStorageSync } from '@/app/storage/sync'
+import SettingsSectionHeader from '@/components/settings/layout/SettingsSectionHeader.vue'
 import AppInput from '@/components/ui/AppInput.vue'
 
 const { storage, settings, credentials, common } = useI18n()
@@ -117,10 +118,10 @@ onMounted(() => void refreshStatuses())
 
 <template>
   <section class="flex flex-col gap-3" data-test-id="settings-storage-panel">
-    <div>
-      <h3 class="text-xs font-semibold text-surface">{{ settings.storage }}</h3>
-      <p class="mt-0.5 text-[10px] text-muted">{{ provider.description }}</p>
-    </div>
+    <SettingsSectionHeader>
+      {{ settings.sectionStorage }}
+      <template #description>{{ provider.description }}</template>
+    </SettingsSectionHeader>
 
     <label
       v-for="field in provider.preferenceFields"

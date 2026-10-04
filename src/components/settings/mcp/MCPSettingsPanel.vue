@@ -13,6 +13,7 @@ import {
 } from '@/app/automation/mcp/preferences'
 import { mcpRuntime, refreshMCPRuntime, restartMCPRuntime } from '@/app/automation/mcp/runtime'
 import { isTauri } from '@/app/tauri/env'
+import SettingsSectionHeader from '@/components/settings/layout/SettingsSectionHeader.vue'
 import AppInput from '@/components/ui/AppInput.vue'
 import AppSwitch from '@/components/ui/AppSwitch.vue'
 
@@ -83,10 +84,10 @@ function enableAllTools(): void {
 
 <template>
   <section class="flex flex-col gap-4" data-test-id="settings-mcp-automation-panel">
-    <div>
-      <h3 class="text-xs font-semibold text-surface">{{ settings.automation }}</h3>
-      <p class="mt-1 text-[11px] text-muted">{{ automation.description }}</p>
-    </div>
+    <SettingsSectionHeader>
+      {{ settings.sectionAgentsAndMCP }}
+      <template #description>{{ automation.description }}</template>
+    </SettingsSectionHeader>
 
     <div class="rounded border border-border bg-panel p-3 text-[11px]">
       <dl class="grid grid-cols-[7rem_1fr] gap-x-3 gap-y-2">

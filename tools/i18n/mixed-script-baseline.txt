@@ -98,6 +98,9 @@ ja:rendering.settingsDescription
 ja:rendering.urlOverride
 ja:settings.aiAndAgents
 ja:settings.automation
+ja:settings.interfaceLanguageDescription
+ja:settings.modelsAndKeysDescription
+ja:settings.sectionAgentsAndMCP
 ja:settings.temporaryDisableSnappingHint
 ja:storage.accessKeyID
 ja:storage.copyCors
@@ -206,6 +209,9 @@ zh-cn:rendering.settingsDescription
 zh-cn:rendering.urlOverride
 zh-cn:settings.aiAndAgents
 zh-cn:settings.automation
+zh-cn:settings.interfaceLanguageDescription
+zh-cn:settings.modelsAndKeysDescription
+zh-cn:settings.sectionAgentsAndMCP
 zh-cn:settings.temporaryDisableSnappingHint
 zh-cn:storage.accessKeyID
 zh-cn:storage.copyCors
