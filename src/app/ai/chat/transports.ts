@@ -15,6 +15,7 @@ import { createAIModelRuntime, resolveModelConnectionAPIKey } from '@/app/ai/mod
 import { MAX_AGENT_STEPS, createAITools, recordStep, resetRunSteps } from '@/app/ai/tools'
 import { beginChangeTurn, finishChangeTurn } from '@/app/assistant/changes/store'
 import { loadThread, saveThread, saveThreadNow, threadKeyFor } from '@/app/assistant/thread/store'
+import { turnInstructions } from '@/app/assistant/turn/instructions'
 import { beginTurn, finishTurn, recordTurnStep } from '@/app/assistant/turn/session'
 import {
   recordChatCompleted,
@@ -107,6 +108,7 @@ export function createToolLoopTransport({
       beginChangeTurn(store)
       return {
         ...options,
+        instructions: turnInstructions(store, SYSTEM_PROMPT),
         maxOutputTokens,
         providerOptions
       }

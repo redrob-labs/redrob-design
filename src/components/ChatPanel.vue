@@ -25,6 +25,7 @@ import { openSettingsDialog } from '@/app/settings/dialog'
 import { useI18n, useThreadMessages, vTestId } from '@redrob-design/vue'
 import { turnSteps } from '@/components/chat/timeline/steps'
 import { useOpeningReview } from '@/components/chat/review/useOpeningReview'
+import { provideChatSend } from '@/components/chat/submit'
 import AgentTimeline from '@/components/ui/agent/AgentTimeline.vue'
 
 import { useNotificationMessages } from '@/app/i18n/notifications'
@@ -55,6 +56,11 @@ const submission = useChatSubmission({
   })),
   reportError: toast.error,
   openModelSettings: () => openSettingsDialog('ai')
+})
+
+// Cards in the thread (Plan's questions, directions) answer as the person.
+provideChatSend((text) => {
+  void submission.submit({ modelText: text, displayText: text, images: [], nodes: [] })
 })
 
 /** Sends the brief a new file was started with on Home, once the chat can take it. */

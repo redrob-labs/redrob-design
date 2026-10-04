@@ -26,6 +26,14 @@ export default {
       auto: {},
       tall: { content: 'h-[min(75vh,48rem)]' },
       full: { content: 'h-[min(90vh,56rem)]' }
+    },
+    /** `right` is a drawer: full height against the right edge. */
+    placement: {
+      center: {},
+      right: {
+        content:
+          'top-0 right-0 left-auto h-dvh max-h-none translate-x-0 translate-y-0 rounded-none border-y-0 border-r-0 data-[state=closed]:slide-out-to-right data-[state=closed]:zoom-out-100 data-[state=open]:slide-in-from-right data-[state=open]:zoom-in-100'
+      }
     }
   }
 } as const

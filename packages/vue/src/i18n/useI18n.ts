@@ -6,6 +6,7 @@ import { locale, setLocale, AVAILABLE_LOCALES, LOCALE_LABELS } from '#vue/i18n/l
 import type { Locale } from '#vue/i18n/locale'
 import {
   aiMessages,
+  planMessages,
   reviewMessages,
   threadMessages,
   homeMessages,
@@ -40,6 +41,7 @@ export function useI18nNamespace<MessagesStore extends Store>(messages: Messages
 }
 
 export const useAIMessages = () => useI18nNamespace(aiMessages)
+export const usePlanMessages = () => useI18nNamespace(planMessages)
 export const useReviewMessages = () => useI18nNamespace(reviewMessages)
 export const useThreadMessages = () => useI18nNamespace(threadMessages)
 export const useHomeMessages = () => useI18nNamespace(homeMessages)
@@ -72,6 +74,7 @@ export const useVariableTypeMessages = () => useI18nNamespace(variableTypeMessag
 export function useI18n() {
   return {
     ai: useAIMessages(),
+    plan: usePlanMessages(),
     review: useReviewMessages(),
     thread: useThreadMessages(),
     home: useHomeMessages(),

@@ -10,6 +10,8 @@ import { visibleUserMessageText } from '@/app/ai/chat/presentation'
 import AttachmentList from '@/components/chat/attachment/AttachmentList.vue'
 import TurnChanges from '@/components/chat/changes/TurnChanges.vue'
 import ReviewFindings from '@/components/chat/review/ReviewFindings.vue'
+import DirectionsPart from '@/components/chat/plan/DirectionsPart.vue'
+import PlanQuestionsPart from '@/components/chat/plan/PlanQuestionsPart.vue'
 import { isReviewData, type ReviewData } from '@/app/review/findings'
 import ChatMarkdown from '@/components/chat/ChatMarkdown.vue'
 import ReasoningBlock from '@/components/chat/ReasoningBlock.vue'
@@ -91,6 +93,19 @@ function toolState(part: ToolPart): 'pending' | 'done' | 'error' {
   })
 }
 
+/** A finished call to one of Plan's tools, which render as cards rather than a tool row. */
+function isPlanTool(
+  part: UIMessagePart<UIDataTypes, UITools>,
+  name: 'ask_plan_questions' | 'create_directions'
+): boolean {
+  return (
+    isToolUIPart(part) &&
+    getToolName(part).replace(/^mcp__[^_]+__/, '') === name &&
+    part.state === 'output-available' &&
+    !hasErrorOutput(part)
+  )
+}
+
 const emptyReview: ReviewData = { pageId: '', frameCount: 0, findings: [] }
 
 /** The review a `data-review` part carries, once it checks out. */
@@ -133,7 +148,16 @@ function partKey(part: UIMessagePart<UIDataTypes, UITools>, index: number): stri
           />
 
           <!-- Tool call -->
-          <div v-if="isToolUIPart(part)" class="rounded-lg border border-ai-border bg-ai p-2">
+          <!-- Plan: the questions before drawing, and the directions it started -->
+          <PlanQuestionsPart
+            v-if="isPlanTool(part, 'ask_plan_questions')"
+            :input="'input' in part ? part.input : null"
+          />
+          <DirectionsPart
+            v-else-if="isPlanTool(part, 'create_directions')"
+            :output="'output' in part ? part.output : null"
+          />
+          <div v-else-if="isToolUIPart(part)" class="rounded-lg border border-ai-border bg-ai p-2">
             <CollapsibleRoot>
               <CollapsibleTrigger
                 class="flex w-full items-center gap-2 rounded px-1 py-0.5 hover:bg-hover"

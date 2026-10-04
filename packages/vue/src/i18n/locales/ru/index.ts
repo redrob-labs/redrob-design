@@ -17,6 +17,7 @@ import media from './media.json'
 import menu from './menu.json'
 import pages from './pages.json'
 import panels from './panels.json'
+import plan from './plan.json'
 import recovery from './recovery.json'
 import rename from './rename.json'
 import rendering from './rendering.json'
@@ -31,6 +32,7 @@ import variables from './variables.json'
 
 export default {
   ai,
+  plan,
   review,
   thread,
   home,

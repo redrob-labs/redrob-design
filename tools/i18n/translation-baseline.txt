@@ -51,6 +51,7 @@ de:panels.position
 de:panels.radialGradient
 de:panels.radius
 de:panels.textCaseOriginal
+de:plan.memoryHeading
 de:settings.themeSystem
 de:storage.bucket
 de:storage.providerAmazonS3
@@ -102,6 +103,8 @@ es:panels.localLibraries
 es:panels.radialGradient
 es:panels.textCaseOriginal
 es:panels.variables
+es:plan.memoryHeading
+es:plan.pricePlan
 es:settings.general
 es:storage.bucket
 es:storage.providerAmazonS3
@@ -168,6 +171,10 @@ fr:panels.radialGradient
 fr:panels.rotation
 fr:panels.saturation
 fr:panels.variables
+fr:plan.directionLetter
+fr:plan.directionsLabel
+fr:plan.memoryHeading
+fr:plan.questionsLabel
 fr:settings.diagnostics
 fr:settings.notifications
 fr:storage.bucket
@@ -215,6 +222,7 @@ it:panels.framePresetCategoryFigmaCommunity
 it:panels.framePresetCategorySocialMedia
 it:panels.framePresetCategoryTablet
 it:panels.layout
+it:plan.memoryHeading
 it:rendering.settingsTitle
 it:settings.media
 it:storage.bucket
@@ -282,6 +290,8 @@ pl:panels.design
 pl:panels.framePresetCategoryFigmaCommunity
 pl:panels.framePresetCategoryTablet
 pl:panels.kerning
+pl:plan.memoryHeading
+pl:plan.pricePlan
 pl:settings.media
 pl:storage.providerAmazonS3
 pl:storage.providerBackblaze
@@ -310,6 +320,7 @@ ru:panels.colorFormatHsl
 ru:panels.colorFormatOkhcl
 ru:panels.colorFormatRgb
 ru:panels.framePresetCategoryFigmaCommunity
+ru:plan.memoryHeading
 ru:storage.providerAmazonS3
 ru:storage.providerBackblaze
 ru:storage.providerR2

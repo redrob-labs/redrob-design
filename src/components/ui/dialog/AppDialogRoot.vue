@@ -9,10 +9,12 @@ defineOptions({ inheritAttrs: false })
 const {
   size = 'md',
   height = 'auto',
+  placement = 'center',
   ui
 } = defineProps<{
   size?: DialogVariants['size']
   height?: DialogVariants['height']
+  placement?: DialogVariants['placement']
   ui?: DialogUI
 }>()
 
@@ -24,7 +26,7 @@ const emit = defineEmits<{
 
 const open = defineModel<boolean>('open', { default: false })
 const attrs = useAttrs()
-const cls = computed(() => useDialogUI(ui, { size, height }))
+const cls = computed(() => useDialogUI(ui, { size, height, placement }))
 </script>
 
 <template>

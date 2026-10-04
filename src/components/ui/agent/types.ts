@@ -154,3 +154,6 @@ export interface ChangesWords {
 
 export type FindingSeverity = 'high' | 'medium' | 'low' | 'note'
 export type FindingState = 'open' | 'accepted' | 'dismissed'
+
+/** One question Plan asks before drawing, with the answers to tap. */
+export type { PlanQuestion as PlanQuestionItem } from '@redrob-design/core/tools'

@@ -26,11 +26,14 @@ import CommandPalette from '@/components/commands/CommandPalette.vue'
 import SafariBanner from '@/components/SafariBanner.vue'
 import TabBar from '@/components/TabBar.vue'
 import ModeSwitch from '@/components/editor/describe/ModeSwitch.vue'
+import DesignMemoryDrawer from '@/components/memory/DesignMemoryDrawer.vue'
+import { demoMode } from '@/app/runtime/demo'
 import RenameSelectionDialog from '@/components/selection/RenameSelectionDialog.vue'
 import EditorWorkspace from '@/components/editor/EditorWorkspace.vue'
 import HomeWorkspace from '@/components/home/HomeWorkspace.vue'
 
 const route = useRoute()
+demoMode.value = route.meta.demo === true
 const createdInitialTab = tabCount() === 0
 const shouldCreateHome =
   route.path === '/' &&
@@ -103,6 +106,7 @@ onUnmounted(() => {
     <SafariBanner />
     <FontStatusBanner />
     <RenameSelectionDialog />
+    <DesignMemoryDrawer />
     <CommandPalette v-model:open="commandPaletteOpen" />
     <TabBar>
       <template #end>

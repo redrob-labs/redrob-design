@@ -18,6 +18,7 @@ import { mediaMessageDefaults, mediaMessages } from '#vue/i18n/messages/media'
 import { menuMessageDefaults, menuMessages } from '#vue/i18n/messages/menu'
 import { pageMessageDefaults, pageMessages } from '#vue/i18n/messages/pages'
 import { panelMessageDefaults, panelMessages } from '#vue/i18n/messages/panels'
+import { planMessageDefaults, planMessages } from '#vue/i18n/messages/plan'
 import { recoveryMessageDefaults, recoveryMessages } from '#vue/i18n/messages/recovery'
 import { renameMessageDefaults, renameMessages } from '#vue/i18n/messages/rename'
 import { renderingMessageDefaults, renderingMessages } from '#vue/i18n/messages/rendering'
@@ -35,6 +36,7 @@ import { variablesMessageDefaults, variablesMessages } from '#vue/i18n/messages/
 
 export {
   aiMessages,
+  planMessages,
   reviewMessages,
   threadMessages,
   homeMessages,
@@ -66,6 +68,7 @@ export {
 
 export const messageDefaults = {
   ai: aiMessageDefaults,
+  plan: planMessageDefaults,
   review: reviewMessageDefaults,
   thread: threadMessageDefaults,
   home: homeMessageDefaults,
