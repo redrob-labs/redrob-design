@@ -13,6 +13,7 @@ import { buildReasoningProviderOptions, type AIProviderOptions } from '@/app/ai/
 import SYSTEM_PROMPT from '@/app/ai/chat/system-prompt.md?raw'
 import { createAIModelRuntime, resolveModelConnectionAPIKey } from '@/app/ai/models'
 import { MAX_AGENT_STEPS, createAITools, recordStep, resetRunSteps } from '@/app/ai/tools'
+import { beginChangeTurn, finishChangeTurn } from '@/app/assistant/changes/store'
 import { loadThread, saveThread, saveThreadNow, threadKeyFor } from '@/app/assistant/thread/store'
 import { beginTurn, finishTurn, recordTurnStep } from '@/app/assistant/turn/session'
 import {
@@ -103,6 +104,7 @@ export function createToolLoopTransport({
     prepareCall: (options) => {
       resetRunSteps(store)
       beginTurn(store)
+      beginChangeTurn(store)
       return {
         ...options,
         maxOutputTokens,
@@ -180,6 +182,7 @@ export function createChatSessionManager({
     const store = currentChatStore
     if (!store) return
     finishTurn(store, isError ? undefined : message)
+    finishChangeTurn(store, message?.role === 'assistant' ? message.id : undefined)
     if (messages) saveThread(threadKeyFor(store), messages)
   }
 

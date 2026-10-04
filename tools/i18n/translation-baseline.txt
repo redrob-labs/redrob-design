@@ -57,6 +57,11 @@ de:storage.providerAmazonS3
 de:storage.providerBackblaze
 de:storage.providerR2
 de:storage.region
+de:thread.propLayout
+de:thread.propName
+de:thread.propPosition
+de:thread.propText
+de:thread.textOf
 de:tools.ellipse
 de:tools.hand
 de:tools.polygon
@@ -167,6 +172,7 @@ fr:storage.bucket
 fr:storage.providerAmazonS3
 fr:storage.providerBackblaze
 fr:storage.providerR2
+fr:thread.propPosition
 fr:tools.ellipse
 fr:tools.rectangle
 fr:tools.section
@@ -211,6 +217,7 @@ it:storage.endpoint
 it:storage.providerAmazonS3
 it:storage.providerBackblaze
 it:storage.providerR2
+it:thread.propLayout
 ja:ai.connectRedrob
 ja:ai.connectRedrobCancel
 ja:ai.connectRedrobConnected

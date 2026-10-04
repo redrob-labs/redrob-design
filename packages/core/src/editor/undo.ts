@@ -5,8 +5,11 @@ import type { Rect, Vector } from '@redrob-design/scene-graph/primitives'
 import { createResizeSnapshot, type ResizeSnapshot } from '@redrob-design/scene-graph/resize'
 import type { UndoEntry } from '@redrob-design/scene-graph/undo'
 
+import { computeAllLayouts } from '#core/layout'
+
 import { assertNodeEditable } from './capabilities'
 import { restoreSubtree, snapshotSubtree } from './clipboard/subtree-history'
+import { restoreNodes as restoreSnapshotNodes } from './history/changes'
 import { collectNodePositions, pushPositionUndo } from './history/position'
 import {
   restorePageFromSnapshot as restorePageSnapshot,
@@ -218,12 +221,28 @@ export function createUndoActions(ctx: EditorContext) {
     ctx.requestRender()
   }
 
-  function snapshotPage(): PageSnapshot {
-    return createPageSnapshot(ctx.graph, ctx.state.currentPageId)
+  function snapshotPage(pageId: string = ctx.state.currentPageId): PageSnapshot {
+    return createPageSnapshot(ctx.graph, pageId)
   }
 
   function restorePageFromSnapshot(snapshot: PageSnapshot) {
     restorePageSnapshot(ctx, snapshot)
+  }
+
+  /**
+   * Brings only the nodes that differ between two snapshots of `pageId` to
+   * their `to` state, then lays the page out again and drops removed nodes
+   * from the selection.
+   */
+  function restoreNodes(from: PageSnapshot, to: PageSnapshot, pageId: string) {
+    restoreSnapshotNodes(ctx.graph, from, to)
+    computeAllLayouts(ctx.graph, pageId)
+    const kept = [...ctx.state.selectedIds].filter((id) => ctx.graph.getNode(id))
+    if (kept.length !== ctx.state.selectedIds.size) ctx.setSelectedIds(new Set(kept))
+    if (ctx.state.hoveredNodeId && !ctx.graph.getNode(ctx.state.hoveredNodeId)) {
+      ctx.state.hoveredNodeId = null
+    }
+    ctx.requestRender()
   }
 
   function pushUndoEntry(entry: UndoEntry) {
@@ -242,6 +261,7 @@ export function createUndoActions(ctx: EditorContext) {
     redoAction,
     snapshotPage,
     restorePageFromSnapshot,
+    restoreNodes,
     pushUndoEntry
   }
 }

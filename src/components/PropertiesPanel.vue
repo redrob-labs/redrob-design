@@ -2,8 +2,12 @@
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from 'reka-ui'
 import { tv } from 'tailwind-variants'
 
-import { useI18n } from '@redrob-design/vue'
+import { computed } from 'vue'
+
+import { useI18n, useThreadMessages } from '@redrob-design/vue'
 import { useAIChat } from '@/app/ai/chat/use'
+import { openChangeCount } from '@/app/assistant/changes/store'
+import { getActiveEditorStoreOrNull } from '@/app/editor/active-store'
 import propertiesTabsTheme from '@/theme/properties-tabs'
 
 import ChatPanel from './ChatPanel.vue'
@@ -13,6 +17,8 @@ import ZoomDropdown from './editor/ZoomDropdown.vue'
 
 const { activeTab } = useAIChat()
 const { panels } = useI18n()
+const thread = useThreadMessages()
+const waiting = computed(() => openChangeCount(getActiveEditorStoreOrNull()))
 const styles = tv(propertiesTabsTheme)()
 </script>
 
@@ -34,6 +40,14 @@ const styles = tv(propertiesTabsTheme)()
         <TabsTrigger value="ai" data-test-id="properties-tab-ai" :class="styles.trigger()">
           <icon-lucide-sparkles :class="styles.icon()" />
           {{ panels.ai }}
+          <span
+            v-if="waiting > 0"
+            data-slot="changes-waiting"
+            :aria-label="thread.changesWaiting({ count: waiting })"
+            :class="styles.badge()"
+          >
+            {{ waiting }}
+          </span>
         </TabsTrigger>
         <ZoomDropdown v-if="activeTab === 'design'" />
       </TabsList>

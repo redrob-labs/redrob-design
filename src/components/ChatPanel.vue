@@ -8,6 +8,7 @@ import { copyChatLog } from '@/app/ai/debug'
 import { clearVisibleMessageText } from '@/app/ai/chat/presentation'
 import { useChatSubmission } from '@/app/ai/chat/submission/use'
 import { takePendingBrief } from '@/app/home/brief'
+import { forgetChangeSets } from '@/app/assistant/changes/store'
 import { clearMessageAttachments } from '@/app/ai/attachment/presentation/store'
 import { clearToolLogEntries, didHitStepLimit } from '@/app/ai/tools'
 import { activeTab } from '@/app/tabs'
@@ -211,6 +212,7 @@ function handleClearChat() {
     console.error('Chat reset error:', error)
   })
   clearToolLogEntries()
+  forgetChangeSets(getActiveEditorStore())
   clearACPDebugLog()
 }
 </script>

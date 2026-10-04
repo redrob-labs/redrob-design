@@ -8,6 +8,7 @@ import { useI18n, useThreadMessages, vTestId } from '@redrob-design/vue'
 import { attachmentsForMessage } from '@/app/ai/attachment/presentation/store'
 import { visibleUserMessageText } from '@/app/ai/chat/presentation'
 import AttachmentList from '@/components/chat/attachment/AttachmentList.vue'
+import TurnChanges from '@/components/chat/changes/TurnChanges.vue'
 import ChatMarkdown from '@/components/chat/ChatMarkdown.vue'
 import ReasoningBlock from '@/components/chat/ReasoningBlock.vue'
 import IconButton from '@/components/ui/IconButton.vue'
@@ -187,6 +188,7 @@ function partKey(part: UIMessagePart<UIDataTypes, UITools>, index: number): stri
             </IconButton>
           </div>
         </template>
+        <TurnChanges v-if="!streaming" :message-id="message.id" />
         <AnswerReceipt v-if="receipt.length" :items="receipt" :label="thread.receiptLabel" />
       </template>
 

@@ -129,3 +129,25 @@ export interface AgentStep {
   label: string
   state: AgentStepState
 }
+
+export type ChangeKind = 'changed' | 'added' | 'removed'
+
+/** One change in plain words: where, what it was, what it is now, and why. */
+export interface ChangeItem {
+  id: string
+  kind: ChangeKind
+  /** Where in the thing: 'Pricing card', 'Heading'. */
+  label?: string
+  before?: string
+  after?: string
+  note?: string
+}
+
+/** The words a `Changes` card needs, so the component stays store-free. */
+export interface ChangesWords {
+  kinds: Record<ChangeKind, string>
+  was: string
+  now: string
+  accept: string
+  reject: string
+}
