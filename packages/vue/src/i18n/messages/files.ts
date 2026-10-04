@@ -11,6 +11,7 @@ export const filesMessageDefaults = {
   importing: 'Importing…',
   importToCanvas: 'Import to canvas',
   newTab: 'New tab',
+  homeTab: 'Home',
   closeTab: params('Close {name}'),
   clipboardImageUnavailableWeb:
     'Pasted design includes 1 image that cannot be loaded in the web app. Use the desktop app to include it.',

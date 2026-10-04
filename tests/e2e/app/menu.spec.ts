@@ -1,72 +1,87 @@
 import { expect, test, useEditorSetup } from '#tests/e2e/fixtures'
+import { openMainMenu, openMenuGroup, runMenuItem } from '#tests/helpers/menu'
 
 const editor = useEditorSetup()
 
-test('menu bar is visible in browser mode', async () => {
-  const menubar = editor.page.locator('[role="menubar"]')
-  await expect(menubar).toBeVisible()
+test.afterEach(async () => {
+  await editor.page.keyboard.press('Escape')
+  await editor.page.keyboard.press('Escape')
+  await editor.page.keyboard.press('Escape')
 })
 
-test('menu bar has all top-level menus', async () => {
-  const triggers = editor.page.locator('[role="menubar"] [role="menuitem"]')
-  const labels = await triggers.allTextContents()
-  expect(labels).toEqual(['File', 'Edit', 'View', 'Object', 'Text', 'Arrange'])
+test('the left panel has no menu bar', async () => {
+  await expect(editor.page.locator('[role="menubar"]')).toHaveCount(0)
+  await expect(editor.page.getByTestId('app-main-menu')).toBeVisible()
 })
 
-test('File menu opens and shows items', async () => {
-  await editor.page.locator('[role="menubar"] [role="menuitem"]', { hasText: 'File' }).click()
-  const menu = editor.page.locator('[role="menu"]')
-  await expect(menu).toBeVisible()
+test('the mark opens the main menu with every group in order', async () => {
+  const content = await openMainMenu(editor.page)
+  const labels = await content.locator(':scope > [role="menuitem"]').allTextContents()
+  expect(labels.map((label) => label.replace(/\s+/g, ' ').trim())).toEqual([
+    'Back to Home',
+    'File',
+    'Edit',
+    'View',
+    'Object',
+    'Text',
+    'Arrange',
+    expect.stringContaining('Settings…'),
+    'Help'
+  ])
+})
 
-  const items = await menu.locator('[role="menuitem"]').allTextContents()
+test('the main menu works from the keyboard', async () => {
+  await editor.page.getByTestId('app-main-menu').focus()
+  await editor.page.keyboard.press('Enter')
+  const content = editor.page.getByTestId('app-main-menu-content')
+  await expect(content).toBeVisible()
+  await expect(editor.page.getByTestId('app-main-menu-home')).toBeFocused()
+  await editor.page.keyboard.press('ArrowDown')
+  await expect(editor.page.getByTestId('menubar-file')).toBeFocused()
+  await editor.page.keyboard.press('ArrowRight')
+  await expect(editor.page.getByTestId('menubar-file-content')).toBeVisible()
+  await editor.page.keyboard.press('Escape')
+  await editor.page.keyboard.press('Escape')
+  await expect(content).toBeHidden()
+})
+
+test('File menu shows open and save items', async () => {
+  const menu = await openMenuGroup(editor.page, 'File')
+  const items = await menu.getByRole('menuitem').allTextContents()
   expect(items.some((t) => t.includes('Open'))).toBe(true)
   expect(items.some((t) => t.includes('Open storage workspace'))).toBe(true)
   expect(items.some((t) => t.includes('Save'))).toBe(true)
   expect(items.some((t) => t.includes('Save as'))).toBe(true)
-
-  await editor.page.keyboard.press('Escape')
 })
 
 test('Edit menu shows Undo/Redo/Delete', async () => {
-  await editor.page.locator('[role="menubar"] [role="menuitem"]', { hasText: 'Edit' }).click()
-  const menu = editor.page.locator('[role="menu"]')
-  await expect(menu).toBeVisible()
-
-  const items = await menu.locator('[role="menuitem"]').allTextContents()
+  const menu = await openMenuGroup(editor.page, 'Edit')
+  const items = await menu.getByRole('menuitem').allTextContents()
   expect(items.some((t) => t.includes('Undo'))).toBe(true)
   expect(items.some((t) => t.includes('Redo'))).toBe(true)
   expect(items.some((t) => t.includes('Delete'))).toBe(true)
   expect(items.some((t) => t.includes('Select all'))).toBe(true)
-
-  await editor.page.keyboard.press('Escape')
 })
 
-test('View menu shows zoom options', async () => {
-  await editor.page.locator('[role="menubar"] [role="menuitem"]', { hasText: 'View' }).click()
-  const menu = editor.page.locator('[role="menu"]')
-  await expect(menu).toBeVisible()
-
-  const items = await menu.locator('[role="menuitem"]').allTextContents()
+test('View menu shows zoom options and no nested Settings', async () => {
+  const menu = await openMenuGroup(editor.page, 'View')
+  const items = await menu.getByRole('menuitem').allTextContents()
   expect(items.some((t) => t.includes('Zoom to fit'))).toBe(true)
   expect(items.some((t) => t.includes('Zoom in'))).toBe(true)
   expect(items.some((t) => t.includes('Zoom out'))).toBe(true)
-
-  await editor.page.keyboard.press('Escape')
+  await menu.getByRole('menuitem', { name: 'Preferences' }).click()
+  await expect(editor.page.getByRole('menuitemcheckbox', { name: 'Snap to objects' })).toBeVisible()
+  await expect(editor.page.getByRole('menuitem', { name: /^Settings…/ })).toHaveCount(1)
 })
 
 test('Object menu shows Group/Ungroup/Component', async () => {
-  await editor.page.locator('[role="menubar"] [role="menuitem"]', { hasText: 'Object' }).click()
-  const menu = editor.page.locator('[role="menu"]')
-  await expect(menu).toBeVisible()
-
-  const items = await menu.locator('[role="menuitem"]').allTextContents()
+  const menu = await openMenuGroup(editor.page, 'Object')
+  const items = await menu.getByRole('menuitem').allTextContents()
   expect(items.some((t) => t.includes('Group'))).toBe(true)
   expect(items.some((t) => t.includes('Ungroup'))).toBe(true)
   expect(items.some((t) => t.includes('Create component'))).toBe(true)
   expect(items.some((t) => t.includes('Bring to front'))).toBe(true)
   expect(items.some((t) => t.includes('Send to back'))).toBe(true)
-
-  await editor.page.keyboard.press('Escape')
 })
 
 function getStoreStateNumber(key: 'selectedIds' | 'zoom') {
@@ -86,16 +101,19 @@ test('Move to page is disabled without a selection', async () => {
     store.switchPage(store.graph.getPages()[0].id)
   })
 
-  await editor.page.locator('[role="menubar"] [role="menuitem"]', { hasText: 'Object' }).click()
-  const moveToPage = editor.page.getByRole('menuitem', { name: 'Move to page' })
-  await expect(moveToPage).toHaveAttribute('data-disabled')
+  let menu = await openMenuGroup(editor.page, 'Object')
+  await expect(menu.getByRole('menuitem', { name: 'Move to page' })).toHaveAttribute(
+    'data-disabled'
+  )
+  await editor.page.keyboard.press('Escape')
   await editor.page.keyboard.press('Escape')
 
   await editor.canvas.drawRect(200, 200, 100, 100)
-  await editor.page.locator('[role="menubar"] [role="menuitem"]', { hasText: 'Object' }).click()
-  await expect(editor.page.getByRole('menuitem', { name: 'Move to page' })).not.toHaveAttribute(
+  menu = await openMenuGroup(editor.page, 'Object')
+  await expect(menu.getByRole('menuitem', { name: 'Move to page' })).not.toHaveAttribute(
     'data-disabled'
   )
+  await editor.page.keyboard.press('Escape')
   await editor.page.keyboard.press('Escape')
   await editor.page.evaluate(() => {
     const store = window.redrobDesign?.getStore?.()
@@ -108,58 +126,71 @@ test('Move to page is disabled without a selection', async () => {
 
 test('Undo via Edit menu works', async () => {
   await editor.canvas.drawRect(200, 200, 100, 100)
-  const beforeUndo = await getStoreStateNumber('selectedIds')
-  expect(beforeUndo).toBe(1)
+  expect(await getStoreStateNumber('selectedIds')).toBe(1)
 
-  await editor.page.locator('[role="menubar"] [role="menuitem"]', { hasText: 'Edit' }).click()
-  await editor.page.locator('[role="menu"] [role="menuitem"]', { hasText: 'Undo' }).click()
+  await runMenuItem(editor.page, 'Edit', /^Undo/)
   await editor.canvas.waitForRender()
 
-  const afterUndo = await getStoreStateNumber('selectedIds')
-  expect(afterUndo).toBe(0)
+  expect(await getStoreStateNumber('selectedIds')).toBe(0)
 })
 
 test('Duplicate via Edit menu works', async () => {
   await editor.canvas.drawRect(300, 300, 80, 80)
 
-  const countBefore = await editor.page.evaluate(() => {
-    const store = window.redrobDesign?.getStore?.()
-    if (!store) throw new Error('RedrobDesign store not initialized')
-    return store.graph.getChildren(store.state.currentPageId).length
-  })
+  const countChildren = () =>
+    editor.page.evaluate(() => {
+      const store = window.redrobDesign?.getStore?.()
+      if (!store) throw new Error('RedrobDesign store not initialized')
+      return store.graph.getChildren(store.state.currentPageId).length
+    })
+  const countBefore = await countChildren()
 
-  await editor.page.locator('[role="menubar"] [role="menuitem"]', { hasText: 'Edit' }).click()
-  await editor.page.locator('[role="menu"] [role="menuitem"]', { hasText: 'Duplicate' }).click()
+  await runMenuItem(editor.page, 'Edit', /^Duplicate/)
   await editor.canvas.waitForRender()
 
-  const countAfter = await editor.page.evaluate(() => {
-    const store = window.redrobDesign?.getStore?.()
-    if (!store) throw new Error('RedrobDesign store not initialized')
-    return store.graph.getChildren(store.state.currentPageId).length
-  })
-
-  expect(countAfter).toBe(countBefore + 1)
+  expect(await countChildren()).toBe(countBefore + 1)
 })
 
 test('Zoom to fit via View menu works', async () => {
-  await editor.page.locator('[role="menubar"] [role="menuitem"]', { hasText: 'View' }).click()
-  await editor.page.locator('[role="menu"] [role="menuitem"]', { hasText: 'Zoom in' }).click()
+  await runMenuItem(editor.page, 'View', /^Zoom in/)
   await editor.canvas.waitForRender()
 
   const zoomBefore = await getStoreStateNumber('zoom')
   expect(zoomBefore).toBeGreaterThan(1)
 
-  await editor.page.locator('[role="menubar"] [role="menuitem"]', { hasText: 'View' }).click()
-  await editor.page.locator('[role="menu"] [role="menuitem"]', { hasText: 'Zoom to fit' }).click()
+  await runMenuItem(editor.page, 'View', /^Zoom to fit/)
   await editor.canvas.waitForRender()
 
-  const zoomAfter = await getStoreStateNumber('zoom')
-  expect(zoomAfter).not.toBe(zoomBefore)
+  expect(await getStoreStateNumber('zoom')).not.toBe(zoomBefore)
+})
+
+test('Help opens the command palette', async () => {
+  const help = await openMenuGroup(editor.page, 'Help')
+  await help.getByRole('menuitem', { name: /^Search commands…/ }).click()
+  await expect(editor.page.getByRole('dialog')).toBeVisible()
+  await editor.page.keyboard.press('Escape')
+})
+
+test('Back to Home trims the main menu to what Home can do', async () => {
+  await openMainMenu(editor.page)
+  await editor.page.getByTestId('app-main-menu-home').click()
+  await expect(editor.page.getByTestId('recent-files-home')).toBeVisible()
+
+  const content = await openMainMenu(editor.page)
+  const labels = await content.locator(':scope > [role="menuitem"]').allTextContents()
+  expect(labels.map((label) => label.replace(/\s+/g, ' ').trim())).toEqual([
+    'File',
+    'View',
+    expect.stringContaining('Settings…'),
+    'Help'
+  ])
+  const file = await openMenuGroup(editor.page, 'File')
+  const items = await file.getByRole('menuitem').allTextContents()
+  expect(items.some((t) => t.startsWith('Save'))).toBe(false)
 })
 
 test('Open storage workspace navigates from the File menu', async () => {
-  await editor.page.getByRole('menuitem', { name: 'File', exact: true }).click()
-  await editor.page.getByRole('menuitem', { name: 'Open storage workspace…' }).click()
+  await runMenuItem(editor.page, 'File', 'Open storage workspace…')
 
   await expect(editor.page).toHaveURL(/\/$/)
   await expect(editor.page.getByTestId('recent-files-home')).toBeVisible()

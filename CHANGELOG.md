@@ -31,6 +31,7 @@
 
 - Adopt the Redrob Group 2026 Design System across the editor, desktop app, and documentation: Pretendard typography, Redrob Blue actions, new surfaces, elevation, and controls, a Redrob Design product accent, and canvas selection, snapping, measurement, and ruler colours that follow the light and dark themes.
 - Start new installs in the light theme; a previously chosen theme is kept.
+- Open the main menu from the Redrob Design mark at the top-left of the window, trimmed to what the current screen can do, instead of a menu bar inside the layers panel.
 - Vertically center shaped section titles and allow renaming a section by double-clicking its canvas label.
 - Load supported online fonts before revealing imported pages, preserve substituted text during editing, and shape canvas labels with bundled Inter typography.
 - Upgrade CanvasKit to 0.41 and use immutable renderer paths through `PathBuilder`.

@@ -70,5 +70,9 @@
   "exportSelectionAsPNG": "将所选内容导出为 PNG",
   "exportSelectionAsSVG": "将所选内容导出为 SVG",
   "exportSelectionAsPPTX": "将所选内容导出为 PPTX",
-  "exportSelectionAsFig": "将所选内容导出为 .fig"
+  "exportSelectionAsFig": "将所选内容导出为 .fig",
+  "help": "帮助",
+  "mainMenu": "主菜单",
+  "backToHome": "返回主页",
+  "searchCommands": "搜索命令…"
 }

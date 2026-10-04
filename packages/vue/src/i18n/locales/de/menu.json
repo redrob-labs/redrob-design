@@ -70,5 +70,9 @@
   "exportSelectionAsPNG": "Auswahl als PNG exportieren",
   "exportSelectionAsSVG": "Auswahl als SVG exportieren",
   "exportSelectionAsPPTX": "Auswahl als PPTX exportieren",
-  "exportSelectionAsFig": "Auswahl als .fig exportieren"
+  "exportSelectionAsFig": "Auswahl als .fig exportieren",
+  "help": "Hilfe",
+  "mainMenu": "Hauptmenü",
+  "backToHome": "Zurück zur Startseite",
+  "searchCommands": "Befehle suchen…"
 }

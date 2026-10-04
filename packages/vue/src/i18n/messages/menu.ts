@@ -7,6 +7,10 @@ export const menuMessageDefaults = {
   object: 'Object',
   arrange: 'Arrange',
   text: 'Text',
+  help: 'Help',
+  mainMenu: 'Main menu',
+  backToHome: 'Back to Home',
+  searchCommands: 'Search commands…',
 
   new: 'New',
   open: 'Open…',

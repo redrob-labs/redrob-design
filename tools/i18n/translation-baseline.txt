@@ -176,6 +176,7 @@ it:code.sourceDesignJSX
 it:code.sourceHTMLCSS
 it:code.sourceTailwindJSX
 it:common.ok
+it:files.homeTab
 it:menu.file
 it:panels.ai
 it:panels.auto

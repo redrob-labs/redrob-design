@@ -1,26 +1,27 @@
 const tabBarTheme = {
   slots: {
-    root: 'scrollbar-none flex h-9 shrink-0 items-end overflow-x-auto border-b border-product-line bg-canvas bg-linear-to-r from-product-wash via-product-wash/40 to-canvas [[data-theme=dark]_&]:from-product-wash/55 [[data-theme=dark]_&]:via-product-wash/15',
-    list: 'flex h-full items-end',
+    root: 'scrollbar-none flex h-10 shrink-0 items-end gap-1 overflow-x-auto border-b border-border bg-canvas px-2',
+    list: 'flex h-full min-w-0 items-end gap-0.5',
     trigger:
-      'group/tab flex h-full max-w-48 min-w-0 cursor-pointer touch-manipulation items-center gap-1.5 border-r border-border px-3 text-[11px] transition-colors outline-none select-none focus-visible:ring-1 focus-visible:ring-accent',
-    icon: 'size-3 shrink-0 opacity-50',
+      'group/tab flex h-8 max-w-56 min-w-0 cursor-pointer touch-manipulation items-center gap-2 rounded-t-md px-3 text-[13px] transition-colors outline-none select-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-inset',
+    icon: 'size-3.5 shrink-0',
     label: 'min-w-0 flex-1 truncate',
     close:
-      'flex size-6 shrink-0 cursor-pointer touch-manipulation items-center justify-center rounded transition-opacity group-hover/tab:opacity-100 hover:bg-hover focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-panel-focus sm:size-4',
+      'flex size-6 shrink-0 cursor-pointer touch-manipulation items-center justify-center rounded text-muted transition-opacity group-hover/tab:opacity-100 hover:bg-hover hover:text-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent sm:size-4',
     closeIcon: 'size-3',
     newAction:
-      'flex size-9 shrink-0 cursor-pointer touch-manipulation items-center justify-center text-muted transition-colors hover:text-surface focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-panel-focus',
-    newIcon: 'size-3.5'
+      'flex size-8 shrink-0 cursor-pointer touch-manipulation items-center justify-center self-center rounded-md text-muted transition-colors hover:bg-hover hover:text-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent',
+    newIcon: 'size-3.5',
+    end: 'ml-auto flex shrink-0 items-center self-center'
   },
   variants: {
     active: {
       true: {
-        trigger: 'bg-panel text-surface',
+        trigger: 'bg-panel font-medium text-surface',
         close: 'opacity-100'
       },
       false: {
-        trigger: 'text-muted hover:text-surface',
+        trigger: 'text-muted hover:bg-hover hover:text-surface',
         close: 'opacity-0'
       }
     }

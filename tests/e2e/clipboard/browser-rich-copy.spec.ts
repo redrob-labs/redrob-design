@@ -1,4 +1,5 @@
 import { expect, test, useEditorSetup } from '#tests/e2e/fixtures'
+import { openMenuGroup } from '#tests/helpers/menu'
 
 const editor = useEditorSetup('/?test')
 
@@ -11,7 +12,7 @@ test('browser menu copy writes rich and plain RedrobDesign clipboard formats', a
   await editor.canvas.drawRect(100, 100, 120, 80)
   await editor.canvas.waitForRender()
 
-  await editor.page.getByTestId('menubar-edit').click()
+  await openMenuGroup(editor.page, 'Edit')
   await editor.page.getByRole('menuitem', { name: /^Copy/ }).click()
 
   const clipboard = await editor.page.evaluate(async () => {
@@ -37,8 +38,8 @@ test('browser menu copy writes rich and plain RedrobDesign clipboard formats', a
     if (!store) throw new Error('RedrobDesign store not initialized')
     return store.graph.getChildren(store.state.currentPageId).length
   })
-  await editor.page.getByTestId('menubar-edit').click()
-  await editor.page.getByRole('menuitem', { name: /^Paste\s+(?:⌘|Ctrl)/ }).click()
+  await openMenuGroup(editor.page, 'Edit')
+  await editor.page.getByRole('menuitem', { name: /^Paste\s+(?:âŒ˜|Ctrl)/ }).click()
   await expect
     .poll(() =>
       editor.page.evaluate(() => {

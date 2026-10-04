@@ -39,6 +39,8 @@ import { useAppTheme } from '@/app/shell/theme'
 import { closeTab, activeTab } from '@/app/tabs'
 
 export interface AppMenuGroup {
+  /** Stable lowercase id from the schema, independent of the interface language. */
+  id: string
   label: string
   paletteIcon?: Component
   items: MenuEntry[]
@@ -316,6 +318,7 @@ export function useAppMenu() {
   function buildGroup(group: AppMenuGroupSchema): AppMenuGroup | null {
     if (!isVisible(group)) return null
     return {
+      id: group.label.toLowerCase(),
       label: groupLabel(group),
       paletteIcon: group.paletteIcon ? APP_MENU_ICONS[group.paletteIcon] : undefined,
       items: group.items.map(buildEntry).filter((item): item is MenuEntry => item !== null)

@@ -70,5 +70,9 @@
   "exportSelectionAsPNG": "선택 항목을 PNG로 내보내기",
   "exportSelectionAsSVG": "선택 항목을 SVG로 내보내기",
   "exportSelectionAsPPTX": "선택 항목을 PPTX로 내보내기",
-  "exportSelectionAsFig": "선택 항목을 .fig로 내보내기"
+  "exportSelectionAsFig": "선택 항목을 .fig로 내보내기",
+  "help": "도움말",
+  "mainMenu": "메인 메뉴",
+  "backToHome": "홈으로 돌아가기",
+  "searchCommands": "명령 검색…"
 }
