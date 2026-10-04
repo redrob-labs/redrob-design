@@ -111,3 +111,21 @@ export interface PromptSuggestion {
   /** What goes in the field; defaults to the label. */
   value?: string
 }
+
+export type AnswerReceiptIcon = 'auto' | 'pin' | 'price' | 'privacy' | 'check' | 'memory'
+
+export interface AnswerReceiptItem {
+  id: string
+  icon?: AnswerReceiptIcon
+  tone?: 'plain' | 'agree' | 'differ'
+  label: string
+  sub?: string
+}
+
+export type AgentStepState = 'done' | 'active' | 'todo' | 'error'
+
+export interface AgentStep {
+  id: string
+  label: string
+  state: AgentStepState
+}

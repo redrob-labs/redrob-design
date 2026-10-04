@@ -13,6 +13,8 @@ import { buildReasoningProviderOptions, type AIProviderOptions } from '@/app/ai/
 import SYSTEM_PROMPT from '@/app/ai/chat/system-prompt.md?raw'
 import { createAIModelRuntime, resolveModelConnectionAPIKey } from '@/app/ai/models'
 import { MAX_AGENT_STEPS, createAITools, recordStep, resetRunSteps } from '@/app/ai/tools'
+import { loadThread, saveThread, saveThreadNow, threadKeyFor } from '@/app/assistant/thread/store'
+import { beginTurn, finishTurn, recordTurnStep } from '@/app/assistant/turn/session'
 import {
   recordChatCompleted,
   recordChatFailed,
@@ -100,6 +102,7 @@ export function createToolLoopTransport({
     providerOptions,
     prepareCall: (options) => {
       resetRunSteps(store)
+      beginTurn(store)
       return {
         ...options,
         maxOutputTokens,
@@ -108,6 +111,12 @@ export function createToolLoopTransport({
     },
     onStepFinish: ({ usage }) => {
       recordStep(store)
+      recordTurnStep(store, {
+        provider: providerID,
+        model: effectiveModelID,
+        inputTokens: usage.inputTokens ?? null,
+        outputTokens: usage.outputTokens ?? null
+      })
       recordModelStepCompleted({
         provider: providerID,
         model: effectiveModelID,
@@ -139,7 +148,7 @@ export function createChatSessionManager({
   const failure = ref<AIChatFailure | null>(null)
   let transportDirty = false
   let currentChatStore: EditorStore | null = null
-  let currentChatMessages = new WeakMap<EditorStore, UIMessage[]>()
+  const currentChatMessages = new WeakMap<EditorStore, UIMessage[]>()
   let chat: Chat<UIMessage> | null = null
   let acpTransportInstance: { destroy(): Promise<void> } | null = null
   let harnessTransportInstance: { destroy(): Promise<void> } | null = null
@@ -151,11 +160,15 @@ export function createChatSessionManager({
   }
 
   function handleChatFinish({
+    message,
+    messages,
     finishReason,
     isAbort,
     isDisconnect,
     isError
   }: {
+    message?: UIMessage
+    messages?: UIMessage[]
     finishReason?: FinishReason
     isAbort: boolean
     isDisconnect: boolean
@@ -164,6 +177,10 @@ export function createChatSessionManager({
     if (!isAbort && !isDisconnect && !isError) {
       recordChatCompleted({ finishReason: finishReason ?? null })
     }
+    const store = currentChatStore
+    if (!store) return
+    finishTurn(store, isError ? undefined : message)
+    if (messages) saveThread(threadKeyFor(store), messages)
   }
 
   function clearFailure(): void {
@@ -171,10 +188,11 @@ export function createChatSessionManager({
     failure.value = null
   }
 
+  /** Settings changed: rebuild the transport next time, but keep every thread. */
   function markTransportDirty() {
+    if (currentChatStore && chat) currentChatMessages.set(currentChatStore, chat.messages)
     transportDirty = true
     currentChatStore = null
-    currentChatMessages = new WeakMap()
   }
 
   async function destroyAgentTransports(): Promise<void> {
@@ -259,7 +277,10 @@ export function createChatSessionManager({
     }
 
     if (!chat || transportDirty || currentChatStore !== store) {
-      const messages = currentChatMessages.get(store)
+      if (currentChatStore && chat && currentChatStore !== store) {
+        saveThread(threadKeyFor(currentChatStore), chat.messages)
+      }
+      const messages = currentChatMessages.get(store) ?? (await loadThread(threadKeyFor(store)))
       let transport: ChatTransport<UIMessage>
       if (isACPProvider.value) transport = await createActiveACPTransport()
       else if (isHarnessProvider.value) transport = await createActiveHarnessTransport()
@@ -284,7 +305,10 @@ export function createChatSessionManager({
   }
 
   async function resetChat() {
-    if (currentChatStore) currentChatMessages.delete(currentChatStore)
+    if (currentChatStore) {
+      currentChatMessages.delete(currentChatStore)
+      await saveThreadNow(threadKeyFor(currentChatStore), [])
+    }
     await destroyAgentTransports()
     failure.value = null
     chat = null

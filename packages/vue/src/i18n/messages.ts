@@ -23,6 +23,7 @@ import { renameMessageDefaults, renameMessages } from '#vue/i18n/messages/rename
 import { renderingMessageDefaults, renderingMessages } from '#vue/i18n/messages/rendering'
 import { settingsMessageDefaults, settingsMessages } from '#vue/i18n/messages/settings'
 import { storageMessageDefaults, storageMessages } from '#vue/i18n/messages/storage'
+import { threadMessageDefaults, threadMessages } from '#vue/i18n/messages/thread'
 import { toolMessageDefaults, toolMessages } from '#vue/i18n/messages/tools'
 import { updatesMessageDefaults, updatesMessages } from '#vue/i18n/messages/updates'
 import {
@@ -33,6 +34,7 @@ import { variablesMessageDefaults, variablesMessages } from '#vue/i18n/messages/
 
 export {
   aiMessages,
+  threadMessages,
   homeMessages,
   composerMessages,
   automationMessages,
@@ -62,6 +64,7 @@ export {
 
 export const messageDefaults = {
   ai: aiMessageDefaults,
+  thread: threadMessageDefaults,
   home: homeMessageDefaults,
   composer: composerMessageDefaults,
   automation: automationMessageDefaults,

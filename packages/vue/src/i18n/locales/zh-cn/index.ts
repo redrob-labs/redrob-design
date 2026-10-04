@@ -22,6 +22,7 @@ import rename from './rename.json'
 import rendering from './rendering.json'
 import settings from './settings.json'
 import storage from './storage.json'
+import thread from './thread.json'
 import tools from './tools.json'
 import updates from './updates.json'
 import variableTypes from './variable-types.json'
@@ -29,6 +30,7 @@ import variables from './variables.json'
 
 export default {
   ai,
+  thread,
   home,
   composer,
   automation,

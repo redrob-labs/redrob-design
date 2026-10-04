@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import { refAutoReset, useClipboard } from '@vueuse/core'
 import { isReasoningUIPart, isTextUIPart, isToolUIPart, getToolName } from 'ai'
 import { CollapsibleContent, CollapsibleRoot, CollapsibleTrigger } from 'reka-ui'
-import { useI18n, vTestId } from '@redrob-design/vue'
+import { useI18n, useThreadMessages, vTestId } from '@redrob-design/vue'
 
 import { attachmentsForMessage } from '@/app/ai/attachment/presentation/store'
 import { visibleUserMessageText } from '@/app/ai/chat/presentation'
@@ -11,6 +11,9 @@ import AttachmentList from '@/components/chat/attachment/AttachmentList.vue'
 import ChatMarkdown from '@/components/chat/ChatMarkdown.vue'
 import ReasoningBlock from '@/components/chat/ReasoningBlock.vue'
 import IconButton from '@/components/ui/IconButton.vue'
+import AnswerReceipt from '@/components/ui/agent/AnswerReceipt.vue'
+import { receiptFor } from '@/app/assistant/thread/store'
+import { receiptItems } from './receipt/items'
 import { classifyToolState } from './tool-state'
 
 import type { UIDataTypes, UIMessage, UIMessagePart, UITools } from 'ai'
@@ -19,7 +22,26 @@ const { message, streaming = false } = defineProps<{
   message: UIMessage
   streaming?: boolean
 }>()
-const { ai } = useI18n()
+const { ai, locale } = useI18n()
+const thread = useThreadMessages()
+const receipt = computed(() => {
+  if (streaming || message.role !== 'assistant') return []
+  const turn = receiptFor(message.id)
+  if (!turn) return []
+  return receiptItems(
+    turn,
+    {
+      byAuto: thread.value.byAuto,
+      yourChoice: thread.value.yourChoice,
+      free: thread.value.free,
+      priceUnknown: thread.value.priceUnknown,
+      private: thread.value.private,
+      keptPrivate: (count) => thread.value.keptPrivate({ count }),
+      factCheck: thread.value.factCheck
+    },
+    locale.value
+  )
+})
 const markdownMode = computed(() => (streaming ? 'streaming' : 'static'))
 const attachments = attachmentsForMessage(message.id)
 const assistantText = computed(() =>
@@ -165,6 +187,7 @@ function partKey(part: UIMessagePart<UIDataTypes, UITools>, index: number): stri
             </IconButton>
           </div>
         </template>
+        <AnswerReceipt v-if="receipt.length" :items="receipt" :label="thread.receiptLabel" />
       </template>
 
       <!-- User message -->

@@ -129,6 +129,8 @@ ja:settings.temporaryDisableSnappingHint
 ja:storage.accessKeyID
 ja:storage.copyCors
 ja:storage.providerS3
+ja:thread.byAuto
+ja:thread.progressLabel
 ja:updates.available
 ja:updates.availableTitle
 ja:updates.downloading
@@ -262,6 +264,8 @@ zh-cn:settings.temporaryDisableSnappingHint
 zh-cn:storage.accessKeyID
 zh-cn:storage.copyCors
 zh-cn:storage.providerS3
+zh-cn:thread.byAuto
+zh-cn:thread.progressLabel
 zh-cn:updates.available
 zh-cn:updates.availableTitle
 zh-cn:updates.downloading

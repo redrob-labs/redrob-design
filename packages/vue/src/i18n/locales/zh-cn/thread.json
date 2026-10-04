@@ -1,0 +1,15 @@
+{
+  "receiptLabel": "关于此回答",
+  "byAuto": "由 Redrob Auto 选择",
+  "yourChoice": "你的选择",
+  "free": "免费",
+  "priceUnknown": "未报告价格",
+  "keptPrivate": "{count} 项保持私密",
+  "private": "私密",
+  "factCheck": "事实核查",
+  "progressLabel": "Redrob 正在做什么",
+  "stepReading": "正在阅读你的消息",
+  "stepWorking": "正在处理页面",
+  "stepAnswering": "正在撰写回答",
+  "stepTool": "使用了 {tool}"
+}

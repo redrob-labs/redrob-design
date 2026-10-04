@@ -21,7 +21,9 @@ import ProviderSetup from '@/components/chat/ProviderSetup.vue'
 import { useAIChat } from '@/app/ai/chat/use'
 import { toast } from '@/app/shell/ui'
 import { openSettingsDialog } from '@/app/settings/dialog'
-import { useI18n } from '@redrob-design/vue'
+import { useI18n, useThreadMessages, vTestId } from '@redrob-design/vue'
+import { turnSteps } from '@/components/chat/timeline/steps'
+import AgentTimeline from '@/components/ui/agent/AgentTimeline.vue'
 
 import { useNotificationMessages } from '@/app/i18n/notifications'
 
@@ -34,6 +36,7 @@ const IS_DEV = import.meta.env.DEV
 const { isConfigured, ensureChat, resetChat, chatFailure, clearChatFailure } = useAIChat()
 const { copy } = useClipboard()
 const { ai } = useI18n()
+const thread = useThreadMessages()
 const notifications = useNotificationMessages()
 
 const chat = shallowRef<Chat<UIMessage> | null>(null)
@@ -122,6 +125,17 @@ const isThinking = computed(() => {
   if ('toolCallId' in lastPart && lastPart.state === 'output-available') return true
   if ('toolCallId' in lastPart && lastPart.state === 'output-error') return true
   return s === 'submitted'
+})
+
+const progressSteps = computed(() => {
+  const last = messages.value.at(-1)
+  const answer = last?.role === 'assistant' ? last : null
+  return turnSteps(answer, {
+    stepReading: thread.value.stepReading,
+    stepWorking: thread.value.stepWorking,
+    stepAnswering: thread.value.stepAnswering,
+    stepTool: (tool) => thread.value.stepTool({ tool })
+  })
 })
 
 const showContinue = computed(() => {
@@ -229,27 +243,12 @@ function handleClearChat() {
             />
 
             <!-- Thinking indicator: shown when AI is working but no visible activity -->
-            <div v-if="isThinking" data-test-id="chat-typing-indicator" class="flex gap-2">
-              <div
-                class="flex size-6 shrink-0 items-center justify-center rounded-full bg-muted/20 text-[10px] font-bold text-muted"
-              >
-                AI
-              </div>
-              <div class="flex items-center gap-1 py-2">
-                <span
-                  class="size-1.5 animate-bounce rounded-full bg-muted"
-                  style="animation-delay: 0ms"
-                />
-                <span
-                  class="size-1.5 animate-bounce rounded-full bg-muted"
-                  style="animation-delay: 150ms"
-                />
-                <span
-                  class="size-1.5 animate-bounce rounded-full bg-muted"
-                  style="animation-delay: 300ms"
-                />
-              </div>
-            </div>
+            <AgentTimeline
+              v-if="isThinking"
+              v-test-id="'chat-typing-indicator'"
+              :steps="progressSteps"
+              :label="thread.progressLabel"
+            />
 
             <!-- Continue button when step limit reached -->
             <div v-if="showContinue" class="flex justify-center py-2">

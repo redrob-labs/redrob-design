@@ -1,0 +1,15 @@
+{
+  "receiptLabel": "이 답변에 대해",
+  "byAuto": "Redrob Auto 선택",
+  "yourChoice": "직접 선택",
+  "free": "무료",
+  "priceUnknown": "가격 미보고",
+  "keptPrivate": "{count}개 비공개 유지",
+  "private": "비공개",
+  "factCheck": "사실 확인",
+  "progressLabel": "Redrob이 하고 있는 일",
+  "stepReading": "메시지를 읽는 중",
+  "stepWorking": "페이지 작업 중",
+  "stepAnswering": "답변 작성 중",
+  "stepTool": "{tool} 사용"
+}

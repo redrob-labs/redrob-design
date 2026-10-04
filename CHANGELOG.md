@@ -26,6 +26,7 @@
 - Inspect selected designs with a configured Vision model and attach images to AI chat with bounded analysis and previews. (#232, #471)
 - Start from one sentence on Home: "What are you making?" opens a new file with the brief as its first message, with suggestions, New presets for a phone app, website or social card, and a note on where files are kept.
 - Choose Plan or Run and Redrob Auto or a pinned model in the Redrob composer, and read Privacy, Memory and Cross-check in a status line under it.
+- Keep each file's Redrob conversation across reloads and provider changes, follow Redrob's progress step by step while it works, and read a receipt under every answer with the model and who chose it, the price, what was kept private, and Fact check when it ran.
 - Pin selected layers as explicit AI chat context, show collapsible reasoning, copy individual responses, and grow the composer with multiline prompts. (#13)
 - Render streaming AI responses with the upstream Comark-based Markdown pipeline and optional Shiki code highlighting without the former project fork.
 

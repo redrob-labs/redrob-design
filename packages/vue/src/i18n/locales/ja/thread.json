@@ -1,0 +1,15 @@
+{
+  "receiptLabel": "この回答について",
+  "byAuto": "Redrob Auto が選択",
+  "yourChoice": "あなたが選択",
+  "free": "無料",
+  "priceUnknown": "価格は未報告",
+  "keptPrivate": "{count} 件を非公開に",
+  "private": "非公開",
+  "factCheck": "ファクトチェック",
+  "progressLabel": "Redrob の作業状況",
+  "stepReading": "メッセージを読んでいます",
+  "stepWorking": "ページを作業中",
+  "stepAnswering": "回答を書いています",
+  "stepTool": "{tool} を使用"
+}

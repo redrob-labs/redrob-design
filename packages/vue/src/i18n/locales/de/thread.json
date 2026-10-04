@@ -1,0 +1,15 @@
+{
+  "receiptLabel": "Zu dieser Antwort",
+  "byAuto": "von Redrob Auto",
+  "yourChoice": "deine Wahl",
+  "free": "Kostenlos",
+  "priceUnknown": "Preis nicht gemeldet",
+  "keptPrivate": "{count} privat gehalten",
+  "private": "Privat",
+  "factCheck": "Faktencheck",
+  "progressLabel": "Was Redrob gerade tut",
+  "stepReading": "Liest deine Nachricht",
+  "stepWorking": "Arbeitet an der Seite",
+  "stepAnswering": "Schreibt die Antwort",
+  "stepTool": "{tool} verwendet"
+}

@@ -1,28 +1,16 @@
-/** One ranked combination of model, effort and harness, as the leaderboard reports it. */
-export interface RankedEffort {
-  label: string
-  level: number
-  of: number
-}
+/**
+ * The leaderboard's ranking, in the shapes the shared agent UI already
+ * defines, so a ranked pick passes to the model picker unchanged.
+ */
+import type {
+  Effort,
+  EffortLevel,
+  ModelPick,
+  ModelRankingSource
+} from '@/components/ui/agent/types'
 
-export interface RankedEffortLevel extends RankedEffort {
-  /** A month of the task at this level, in USD. */
-  monthly?: number
-}
-
-export interface RankedPick {
-  id: string
-  model: string
-  short?: string
-  harness: string
-  effort: RankedEffort
-  efforts?: RankedEffortLevel[]
-  why?: string
-  monthly?: number
-}
-
-export interface RankingSource {
-  name: string
-  edition?: string
-  note?: string
-}
+export type RankedEffort = Effort
+export type RankedEffortLevel = EffortLevel
+/** One ranked combination of model, effort and harness. */
+export type RankedPick = ModelPick
+export type RankingSource = ModelRankingSource

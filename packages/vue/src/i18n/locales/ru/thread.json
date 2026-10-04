@@ -1,0 +1,15 @@
+{
+  "receiptLabel": "Об этом ответе",
+  "byAuto": "выбрал Redrob Auto",
+  "yourChoice": "ваш выбор",
+  "free": "Бесплатно",
+  "priceUnknown": "Цена не сообщена",
+  "keptPrivate": "Скрыто: {count}",
+  "private": "Конфиденциально",
+  "factCheck": "Проверка фактов",
+  "progressLabel": "Что делает Redrob",
+  "stepReading": "Читает ваше сообщение",
+  "stepWorking": "Работает над страницей",
+  "stepAnswering": "Пишет ответ",
+  "stepTool": "Использовано: {tool}"
+}
