@@ -51,5 +51,8 @@
   "resizeThread": "调整面板大小",
   "threadRegion": "对话",
   "canvasRegion": "页面",
-  "shipsIn": "以 {languages} 发布。"
+  "shipsIn": "以 {languages} 发布。",
+  "continue": "继续",
+  "continuePrompt": "从上次停下的地方继续",
+  "clearThread": "清空"
 }

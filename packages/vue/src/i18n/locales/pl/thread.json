@@ -51,5 +51,8 @@
   "resizeThread": "Zmień rozmiar panelu Redrob",
   "threadRegion": "Redrob",
   "canvasRegion": "Strona",
-  "shipsIn": "Wydanie w językach: {languages}."
+  "shipsIn": "Wydanie w językach: {languages}.",
+  "continue": "Kontynuuj",
+  "continuePrompt": "Kontynuuj od miejsca, w którym skończyłeś",
+  "clearThread": "Wyczyść"
 }

@@ -1,6 +1,11 @@
 import { describe, expect, test } from 'bun:test'
 
-import { hasMixedLatinAndCjk, placeholders, visibleTranslationText } from '../src/quality'
+import {
+  hasForbiddenDash,
+  hasMixedLatinAndCjk,
+  placeholders,
+  visibleTranslationText
+} from '../src/quality'
 
 describe('translation quality checks', () => {
   test('extracts and removes interpolation placeholders', () => {
@@ -15,6 +20,13 @@ describe('translation quality checks', () => {
   test('does not treat placeholder identifiers as translated Latin text', () => {
     expect(hasMixedLatinAndCjk('画像 {name} を削除')).toBe(false)
     expect(hasMixedLatinAndCjk('查看附件 {name}')).toBe(false)
+  })
+
+  test('rejects the dashes Redrob copy never uses', () => {
+    for (const dash of ['\u2014', '\u2013', '\u2015', '\u2212']) {
+      expect(hasForbiddenDash(`Saved ${dash} replace it`)).toBe(true)
+    }
+    expect(hasForbiddenDash('Short-dash copy is fine')).toBe(false)
   })
 
   test('still detects visible Latin text mixed with CJK text', () => {

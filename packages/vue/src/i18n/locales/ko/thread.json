@@ -51,5 +51,8 @@
   "resizeThread": "Redrob 패널 크기 조정",
   "threadRegion": "Redrob",
   "canvasRegion": "페이지",
-  "shipsIn": "{languages}(으)로 배포합니다."
+  "shipsIn": "{languages}(으)로 배포합니다.",
+  "continue": "계속",
+  "continuePrompt": "멈춘 곳에서 이어서 해 주세요",
+  "clearThread": "지우기"
 }

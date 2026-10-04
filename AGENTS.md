@@ -47,6 +47,26 @@ Headless SDK fields compose variable/token binding through `BindingProvider` and
 
 Property-panel anatomy in `packages/vue/src/primitives/PropertySection/`, `SegmentedControl/`, and `PropertyList/` is controlled and editor-agnostic. Connect PropertyList events to RedrobDesign selection and undo through `useEditorPropertyList()` or an app adapter; never call `useEditor()` from these primitives.
 
+### Redrob assistant surfaces
+
+Each document tab is in Describe or Edit (`Tab.mode`, `setTabMode` in `src/app/tabs/`). Describe turns on core's view-only flag (`editor.setViewOnly`, `EditorViewState.viewOnly`, `view-only:changed`). Input layers stand down while it is on: `useCanvasInput`, text edit, the context menu, clipboard, nudging, tool keys, and shortcuts outside `VIEW_ONLY_SHORTCUT_IDS`. Programmatic edits, Redrob's included, still run. Gate new direct-input paths on `state.viewOnly`, and never block tool or automation mutations with it.
+
+Thread state lives under `src/app/assistant/`:
+
+- `thread/` holds the per-file IndexedDB thread and its receipts.
+- `turn/` holds pricing, usage and the per-answer instructions with Design Memory.
+- `changes/` turns one answer into one undo entry and a change set. It uses core's `diffPageSnapshots` and `restoreNodes`.
+- `pointing/` handles Describe pointing.
+- `controls/` holds Plan or Run, the model pick, Memory and Cross-check.
+
+The page check is in `src/app/review/` and uses the core lint `design-system` preset and `LintFix`. Design Memory is in `src/app/memory/`, behind `DesignMemorySource`. Ship and watch are in `src/app/ship/`.
+
+Messages Redrob posts without a model (review, Ship, watched updates) carry `data-*` parts that the AI SDK never sends to the model. They render in `ChatMessage.vue` after a type guard, and they are posted through `provideChatPost`. Cards that answer for the person use `provideChatSend`.
+
+Services with no backend yet (workspace reading, Publish, Hand to Claude Code, watching) answer with the prototype's sample data only on `/demo` (`src/app/runtime/demo.ts`). Everywhere else they must say they are not connected.
+
+Shared agent UI (`Composer`, `Changes`, `Finding`, `AnswerReceipt`, `AgentTimeline`, `MemoryCard`, `PlanQuestions`) is store-free under `src/components/ui/agent/`. Its props contracts are in `types.ts`, after the design system's `index.d.ts`. App types should alias those contracts rather than repeat their shapes, because `test:type-shapes` rejects duplicates.
+
 ### Settings and credentials
 
 Credential persistence lives under `src/app/settings/credentials/`. Settings components receive `CredentialManager` and may inspect status, replace, or clear credentials; runtime adapters receive `CredentialResolver`. Components must not read saved secrets or keep them in long-lived reactive refs. Non-secret provider preferences remain in normal settings storage.
@@ -225,7 +245,13 @@ Keep responsibilities distinct: engine tests cover state contracts, Playwright b
 - App wrappers around SDK primitives use shared UI helpers rather than scattered raw classes.
 - Commands use `packages/vue/src/editor/commands/registry.ts` for shortcuts, bindings, and menu IDs. Store portable tokens (`MOD+D`) and format them at render time; labels/translations never contain shortcuts.
 - i18n uses narrow product-domain catalogs under `packages/vue/src/i18n/messages/` with matching locale files. Inspect existing domains instead of adding generic UI/component namespaces; prefer narrow `use*Messages()` composables over aggregate `useI18n()`.
-- `check:i18n` enforces structure, placeholder parity, and reviewed translation baselines. Remove stale baseline identities when fixing existing debt.
+- `check:i18n` enforces:
+  - structure;
+  - placeholder parity;
+  - reviewed translation baselines;
+  - Redrob copy's short-dash rule. Em dashes, en dashes, horizontal bars and minus signs fail in English defaults and every locale.
+
+  Remove stale baseline identities when you fix existing debt.
 - Canvas menu structure lives in `packages/vue/src/editor/menu-model/canvas.ts`; `CanvasMenu.vue` renders it.
 - Browser/native menus share `src/app/shell/menu/schema.ts`; handle IDs in `use.ts` or editor commands, and regenerate `desktop/generated/menu.json` with `generate:tauri-menu`.
 - Use Tailwind 4 and `tw-animate-css`; no static inline styling or component `<style>` blocks. Dynamic `:style` bindings are allowed for runtime geometry/CSS variables.

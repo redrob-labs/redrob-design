@@ -56,7 +56,10 @@ export const threadMessageDefaults = {
   resizeThread: 'Resize the Redrob panel',
   threadRegion: 'Redrob',
   canvasRegion: 'Page',
-  shipsIn: params('Ships in {languages}.')
+  shipsIn: params('Ships in {languages}.'),
+  continue: 'Continue',
+  continuePrompt: 'Continue where you left off',
+  clearThread: 'Clear'
 } as const
 
 export const threadMessages = i18n('thread', threadMessageDefaults)

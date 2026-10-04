@@ -51,5 +51,8 @@
   "resizeThread": "Ridimensiona il pannello di Redrob",
   "threadRegion": "Redrob",
   "canvasRegion": "Pagina",
-  "shipsIn": "Pubblicato in {languages}."
+  "shipsIn": "Pubblicato in {languages}.",
+  "continue": "Continua",
+  "continuePrompt": "Riprendi da dove avevi lasciato",
+  "clearThread": "Cancella"
 }

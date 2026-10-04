@@ -51,5 +51,8 @@
   "resizeThread": "Cambiar el tamaño del panel de Redrob",
   "threadRegion": "Redrob",
   "canvasRegion": "Página",
-  "shipsIn": "Se publica en {languages}."
+  "shipsIn": "Se publica en {languages}.",
+  "continue": "Continuar",
+  "continuePrompt": "Sigue donde lo dejaste",
+  "clearThread": "Borrar"
 }

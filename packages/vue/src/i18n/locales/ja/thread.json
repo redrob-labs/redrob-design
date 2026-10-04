@@ -51,5 +51,8 @@
   "resizeThread": "パネルのサイズを変更",
   "threadRegion": "対話",
   "canvasRegion": "ページ",
-  "shipsIn": "{languages} で公開します。"
+  "shipsIn": "{languages} で公開します。",
+  "continue": "続ける",
+  "continuePrompt": "中断したところから続けてください",
+  "clearThread": "消去"
 }

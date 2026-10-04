@@ -112,7 +112,7 @@
   "modelsTitle": "모델",
   "connectRedrob": "Redrob 연결",
   "connectRedrobHint": "Redrob Console에 로그인하면 키가 저장됩니다.",
-  "connectRedrobWaiting": "{url}에서 {code}를 입력하세요 — 승인을 기다리고 있습니다.",
+  "connectRedrobWaiting": "{url}에서 {code}을(를) 입력한 뒤 승인을 기다리세요.",
   "connectRedrobConnected": "연결되었습니다. 워크스페이스 키를 저장했습니다.",
   "connectRedrobDenied": "Console에서 요청이 거절되었습니다.",
   "connectRedrobExpired": "승인되기 전에 코드가 만료되었습니다. 다시 시도하세요.",

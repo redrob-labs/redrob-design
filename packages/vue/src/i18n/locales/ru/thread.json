@@ -51,5 +51,8 @@
   "resizeThread": "Изменить размер панели Redrob",
   "threadRegion": "Redrob",
   "canvasRegion": "Страница",
-  "shipsIn": "Выходит на языках: {languages}."
+  "shipsIn": "Выходит на языках: {languages}.",
+  "continue": "Продолжить",
+  "continuePrompt": "Продолжи с того места, где остановился",
+  "clearThread": "Очистить"
 }

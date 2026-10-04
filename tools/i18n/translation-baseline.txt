@@ -7,7 +7,6 @@ de:ai.connectRedrobExpired
 de:ai.connectRedrobFailed
 de:ai.connectRedrobHint
 de:ai.connectRedrobUnreachable
-de:ai.connectRedrobWaiting
 de:ai.harnessThinkingMinimal
 de:ai.modelAgentConnection
 de:ai.modelCapabilityVisionShort
@@ -79,7 +78,6 @@ es:ai.connectRedrobExpired
 es:ai.connectRedrobFailed
 es:ai.connectRedrobHint
 es:ai.connectRedrobUnreachable
-es:ai.connectRedrobWaiting
 es:ai.responses
 es:ai.toolError
 es:automation.statusError
@@ -122,7 +120,6 @@ fr:ai.connectRedrobExpired
 fr:ai.connectRedrobFailed
 fr:ai.connectRedrobHint
 fr:ai.connectRedrobUnreachable
-fr:ai.connectRedrobWaiting
 fr:ai.harnessThinkingMinimal
 fr:ai.modelAgentConnection
 fr:ai.modelCapabilityVisionShort
@@ -199,7 +196,6 @@ it:ai.connectRedrobExpired
 it:ai.connectRedrobFailed
 it:ai.connectRedrobHint
 it:ai.connectRedrobUnreachable
-it:ai.connectRedrobWaiting
 it:ai.responses
 it:code.editorDesignLabel
 it:code.sourceDesignJSX
@@ -241,7 +237,6 @@ ja:ai.connectRedrobExpired
 ja:ai.connectRedrobFailed
 ja:ai.connectRedrobHint
 ja:ai.connectRedrobUnreachable
-ja:ai.connectRedrobWaiting
 ja:code.editorDesignLabel
 ja:code.sourceDesignJSX
 ja:code.sourceHTMLCSS
@@ -269,7 +264,6 @@ pl:ai.connectRedrobExpired
 pl:ai.connectRedrobFailed
 pl:ai.connectRedrobHint
 pl:ai.connectRedrobUnreachable
-pl:ai.connectRedrobWaiting
 pl:ai.modelAgentConnection
 pl:ai.modelConfiguration
 pl:ai.responses
@@ -309,7 +303,6 @@ ru:ai.connectRedrobExpired
 ru:ai.connectRedrobFailed
 ru:ai.connectRedrobHint
 ru:ai.connectRedrobUnreachable
-ru:ai.connectRedrobWaiting
 ru:ai.responses
 ru:code.editorDesignLabel
 ru:code.sourceDesignJSX
@@ -336,7 +329,6 @@ zh-cn:ai.connectRedrobExpired
 zh-cn:ai.connectRedrobFailed
 zh-cn:ai.connectRedrobHint
 zh-cn:ai.connectRedrobUnreachable
-zh-cn:ai.connectRedrobWaiting
 zh-cn:ai.responses
 zh-cn:code.editorDesignLabel
 zh-cn:code.sourceDesignJSX

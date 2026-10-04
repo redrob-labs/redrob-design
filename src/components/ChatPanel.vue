@@ -295,15 +295,15 @@ function handleClearChat() {
                 class="flex items-center gap-1.5 rounded-full bg-accent/10 px-4 py-1.5 text-xs font-medium text-accent transition-colors hover:bg-accent/20"
                 @click="
                   submission.submit({
-                    modelText: 'Continue where you left off',
-                    displayText: 'Continue where you left off',
+                    modelText: thread.continuePrompt,
+                    displayText: thread.continuePrompt,
                     images: [],
                     nodes: []
                   })
                 "
               >
                 <icon-lucide-play class="size-3" />
-                Continue
+                {{ thread.continue }}
               </button>
             </div>
 
@@ -338,7 +338,7 @@ function handleClearChat() {
         </AppButton>
         <AppButton color="error" variant="ghost" size="xs" @click="handleClearChat">
           <icon-lucide-trash-2 class="size-3" />
-          Clear
+          {{ thread.clearThread }}
         </AppButton>
       </div>
 

@@ -51,5 +51,8 @@
   "resizeThread": "Größe des Redrob-Bereichs ändern",
   "threadRegion": "Redrob",
   "canvasRegion": "Seite",
-  "shipsIn": "Erscheint auf {languages}."
+  "shipsIn": "Erscheint auf {languages}.",
+  "continue": "Weiter",
+  "continuePrompt": "Mach dort weiter, wo du aufgehört hast",
+  "clearThread": "Leeren"
 }
