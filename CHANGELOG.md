@@ -112,6 +112,7 @@
 
 ### Performance
 
+- Record each Redrob answer's changes from only the layers it touched, so finishing an answer on a large page takes a fraction of the time.
 - Scope automation and Figma API layout reconciliation to graph nodes and parent containers actually changed by each mutation.
 - Keep rapid trackpad zoom reversals and effect-heavy document navigation responsive by cancelling obsolete reconstruction and reusing safe raster snapshots.
 - Show the FIG page list from a lightweight Kiwi scan before materializing the full document.
