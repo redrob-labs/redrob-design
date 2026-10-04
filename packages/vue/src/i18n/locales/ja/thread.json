@@ -50,5 +50,6 @@
   "pointHint": "フレームを指して話しかけてください。",
   "resizeThread": "パネルのサイズを変更",
   "threadRegion": "対話",
-  "canvasRegion": "ページ"
+  "canvasRegion": "ページ",
+  "shipsIn": "{languages} で公開します。"
 }

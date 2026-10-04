@@ -50,5 +50,6 @@
   "pointHint": "Señala un marco para hablar de él.",
   "resizeThread": "Cambiar el tamaño del panel de Redrob",
   "threadRegion": "Redrob",
-  "canvasRegion": "Página"
+  "canvasRegion": "Página",
+  "shipsIn": "Se publica en {languages}."
 }

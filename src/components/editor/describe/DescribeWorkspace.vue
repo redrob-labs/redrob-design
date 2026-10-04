@@ -5,6 +5,7 @@ import { computed } from 'vue'
 import { useThreadMessages } from '@redrob-design/vue'
 
 import { useEditorStore } from '@/app/editor/active-store'
+import { pageLanguages } from '@/app/language/versions'
 import ChatPanel from '@/components/ChatPanel.vue'
 import EditorCanvas from '@/components/EditorCanvas.vue'
 
@@ -20,6 +21,10 @@ const THREAD_WIDTH = { initial: 440, min: 340, max: 720 } as const
 const store = useEditorStore()
 const t = useThreadMessages()
 const storedWidth = useLocalStorage('redrob-design:describe-thread-width', THREAD_WIDTH.initial)
+const languages = computed(() => {
+  void store.state.sceneVersion
+  return pageLanguages(store.graph, store.state.currentPageId)
+})
 const threadWidth = computed({
   get: () => Math.min(THREAD_WIDTH.max, Math.max(THREAD_WIDTH.min, storedWidth.value)),
   set: (value: number) => {
@@ -37,6 +42,14 @@ const threadWidth = computed({
       >
         <icon-lucide-mouse-pointer-click class="size-3.5 shrink-0" />
         <span class="truncate">{{ t.pointHint }}</span>
+        <span
+          v-if="languages.length > 0"
+          data-test-id="describe-languages"
+          class="ml-auto flex shrink-0 items-center gap-1"
+        >
+          <icon-lucide-languages class="size-3.5" />
+          {{ t.shipsIn({ languages: languages.join(', ') }) }}
+        </span>
       </div>
       <div class="relative flex min-h-0 flex-1">
         <EditorCanvas />

@@ -50,5 +50,6 @@
   "pointHint": "Indica un frame per parlarne.",
   "resizeThread": "Ridimensiona il pannello di Redrob",
   "threadRegion": "Redrob",
-  "canvasRegion": "Pagina"
+  "canvasRegion": "Pagina",
+  "shipsIn": "Pubblicato in {languages}."
 }

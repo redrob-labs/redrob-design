@@ -26,6 +26,7 @@
 - Inspect selected designs with a configured Vision model and attach images to AI chat with bounded analysis and previews. (#232, #471)
 - Start from one sentence on Home: "What are you making?" opens a new file with the brief as its first message, with suggestions, New presets for a phone app, website or social card, and a note on where files are kept.
 - Choose Plan or Run and Redrob Auto or a pinned model in the Redrob composer, and read Privacy, Memory and Cross-check in a status line under it.
+- Ask Redrob for a version of a screen in another language: it copies the frame beside the original, rewrites the copy as a native writer would, and Describe shows which languages the page ships in.
 - Plan with Design Memory: every answer reads the file's color tokens, typefaces, radii, components and the Design System's rules, a card in the thread opens it in full, Plan asks at most two tap-to-answer questions before drawing, and new pages start as four directions side by side to pick from.
 - Check a page against design-system rules for free when it opens in Describe: Redrob posts what it found, most serious first, with where each one is, and Fix or Fix all settles spacing, radius, text size, touch targets and subpixel values in one undo step. The CLI `lint` command gains a `design-system` preset.
 - Switch any file between Describe and Edit from the tab bar: Describe shows the canvas to look at and point at, with the Redrob thread beside it in a 340 to 720 pixel panel, and keeps hand edits and their shortcuts off; briefs from Home open in Describe.

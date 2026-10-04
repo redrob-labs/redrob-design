@@ -50,5 +50,6 @@
   "pointHint": "Укажите на фрейм, чтобы обсудить его.",
   "resizeThread": "Изменить размер панели Redrob",
   "threadRegion": "Redrob",
-  "canvasRegion": "Страница"
+  "canvasRegion": "Страница",
+  "shipsIn": "Выходит на языках: {languages}."
 }

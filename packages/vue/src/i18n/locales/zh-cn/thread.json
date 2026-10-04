@@ -50,5 +50,6 @@
   "pointHint": "指向一个框架来讨论它。",
   "resizeThread": "调整面板大小",
   "threadRegion": "对话",
-  "canvasRegion": "页面"
+  "canvasRegion": "页面",
+  "shipsIn": "以 {languages} 发布。"
 }

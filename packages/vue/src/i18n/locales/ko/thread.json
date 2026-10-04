@@ -50,5 +50,6 @@
   "pointHint": "프레임을 가리켜 이야기해 보세요.",
   "resizeThread": "Redrob 패널 크기 조정",
   "threadRegion": "Redrob",
-  "canvasRegion": "페이지"
+  "canvasRegion": "페이지",
+  "shipsIn": "{languages}(으)로 배포합니다."
 }

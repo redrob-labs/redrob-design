@@ -55,7 +55,8 @@ export const threadMessageDefaults = {
   pointHint: 'Point at a frame to talk about it.',
   resizeThread: 'Resize the Redrob panel',
   threadRegion: 'Redrob',
-  canvasRegion: 'Page'
+  canvasRegion: 'Page',
+  shipsIn: params('Ships in {languages}.')
 } as const
 
 export const threadMessages = i18n('thread', threadMessageDefaults)

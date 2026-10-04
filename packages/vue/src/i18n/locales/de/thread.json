@@ -50,5 +50,6 @@
   "pointHint": "Zeige auf einen Rahmen, um darüber zu sprechen.",
   "resizeThread": "Größe des Redrob-Bereichs ändern",
   "threadRegion": "Redrob",
-  "canvasRegion": "Seite"
+  "canvasRegion": "Seite",
+  "shipsIn": "Erscheint auf {languages}."
 }

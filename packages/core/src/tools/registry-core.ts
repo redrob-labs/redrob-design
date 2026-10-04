@@ -2,6 +2,7 @@ import { evalCode } from './analyze'
 import { calc } from './calc'
 import { render } from './create'
 import { describe } from './describe'
+import { addLanguageVersion } from './language'
 import {
   setFill,
   setLayout,
@@ -32,6 +33,7 @@ export const CORE_TOOLS: ToolDef[] = [
   // Plan
   askPlanQuestions,
   createDirections,
+  addLanguageVersion,
   // Create
   render,
   // Modify
