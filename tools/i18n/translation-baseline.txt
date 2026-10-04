@@ -23,6 +23,7 @@ de:code.sourceHTMLCSS
 de:code.sourceTailwindJSX
 de:common.ok
 de:menu.text
+de:panels.ai
 de:panels.alpha
 de:panels.blendModeNormal
 de:panels.chroma
@@ -77,6 +78,7 @@ es:code.sourceDesignJSX
 es:code.sourceHTMLCSS
 es:code.sourceTailwindJSX
 es:common.tokens
+es:panels.ai
 es:panels.auto
 es:panels.blendModeColor
 es:panels.blendModeNormal
@@ -120,6 +122,7 @@ fr:code.sourceTailwindJSX
 fr:common.ok
 fr:diagnostics.title
 fr:pages.pageName
+fr:panels.ai
 fr:panels.alpha
 fr:panels.auto
 fr:panels.blendModeExclusion
@@ -220,6 +223,7 @@ ja:panels.framePresetCategoryFigmaCommunity
 ja:storage.providerAmazonS3
 ja:storage.providerBackblaze
 ja:storage.providerR2
+ko:panels.ai
 pl:ai.completions
 pl:ai.connectRedrob
 pl:ai.connectRedrobCancel

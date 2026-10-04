@@ -1,7 +1,8 @@
 import { IS_BROWSER } from '@redrob-design/core/constants'
 
 const EDITOR_LAYOUT_KEY = 'redrob-design:editor-layout'
-const DEFAULT_EDITOR_LAYOUT = [18, 64, 18]
+/** About 256px, the canvas and 304px at 1440px wide, as the approved prototype sets them. */
+const DEFAULT_EDITOR_LAYOUT = [18, 61, 21]
 
 export function loadEditorLayout(): number[] {
   if (!IS_BROWSER) return DEFAULT_EDITOR_LAYOUT

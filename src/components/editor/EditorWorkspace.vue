@@ -67,7 +67,9 @@ const horizontalSplitterStyles = tv(splitterTheme)({ direction: 'horizontal' })
       :max-size="30"
       class="flex flex-col"
     >
-      <div class="flex shrink-0 items-center justify-between border-b border-border px-1.5 py-1.5">
+      <div
+        class="flex h-12 shrink-0 items-center justify-between border-b border-l border-border bg-panel px-3"
+      >
         <CollabPanel />
       </div>
       <PropertiesPanel />

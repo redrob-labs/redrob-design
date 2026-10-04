@@ -5,7 +5,7 @@
   "pages": "ページ",
   "design": "デザイン",
   "code": "コード",
-  "ai": "AI",
+  "ai": "Redrob",
   "assets": "アセット",
   "page": "ページ",
   "frame": "フレーム",
@@ -346,5 +346,7 @@
   "brightness": "明度",
   "lightness": "明度",
   "chroma": "彩度",
-  "alpha": "アルファ"
+  "alpha": "アルファ",
+  "askRedrob": "Redrob に聞く",
+  "askRedrobAboutThis": "これについて Redrob に聞く"
 }

@@ -123,7 +123,7 @@ test('model library keeps reusable profiles and role assignments', async ({ page
 
   await openSettingsFromMenu(page)
   await page.getByTestId('settings-add-model').click()
-  await page.getByLabel('Name').fill('Fast model')
+  await page.getByLabel('Name', { exact: true }).fill('Fast model')
   await page.getByTestId('settings-model-provider').click()
   await page.getByRole('option', { name: 'Google AI' }).click()
   await page.getByLabel('Model ID').click()
@@ -131,7 +131,7 @@ test('model library keeps reusable profiles and role assignments', async ({ page
   await page.getByRole('button', { name: 'Save model' }).click()
 
   await page.getByTestId('settings-add-model').click()
-  await page.getByLabel('Name').fill('Vision model')
+  await page.getByLabel('Name', { exact: true }).fill('Vision model')
   await page.getByTestId('settings-model-provider').click()
   await page.getByRole('option', { name: 'OpenRouter' }).click()
   await page.getByLabel('Model ID').first().click()
@@ -159,7 +159,7 @@ test('remembered browser credentials survive reload and clear centrally', async 
   const canvas = new CanvasHelper(page)
   await canvas.waitForInit()
 
-  await page.getByRole('tab', { name: 'AI' }).click()
+  await page.getByRole('tab', { name: 'Redrob' }).click()
   await page.getByTestId('provider-setup-open-settings').click()
 
   const remember = page.getByTestId('settings-remember-credentials')
@@ -171,7 +171,7 @@ test('remembered browser credentials survive reload and clear centrally', async 
   await page.locator('[data-model-id]').first().click()
   await page.getByTestId('settings-model-provider').click()
   await page.getByRole('option', { name: 'OpenRouter' }).click()
-  await page.getByLabel('Name').fill('Claude Sonnet')
+  await page.getByLabel('Name', { exact: true }).fill('Claude Sonnet')
   await page.getByTestId('provider-settings-api-key').fill('sk-or-remembered-test-key')
   await page.getByRole('button', { name: 'Save model' }).click()
   await page.getByTestId('app-settings-done').click()
@@ -179,7 +179,7 @@ test('remembered browser credentials survive reload and clear centrally', async 
 
   await page.reload()
   await canvas.waitForInit()
-  await page.getByRole('tab', { name: 'AI' }).click()
+  await page.getByRole('tab', { name: 'Redrob' }).click()
   await expect(page.getByTestId('chat-input')).toBeVisible()
 
   await openSettingsFromMenu(page)
@@ -191,6 +191,6 @@ test('remembered browser credentials survive reload and clear centrally', async 
 
   await page.reload()
   await canvas.waitForInit()
-  await page.getByRole('tab', { name: 'AI' }).click()
+  await page.getByRole('tab', { name: 'Redrob' }).click()
   await expect(page.getByTestId('provider-setup-open-settings')).toBeVisible()
 })

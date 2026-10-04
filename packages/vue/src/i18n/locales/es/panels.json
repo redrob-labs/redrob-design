@@ -5,7 +5,7 @@
   "pages": "Páginas",
   "design": "Diseño",
   "code": "Código",
-  "ai": "IA",
+  "ai": "Redrob",
   "assets": "Recursos",
   "page": "Página",
   "frame": "Marco",
@@ -346,5 +346,7 @@
   "brightness": "Brillo",
   "lightness": "Luminosidad",
   "chroma": "Croma",
-  "alpha": "Alfa"
+  "alpha": "Alfa",
+  "askRedrob": "Preguntar a Redrob",
+  "askRedrobAboutThis": "Preguntar a Redrob sobre esto"
 }

@@ -28,6 +28,7 @@ import {
 import { computed, type Component } from 'vue'
 import type { EditorCommandId } from '@redrob-design/vue'
 
+import { askRedrob } from '@/app/ai/chat/ask'
 import { useEditorStore } from '@/app/editor/active-store'
 import { appMenuShortcutLabel } from '@/app/shell/menu/shortcut'
 import { createCanvasMenuActions } from '@/app/editor/canvas/menu/actions'
@@ -41,7 +42,7 @@ const store = useEditorStore()
 const { editor, selectedIds, hasSelection } = useSelectionState()
 const { getCommand } = useEditorCommands()
 const { canvasMenu } = useMenuModel()
-const { menu: t } = useI18n()
+const { menu: t, panels } = useI18n()
 
 const canvasMenuActions = createCanvasMenuActions(store, selectedIds)
 const { execCommand } = canvasMenuActions
@@ -98,6 +99,16 @@ function contextCommandIcon(id: EditorCommandId | undefined): Component | undefi
       </ContextMenuItem>
     </template>
     <template v-else>
+      <ContextMenuItem data-test-id="context-ask-redrob" :class="cls.item" @select="askRedrob">
+        <span class="flex min-w-0 flex-1 items-center gap-2">
+          <icon-lucide-sparkles class="size-3.5 shrink-0 text-accent" />
+          <span class="truncate">{{
+            hasSelection ? panels.askRedrobAboutThis : panels.askRedrob
+          }}</span>
+        </span>
+        <AppShortcutText>{{ formatShortcut('MOD+J') }}</AppShortcutText>
+      </ContextMenuItem>
+      <ContextMenuSeparator :class="cls.sep" />
       <ContextMenuItem
         data-test-id="context-copy"
         :class="cls.item"

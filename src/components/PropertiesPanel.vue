@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from 'reka-ui'
+import { tv } from 'tailwind-variants'
 
 import { useI18n } from '@redrob-design/vue'
 import { useAIChat } from '@/app/ai/chat/use'
+import propertiesTabsTheme from '@/theme/properties-tabs'
 
 import ChatPanel from './ChatPanel.vue'
 import CodePanel from './CodePanel.vue'
@@ -11,6 +13,7 @@ import ZoomDropdown from './editor/ZoomDropdown.vue'
 
 const { activeTab } = useAIChat()
 const { panels } = useI18n()
+const styles = tv(propertiesTabsTheme)()
 </script>
 
 <template>
@@ -20,28 +23,16 @@ const { panels } = useI18n()
     style="contain: paint layout style"
   >
     <TabsRoot v-model="activeTab" class="flex min-h-0 flex-1 flex-col">
-      <TabsList class="flex h-10 shrink-0 items-center gap-1 border-b border-border px-2">
-        <TabsTrigger
-          value="design"
-          data-test-id="properties-tab-design"
-          class="relative rounded px-2.5 py-1 text-[11px] text-muted hover:text-surface data-[state=active]:font-semibold data-[state=active]:text-surface after:absolute after:inset-x-2 after:-bottom-[9px] after:h-0.5 after:rounded-full after:bg-transparent data-[state=active]:after:bg-accent"
-        >
+      <TabsList :class="styles.list()">
+        <TabsTrigger value="design" data-test-id="properties-tab-design" :class="styles.trigger()">
           {{ panels.design }}
         </TabsTrigger>
-        <TabsTrigger
-          value="code"
-          data-test-id="properties-tab-code"
-          class="relative flex items-center gap-1 rounded px-2.5 py-1 text-[11px] text-muted hover:text-surface data-[state=active]:font-semibold data-[state=active]:text-surface after:absolute after:inset-x-2 after:-bottom-[9px] after:h-0.5 after:rounded-full after:bg-transparent data-[state=active]:after:bg-accent"
-        >
-          <icon-lucide-code class="size-3" />
+        <TabsTrigger value="code" data-test-id="properties-tab-code" :class="styles.trigger()">
+          <icon-lucide-code :class="styles.icon()" />
           {{ panels.code }}
         </TabsTrigger>
-        <TabsTrigger
-          value="ai"
-          data-test-id="properties-tab-ai"
-          class="relative flex items-center gap-1 rounded px-2.5 py-1 text-[11px] text-muted hover:text-surface data-[state=active]:font-semibold data-[state=active]:text-surface after:absolute after:inset-x-2 after:-bottom-[9px] after:h-0.5 after:rounded-full after:bg-transparent data-[state=active]:after:bg-accent"
-        >
-          <icon-lucide-sparkles class="size-3" />
+        <TabsTrigger value="ai" data-test-id="properties-tab-ai" :class="styles.trigger()">
+          <icon-lucide-sparkles :class="styles.icon()" />
           {{ panels.ai }}
         </TabsTrigger>
         <ZoomDropdown v-if="activeTab === 'design'" />

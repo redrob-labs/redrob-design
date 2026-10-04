@@ -5,7 +5,7 @@
   "pages": "페이지",
   "design": "디자인",
   "code": "코드",
-  "ai": "인공지능",
+  "ai": "Redrob",
   "assets": "에셋",
   "page": "페이지",
   "frame": "프레임",
@@ -346,5 +346,7 @@
   "brightness": "명도",
   "lightness": "밝기",
   "chroma": "크로마",
-  "alpha": "알파"
+  "alpha": "알파",
+  "askRedrob": "Redrob에게 묻기",
+  "askRedrobAboutThis": "이것에 대해 Redrob에게 묻기"
 }

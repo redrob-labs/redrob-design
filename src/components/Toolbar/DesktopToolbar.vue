@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import { tv } from 'tailwind-variants'
+
+import { askRedrob } from '@/app/ai/chat/ask'
+import toolbarTheme from '@/theme/toolbar'
 import Tip from '@/components/ui/Tip.vue'
 import ToolButton from '@/components/Toolbar/ToolButton.vue'
 import ToolFlyout from '@/components/Toolbar/ToolFlyout.vue'
@@ -6,7 +10,9 @@ import {
   getToolbarToolSelection,
   isToolbarToolActive,
   toolbarToolTestId,
-  ToolbarItem
+  ToolbarItem,
+  formatShortcut,
+  useI18n
 } from '@redrob-design/vue'
 
 import type { Tool } from '@redrob-design/vue'
@@ -24,16 +30,20 @@ const { tools, activeTool, flyoutSelections, toolIcons, toolLabels, toolShortcut
     ui?: ToolbarUI
   }>()
 
+const { panels } = useI18n()
+const styles = tv(toolbarTheme)()
+const askShortcut = formatShortcut('MOD+J')
+
 const emit = defineEmits<{
   setTool: [tool: Tool]
 }>()
 </script>
 
 <template>
-  <div class="absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 items-center">
+  <div class="absolute bottom-5 left-1/2 z-10 flex -translate-x-1/2 items-center">
     <div
       data-test-id="toolbar"
-      class="flex gap-0.5 rounded-xl border border-border bg-panel p-1 shadow-md"
+      class="flex items-center gap-0.5 rounded-xl border border-border bg-panel p-1.5 shadow-md"
     >
       <template v-for="tool in tools" :key="tool.key">
         <Tip
@@ -65,6 +75,18 @@ const emit = defineEmits<{
           </Tip>
         </ToolbarItem>
       </template>
+      <span :class="styles.separator()" aria-hidden="true" />
+      <Tip :label="`${panels.askRedrob} (${askShortcut})`">
+        <button
+          type="button"
+          data-test-id="toolbar-ask-redrob"
+          :class="styles.ask()"
+          @click="askRedrob"
+        >
+          <icon-lucide-sparkles :class="styles.askIcon()" />
+          {{ panels.askRedrob }}
+        </button>
+      </Tip>
     </div>
   </div>
 </template>

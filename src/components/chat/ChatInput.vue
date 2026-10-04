@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useTextareaAutosize } from '@vueuse/core'
 import { TooltipProvider } from 'reka-ui'
-import { computed, ref } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 
 import { useI18n, useSelectionState } from '@redrob-design/vue'
 
@@ -12,6 +12,7 @@ import IconButton from '@/components/ui/IconButton.vue'
 import InputGroup from '@/components/ui/InputGroup.vue'
 import { MAX_IMAGE_ATTACHMENTS } from '@/app/ai/attachment/image/types'
 import type { ChatSubmission } from '@/app/ai/chat/submission/types'
+import { composerFocusRequest } from '@/app/ai/chat/ask'
 import { useAIChat } from '@/app/ai/chat/use'
 import { designModelProfile } from '@/app/ai/models'
 import { openSettingsDialog } from '@/app/settings/dialog'
@@ -36,6 +37,11 @@ const emit = defineEmits<{
 const textarea = ref<HTMLTextAreaElement>()
 const input = ref('')
 const { triggerResize } = useTextareaAutosize({ element: textarea, input, maxHeight: 160 })
+
+watch(composerFocusRequest, async () => {
+  await nextTick()
+  textarea.value?.focus()
+})
 const attachments = useAttachmentDrafts({
   editor,
   selectedIds,

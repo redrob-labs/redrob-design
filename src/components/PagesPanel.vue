@@ -87,7 +87,12 @@ function setupPageRowRef(
   <PageListRoot v-slot="{ pages, currentPageId, isDivider, actions }">
     <div data-test-id="pages-panel" :class="baseStyles.panel()">
       <div :class="baseStyles.header()">
-        <span data-test-id="pages-header" :class="baseStyles.title()">{{ panels.pages }}</span>
+        <span data-test-id="pages-header" :class="baseStyles.title()"
+          >{{ panels.pages
+          }}<span data-test-id="pages-count" :class="baseStyles.count()">{{
+            pages.filter((pg) => !isDivider(pg)).length
+          }}</span></span
+        >
         <Tip :label="panels.addPage">
           <button data-test-id="pages-add" :class="baseStyles.add()" @click="actions.add()">
             +

@@ -38,6 +38,7 @@
 - Upgrade direct model chat providers and transports to AI SDK 7 while retaining the local ACP execution path.
 - Localize file, clipboard, collaboration, chat, vectorization, storage, recovery, and component-library notifications in every supported language.
 - Move MCP connections into their own Settings destination instead of presenting them as part of model configuration.
+- Rename the AI panel to Redrob, add Ask Redrob to the tool bar and first in the canvas right-click menu, and focus its composer with Mod+J.
 - Group Settings into General, Agents and MCP, Storage, Usage and Diagnostics, with model providers and keys under Agents and MCP and stock photo and vectorize keys under Storage.
 - Pan horizontally with Shift+wheel while preserving native horizontal trackpad movement.
 

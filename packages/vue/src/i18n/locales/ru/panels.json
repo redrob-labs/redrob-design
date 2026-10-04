@@ -3,7 +3,7 @@
   "pages": "Страницы",
   "design": "Дизайн",
   "code": "Код",
-  "ai": "AI",
+  "ai": "Redrob",
   "assets": "Ассеты",
   "page": "Страница",
   "frame": "Фрейм",
@@ -346,5 +346,7 @@
   "brightness": "Яркость",
   "lightness": "Светлота",
   "chroma": "Цветность",
-  "alpha": "Альфа"
+  "alpha": "Альфа",
+  "askRedrob": "Спросить Redrob",
+  "askRedrobAboutThis": "Спросить Redrob об этом"
 }
