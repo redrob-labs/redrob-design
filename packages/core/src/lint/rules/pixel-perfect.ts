@@ -1,4 +1,6 @@
 import { defineRule } from '#core/lint/rule'
+import type { LintFixField } from '#core/lint/types'
+import { fixFields } from '#core/lint/utils'
 
 export default defineRule({
   meta: {
@@ -7,7 +9,7 @@ export default defineRule({
     description: 'Elements should align to whole pixels'
   },
   check(node, context) {
-    const values: Array<[string, number]> = [
+    const values: Array<[LintFixField, number]> = [
       ['x', node.x],
       ['y', node.y],
       ['width', node.width],
@@ -18,7 +20,8 @@ export default defineRule({
     context.report({
       node,
       message: `Subpixel values: ${subpixel.map(([k, v]) => `${k}: ${v}`).join(', ')}`,
-      suggest: 'Round to whole pixels for crisp rendering'
+      suggest: 'Round to whole pixels for crisp rendering',
+      fix: fixFields(subpixel.map(([key, value]) => [key, Math.round(value)] as const))
     })
   }
 })

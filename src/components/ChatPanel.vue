@@ -24,6 +24,7 @@ import { toast } from '@/app/shell/ui'
 import { openSettingsDialog } from '@/app/settings/dialog'
 import { useI18n, useThreadMessages, vTestId } from '@redrob-design/vue'
 import { turnSteps } from '@/components/chat/timeline/steps'
+import { useOpeningReview } from '@/components/chat/review/useOpeningReview'
 import AgentTimeline from '@/components/ui/agent/AgentTimeline.vue'
 
 import { useNotificationMessages } from '@/app/i18n/notifications'
@@ -41,6 +42,7 @@ const thread = useThreadMessages()
 const notifications = useNotificationMessages()
 
 const chat = shallowRef<Chat<UIMessage> | null>(null)
+useOpeningReview(chat)
 const submission = useChatSubmission({
   chat,
   ensureChat,

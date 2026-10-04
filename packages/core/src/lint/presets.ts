@@ -53,4 +53,27 @@ export const accessibility: Preset = {
     'no-detached-instances': 'off'
   }
 }
-export const presets: Record<string, Preset> = { recommended, strict, accessibility }
+/**
+ * Checks a file against a design system: colors and type from tokens, the
+ * 4px spacing grid, the radius scale, readable and reachable controls, and
+ * whole pixels. Every warning here is one a person can fix in one step.
+ */
+export const designSystem: Preset = {
+  rules: {
+    'color-contrast': 'error',
+    'no-hardcoded-colors': 'warning',
+    'consistent-spacing': { severity: 'warning', options: { base: 4 } },
+    'consistent-radius': 'warning',
+    'min-text-size': 'warning',
+    'touch-target-size': 'warning',
+    'text-style-required': 'info',
+    'pixel-perfect': 'info'
+  }
+}
+
+export const presets: Record<string, Preset> = {
+  recommended,
+  strict,
+  accessibility,
+  'design-system': designSystem
+}

@@ -118,7 +118,7 @@ export class Linter {
       const config = this.ruleConfigs.get(ruleId)
       if (!config || config.severity === 'off') continue
       const context: RuleContext = {
-        report: ({ node, message, suggest }) => {
+        report: ({ node, message, suggest, fix }) => {
           this.messages.push({
             ruleId,
             severity: config.severity as Exclude<Severity, 'off'>,
@@ -126,7 +126,8 @@ export class Linter {
             nodeId: node.id,
             nodeName: node.name,
             nodePath: getNodePath(this.nodes.get(node.id) ?? node),
-            suggest
+            suggest,
+            fix
           })
         },
         getConfig: () => config.options,

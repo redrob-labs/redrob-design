@@ -16,6 +16,25 @@ export interface RuleMeta {
   description: string
 }
 
+/** Numeric node fields a lint fix may set. */
+export type LintFixField =
+  | 'itemSpacing'
+  | 'paddingTop'
+  | 'paddingRight'
+  | 'paddingBottom'
+  | 'paddingLeft'
+  | 'cornerRadius'
+  | 'x'
+  | 'y'
+  | 'width'
+  | 'height'
+  | 'fontSize'
+
+/** A fix the rule is sure of: the field values that settle the message. */
+export interface LintFix {
+  set: Partial<Record<LintFixField, number>>
+}
+
 export interface LintMessage {
   ruleId: string
   severity: Exclude<Severity, 'off'>
@@ -24,6 +43,7 @@ export interface LintMessage {
   nodeName: string
   nodePath: string[]
   suggest?: string
+  fix?: LintFix
 }
 
 export interface LintResult {
@@ -82,7 +102,7 @@ export interface LintNode {
 }
 
 export interface RuleContext {
-  report(issue: { node: LintNode; message: string; suggest?: string }): void
+  report(issue: { node: LintNode; message: string; suggest?: string; fix?: LintFix }): void
   getConfig(): unknown
   getParent(node: LintNode): LintNode | null
   getChildren(node: LintNode): LintNode[]

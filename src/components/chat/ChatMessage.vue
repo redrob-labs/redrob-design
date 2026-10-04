@@ -9,6 +9,8 @@ import { attachmentsForMessage } from '@/app/ai/attachment/presentation/store'
 import { visibleUserMessageText } from '@/app/ai/chat/presentation'
 import AttachmentList from '@/components/chat/attachment/AttachmentList.vue'
 import TurnChanges from '@/components/chat/changes/TurnChanges.vue'
+import ReviewFindings from '@/components/chat/review/ReviewFindings.vue'
+import { isReviewData, type ReviewData } from '@/app/review/findings'
 import ChatMarkdown from '@/components/chat/ChatMarkdown.vue'
 import ReasoningBlock from '@/components/chat/ReasoningBlock.vue'
 import IconButton from '@/components/ui/IconButton.vue'
@@ -89,6 +91,14 @@ function toolState(part: ToolPart): 'pending' | 'done' | 'error' {
   })
 }
 
+const emptyReview: ReviewData = { pageId: '', frameCount: 0, findings: [] }
+
+/** The review a `data-review` part carries, once it checks out. */
+function reviewOf(part: UIMessagePart<UIDataTypes, UITools>): ReviewData | null {
+  if (part.type !== 'data-review' || !('data' in part)) return null
+  return isReviewData(part.data) ? part.data : null
+}
+
 function partKey(part: UIMessagePart<UIDataTypes, UITools>, index: number): string {
   if ('toolCallId' in part) return part.toolCallId
   return `part-${index}`
@@ -113,6 +123,13 @@ function partKey(part: UIMessagePart<UIDataTypes, UITools>, index: number): stri
             :streaming="part.state === 'streaming'"
             :thinking-label="ai.thinking"
             :reasoning-label="ai.reasoning"
+          />
+
+          <!-- A page check Redrob posted -->
+          <ReviewFindings
+            v-if="reviewOf(part)"
+            :message-id="message.id"
+            :review="reviewOf(part) ?? emptyReview"
           />
 
           <!-- Tool call -->

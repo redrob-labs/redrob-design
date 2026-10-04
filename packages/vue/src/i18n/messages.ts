@@ -21,6 +21,7 @@ import { panelMessageDefaults, panelMessages } from '#vue/i18n/messages/panels'
 import { recoveryMessageDefaults, recoveryMessages } from '#vue/i18n/messages/recovery'
 import { renameMessageDefaults, renameMessages } from '#vue/i18n/messages/rename'
 import { renderingMessageDefaults, renderingMessages } from '#vue/i18n/messages/rendering'
+import { reviewMessageDefaults, reviewMessages } from '#vue/i18n/messages/review'
 import { settingsMessageDefaults, settingsMessages } from '#vue/i18n/messages/settings'
 import { storageMessageDefaults, storageMessages } from '#vue/i18n/messages/storage'
 import { threadMessageDefaults, threadMessages } from '#vue/i18n/messages/thread'
@@ -34,6 +35,7 @@ import { variablesMessageDefaults, variablesMessages } from '#vue/i18n/messages/
 
 export {
   aiMessages,
+  reviewMessages,
   threadMessages,
   homeMessages,
   composerMessages,
@@ -64,6 +66,7 @@ export {
 
 export const messageDefaults = {
   ai: aiMessageDefaults,
+  review: reviewMessageDefaults,
   thread: threadMessageDefaults,
   home: homeMessageDefaults,
   composer: composerMessageDefaults,

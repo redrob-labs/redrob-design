@@ -20,6 +20,7 @@ import panels from './panels.json'
 import recovery from './recovery.json'
 import rename from './rename.json'
 import rendering from './rendering.json'
+import review from './review.json'
 import settings from './settings.json'
 import storage from './storage.json'
 import thread from './thread.json'
@@ -30,6 +31,7 @@ import variables from './variables.json'
 
 export default {
   ai,
+  review,
   thread,
   home,
   composer,

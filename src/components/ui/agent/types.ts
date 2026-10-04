@@ -151,3 +151,6 @@ export interface ChangesWords {
   accept: string
   reject: string
 }
+
+export type FindingSeverity = 'high' | 'medium' | 'low' | 'note'
+export type FindingState = 'open' | 'accepted' | 'dismissed'

@@ -89,3 +89,39 @@ test('the thread resizes between 340 and 720 pixels', async ({ configuredChat: c
   await expect(resizer).toHaveAttribute('aria-valuenow', '340')
   expect((await thread.boundingBox())?.width).toBeCloseTo(340, 0)
 })
+
+test('opening Describe checks the page for free and Fix all settles it', async ({
+  configuredChat: chat
+}) => {
+  const cardId = await chat.page.evaluate(() => {
+    const store = window.redrobDesign?.getStore?.()
+    if (!store) throw new Error('Editor store is not exposed')
+    const card = store.graph.createNode('FRAME', store.state.currentPageId, {
+      name: 'Plans',
+      layoutMode: 'VERTICAL',
+      itemSpacing: 13,
+      width: 320,
+      height: 200,
+      fills: [{ type: 'SOLID', color: { r: 1, g: 1, b: 1, a: 1 }, opacity: 1, visible: true }]
+    })
+    store.requestRender()
+    return card.id
+  })
+  await enterDescribe(chat.page)
+
+  const findings = chat.assistantMessage().getByRole('region', { name: 'Findings' })
+  await expect(chat.assistantMessage()).toContainText('on this computer, free')
+  await expect(findings.getByRole('article', { name: 'Spacing is off the 4px grid' })).toBeVisible()
+
+  await findings.getByRole('button', { name: /^Fix all/ }).click()
+  // Fixed findings leave the list; ones with no sure fix stay for a person.
+  await expect(findings.getByRole('article', { name: 'Spacing is off the 4px grid' })).toHaveCount(
+    0
+  )
+  expect(
+    await chat.page.evaluate(
+      (id) => window.redrobDesign?.getStore?.().graph.getNode(id)?.itemSpacing,
+      cardId
+    )
+  ).toBe(12)
+})

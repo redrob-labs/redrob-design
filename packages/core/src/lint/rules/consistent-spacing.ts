@@ -1,5 +1,5 @@
 import { defineRule } from '#core/lint/rule'
-import { isMultipleOf, SPACING_SCALE } from '#core/lint/utils'
+import { fixFields, isMultipleOf, nearestSpacing, SPACING_SCALE } from '#core/lint/utils'
 
 export default defineRule({
   meta: {
@@ -14,18 +14,19 @@ export default defineRule({
     const base = config?.base ?? 8
     const valid = (value: number) => SPACING_SCALE.includes(value) || isMultipleOf(value, base)
     const values = [
-      ['gap', node.itemSpacing],
-      ['paddingTop', node.paddingTop],
-      ['paddingRight', node.paddingRight],
-      ['paddingBottom', node.paddingBottom],
-      ['paddingLeft', node.paddingLeft]
+      ['gap', 'itemSpacing', node.itemSpacing],
+      ['paddingTop', 'paddingTop', node.paddingTop],
+      ['paddingRight', 'paddingRight', node.paddingRight],
+      ['paddingBottom', 'paddingBottom', node.paddingBottom],
+      ['paddingLeft', 'paddingLeft', node.paddingLeft]
     ] as const
-    for (const [name, value] of values) {
+    for (const [name, field, value] of values) {
       if (value > 0 && !valid(value)) {
         context.report({
           node,
           message: `${name} ${value}px is not in spacing scale`,
-          suggest: 'Use a spacing token or 8pt-grid multiple'
+          suggest: 'Use a spacing token or 8pt-grid multiple',
+          fix: fixFields([[field, nearestSpacing(value, base)]])
         })
       }
     }

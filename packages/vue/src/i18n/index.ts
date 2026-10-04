@@ -2,6 +2,7 @@ export {
   useI18n,
   useI18nNamespace,
   useAIMessages,
+  useReviewMessages,
   useThreadMessages,
   useHomeMessages,
   useComposerMessages,
