@@ -1,0 +1,23 @@
+{
+  "ship": "Veröffentlichen",
+  "shipOpen": "„Veröffentlichen“ ist im Verlauf schon offen.",
+  "ready": "Geprüft und bereit. Es sind schon Ebenen, Code und Tokens.",
+  "open": "{count} Befunde sind noch offen. Du kannst trotzdem veröffentlichen; sie bleiben in diesem Verlauf.",
+  "empty": "Auf dieser Seite gibt es noch nichts zu veröffentlichen.",
+  "actionsLabel": "Wege zur Veröffentlichung",
+  "publish": "Online stellen",
+  "published": "Online",
+  "publishedTo": "Online unter {site}.",
+  "publishNotConnected": "Zum Online-Stellen braucht es eine verbundene Website, und noch ist keine verbunden.",
+  "reactTokens": "React + Tokens",
+  "handToClaudeCode": "An Claude Code übergeben",
+  "handedOff": "Über MCP an Claude Code übergeben: die Seite, tokens.json und das Briefing.",
+  "handoffNotConnected": "Für die Übergabe an Claude Code braucht es die MCP-Verbindung. Verbinde sie in den Einstellungen unter Agenten und MCP.",
+  "exportForFigma": "Für Figma exportieren",
+  "watchTitle": "Diese Seite aktualisiert sich selbst.",
+  "watchBody": "Sie beobachtet {sources} und Design Memory und schlägt selbst eine Änderung vor, wenn sich etwas davon bewegt.",
+  "watchNotConnected": "Sobald ein Arbeitsbereich verbunden ist, kann sie eine Preistabelle oder Website beobachten und selbst eine Änderung vorschlagen.",
+  "tryUpdate": "Ausprobieren: Die Preistabelle ändert sich",
+  "updateChanged": "Die Preistabelle Q4 hat sich geändert, also schlägt die Seite selbst eine Aktualisierung vor.",
+  "updateNothing": "Die Preistabelle hat sich geändert, aber keine Ebene auf dieser Seite zeigt den alten Preis."
+}

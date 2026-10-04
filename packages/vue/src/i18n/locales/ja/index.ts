@@ -23,6 +23,7 @@ import rename from './rename.json'
 import rendering from './rendering.json'
 import review from './review.json'
 import settings from './settings.json'
+import ship from './ship.json'
 import storage from './storage.json'
 import thread from './thread.json'
 import tools from './tools.json'
@@ -32,6 +33,7 @@ import variables from './variables.json'
 
 export default {
   ai,
+  ship,
   plan,
   review,
   thread,

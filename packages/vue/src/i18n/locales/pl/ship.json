@@ -1,0 +1,23 @@
+{
+  "ship": "Wydaj",
+  "shipOpen": "Wydanie jest już otwarte w wątku.",
+  "ready": "Sprawdzone i gotowe. To już warstwy, kod i tokeny.",
+  "open": "Otwarte ustalenia: {count}. Możesz wydać mimo to; zostaną w tym wątku.",
+  "empty": "Na tej stronie nie ma jeszcze nic do wydania.",
+  "actionsLabel": "Sposoby wydania",
+  "publish": "Opublikuj",
+  "published": "Opublikowano",
+  "publishedTo": "Opublikowano w {site}.",
+  "publishNotConnected": "Publikacja wymaga połączonej witryny, a żadna nie jest jeszcze połączona.",
+  "reactTokens": "React + tokeny",
+  "handToClaudeCode": "Przekaż do Claude Code",
+  "handedOff": "Przekazano do Claude Code przez MCP: stronę, tokens.json i brief.",
+  "handoffNotConnected": "Przekazanie do Claude Code wymaga połączenia MCP. Połącz je w Ustawieniach, w sekcji Agenci i MCP.",
+  "exportForFigma": "Eksportuj do Figmy",
+  "watchTitle": "Ta strona aktualizuje się sama.",
+  "watchBody": "Obserwuje {sources} i Design Memory, a gdy coś się zmieni, sama proponuje zmianę.",
+  "watchNotConnected": "Po połączeniu obszaru roboczego może obserwować cennik lub witrynę i sama proponować zmianę.",
+  "tryUpdate": "Wypróbuj: zmienia się cennik",
+  "updateChanged": "Cennik na czwarty kwartał się zmienił, więc strona sama proponuje aktualizację.",
+  "updateNothing": "Cennik się zmienił, ale żadna warstwa na tej stronie nie pokazuje starej ceny."
+}

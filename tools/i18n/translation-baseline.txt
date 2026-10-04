@@ -106,6 +106,7 @@ es:panels.variables
 es:plan.memoryHeading
 es:plan.pricePlan
 es:settings.general
+es:ship.reactTokens
 es:storage.bucket
 es:storage.providerAmazonS3
 es:storage.providerBackblaze

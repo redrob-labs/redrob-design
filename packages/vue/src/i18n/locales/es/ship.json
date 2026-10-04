@@ -1,0 +1,23 @@
+{
+  "ship": "Lanzar",
+  "shipOpen": "Lanzar ya está abierto en la conversación.",
+  "ready": "Revisado y listo. Ya son capas, código y tokens.",
+  "open": "Quedan {count} hallazgos abiertos. Puedes lanzar igualmente; se quedan en esta conversación.",
+  "empty": "Aún no hay nada que lanzar en esta página.",
+  "actionsLabel": "Formas de lanzar",
+  "publish": "Publicar",
+  "published": "Publicado",
+  "publishedTo": "Publicado en {site}.",
+  "publishNotConnected": "Publicar requiere un sitio conectado y aún no hay ninguno.",
+  "reactTokens": "React + tokens",
+  "handToClaudeCode": "Pasar a Claude Code",
+  "handedOff": "Pasado a Claude Code por MCP: la página, tokens.json y el brief.",
+  "handoffNotConnected": "Pasar a Claude Code requiere su conexión MCP. Conéctala en Ajustes, en Agentes y MCP.",
+  "exportForFigma": "Exportar para Figma",
+  "watchTitle": "Esta página se actualiza sola.",
+  "watchBody": "Vigila {sources} y Design Memory, y propone su propio cambio cuando alguno se mueve.",
+  "watchNotConnected": "Cuando conectes un espacio de trabajo, podrá vigilar una hoja de precios o un sitio y proponer su propio cambio.",
+  "tryUpdate": "Pruébalo: cambia la hoja de precios",
+  "updateChanged": "La hoja de precios del cuarto trimestre cambió, así que la página propone su propia actualización.",
+  "updateNothing": "La hoja de precios cambió, pero ninguna capa de esta página muestra el precio anterior."
+}

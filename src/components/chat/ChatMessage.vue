@@ -10,6 +10,8 @@ import { visibleUserMessageText } from '@/app/ai/chat/presentation'
 import AttachmentList from '@/components/chat/attachment/AttachmentList.vue'
 import TurnChanges from '@/components/chat/changes/TurnChanges.vue'
 import ReviewFindings from '@/components/chat/review/ReviewFindings.vue'
+import ShipCard from '@/components/chat/ship/ShipCard.vue'
+import { isShipData, type ShipData } from '@/app/ship/ship'
 import DirectionsPart from '@/components/chat/plan/DirectionsPart.vue'
 import PlanQuestionsPart from '@/components/chat/plan/PlanQuestionsPart.vue'
 import { isReviewData, type ReviewData } from '@/app/review/findings'
@@ -107,6 +109,12 @@ function isPlanTool(
 }
 
 const emptyReview: ReviewData = { pageId: '', frameCount: 0, findings: [] }
+const emptyShip: ShipData = { pageId: '', openFindings: 0, frameCount: 0 }
+
+function shipOf(part: UIMessagePart<UIDataTypes, UITools>): ShipData | null {
+  if (part.type !== 'data-ship' || !('data' in part)) return null
+  return isShipData(part.data) ? part.data : null
+}
 
 /** The review a `data-review` part carries, once it checks out. */
 function reviewOf(part: UIMessagePart<UIDataTypes, UITools>): ReviewData | null {
@@ -139,6 +147,9 @@ function partKey(part: UIMessagePart<UIDataTypes, UITools>, index: number): stri
             :thinking-label="ai.thinking"
             :reasoning-label="ai.reasoning"
           />
+
+          <!-- Ship: the ways out, posted without a model -->
+          <ShipCard v-if="shipOf(part)" :ship="shipOf(part) ?? emptyShip" />
 
           <!-- A page check Redrob posted -->
           <ReviewFindings

@@ -128,6 +128,11 @@ ja:settings.interfaceLanguageDescription
 ja:settings.modelsAndKeysDescription
 ja:settings.sectionAgentsAndMCP
 ja:settings.temporaryDisableSnappingHint
+ja:ship.exportForFigma
+ja:ship.handedOff
+ja:ship.handoffNotConnected
+ja:ship.handToClaudeCode
+ja:ship.reactTokens
 ja:storage.accessKeyID
 ja:storage.copyCors
 ja:storage.providerS3
@@ -265,6 +270,11 @@ zh-cn:settings.interfaceLanguageDescription
 zh-cn:settings.modelsAndKeysDescription
 zh-cn:settings.sectionAgentsAndMCP
 zh-cn:settings.temporaryDisableSnappingHint
+zh-cn:ship.exportForFigma
+zh-cn:ship.handedOff
+zh-cn:ship.handoffNotConnected
+zh-cn:ship.handToClaudeCode
+zh-cn:ship.reactTokens
 zh-cn:storage.accessKeyID
 zh-cn:storage.copyCors
 zh-cn:storage.providerS3

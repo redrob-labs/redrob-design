@@ -2,10 +2,12 @@
 import { useLocalStorage } from '@vueuse/core'
 import { computed } from 'vue'
 
-import { useThreadMessages } from '@redrob-design/vue'
+import { useShipMessages, useThreadMessages } from '@redrob-design/vue'
 
 import { useEditorStore } from '@/app/editor/active-store'
 import { pageLanguages } from '@/app/language/versions'
+import { requestShip } from '@/app/ship/ship'
+import AppButton from '@/components/ui/AppButton.vue'
 import ChatPanel from '@/components/ChatPanel.vue'
 import EditorCanvas from '@/components/EditorCanvas.vue'
 
@@ -20,6 +22,7 @@ const THREAD_WIDTH = { initial: 440, min: 340, max: 720 } as const
  */
 const store = useEditorStore()
 const t = useThreadMessages()
+const shipWords = useShipMessages()
 const storedWidth = useLocalStorage('redrob-design:describe-thread-width', THREAD_WIDTH.initial)
 const languages = computed(() => {
   void store.state.sceneVersion
@@ -67,10 +70,20 @@ const threadWidth = computed({
       class="flex shrink-0 flex-col border-l border-border bg-panel"
       :style="{ width: `${threadWidth}px` }"
     >
-      <div class="flex h-10 shrink-0 items-center border-b border-border px-3">
-        <span class="truncate text-[13px] font-semibold text-surface">
+      <div class="flex h-10 shrink-0 items-center gap-2 border-b border-border px-3">
+        <span class="min-w-0 flex-1 truncate text-[13px] font-semibold text-surface">
           {{ store.state.documentName }}
         </span>
+        <AppButton
+          color="primary"
+          variant="solid"
+          size="xs"
+          data-test-id="describe-ship"
+          @click="requestShip"
+        >
+          <template #leading><icon-lucide-send /></template>
+          {{ shipWords.ship }}
+        </AppButton>
       </div>
       <ChatPanel />
     </aside>

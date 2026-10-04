@@ -22,10 +22,12 @@ import ProviderSetup from '@/components/chat/ProviderSetup.vue'
 import { useAIChat } from '@/app/ai/chat/use'
 import { toast } from '@/app/shell/ui'
 import { openSettingsDialog } from '@/app/settings/dialog'
-import { useI18n, useThreadMessages, vTestId } from '@redrob-design/vue'
+import { useI18n, useShipMessages, useThreadMessages, vTestId } from '@redrob-design/vue'
 import { turnSteps } from '@/components/chat/timeline/steps'
 import { useOpeningReview } from '@/components/chat/review/useOpeningReview'
-import { provideChatSend } from '@/components/chat/submit'
+import { provideChatPost, provideChatSend } from '@/components/chat/submit'
+import { saveThread, threadKeyFor } from '@/app/assistant/thread/store'
+import { hasShipMessage, shipMessage, shipRequest } from '@/app/ship/ship'
 import AgentTimeline from '@/components/ui/agent/AgentTimeline.vue'
 
 import { useNotificationMessages } from '@/app/i18n/notifications'
@@ -40,6 +42,7 @@ const { isConfigured, ensureChat, resetChat, chatFailure, clearChatFailure } = u
 const { copy } = useClipboard()
 const { ai } = useI18n()
 const thread = useThreadMessages()
+const shipWords = useShipMessages()
 const notifications = useNotificationMessages()
 
 const chat = shallowRef<Chat<UIMessage> | null>(null)
@@ -61,6 +64,32 @@ const submission = useChatSubmission({
 // Cards in the thread (Plan's questions, directions) answer as the person.
 provideChatSend((text) => {
   void submission.submit({ modelText: text, displayText: text, images: [], nodes: [] })
+})
+
+/** Adds a message Redrob posts without a model, and keeps it with the thread. */
+function postMessage(message: UIMessage): void {
+  const current = chat.value
+  if (!current) return
+  current.messages = [...current.messages, message]
+  saveThread(threadKeyFor(getActiveEditorStore()), current.messages)
+}
+provideChatPost(postMessage)
+
+watch(shipRequest, () => {
+  const current = chat.value
+  if (!current) return
+  if (hasShipMessage(current.messages)) {
+    toast.info(shipWords.value.shipOpen)
+    return
+  }
+  const store = getActiveEditorStore()
+  postMessage(
+    shipMessage(store.graph, store.state.currentPageId, {
+      ready: shipWords.value.ready,
+      open: (count) => shipWords.value.open({ count }),
+      empty: shipWords.value.empty
+    })
+  )
 })
 
 /** Sends the brief a new file was started with on Home, once the chat can take it. */

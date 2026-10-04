@@ -1,0 +1,23 @@
+{
+  "ship": "公開",
+  "shipOpen": "公開はすでにスレッドで開いています。",
+  "ready": "確認済みで準備ができています。すでにレイヤー、コード、トークンになっています。",
+  "open": "未解決の確認結果が {count} 件あります。このまま公開できます。結果はこのスレッドに残ります。",
+  "empty": "このページにはまだ公開するものがありません。",
+  "actionsLabel": "公開の方法",
+  "publish": "公開する",
+  "published": "公開済み",
+  "publishedTo": "{site} に公開しました。",
+  "publishNotConnected": "公開するにはサイトの接続が必要ですが、まだ接続されていません。",
+  "reactTokens": "React とトークン",
+  "handToClaudeCode": "Claude Code に渡す",
+  "handedOff": "MCP 経由で Claude Code に渡しました。ページ、tokens.json、概要です。",
+  "handoffNotConnected": "Claude Code に渡すには MCP 接続が必要です。設定のエージェントと MCP で接続してください。",
+  "exportForFigma": "Figma 用に書き出す",
+  "watchTitle": "このページは自動で更新されます。",
+  "watchBody": "{sources} とデザインメモリーを見守り、どれかが変わると自分で変更を提案します。",
+  "watchNotConnected": "ワークスペースを接続すると、価格表やサイトを見守り、自分で変更を提案できます。",
+  "tryUpdate": "試す：価格表が変わる",
+  "updateChanged": "第 4 四半期の価格表が変わったため、ページが自分で更新を提案します。",
+  "updateNothing": "価格表は変わりましたが、このページに古い価格を表示しているレイヤーはありません。"
+}

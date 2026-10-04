@@ -1,0 +1,23 @@
+{
+  "ship": "Pubblica",
+  "shipOpen": "Pubblica è già aperto nella conversazione.",
+  "ready": "Controllato e pronto. Sono già livelli, codice e token.",
+  "open": "Ci sono ancora {count} rilievi aperti. Puoi pubblicare comunque; restano in questa conversazione.",
+  "empty": "Non c’è ancora niente da pubblicare in questa pagina.",
+  "actionsLabel": "Modi per pubblicare",
+  "publish": "Metti online",
+  "published": "Online",
+  "publishedTo": "Online su {site}.",
+  "publishNotConnected": "Per mettere online serve un sito collegato, e non ce n’è ancora nessuno.",
+  "reactTokens": "React + token",
+  "handToClaudeCode": "Passa a Claude Code",
+  "handedOff": "Passato a Claude Code via MCP: la pagina, tokens.json e il brief.",
+  "handoffNotConnected": "Per passare a Claude Code serve la connessione MCP. Collegala in Impostazioni, sotto Agenti e MCP.",
+  "exportForFigma": "Esporta per Figma",
+  "watchTitle": "Questa pagina si aggiorna da sola.",
+  "watchBody": "Tiene d’occhio {sources} e Design Memory, e propone una modifica quando uno di loro cambia.",
+  "watchNotConnected": "Quando colleghi uno spazio di lavoro, potrà seguire un listino o un sito e proporre una modifica.",
+  "tryUpdate": "Provalo: il listino cambia",
+  "updateChanged": "Il listino del quarto trimestre è cambiato, quindi la pagina propone il proprio aggiornamento.",
+  "updateNothing": "Il listino è cambiato, ma nessun livello di questa pagina mostra il prezzo vecchio."
+}

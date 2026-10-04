@@ -24,6 +24,7 @@ import { renameMessageDefaults, renameMessages } from '#vue/i18n/messages/rename
 import { renderingMessageDefaults, renderingMessages } from '#vue/i18n/messages/rendering'
 import { reviewMessageDefaults, reviewMessages } from '#vue/i18n/messages/review'
 import { settingsMessageDefaults, settingsMessages } from '#vue/i18n/messages/settings'
+import { shipMessageDefaults, shipMessages } from '#vue/i18n/messages/ship'
 import { storageMessageDefaults, storageMessages } from '#vue/i18n/messages/storage'
 import { threadMessageDefaults, threadMessages } from '#vue/i18n/messages/thread'
 import { toolMessageDefaults, toolMessages } from '#vue/i18n/messages/tools'
@@ -36,6 +37,7 @@ import { variablesMessageDefaults, variablesMessages } from '#vue/i18n/messages/
 
 export {
   aiMessages,
+  shipMessages,
   planMessages,
   reviewMessages,
   threadMessages,
@@ -68,6 +70,7 @@ export {
 
 export const messageDefaults = {
   ai: aiMessageDefaults,
+  ship: shipMessageDefaults,
   plan: planMessageDefaults,
   review: reviewMessageDefaults,
   thread: threadMessageDefaults,

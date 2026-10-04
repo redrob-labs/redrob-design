@@ -1,0 +1,23 @@
+{
+  "ship": "发布",
+  "shipOpen": "发布已在对话中打开。",
+  "ready": "已检查，可以发布。它已经是图层、代码和令牌。",
+  "open": "还有 {count} 处发现未处理。你仍可发布，它们会留在此对话中。",
+  "empty": "此页面还没有可发布的内容。",
+  "actionsLabel": "发布方式",
+  "publish": "上线",
+  "published": "已上线",
+  "publishedTo": "已上线到 {site}。",
+  "publishNotConnected": "上线需要已连接的网站，目前还没有。",
+  "reactTokens": "React 与令牌",
+  "handToClaudeCode": "交给 Claude Code",
+  "handedOff": "已通过 MCP 交给 Claude Code：页面、tokens.json 和需求。",
+  "handoffNotConnected": "交给 Claude Code 需要 MCP 连接。请在设置的代理与 MCP 中连接。",
+  "exportForFigma": "导出到 Figma",
+  "watchTitle": "此页面会自行更新。",
+  "watchBody": "它会关注 {sources} 和设计记忆，其中任何一项变化时都会自行提出修改。",
+  "watchNotConnected": "连接工作区后，它可以关注价格表或网站并自行提出修改。",
+  "tryUpdate": "试一试：价格表发生变化",
+  "updateChanged": "第四季度价格表已变化，因此页面自行提出更新。",
+  "updateNothing": "价格表已变化，但此页面没有图层显示旧价格。"
+}

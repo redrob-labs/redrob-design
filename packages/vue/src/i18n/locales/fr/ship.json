@@ -1,0 +1,23 @@
+{
+  "ship": "Livrer",
+  "shipOpen": "Livrer est déjà ouvert dans la conversation.",
+  "ready": "Vérifié et prêt. Ce sont déjà des calques, du code et des jetons.",
+  "open": "{count} constats sont encore ouverts. Vous pouvez livrer quand même ; ils restent dans cette conversation.",
+  "empty": "Il n’y a encore rien à livrer sur cette page.",
+  "actionsLabel": "Façons de livrer",
+  "publish": "Publier",
+  "published": "Publié",
+  "publishedTo": "Publié sur {site}.",
+  "publishNotConnected": "Publier demande un site connecté, et aucun ne l’est encore.",
+  "reactTokens": "React + jetons",
+  "handToClaudeCode": "Confier à Claude Code",
+  "handedOff": "Confié à Claude Code via MCP : la page, tokens.json et le brief.",
+  "handoffNotConnected": "Confier à Claude Code demande sa connexion MCP. Connectez-la dans Réglages, sous Agents et MCP.",
+  "exportForFigma": "Exporter pour Figma",
+  "watchTitle": "Cette page se met à jour toute seule.",
+  "watchBody": "Elle surveille {sources} et Design Memory, et propose son propre changement quand l’un d’eux bouge.",
+  "watchNotConnected": "Une fois un espace de travail connecté, elle pourra surveiller une grille tarifaire ou un site et proposer son propre changement.",
+  "tryUpdate": "Essayez : la grille tarifaire change",
+  "updateChanged": "La grille tarifaire du quatrième trimestre a changé : la page propose sa propre mise à jour.",
+  "updateNothing": "La grille tarifaire a changé, mais aucun calque de cette page n’affiche l’ancien prix."
+}
