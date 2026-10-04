@@ -12,6 +12,7 @@ import diagnostics from './diagnostics.json'
 import editor from './editor.json'
 import files from './files.json'
 import fonts from './fonts.json'
+import home from './home.json'
 import media from './media.json'
 import menu from './menu.json'
 import pages from './pages.json'
@@ -28,6 +29,7 @@ import variables from './variables.json'
 
 export default {
   ai,
+  home,
   composer,
   automation,
   code,

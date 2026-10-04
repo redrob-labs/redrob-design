@@ -105,3 +105,9 @@ export interface PrivacyLevel {
 }
 
 export type ProtectionTone = 'safe' | 'warn' | 'brand' | 'plain'
+
+export interface PromptSuggestion {
+  label: string
+  /** What goes in the field; defaults to the label. */
+  value?: string
+}

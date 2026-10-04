@@ -24,6 +24,7 @@ de:code.sourceTailwindJSX
 de:common.ok
 de:composer.auto
 de:composer.privacyStandard
+de:home.newWebsite
 de:menu.text
 de:panels.ai
 de:panels.alpha

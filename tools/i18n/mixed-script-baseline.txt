@@ -82,6 +82,12 @@ ja:files.importHTMLCSSDescription
 ja:files.orEdgeForFullSupport
 ja:files.useChrome
 ja:fonts.downloadFallbackPacksDescription
+ja:home.lede
+ja:home.newSocial
+ja:home.suggestionLaunch
+ja:home.suggestionOnboarding
+ja:home.suggestionPricing
+ja:home.suggestionPricingBrief
 ja:media.getPexelsAPIKey
 ja:media.getUnsplashAccessKey
 ja:media.pexelsAlternativeOptional
@@ -211,6 +217,11 @@ zh-cn:files.importHTMLCSSDescription
 zh-cn:files.orEdgeForFullSupport
 zh-cn:files.useChrome
 zh-cn:fonts.downloadFallbackPacksDescription
+zh-cn:home.lede
+zh-cn:home.suggestionLaunch
+zh-cn:home.suggestionOnboarding
+zh-cn:home.suggestionPricing
+zh-cn:home.suggestionPricingBrief
 zh-cn:media.getPexelsAPIKey
 zh-cn:media.getUnsplashAccessKey
 zh-cn:media.pexelsAlternativeOptional

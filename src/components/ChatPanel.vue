@@ -7,6 +7,7 @@ import { getACPDebugText, clearACPDebugLog, hasACPDebugEntries } from '@/app/ai/
 import { copyChatLog } from '@/app/ai/debug'
 import { clearVisibleMessageText } from '@/app/ai/chat/presentation'
 import { useChatSubmission } from '@/app/ai/chat/submission/use'
+import { takePendingBrief } from '@/app/home/brief'
 import { clearMessageAttachments } from '@/app/ai/attachment/presentation/store'
 import { clearToolLogEntries, didHitStepLimit } from '@/app/ai/tools'
 import { activeTab } from '@/app/tabs'
@@ -50,9 +51,17 @@ const submission = useChatSubmission({
   openModelSettings: () => openSettingsDialog('ai')
 })
 
+/** Sends the brief a new file was started with on Home, once the chat can take it. */
+function sendPendingBrief(): void {
+  if (!isConfigured.value || !chat.value) return
+  const brief = takePendingBrief(getActiveEditorStore())
+  if (brief) void submission.submit(brief)
+}
+
 void ensureChat()
   .then((c) => {
     if (c) chat.value = markRaw(c)
+    sendPendingBrief()
     return undefined
   })
   .catch((error: unknown) => {
@@ -152,8 +161,15 @@ watch(
     clearVisibleMessageText()
     const nextChat = await ensureChat()
     chat.value = nextChat ? markRaw(nextChat) : null
+    sendPendingBrief()
   }
 )
+watch(isConfigured, async (configured) => {
+  if (!configured) return
+  const nextChat = await ensureChat()
+  chat.value = nextChat ? markRaw(nextChat) : null
+  sendPendingBrief()
+})
 
 function handleStop() {
   submission.stop()

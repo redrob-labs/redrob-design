@@ -13,6 +13,7 @@ import { diagnosticsMessageDefaults, diagnosticsMessages } from '#vue/i18n/messa
 import { editorMessageDefaults, editorMessages } from '#vue/i18n/messages/editor'
 import { filesMessageDefaults, filesMessages } from '#vue/i18n/messages/files'
 import { fontsMessageDefaults, fontsMessages } from '#vue/i18n/messages/fonts'
+import { homeMessageDefaults, homeMessages } from '#vue/i18n/messages/home'
 import { mediaMessageDefaults, mediaMessages } from '#vue/i18n/messages/media'
 import { menuMessageDefaults, menuMessages } from '#vue/i18n/messages/menu'
 import { pageMessageDefaults, pageMessages } from '#vue/i18n/messages/pages'
@@ -32,6 +33,7 @@ import { variablesMessageDefaults, variablesMessages } from '#vue/i18n/messages/
 
 export {
   aiMessages,
+  homeMessages,
   composerMessages,
   automationMessages,
   codeMessages,
@@ -60,6 +62,7 @@ export {
 
 export const messageDefaults = {
   ai: aiMessageDefaults,
+  home: homeMessageDefaults,
   composer: composerMessageDefaults,
   automation: automationMessageDefaults,
   code: codeMessageDefaults,
