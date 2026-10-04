@@ -7,6 +7,7 @@ import {
 } from '#vue/i18n/messages/collaboration'
 import { commandMessageDefaults, commandMessages } from '#vue/i18n/messages/commands'
 import { commonMessageDefaults, commonMessages } from '#vue/i18n/messages/common'
+import { composerMessageDefaults, composerMessages } from '#vue/i18n/messages/composer'
 import { credentialsMessageDefaults, credentialsMessages } from '#vue/i18n/messages/credentials'
 import { diagnosticsMessageDefaults, diagnosticsMessages } from '#vue/i18n/messages/diagnostics'
 import { editorMessageDefaults, editorMessages } from '#vue/i18n/messages/editor'
@@ -31,6 +32,7 @@ import { variablesMessageDefaults, variablesMessages } from '#vue/i18n/messages/
 
 export {
   aiMessages,
+  composerMessages,
   automationMessages,
   codeMessages,
   collaborationMessages,
@@ -58,6 +60,7 @@ export {
 
 export const messageDefaults = {
   ai: aiMessageDefaults,
+  composer: composerMessageDefaults,
   automation: automationMessageDefaults,
   code: codeMessageDefaults,
   collaboration: collaborationMessageDefaults,

@@ -6,6 +6,7 @@ import { locale, setLocale, AVAILABLE_LOCALES, LOCALE_LABELS } from '#vue/i18n/l
 import type { Locale } from '#vue/i18n/locale'
 import {
   aiMessages,
+  composerMessages,
   automationMessages,
   codeMessages,
   collaborationMessages,
@@ -36,6 +37,7 @@ export function useI18nNamespace<MessagesStore extends Store>(messages: Messages
 }
 
 export const useAIMessages = () => useI18nNamespace(aiMessages)
+export const useComposerMessages = () => useI18nNamespace(composerMessages)
 export const useAutomationMessages = () => useI18nNamespace(automationMessages)
 export const useCodeMessages = () => useI18nNamespace(codeMessages)
 export const useCollaborationMessages = () => useI18nNamespace(collaborationMessages)
@@ -64,6 +66,7 @@ export const useVariableTypeMessages = () => useI18nNamespace(variableTypeMessag
 export function useI18n() {
   return {
     ai: useAIMessages(),
+    composer: useComposerMessages(),
     automation: useAutomationMessages(),
     code: useCodeMessages(),
     collaboration: useCollaborationMessages(),

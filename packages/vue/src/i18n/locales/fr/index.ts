@@ -6,6 +6,7 @@ import code from './code.json'
 import collaboration from './collaboration.json'
 import commands from './commands.json'
 import common from './common.json'
+import composer from './composer.json'
 import credentials from './credentials.json'
 import diagnostics from './diagnostics.json'
 import editor from './editor.json'
@@ -27,6 +28,7 @@ import variables from './variables.json'
 
 export default {
   ai,
+  composer,
   automation,
   code,
   collaboration,

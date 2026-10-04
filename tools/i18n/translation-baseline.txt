@@ -22,6 +22,8 @@ de:code.sourceDesignJSX
 de:code.sourceHTMLCSS
 de:code.sourceTailwindJSX
 de:common.ok
+de:composer.auto
+de:composer.privacyStandard
 de:menu.text
 de:panels.ai
 de:panels.alpha
@@ -78,6 +80,7 @@ es:code.sourceDesignJSX
 es:code.sourceHTMLCSS
 es:code.sourceTailwindJSX
 es:common.tokens
+es:composer.auto
 es:panels.ai
 es:panels.auto
 es:panels.blendModeColor
@@ -120,6 +123,9 @@ fr:code.sourceDesignJSX
 fr:code.sourceHTMLCSS
 fr:code.sourceTailwindJSX
 fr:common.ok
+fr:composer.auto
+fr:composer.effort
+fr:composer.privacyStandard
 fr:diagnostics.title
 fr:pages.pageName
 fr:panels.ai
@@ -180,6 +186,9 @@ it:code.sourceDesignJSX
 it:code.sourceHTMLCSS
 it:code.sourceTailwindJSX
 it:common.ok
+it:composer.auto
+it:composer.privacy
+it:composer.privacyStandard
 it:files.homeTab
 it:menu.file
 it:panels.ai
@@ -214,6 +223,7 @@ ja:code.editorDesignLabel
 ja:code.sourceDesignJSX
 ja:code.sourceHTMLCSS
 ja:code.sourceTailwindJSX
+ja:composer.auto
 ja:panels.ai
 ja:panels.colorFormatHsb
 ja:panels.colorFormatHsl
@@ -223,6 +233,7 @@ ja:panels.framePresetCategoryFigmaCommunity
 ja:storage.providerAmazonS3
 ja:storage.providerBackblaze
 ja:storage.providerR2
+ko:composer.auto
 ko:panels.ai
 pl:ai.completions
 pl:ai.connectRedrob
@@ -243,6 +254,8 @@ pl:code.sourceDesignJSX
 pl:code.sourceHTMLCSS
 pl:code.sourceTailwindJSX
 pl:common.ok
+pl:composer.auto
+pl:composer.modelLabel
 pl:panels.ai
 pl:panels.auto
 pl:panels.chroma
@@ -274,6 +287,7 @@ ru:code.editorDesignLabel
 ru:code.sourceDesignJSX
 ru:code.sourceHTMLCSS
 ru:code.sourceTailwindJSX
+ru:composer.auto
 ru:panels.ai
 ru:panels.colorFormatHsb
 ru:panels.colorFormatHsl
@@ -298,6 +312,7 @@ zh-cn:code.editorDesignLabel
 zh-cn:code.sourceDesignJSX
 zh-cn:code.sourceHTMLCSS
 zh-cn:code.sourceTailwindJSX
+zh-cn:composer.auto
 zh-cn:panels.ai
 zh-cn:panels.colorFormatHsb
 zh-cn:panels.colorFormatHsl

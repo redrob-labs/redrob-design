@@ -30,3 +30,49 @@ test('Enter submits and clears input', async ({ configuredChat: chat }) => {
   await expect(chat.page.getByText('Hello there', { exact: true })).toBeVisible()
   await expect(chat.input).toHaveValue('')
 })
+
+test('the bar offers Plan or Run and Redrob Auto', async ({ configuredChat: chat }) => {
+  const composer = chat.page.getByTestId('chat-composer')
+  const plan = composer.getByRole('button', { name: 'Plan', exact: true })
+  const run = composer.getByRole('button', { name: 'Run', exact: true })
+  await expect(plan).toHaveAttribute('aria-pressed', 'true')
+  await run.click()
+  await expect(run).toHaveAttribute('aria-pressed', 'true')
+
+  const picker = composer.getByRole('button', { name: 'Model', exact: true })
+  await expect(picker).toContainText('Redrob Auto')
+  await picker.click()
+  const away = chat.page.getByRole('button', { name: /GPT-6 Astra/ })
+  await expect(away).toBeDisabled()
+  await chat.page.getByRole('button', { name: /Claude Opus 5\.5/ }).click()
+  await expect(chat.page.getByRole('group', { name: 'Effort' })).toBeVisible()
+  await chat.page.keyboard.press('Escape')
+  await expect(picker).toContainText('Opus 5.5')
+})
+
+test('the status line opens Privacy, Memory and Cross-check', async ({ configuredChat: chat }) => {
+  test.setTimeout(45_000)
+  const status = chat.page.getByRole('group', { name: 'How Redrob treats every message' })
+  await expect(status.getByRole('button')).toHaveCount(3)
+
+  await status.getByRole('button', { name: /^Privacy: High/ }).click()
+  await expect(chat.page.getByText('Privacy protection is on')).toBeVisible()
+  await chat.page.keyboard.press('Escape')
+
+  await status.getByRole('button', { name: /^Memory:/ }).click()
+  await chat.page.getByRole('radio', { name: /Off for this chat/ }).click()
+  await chat.page.keyboard.press('Escape')
+  await expect(status.getByRole('button', { name: 'Memory: Off' })).toBeVisible()
+
+  await status.getByRole('button', { name: /^Cross-check:/ }).click()
+  await chat.page
+    .getByRole('radiogroup', { name: 'Fact check' })
+    .getByRole('radio', { name: 'Off' })
+    .click()
+  await chat.page
+    .getByRole('radiogroup', { name: 'Challenge' })
+    .getByRole('radio', { name: 'Off' })
+    .click()
+  await chat.page.keyboard.press('Escape')
+  await expect(status.getByRole('button', { name: 'Cross-check: Off' })).toBeVisible()
+})

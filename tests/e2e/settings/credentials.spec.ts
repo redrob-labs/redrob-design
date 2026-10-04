@@ -175,12 +175,12 @@ test('remembered browser credentials survive reload and clear centrally', async 
   await page.getByTestId('provider-settings-api-key').fill('sk-or-remembered-test-key')
   await page.getByRole('button', { name: 'Save model' }).click()
   await page.getByTestId('app-settings-done').click()
-  await expect(page.getByTestId('chat-input')).toBeVisible()
+  await expect(page.getByRole('textbox', { name: 'Describe a change' })).toBeVisible()
 
   await page.reload()
   await canvas.waitForInit()
   await page.getByRole('tab', { name: 'Redrob' }).click()
-  await expect(page.getByTestId('chat-input')).toBeVisible()
+  await expect(page.getByRole('textbox', { name: 'Describe a change' })).toBeVisible()
 
   await openSettingsFromMenu(page)
   await page.locator('[data-model-id]').first().click()
