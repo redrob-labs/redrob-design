@@ -76,3 +76,30 @@ test('the status line opens Privacy, Memory and Cross-check', async ({ configure
   await chat.page.keyboard.press('Escape')
   await expect(status.getByRole('button', { name: 'Cross-check: Off' })).toBeVisible()
 })
+
+test('Privacy runs at the level the person picks and keeps listed names', async ({
+  configuredChat: chat
+}) => {
+  test.setTimeout(45_000)
+  const status = chat.page.getByRole('group', { name: 'How Redrob treats every message' })
+  await status.getByRole('button', { name: /^Privacy: High/ }).click()
+  await expect(chat.page.getByText(/Rules on this computer swap private details/)).toBeVisible()
+
+  const levels = chat.page.getByRole('radiogroup', { name: 'Privacy protection is on' })
+  await levels.getByRole('radio', { name: /^Strict/ }).click()
+  await expect(levels.getByRole('radio', { name: /^Strict/ })).toHaveAttribute(
+    'aria-checked',
+    'true'
+  )
+
+  const terms = chat.page.getByRole('textbox', { name: /Names to keep private/ })
+  await terms.fill('Jane Doe')
+  await terms.blur()
+  await chat.page.keyboard.press('Escape')
+  await expect(status.getByRole('button', { name: /^Privacy: Strict/ })).toBeVisible()
+
+  await status.getByRole('button', { name: /^Privacy: Strict/ }).click()
+  await expect(chat.page.getByRole('textbox', { name: /Names to keep private/ })).toHaveValue(
+    'Jane Doe'
+  )
+})

@@ -37,10 +37,16 @@ function add(total: number | null, value: number | null): number | null {
  */
 export function createTurnAccumulator() {
   let steps: TurnStep[] = []
+  let keptPrivate = 0
 
   return {
     reset(): void {
       steps = []
+      keptPrivate = 0
+    },
+    /** Private details privacy protection kept from the model in this turn. */
+    setKeptPrivate(count: number): void {
+      keptPrivate = count
     },
     addStep(step: TurnStep): void {
       steps.push(step)
@@ -67,10 +73,11 @@ export function createTurnAccumulator() {
         outputTokens,
         steps: steps.length,
         price: priceTurn(last.model, inputTokens, outputTokens),
-        keptPrivate: 0,
+        keptPrivate,
         factCheckBy: null
       }
       steps = []
+      keptPrivate = 0
       return receipt
     }
   }

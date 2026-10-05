@@ -14,9 +14,17 @@ import SYSTEM_PROMPT from '@/app/ai/chat/system-prompt.md?raw'
 import { createAIModelRuntime, resolveModelConnectionAPIKey } from '@/app/ai/models'
 import { MAX_AGENT_STEPS, createAITools, recordStep, resetRunSteps } from '@/app/ai/tools'
 import { beginChangeTurn, finishChangeTurn } from '@/app/assistant/changes/store'
+import { protectedPrompt } from '@/app/assistant/privacy/prompt'
+import { privacyVaultFor, rememberThreadPrivacy } from '@/app/assistant/privacy/store'
+import { protectTools } from '@/app/assistant/privacy/tools'
 import { loadThread, saveThread, saveThreadNow, threadKeyFor } from '@/app/assistant/thread/store'
 import { turnContext, turnInstructions } from '@/app/assistant/turn/instructions'
-import { beginTurn, finishTurn, recordTurnStep } from '@/app/assistant/turn/session'
+import {
+  beginTurn,
+  finishTurn,
+  recordKeptPrivate,
+  recordTurnStep
+} from '@/app/assistant/turn/session'
 import {
   recordChatCompleted,
   recordChatFailed,
@@ -82,6 +90,17 @@ export async function createACPTransport(providerID: AIProviderID, turnContextFo
   })
 }
 
+function userTextsOf(messages: readonly UIMessage[]): string[] {
+  return messages
+    .filter((message) => message.role === 'user')
+    .map((message) =>
+      message.parts
+        .filter((part): part is { type: 'text'; text: string } => part.type === 'text')
+        .map((part) => part.text)
+        .join('\n')
+    )
+}
+
 export function createToolLoopTransport({
   store,
   providerID,
@@ -91,7 +110,7 @@ export function createToolLoopTransport({
   reasoningEffort,
   onError
 }: ToolLoopTransportOptions) {
-  const tools = createAITools(store)
+  const tools = protectTools(createAITools(store), () => privacyVaultFor(store))
   const cacheProviderOptions = supportsAnthropicCaching(providerID, effectiveModelID)
     ? ANTHROPIC_CACHE_CONTROL
     : undefined
@@ -113,6 +132,7 @@ export function createToolLoopTransport({
       beginChangeTurn(store)
       return {
         ...options,
+        ...protectedPrompt(store, options, (count) => recordKeptPrivate(store, count)),
         instructions: turnInstructions(store, SYSTEM_PROMPT),
         maxOutputTokens,
         providerOptions
@@ -292,6 +312,7 @@ export function createChatSessionManager({
         saveThread(threadKeyFor(currentChatStore), chat.messages)
       }
       const messages = currentChatMessages.get(store) ?? (await loadThread(threadKeyFor(store)))
+      rememberThreadPrivacy(store, userTextsOf(messages))
       let transport: ChatTransport<UIMessage>
       if (isACPProvider.value) transport = await createActiveACPTransport(store)
       else if (isHarnessProvider.value) transport = await createActiveHarnessTransport(store)

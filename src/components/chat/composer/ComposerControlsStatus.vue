@@ -7,7 +7,16 @@ import MemoryScope from '@/components/ui/agent/MemoryScope.vue'
 import PrivacyProtection from '@/components/ui/agent/PrivacyProtection.vue'
 import type { MemoryScopeValue } from '@/app/assistant/controls/model'
 import { assistantControlsFor } from '@/app/assistant/controls/store'
+import { isPrivacyLevelId } from '@/app/assistant/privacy/rules'
+import {
+  privacyLevel,
+  privacyLevelLocked,
+  privateTerms,
+  setPrivacyLevel,
+  setPrivateTerms
+} from '@/app/assistant/privacy/store'
 import { useEditorStore } from '@/app/editor/active-store'
+import AppTextarea from '@/components/ui/AppTextarea.vue'
 
 import { useComposerControls } from './useComposerControls'
 
@@ -19,12 +28,23 @@ const {
   t,
   statusItems,
   privacyLevels,
+  agentProvider,
   memoryOptions,
   crossChecks,
   crossCheckLevels,
   crossCheckValue
 } = useComposerControls(controls)
 const open = ref<string | null>(null)
+const termsText = ref(privateTerms.value.join('\n'))
+
+function choosePrivacy(level: string): void {
+  if (isPrivacyLevelId(level)) setPrivacyLevel(level)
+}
+
+function saveTerms(): void {
+  setPrivateTerms(termsText.value.split('\n'))
+  termsText.value = privateTerms.value.join('\n')
+}
 
 function isMemoryScope(value: string): value is MemoryScopeValue {
   return value === 'project' || value === 'all' || value === 'none'
@@ -40,14 +60,25 @@ function setMemory(value: string): void {
     <ComposerStatus v-model:open="open" :items="statusItems" :label="t.statusLabel" class="flex-1">
       <template #panel-privacy>
         <PrivacyProtection
-          level="high"
+          :level="privacyLevel"
           :levels="privacyLevels"
           :heading="t.privacyHeading"
           :running="t.privacyRunning"
           :summary="t.privacySummary"
+          :lede="agentProvider || privacyLevelLocked ? undefined : t.privacyChoose"
+          :state="agentProvider ? 'off' : 'on'"
+          :off-title="t.privacyAgents"
+          :off-text="t.privacyAgentsDetail"
+          :selectable="!privacyLevelLocked && !agentProvider"
+          @update:level="choosePrivacy"
         >
           <template #foot>
-            <span>{{ t.privacyAdmin }}</span>
+            <span v-if="privacyLevelLocked">{{ t.privacyAdmin }}</span>
+            <label v-else class="flex w-full flex-col gap-1">
+              <span class="font-medium text-surface">{{ t.privacyTerms }}</span>
+              <AppTextarea v-model="termsText" :rows="2" @blur="saveTerms" />
+              <span>{{ t.privacyTermsHint }}</span>
+            </label>
           </template>
         </PrivacyProtection>
       </template>

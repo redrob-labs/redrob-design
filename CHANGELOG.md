@@ -26,6 +26,7 @@
 - Inspect selected designs with a configured Vision model and attach images to AI chat with bounded analysis and previews. (#232, #471)
 - Start from one sentence on Home: "What are you making?" opens a new file with the brief as its first message, with suggestions, New presets for a phone app, website or social card, and a note on where files are kept.
 - Choose Plan or Run and Redrob Auto or a pinned model in the Redrob composer, and read Privacy, Memory and Cross-check in a status line under it.
+- Keep card, account and ID numbers, secret keys, contact details and names you list out of direct-model requests: rules on this computer swap them for placeholders at the Standard, High or Strict level you pick in the composer, the canvas still gets the real values, and each receipt counts what was kept private.
 - Ship a page from Describe: one message, with no AI and no cost, says what is still open and offers React + tokens, Export for Figma, Publish and Hand to Claude Code, and notes that the page can watch its sources and propose its own changes once a workspace is connected.
 - Generate React + Tailwind code that reads design tokens: values bound to variables become classes such as `bg-(--action-primary)`, and the Code panel downloads the file's variables as DTCG `tokens.json` or copies them as CSS variables.
 - Ask Redrob for a version of a screen in another language: it copies the frame beside the original, rewrites the copy as a native writer would, and Describe shows which languages the page ships in.

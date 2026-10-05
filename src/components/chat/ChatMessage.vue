@@ -20,6 +20,8 @@ import ReasoningBlock from '@/components/chat/ReasoningBlock.vue'
 import IconButton from '@/components/ui/IconButton.vue'
 import AnswerReceipt from '@/components/ui/agent/AnswerReceipt.vue'
 import { receiptFor } from '@/app/assistant/thread/store'
+import { revealForDisplay } from '@/app/assistant/privacy/store'
+import { getActiveEditorStoreOrNull } from '@/app/editor/active-store'
 import { receiptItems } from './receipt/items'
 import { classifyToolState } from './tool-state'
 
@@ -52,11 +54,18 @@ const receipt = computed(() => {
 const markdownMode = computed(() => (streaming ? 'streaming' : 'static'))
 const attachments = attachmentsForMessage(message.id)
 const assistantText = computed(() =>
-  message.parts
-    .filter(isTextUIPart)
-    .map((part) => part.text)
-    .join('')
+  shown(
+    message.parts
+      .filter(isTextUIPart)
+      .map((part) => part.text)
+      .join('')
+  )
 )
+
+/** Real values where the model wrote privacy placeholders; the model never saw them. */
+function shown(text: string): string {
+  return message.role === 'assistant' ? revealForDisplay(getActiveEditorStoreOrNull(), text) : text
+}
 const firstAssistantTextPartIndex = computed(() =>
   message.parts.findIndex((part) => isTextUIPart(part) && part.text.length > 0)
 )
@@ -227,7 +236,7 @@ function partKey(part: UIMessagePart<UIDataTypes, UITools>, index: number): stri
             data-test-id="chat-text-bubble"
             class="group/response relative rounded-xl rounded-tl-md border border-ai-border bg-ai px-3 py-2 text-xs leading-relaxed text-surface"
           >
-            <ChatMarkdown :content="part.text" :mode="markdownMode" />
+            <ChatMarkdown :content="shown(part.text)" :mode="markdownMode" />
             <IconButton
               v-if="i === firstAssistantTextPartIndex && assistantText && clipboardSupported"
               :label="copied ? ai.responseCopied : ai.copyResponse"

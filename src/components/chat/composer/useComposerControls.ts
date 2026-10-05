@@ -2,6 +2,7 @@ import { computed } from 'vue'
 
 import { useComposerMessages } from '@redrob-design/vue'
 
+import { isAgentProvider } from '@/app/ai/chat/storage'
 import { aiModelSettings, setModelRoleAssignment } from '@/app/ai/models'
 import {
   DESIGN_SCREENS_RANKING,
@@ -10,6 +11,7 @@ import {
 } from '@/app/ai/models/ranking/fixture'
 import { profileForPick } from '@/app/ai/models/ranking/profiles'
 import type { AssistantControls } from '@/app/assistant/controls/model'
+import { privacyLevel } from '@/app/assistant/privacy/store'
 import { crossCheckSummary } from '@/components/ui/agent/cross-check'
 import type {
   ComposerModeOption,
@@ -75,18 +77,30 @@ export function useComposerControls(controls: AssistantControls) {
     }
   })
 
+  const currentPrivacy = computed(
+    () =>
+      privacyLevels.value.find((level) => level.id === privacyLevel.value) ?? privacyLevels.value[1]
+  )
+
+  /** Local agents read the person's words directly; protection only covers direct models. */
+  const privacyItem = computed<ComposerStatusItem>(() =>
+    isAgentProvider.value
+      ? { id: 'privacy', tone: 'plain', name: t.value.privacy, value: t.value.privacyAgents }
+      : {
+          id: 'privacy',
+          tone: 'safe',
+          name: t.value.privacy,
+          value: currentPrivacy.value.label,
+          level: { n: currentPrivacy.value.n, of: privacyLevels.value.length },
+          live: t.value.privacyRunning
+        }
+  )
+
   const statusItems = computed<ComposerStatusItem[]>(() => {
     const checksOff =
       controls.crossCheck.factCheck === 'off' && controls.crossCheck.challenge === 'off'
     return [
-      {
-        id: 'privacy',
-        tone: 'safe',
-        name: t.value.privacy,
-        value: t.value.privacyHigh,
-        level: { n: 2, of: 3 },
-        live: t.value.privacyRunning
-      },
+      privacyItem.value,
       {
         id: 'memory',
         tone: controls.memory === 'none' ? 'plain' : 'on',
@@ -124,6 +138,7 @@ export function useComposerControls(controls: AssistantControls) {
     crossChecks,
     crossCheckValue,
     privacyLevels,
+    agentProvider: isAgentProvider,
     memoryOptions,
     statusItems,
     pickId,

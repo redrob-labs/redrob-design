@@ -62,7 +62,6 @@ ja:composer.modeLabel
 ja:composer.modePlanHint
 ja:composer.modeRunHint
 ja:composer.privacyStandardDetail
-ja:composer.privacySummary
 ja:composer.statusLabel
 ja:credentials.getAPIKey
 ja:diagnostics.acpFailed
@@ -207,7 +206,6 @@ zh-cn:composer.memoryProductSummary
 zh-cn:composer.modeLabel
 zh-cn:composer.modePlanHint
 zh-cn:composer.modeRunHint
-zh-cn:composer.privacySummary
 zh-cn:composer.statusLabel
 zh-cn:credentials.getAPIKey
 zh-cn:diagnostics.acpFailed

@@ -8,8 +8,8 @@ import type { PrivacyLevel } from './types'
 
 /**
  * What privacy protection does with each message, after the design system's
- * `PrivacyProtection`. The level is the admin's: the person reads it here and
- * never changes it.
+ * `PrivacyProtection`. When an admin sets the level the person only reads it;
+ * with `selectable` the levels become a choice and emit `update:level`.
  */
 const {
   level,
@@ -20,7 +20,8 @@ const {
   lede,
   state = 'on',
   offTitle,
-  offText
+  offText,
+  selectable = false
 } = defineProps<{
   level: string
   levels: PrivacyLevel[]
@@ -31,7 +32,9 @@ const {
   state?: 'on' | 'off'
   offTitle?: string
   offText?: string
+  selectable?: boolean
 }>()
+const emit = defineEmits<{ 'update:level': [level: string] }>()
 defineSlots<{ foot?(): unknown; last?(): unknown }>()
 
 const styles = tv(theme)()
@@ -47,7 +50,27 @@ const styles = tv(theme)()
     </ProtectionStatus>
     <p v-if="lede" :class="styles.lede()">{{ lede }}</p>
     <p v-if="$slots.last" :class="styles.lede()"><slot name="last" /></p>
-    <ul :class="styles.levels()">
+    <div v-if="selectable" role="radiogroup" :aria-label="heading" :class="styles.levels()">
+      <button
+        v-for="item in levels"
+        :key="item.id"
+        type="button"
+        role="radio"
+        :aria-checked="item.id === level ? 'true' : 'false'"
+        :data-state="item.id === level ? 'on' : 'off'"
+        :class="styles.level()"
+        class="w-full cursor-pointer text-left hover:bg-hover focus-visible:ring-2 focus-visible:ring-panel-focus focus-visible:outline-none"
+        @click="emit('update:level', item.id)"
+      >
+        <icon-lucide-check v-if="item.id === level" class="mt-0.5 size-3.5 shrink-0 text-accent" />
+        <span v-else class="size-3.5 shrink-0" />
+        <span>
+          <span :class="styles.levelName()">{{ item.label }}</span>
+          <span :class="styles.levelDetail()"> {{ item.detail }}</span>
+        </span>
+      </button>
+    </div>
+    <ul v-else :class="styles.levels()">
       <li
         v-for="item in levels"
         :key="item.id"

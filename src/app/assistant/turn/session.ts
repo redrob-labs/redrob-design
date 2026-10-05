@@ -27,6 +27,10 @@ export function recordTurnStep(store: EditorStore, step: TurnStep): void {
   accumulatorFor(store).addStep(step)
 }
 
+export function recordKeptPrivate(store: EditorStore, count: number): void {
+  accumulatorFor(store).setKeptPrivate(count)
+}
+
 /** The effort label the person set on a pinned model, or null under Redrob Auto. */
 function pinnedEffort(store: EditorStore): { pinned: boolean; effort: string | null } {
   const controls = assistantControlsFor(store)
