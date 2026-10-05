@@ -10,9 +10,12 @@ import {
 } from '@/app/assistant/thread/storage'
 import {
   loadThread,
+  planAnswersByCall,
+  planAnswersFor,
   receiptFor,
   receiptsByMessage,
   saveThreadNow,
+  setPlanAnswers,
   setReceipt,
   threadKeyFor
 } from '@/app/assistant/thread/store'
@@ -38,6 +41,7 @@ const receipt: TurnReceipt = {
 afterEach(() => {
   setThreadStorageForTests(null)
   receiptsByMessage.clear()
+  planAnswersByCall.clear()
 })
 
 describe('thread keys', () => {
@@ -82,6 +86,50 @@ describe('thread storage', () => {
     expect(messages.map((m) => m.id)).toEqual(['u1', 'a1'])
     expect(receiptFor('a1')).toEqual(receipt)
     expect(receiptFor('u1')).toBeNull()
+  })
+
+  test('keeps answered Plan cards with the thread', async () => {
+    setThreadStorageForTests(createMemoryThreadStorage())
+    const asked: UIMessage = {
+      id: 'a1',
+      role: 'assistant',
+      parts: [
+        {
+          type: 'tool-ask_plan_questions',
+          toolCallId: 'call-1',
+          state: 'output-available',
+          input: { questions: '[]' },
+          output: 'asked'
+        }
+      ]
+    }
+    setPlanAnswers('call-1', { who: 'Teams of 5 to 50' })
+    await saveThreadNow('file:x', [message('u1', 'user'), asked])
+    planAnswersByCall.clear()
+
+    await loadThread('file:x')
+    expect(planAnswersFor('call-1')).toEqual({ who: 'Teams of 5 to 50' })
+    expect(planAnswersFor('call-2')).toBeNull()
+  })
+
+  test('reads threads saved before Plan answers were kept', async () => {
+    const storage = createMemoryThreadStorage()
+    setThreadStorageForTests(storage)
+    await storage.write({ key: 'file:old', messages: [message('a1')], receipts: {}, updatedAt: 0 })
+    expect((await loadThread('file:old')).map((m) => m.id)).toEqual(['a1'])
+    expect(planAnswersByCall.size).toBe(0)
+  })
+
+  test('trims Plan answers whose card is no longer kept', () => {
+    const messages = Array.from({ length: MAX_STORED_MESSAGES + 1 }, (_, i) => message(`m${i}`))
+    const trimmed = trimThread({
+      key: 'k',
+      messages,
+      receipts: {},
+      planAnswers: { gone: { q: 'a' } },
+      updatedAt: 0
+    })
+    expect(trimmed.planAnswers).toEqual({})
   })
 
   test('forgets a thread saved empty', async () => {

@@ -4,12 +4,31 @@ import { toRaw } from 'vue'
 
 import type { TurnReceipt } from '@/app/assistant/turn/usage'
 
+/** The options a person tapped on one Plan card, by question id. */
+export type PlanAnswers = Record<string, string>
+
 /** One document's conversation as it is kept on this computer. */
 export interface StoredThread {
   key: string
   messages: UIMessage[]
   receipts: Record<string, TurnReceipt>
+  /**
+   * Answered Plan cards, by the `ask_plan_questions` tool call id. Threads
+   * saved before answers were kept have none, which reads as unanswered.
+   */
+  planAnswers?: Record<string, PlanAnswers>
   updatedAt: number
+}
+
+/** Every tool call id in these messages. */
+export function toolCallIdsOf(messages: readonly UIMessage[]): Set<string> {
+  const ids = new Set<string>()
+  for (const message of messages) {
+    for (const part of message.parts) {
+      if ('toolCallId' in part && typeof part.toolCallId === 'string') ids.add(part.toolCallId)
+    }
+  }
+  return ids
 }
 
 export interface ThreadStorage {
@@ -31,7 +50,12 @@ export function trimThread(thread: StoredThread): StoredThread {
   const receipts = Object.fromEntries(
     Object.entries(thread.receipts).filter(([id]) => kept.has(id))
   )
-  return { ...thread, messages, receipts }
+  if (!thread.planAnswers) return { ...thread, messages, receipts }
+  const calls = toolCallIdsOf(messages)
+  const planAnswers = Object.fromEntries(
+    Object.entries(thread.planAnswers).filter(([id]) => calls.has(id))
+  )
+  return { ...thread, messages, receipts, planAnswers }
 }
 
 /** Unwraps reactive proxies at every depth; structured cloning rejects them. */

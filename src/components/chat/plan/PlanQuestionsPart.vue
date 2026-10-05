@@ -5,6 +5,7 @@ import { parsePlanQuestions, type PlanQuestion } from '@redrob-design/core/tools
 import { usePlanMessages } from '@redrob-design/vue'
 
 import { getActiveEditorStoreOrNull } from '@/app/editor/active-store'
+import { planAnswersFor, setPlanAnswers } from '@/app/assistant/thread/store'
 import { designMemorySource, openDesignMemory } from '@/app/memory/service'
 import { colorCount } from '@/app/memory/types'
 import { useChatSend } from '@/components/chat/submit'
@@ -15,14 +16,20 @@ import PlanQuestions from '@/components/ui/agent/PlanQuestions.vue'
 /**
  * Plan's first answer: Design Memory, then the questions it asked with
  * `ask_plan_questions`. Answering every question, or skipping, sends the
- * answers as the next message.
+ * answers as the next message. The answers are kept with the thread, so a
+ * card answered before a reload stays answered.
  */
-const { input, answered = false } = defineProps<{ input: unknown; answered?: boolean }>()
+const {
+  input,
+  toolCallId = null,
+  answered = false
+} = defineProps<{ input: unknown; toolCallId?: string | null; answered?: boolean }>()
 
 const t = usePlanMessages()
 const send = useChatSend()
-const answers = ref<Partial<Record<string, string>>>({})
-const sent = ref(false)
+const stored = toolCallId ? planAnswersFor(toolCallId) : null
+const answers = ref<Partial<Record<string, string>>>(stored ? { ...stored } : {})
+const sent = ref(stored !== null)
 
 const questions = computed<PlanQuestion[]>(() => {
   const raw =
@@ -52,6 +59,11 @@ const locked = computed(() => answered || sent.value)
 function finish(text: string): void {
   if (locked.value) return
   sent.value = true
+  if (toolCallId) {
+    const given: Record<string, string> = {}
+    for (const [id, option] of Object.entries(answers.value)) if (option) given[id] = option
+    setPlanAnswers(toolCallId, given)
+  }
   send(text)
 }
 

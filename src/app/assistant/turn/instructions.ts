@@ -1,6 +1,13 @@
+import type { SceneGraph } from '@redrob-design/scene-graph'
+
 import { assistantControlsFor } from '@/app/assistant/controls/store'
-import type { EditorStore } from '@/app/editor/active-store'
 import { designMemoryBrief, designMemorySource } from '@/app/memory/service'
+
+/** The document a turn is about; in the app, the active editor store. */
+export interface TurnOwner {
+  graph: SceneGraph
+  state: { documentName: string }
+}
 
 const PLAN_MODE = [
   'Plan mode. Before you draw anything new, read the brief and Design Memory.',
@@ -12,11 +19,21 @@ const RUN_MODE =
   'Run mode. Do not ask questions first; use the likeliest answer and make the change.'
 
 /**
- * The instructions for one answer: the system prompt, the Plan or Run rule
- * the person chose, and Design Memory, which every model reads before it draws.
+ * What one answer adds to the system prompt: the Plan or Run rule the person
+ * chose and, unless Memory is off, Design Memory. Memory off means nothing
+ * from Design Memory is read or sent.
  */
-export function turnInstructions(store: EditorStore, systemPrompt: string): string {
-  const mode = assistantControlsFor(store).mode === 'run' ? RUN_MODE : PLAN_MODE
-  const memory = designMemorySource().read(store.graph, store.state.documentName)
-  return [systemPrompt, mode, designMemoryBrief(memory)].join('\n\n')
+export function turnContext(store: TurnOwner): string {
+  const controls = assistantControlsFor(store)
+  const parts = [controls.mode === 'run' ? RUN_MODE : PLAN_MODE]
+  if (controls.memory !== 'none') {
+    const memory = designMemorySource().read(store.graph, store.state.documentName)
+    parts.push(designMemoryBrief(memory))
+  }
+  return parts.join('\n\n')
+}
+
+/** The instructions for one answer: the system prompt, then the turn context. */
+export function turnInstructions(store: TurnOwner, systemPrompt: string): string {
+  return [systemPrompt, turnContext(store)].join('\n\n')
 }

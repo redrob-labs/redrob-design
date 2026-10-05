@@ -163,6 +163,7 @@ function partKey(part: UIMessagePart<UIDataTypes, UITools>, index: number): stri
           <PlanQuestionsPart
             v-if="isPlanTool(part, 'ask_plan_questions')"
             :input="'input' in part ? part.input : null"
+            :tool-call-id="'toolCallId' in part ? part.toolCallId : null"
           />
           <DirectionsPart
             v-else-if="isPlanTool(part, 'create_directions')"

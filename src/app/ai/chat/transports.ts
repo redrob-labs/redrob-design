@@ -15,7 +15,7 @@ import { createAIModelRuntime, resolveModelConnectionAPIKey } from '@/app/ai/mod
 import { MAX_AGENT_STEPS, createAITools, recordStep, resetRunSteps } from '@/app/ai/tools'
 import { beginChangeTurn, finishChangeTurn } from '@/app/assistant/changes/store'
 import { loadThread, saveThread, saveThreadNow, threadKeyFor } from '@/app/assistant/thread/store'
-import { turnInstructions } from '@/app/assistant/turn/instructions'
+import { turnContext, turnInstructions } from '@/app/assistant/turn/instructions'
 import { beginTurn, finishTurn, recordTurnStep } from '@/app/assistant/turn/session'
 import {
   recordChatCompleted,
@@ -65,7 +65,7 @@ function mergeProviderOptions(
   return { ...cacheOptions, ...reasoningOptions }
 }
 
-export async function createACPTransport(providerID: AIProviderID) {
+export async function createACPTransport(providerID: AIProviderID, turnContextFor?: () => string) {
   const agentId = providerID.replace('acp:', '') as ACPAgentID
   const agentDef = ACP_AGENTS.find((a) => a.id === agentId)
   if (!agentDef) throw new Error(`Unknown ACP agent: ${agentId}`)
@@ -74,7 +74,12 @@ export async function createACPTransport(providerID: AIProviderID) {
   const { homeDir } = await import('@tauri-apps/api/path')
   const { designCustomModelID, designModelID } = await import('@/app/ai/models')
   const modelId = designCustomModelID.value.trim() || designModelID.value.trim()
-  return new ACPChatTransport({ agentDef, cwd: await homeDir(), modelId })
+  return new ACPChatTransport({
+    agentDef,
+    cwd: await homeDir(),
+    modelId,
+    turnContext: turnContextFor
+  })
 }
 
 export function createToolLoopTransport({
@@ -212,14 +217,14 @@ export function createChatSessionManager({
     if (errors.length) throw new AggregateError(errors, 'Agent transport teardown failed')
   }
 
-  async function createActiveACPTransport() {
+  async function createActiveACPTransport(store: EditorStore) {
     await destroyAgentTransports()
-    const transport = await createACPTransport(providerID.value)
+    const transport = await createACPTransport(providerID.value, () => turnContext(store))
     acpTransportInstance = transport
     return transport as ChatTransport<UIMessage>
   }
 
-  async function createActiveHarnessTransport() {
+  async function createActiveHarnessTransport(store: EditorStore) {
     await destroyAgentTransports()
     const runtime = await createAIModelRuntime('design')
     if (runtime?.kind !== 'harness') throw new Error('The Design agent is not configured for Pi')
@@ -242,7 +247,8 @@ export function createChatSessionManager({
         instructions: SYSTEM_PROMPT,
         mcpServers: await buildPiMCPServers()
       },
-      { REDROB_DESIGN_HARNESS_API_KEY: apiKey }
+      { REDROB_DESIGN_HARNESS_API_KEY: apiKey },
+      () => turnContext(store)
     )
     harnessTransportInstance = transport
     return transport as ChatTransport<UIMessage>
@@ -287,8 +293,8 @@ export function createChatSessionManager({
       }
       const messages = currentChatMessages.get(store) ?? (await loadThread(threadKeyFor(store)))
       let transport: ChatTransport<UIMessage>
-      if (isACPProvider.value) transport = await createActiveACPTransport()
-      else if (isHarnessProvider.value) transport = await createActiveHarnessTransport()
+      if (isACPProvider.value) transport = await createActiveACPTransport(store)
+      else if (isHarnessProvider.value) transport = await createActiveHarnessTransport(store)
       else transport = await createTransport(store)
       chat = new Chat<UIMessage>({
         transport,
