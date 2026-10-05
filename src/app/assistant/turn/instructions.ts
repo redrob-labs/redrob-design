@@ -1,6 +1,7 @@
 import type { SceneGraph } from '@redrob-design/scene-graph'
 
 import { assistantControlsFor } from '@/app/assistant/controls/store'
+import { loadPersonalNotes, personalNotes, personalNotesBrief } from '@/app/memory/notes/store'
 import { designMemoryBrief, designMemorySource } from '@/app/memory/service'
 
 /** The document a turn is about; in the app, the active editor store. */
@@ -29,6 +30,12 @@ export function turnContext(store: TurnOwner): string {
   if (controls.memory !== 'none') {
     const memory = designMemorySource().read(store.graph, store.state.documentName)
     parts.push(designMemoryBrief(memory))
+  }
+  // "All my work" adds the person's own notes; the other scopes never read them.
+  if (controls.memory === 'all') {
+    void loadPersonalNotes()
+    const notes = personalNotesBrief(personalNotes.value)
+    if (notes) parts.push(notes)
   }
   return parts.join('\n\n')
 }

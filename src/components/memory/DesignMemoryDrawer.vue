@@ -5,6 +5,7 @@ import { usePlanMessages } from '@redrob-design/vue'
 
 import { getActiveEditorStoreOrNull } from '@/app/editor/active-store'
 import { designMemoryOpen, designMemorySource } from '@/app/memory/service'
+import PersonalNotesSection from '@/components/memory/PersonalNotesSection.vue'
 import AppDialog from '@/components/ui/dialog/AppDialog.vue'
 
 /** Design Memory in full: colors, type, radii, rules, prices and components. */
@@ -88,6 +89,8 @@ const origin = computed(() => {
           </li>
         </ul>
       </section>
+
+      <PersonalNotesSection />
 
       <section v-if="memory.prices.length > 0" class="flex flex-col gap-2">
         <h3 class="text-[13px] font-semibold text-surface">{{ t.sectionPrices }}</h3>

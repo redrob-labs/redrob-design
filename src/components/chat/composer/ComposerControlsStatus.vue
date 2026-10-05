@@ -16,6 +16,7 @@ import {
   setPrivateTerms
 } from '@/app/assistant/privacy/store'
 import { useEditorStore } from '@/app/editor/active-store'
+import { loadPersonalNotes } from '@/app/memory/notes/store'
 import { openSettingsDialog } from '@/app/settings/dialog'
 import AppButton from '@/components/ui/AppButton.vue'
 import AppTextarea from '@/components/ui/AppTextarea.vue'
@@ -38,6 +39,8 @@ const {
   crossCheckValue
 } = useComposerControls(controls)
 const open = ref<string | null>(null)
+// Read the notes early, so the first answer under All my work already has them.
+void loadPersonalNotes()
 const termsText = ref(privateTerms.value.join('\n'))
 
 function choosePrivacy(level: string): void {
