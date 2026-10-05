@@ -57,5 +57,8 @@
   "levelAlways": "Toujours",
   "someOn": "{on} sur {total} activées",
   "crossCheckFoot": "Chaque vérification indique l’IA qui l’a faite.",
+  "crossCheckNoModel": "Il faut un modèle de relecture",
+  "crossCheckNoModelText": "Choisissez un modèle de relecture dans Réglages, sous Agents et MCP. D'ici là, rien n'est vérifié.",
+  "crossCheckChooseModel": "Choisir un modèle de relecture",
   "modelsAndKeys": "Modèles et clés"
 }

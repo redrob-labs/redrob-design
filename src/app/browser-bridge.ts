@@ -1,6 +1,7 @@
 import type { ChatTransport, UIMessage } from 'ai'
 
 import { beginChangeTurn, finishChangeTurn } from '@/app/assistant/changes/store'
+import type { CrossCheckDependencies } from '@/app/assistant/cross-check/run'
 import type { CollabReturn } from '@/app/collab/context'
 import type { EditorStore } from '@/app/editor/session/create'
 import { createNavigationBenchmarkHooks } from '@/app/performance/navigation/hooks'
@@ -18,6 +19,8 @@ export interface RedrobDesignTestHooks {
     begin: () => void
     finish: (messageId: string) => void
   }
+  /** Answers the next Cross-check calls with these replies, in order. */
+  crossCheckReplies?: (replies: string[], reviewer: { providerID: string; modelID: string }) => void
   collab?: Pick<
     CollabReturn,
     'connect' | 'disconnect' | 'updateCursor' | 'updateSelection' | 'setLocalName'
@@ -88,6 +91,29 @@ export function exposeChatTransportOverride(
   setChatTransport: (factory: () => ChatTransport<UIMessage>) => void
 ) {
   windowAPI().setChatTransport = setChatTransport
+}
+
+/**
+ * Dev only: the chat tests answer Cross-check with fixed replies from a fake
+ * Review model, so the card can be checked without a real one.
+ */
+export function exposeCrossCheckOverride(
+  setDependencies: (next: CrossCheckDependencies | null) => void
+) {
+  if (!IS_BROWSER || !import.meta.env.DEV) return
+  const testHooks = (windowAPI().test ??= {})
+  testHooks.crossCheckReplies = (replies, reviewer) => {
+    const queue = [...replies]
+    setDependencies({
+      createRuntime: () =>
+        Promise.resolve({
+          model: reviewer.modelID,
+          providerID: reviewer.providerID,
+          modelID: reviewer.modelID
+        }),
+      generate: () => Promise.resolve({ text: queue.shift() ?? 'NONE' })
+    })
+  }
 }
 
 export function setRedrobDesignOpenFileHandler(openFile: (path: string) => Promise<void>) {

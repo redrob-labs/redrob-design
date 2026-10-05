@@ -3,7 +3,12 @@ import { computed } from 'vue'
 import { useComposerMessages } from '@redrob-design/vue'
 
 import { isAgentProvider } from '@/app/ai/chat/storage'
-import { aiModelSettings, setModelRoleAssignment } from '@/app/ai/models'
+import {
+  aiModelSettings,
+  isAgentModelProfile,
+  resolveAIModelRole,
+  setModelRoleAssignment
+} from '@/app/ai/models'
 import {
   DESIGN_SCREENS_RANKING,
   RANKING_HERE,
@@ -96,9 +101,20 @@ export function useComposerControls(controls: AssistantControls) {
         }
   )
 
+  /** Cross-check runs on the Review model, which must be a direct model. */
+  const reviewModelReady = computed(() => {
+    void aiModelSettings.value
+    const review = resolveAIModelRole('review')
+    return review !== null && !isAgentModelProfile(review.profile)
+  })
+
   const statusItems = computed<ComposerStatusItem[]>(() => {
     const checksOff =
       controls.crossCheck.factCheck === 'off' && controls.crossCheck.challenge === 'off'
+    const missingModel = !checksOff && !reviewModelReady.value
+    let checkTone: ComposerStatusItem['tone'] = 'on'
+    if (missingModel) checkTone = 'warn'
+    else if (checksOff) checkTone = 'plain'
     return [
       privacyItem.value,
       {
@@ -109,12 +125,14 @@ export function useComposerControls(controls: AssistantControls) {
       },
       {
         id: 'check',
-        tone: checksOff ? 'plain' : 'on',
+        tone: checkTone,
         name: t.value.crossCheck,
-        value: crossCheckSummary({ ...controls.crossCheck }, crossCheckLevels.value, {
-          off: t.value.levelOff,
-          someOn: (on, total) => t.value.someOn({ on, total })
-        })
+        value: missingModel
+          ? t.value.crossCheckNoModel
+          : crossCheckSummary({ ...controls.crossCheck }, crossCheckLevels.value, {
+              off: t.value.levelOff,
+              someOn: (on, total) => t.value.someOn({ on, total })
+            })
       }
     ]
   })
@@ -139,6 +157,7 @@ export function useComposerControls(controls: AssistantControls) {
     crossCheckValue,
     privacyLevels,
     agentProvider: isAgentProvider,
+    reviewModelReady,
     memoryOptions,
     statusItems,
     pickId,

@@ -57,5 +57,8 @@
   "levelAlways": "Siempre",
   "someOn": "{on} de {total} activadas",
   "crossCheckFoot": "Cada revisión dice qué IA la hizo.",
+  "crossCheckNoModel": "Falta un modelo de revisión",
+  "crossCheckNoModelText": "Elige un modelo de revisión en Ajustes, en Agentes y MCP. Hasta entonces no se revisa nada.",
+  "crossCheckChooseModel": "Elegir modelo de revisión",
   "modelsAndKeys": "Modelos y claves"
 }

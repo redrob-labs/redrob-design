@@ -18,6 +18,7 @@ import { protectedPrompt } from '@/app/assistant/privacy/prompt'
 import { privacyVaultFor, rememberThreadPrivacy } from '@/app/assistant/privacy/store'
 import { protectTools } from '@/app/assistant/privacy/tools'
 import { loadThread, saveThread, saveThreadNow, threadKeyFor } from '@/app/assistant/thread/store'
+import { emitAnswerFinished } from '@/app/assistant/turn/finished'
 import { turnContext, turnInstructions } from '@/app/assistant/turn/instructions'
 import {
   beginTurn,
@@ -211,6 +212,9 @@ export function createChatSessionManager({
     finishTurn(store, isError ? undefined : message)
     finishChangeTurn(store, message?.role === 'assistant' ? message.id : undefined)
     if (messages) saveThread(threadKeyFor(store), messages)
+    if (!isAbort && !isDisconnect && !isError && message?.role === 'assistant') {
+      emitAnswerFinished({ store, message, messages: messages ?? [message] })
+    }
   }
 
   function clearFailure(): void {

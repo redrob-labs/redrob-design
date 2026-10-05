@@ -57,5 +57,8 @@
   "levelAlways": "Всегда",
   "someOn": "Включено {on} из {total}",
   "crossCheckFoot": "Каждая проверка называет ИИ, который ее провел.",
+  "crossCheckNoModel": "Нужна проверяющая модель",
+  "crossCheckNoModelText": "Выберите проверяющую модель в Настройках, в разделе Агенты и MCP. До тех пор ничего не проверяется.",
+  "crossCheckChooseModel": "Выбрать проверяющую модель",
   "modelsAndKeys": "Модели и ключи"
 }

@@ -57,5 +57,8 @@
   "levelAlways": "Zawsze",
   "someOn": "{on} z {total} włączone",
   "crossCheckFoot": "Każde sprawdzenie podaje AI, która je wykonała.",
+  "crossCheckNoModel": "Potrzebny model sprawdzający",
+  "crossCheckNoModelText": "Wybierz model sprawdzający w Ustawieniach, w sekcji Agenci i MCP. Do tego czasu nic nie jest sprawdzane.",
+  "crossCheckChooseModel": "Wybierz model sprawdzający",
   "modelsAndKeys": "Modele i klucze"
 }

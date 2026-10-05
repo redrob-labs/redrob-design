@@ -16,6 +16,8 @@ import {
   setPrivateTerms
 } from '@/app/assistant/privacy/store'
 import { useEditorStore } from '@/app/editor/active-store'
+import { openSettingsDialog } from '@/app/settings/dialog'
+import AppButton from '@/components/ui/AppButton.vue'
 import AppTextarea from '@/components/ui/AppTextarea.vue'
 
 import { useComposerControls } from './useComposerControls'
@@ -29,6 +31,7 @@ const {
   statusItems,
   privacyLevels,
   agentProvider,
+  reviewModelReady,
   memoryOptions,
   crossChecks,
   crossCheckLevels,
@@ -106,7 +109,13 @@ function setMemory(value: string): void {
           :lede="t.crossCheckLede"
         >
           <template #foot>
-            <span>{{ t.crossCheckFoot }}</span>
+            <span v-if="reviewModelReady">{{ t.crossCheckFoot }}</span>
+            <span v-else class="flex flex-col items-start gap-1.5">
+              <span>{{ t.crossCheckNoModelText }}</span>
+              <AppButton color="primary" variant="link" @click="openSettingsDialog('ai')">
+                {{ t.crossCheckChooseModel }}
+              </AppButton>
+            </span>
           </template>
         </CrossCheckSetting>
       </template>

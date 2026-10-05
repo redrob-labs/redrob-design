@@ -11,6 +11,9 @@ import AttachmentList from '@/components/chat/attachment/AttachmentList.vue'
 import TurnChanges from '@/components/chat/changes/TurnChanges.vue'
 import ReviewFindings from '@/components/chat/review/ReviewFindings.vue'
 import ShipCard from '@/components/chat/ship/ShipCard.vue'
+import CrossCheckCard from '@/components/chat/cross-check/CrossCheckCard.vue'
+import { isCrossCheckData, type CrossCheckData } from '@/app/assistant/cross-check/types'
+import { crossChecksRunning } from '@/app/assistant/cross-check/session'
 import { isShipData, type ShipData } from '@/app/ship/ship'
 import DirectionsPart from '@/components/chat/plan/DirectionsPart.vue'
 import PlanQuestionsPart from '@/components/chat/plan/PlanQuestionsPart.vue'
@@ -131,6 +134,22 @@ function reviewOf(part: UIMessagePart<UIDataTypes, UITools>): ReviewData | null 
   return isReviewData(part.data) ? part.data : null
 }
 
+/** What Cross-check found, carried by a `data-cross-check` part. */
+function crossCheckOf(part: UIMessagePart<UIDataTypes, UITools>): CrossCheckData | null {
+  if (part.type !== 'data-cross-check' || !('data' in part)) return null
+  return isCrossCheckData(part.data) ? part.data : null
+}
+
+const emptyCrossCheck: CrossCheckData = {
+  answerId: '',
+  status: 'done',
+  by: null,
+  sameCompany: false,
+  factCheck: null,
+  challenge: null,
+  error: null
+}
+
 function partKey(part: UIMessagePart<UIDataTypes, UITools>, index: number): string {
   if ('toolCallId' in part) return part.toolCallId
   return `part-${index}`
@@ -159,6 +178,12 @@ function partKey(part: UIMessagePart<UIDataTypes, UITools>, index: number): stri
 
           <!-- Ship: the ways out, posted without a model -->
           <ShipCard v-if="shipOf(part)" :ship="shipOf(part) ?? emptyShip" />
+
+          <!-- Cross-check: another model read the answer -->
+          <CrossCheckCard
+            v-if="crossCheckOf(part)"
+            :check="crossCheckOf(part) ?? emptyCrossCheck"
+          />
 
           <!-- A page check Redrob posted -->
           <ReviewFindings
@@ -252,6 +277,15 @@ function partKey(part: UIMessagePart<UIDataTypes, UITools>, index: number): stri
         </template>
         <TurnChanges v-if="!streaming" :message-id="message.id" />
         <AnswerReceipt v-if="receipt.length" :items="receipt" :label="thread.receiptLabel" />
+        <p
+          v-if="crossChecksRunning.has(message.id)"
+          role="status"
+          data-slot="cross-check-running"
+          class="flex items-center gap-1.5 text-xs text-muted"
+        >
+          <icon-lucide-loader-circle class="size-3.5 shrink-0 animate-spin" />
+          {{ thread.checkRunning }}
+        </p>
       </template>
 
       <!-- User message -->

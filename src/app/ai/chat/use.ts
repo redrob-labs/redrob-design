@@ -26,7 +26,8 @@ import {
   unsplashKeyStatus
 } from '@/app/ai/chat/storage'
 import { createChatSessionManager } from '@/app/ai/chat/transports'
-import { exposeChatTransportOverride } from '@/app/browser-bridge'
+import { NO_REVIEW_MODEL, setCrossCheckDependencies } from '@/app/assistant/cross-check/session'
+import { exposeChatTransportOverride, exposeCrossCheckOverride } from '@/app/browser-bridge'
 import { getActiveEditorStore } from '@/app/editor/active-store'
 
 const activeTab = ref<'design' | 'code' | 'ai'>('design')
@@ -45,7 +46,10 @@ registerAIChatEffects(chatSession.markTransportDirty)
 if (IS_BROWSER) {
   exposeChatTransportOverride((factory) => {
     chatSession.setOverrideTransport(factory)
+    // A test transport fakes the drawing model; Cross-check must not call a real one.
+    setCrossCheckDependencies(NO_REVIEW_MODEL)
   })
+  exposeCrossCheckOverride(setCrossCheckDependencies)
 }
 
 export function useAIChat() {

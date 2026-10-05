@@ -57,5 +57,8 @@
   "levelAlways": "常に",
   "someOn": "{total} 件中 {on} 件オン",
   "crossCheckFoot": "各チェックには実行した AI が表示されます。",
+  "crossCheckNoModel": "レビューモデルが必要です",
+  "crossCheckNoModelText": "設定のエージェントとMCPでレビューモデルを選んでください。それまでは何もチェックされません。",
+  "crossCheckChooseModel": "レビューモデルを選ぶ",
   "modelsAndKeys": "モデルとキー"
 }

@@ -57,5 +57,8 @@
   "levelAlways": "Immer",
   "someOn": "{on} von {total} an",
   "crossCheckFoot": "Jede Prüfung nennt die KI, die sie ausgeführt hat.",
+  "crossCheckNoModel": "Braucht ein Prüfmodell",
+  "crossCheckNoModelText": "Wähle ein Prüfmodell in den Einstellungen unter Agenten und MCP. Bis dahin wird nichts geprüft.",
+  "crossCheckChooseModel": "Prüfmodell wählen",
   "modelsAndKeys": "Modelle und Schlüssel"
 }

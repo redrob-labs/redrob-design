@@ -57,5 +57,8 @@
   "levelAlways": "始终",
   "someOn": "{total} 项中开启 {on} 项",
   "crossCheckFoot": "每项检查都会写明由哪个 AI 执行。",
+  "crossCheckNoModel": "需要审查模型",
+  "crossCheckNoModelText": "请在设置的代理和 MCP 中选择审查模型。在此之前不会进行任何核查。",
+  "crossCheckChooseModel": "选择审查模型",
   "modelsAndKeys": "模型和密钥"
 }

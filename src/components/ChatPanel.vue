@@ -25,6 +25,7 @@ import { openSettingsDialog } from '@/app/settings/dialog'
 import { useI18n, useShipMessages, useThreadMessages, vTestId } from '@redrob-design/vue'
 import { turnSteps } from '@/components/chat/timeline/steps'
 import { useOpeningReview } from '@/components/chat/review/useOpeningReview'
+import { useCrossCheck } from '@/components/chat/cross-check/useCrossCheck'
 import { provideChatPost, provideChatSend } from '@/components/chat/submit'
 import { saveThread, threadKeyFor } from '@/app/assistant/thread/store'
 import { hasShipMessage, shipMessage, shipRequest } from '@/app/ship/ship'
@@ -74,6 +75,7 @@ function postMessage(message: UIMessage): void {
   saveThread(threadKeyFor(getActiveEditorStore()), current.messages)
 }
 provideChatPost(postMessage)
+useCrossCheck(postMessage)
 
 watch(shipRequest, () => {
   const current = chat.value

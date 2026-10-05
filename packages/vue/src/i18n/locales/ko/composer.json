@@ -57,5 +57,8 @@
   "levelAlways": "항상",
   "someOn": "{total}개 중 {on}개 켜짐",
   "crossCheckFoot": "각 검토에는 실행한 AI가 표시됩니다.",
+  "crossCheckNoModel": "검토 모델이 필요합니다",
+  "crossCheckNoModelText": "설정의 에이전트 및 MCP에서 검토 모델을 고르세요. 그전까지는 아무것도 검토하지 않습니다.",
+  "crossCheckChooseModel": "검토 모델 고르기",
   "modelsAndKeys": "모델 및 키"
 }

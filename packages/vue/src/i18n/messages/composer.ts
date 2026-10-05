@@ -68,6 +68,10 @@ export const composerMessageDefaults = {
   levelAlways: 'Always',
   someOn: params('{on} of {total} on'),
   crossCheckFoot: 'Every check says which AI ran it.',
+  crossCheckNoModel: 'Needs a Review model',
+  crossCheckNoModelText:
+    'Choose a Review model in Settings, under Agents and MCP. Until then nothing is checked.',
+  crossCheckChooseModel: 'Choose a Review model',
   modelsAndKeys: 'Models and keys'
 } as const
 
