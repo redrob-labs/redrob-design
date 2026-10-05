@@ -10,11 +10,12 @@ test('storage settings keep secrets behind the credential manager', async ({ pag
 
   await openSettingsFromMenu(page)
   await page.getByTestId('settings-section-storage').click()
-  await page.getByLabel('Endpoint').fill('https://s3.example.com')
-  await page.getByLabel('Bucket').fill('designs')
+  const storageProfile = page.locator('[data-storage-profile="default"]')
+  await storageProfile.getByLabel('Endpoint').fill('https://s3.example.com')
+  await storageProfile.getByLabel('Bucket').fill('designs')
   await expect(page.getByRole('button', { name: 'Copy CORS JSON' })).toBeHidden()
 
-  const secretField = page.locator('[data-credential="secret-access-key"]')
+  const secretField = storageProfile.locator('[data-credential="secret-access-key"]')
   await secretField.locator('input').fill('storage-secret')
   await secretField.getByRole('button', { name: 'Save' }).click()
   await expect(secretField.locator('input')).toHaveValue('')
@@ -31,7 +32,7 @@ test('storage settings keep secrets behind the credential manager', async ({ pag
   await canvas.waitForInit()
   await openSettingsFromMenu(page)
   await page.getByTestId('settings-section-storage').click()
-  await expect(page.getByLabel('Endpoint')).toHaveValue('https://s3.example.com')
+  await expect(storageProfile.getByLabel('Endpoint')).toHaveValue('https://s3.example.com')
   await expect(secretField.locator('input')).not.toHaveAttribute('placeholder', /Key saved/)
 })
 
@@ -193,4 +194,38 @@ test('remembered browser credentials survive reload and clear centrally', async 
   await canvas.waitForInit()
   await page.getByRole('tab', { name: 'Redrob' }).click()
   await expect(page.getByTestId('provider-setup-open-settings')).toBeVisible()
+})
+
+test('the publish site keeps its own bucket and checks its public address', async ({ page }) => {
+  await page.goto('/?test')
+  const canvas = new CanvasHelper(page)
+  await canvas.waitForInit()
+
+  await openSettingsFromMenu(page)
+  await page.getByTestId('settings-section-storage').click()
+  const storageProfile = page.locator('[data-storage-profile="default"]')
+  const publishProfile = page.locator('[data-storage-profile="publish"]')
+  await storageProfile.getByLabel('Bucket').fill('designs')
+  await storageProfile.getByLabel('Bucket').blur()
+  await publishProfile.getByLabel('Bucket').fill('site')
+  await publishProfile.getByLabel('Bucket').blur()
+
+  const siteURL = page.getByTestId('settings-publish-site').getByLabel('Public site URL')
+  await siteURL.fill('http://site.example.com')
+  await siteURL.blur()
+  await expect(page.getByTestId('settings-publish-site').getByRole('alert')).toContainText(
+    'Use an https address.'
+  )
+  await siteURL.fill('https://site.example.com/')
+  await siteURL.blur()
+  await expect(page.getByTestId('settings-publish-site').getByRole('alert')).toHaveCount(0)
+
+  await page.getByTestId('app-settings-done').click()
+  await page.reload()
+  await canvas.waitForInit()
+  await openSettingsFromMenu(page)
+  await page.getByTestId('settings-section-storage').click()
+  await expect(storageProfile.getByLabel('Bucket')).toHaveValue('designs')
+  await expect(publishProfile.getByLabel('Bucket')).toHaveValue('site')
+  await expect(siteURL).toHaveValue('https://site.example.com')
 })

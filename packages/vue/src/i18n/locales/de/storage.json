@@ -15,5 +15,11 @@
   "bucket": "Bucket",
   "region": "Region",
   "accessKeyID": "Zugriffsschlüssel-ID",
-  "secretAccessKey": "Geheimer Zugriffsschlüssel"
+  "secretAccessKey": "Geheimer Zugriffsschlüssel",
+  "publishHeading": "Veröffentlichungsseite",
+  "publishDescription": "Veröffentlichen lädt ausgelieferte Seiten in diesen Bucket, getrennt von dem, wo deine Dateien synchronisiert werden. Mache den Bucket bei deinem Anbieter öffentlich; Redrob ändert nie, wer ihn lesen darf.",
+  "publicSiteURL": "Öffentliche Seiten-URL",
+  "publicSiteURLHint": "Wo dieser Bucket ausgeliefert wird, zum Beispiel https://site.example.com.",
+  "siteURLNotHttps": "Verwende eine https-Adresse.",
+  "siteURLInvalid": "Gib eine vollständige Webadresse ohne Abfrage oder #-Teil ein."
 }

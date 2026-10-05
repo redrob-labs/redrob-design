@@ -15,5 +15,11 @@
   "bucket": "Bucket",
   "region": "Región",
   "accessKeyID": "ID de clave de acceso",
-  "secretAccessKey": "Clave de acceso secreta"
+  "secretAccessKey": "Clave de acceso secreta",
+  "publishHeading": "Sitio de publicación",
+  "publishDescription": "Publicar sube las páginas enviadas a este bucket, aparte de donde se sincronizan tus archivos. Haz público el bucket con tu proveedor; Redrob nunca cambia quién puede leerlo.",
+  "publicSiteURL": "URL pública del sitio",
+  "publicSiteURLHint": "Donde se sirve este bucket, por ejemplo https://site.example.com.",
+  "siteURLNotHttps": "Usa una dirección https.",
+  "siteURLInvalid": "Escribe una dirección web completa sin consulta ni parte #."
 }

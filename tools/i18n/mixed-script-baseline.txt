@@ -136,6 +136,10 @@ ja:ship.reactTokens
 ja:storage.accessKeyID
 ja:storage.copyCors
 ja:storage.providerS3
+ja:storage.publicSiteURL
+ja:storage.publicSiteURLHint
+ja:storage.publishDescription
+ja:storage.siteURLNotHttps
 ja:thread.byAuto
 ja:thread.progressLabel
 ja:updates.available
@@ -278,6 +282,9 @@ zh-cn:ship.reactTokens
 zh-cn:storage.accessKeyID
 zh-cn:storage.copyCors
 zh-cn:storage.providerS3
+zh-cn:storage.publicSiteURLHint
+zh-cn:storage.publishDescription
+zh-cn:storage.siteURLNotHttps
 zh-cn:thread.byAuto
 zh-cn:thread.progressLabel
 zh-cn:updates.available
