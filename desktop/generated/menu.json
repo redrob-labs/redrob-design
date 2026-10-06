@@ -76,6 +76,10 @@
         "label": "Version History…"
       },
       {
+        "id": "comments",
+        "label": "Comments…"
+      },
+      {
         "id": "close",
         "label": "Close Tab",
         "accelerator": "CmdOrCtrl+W"

@@ -22,6 +22,7 @@ de:code.editorDesignLabel
 de:code.sourceDesignJSX
 de:code.sourceHTMLCSS
 de:code.sourceTailwindJSX
+de:comments.threadLabel
 de:common.ok
 de:composer.auto
 de:composer.privacyStandard

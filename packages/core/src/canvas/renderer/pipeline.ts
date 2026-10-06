@@ -83,6 +83,7 @@ export function renderFromEditorState(
         : null,
       nodeEditState: state.nodeEditState ?? null,
       remoteCursors: state.remoteCursors,
+      commentPins: state.commentPins,
       autoLayoutHover: state.autoLayoutHover
     },
     state.sceneVersion,

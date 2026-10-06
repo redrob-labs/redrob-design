@@ -78,6 +78,7 @@
   --color-canvas-measurement: var(--accent-orange-3);
   --color-canvas-layout-padding: var(--accent-sky-3);
   --color-canvas-layout-gap: var(--accent-pink-3);
+  --color-canvas-comment-pin: var(--action-primary);
 }
 
 /*

@@ -11,6 +11,7 @@ import PublishLibraryDialog from '@/components/libraries/PublishLibraryDialog.vu
 import LibraryUpdateReviewDialog from '@/components/libraries/review/LibraryUpdateReviewDialog.vue'
 import RecoveryDialog from '@/components/recovery/RecoveryDialog.vue'
 import VersionHistoryDrawer from '@/components/history/VersionHistoryDrawer.vue'
+import CommentsDrawer from '@/components/comments/CommentsDrawer.vue'
 import SettingsDialog from '@/components/settings/SettingsDialog.vue'
 import { useEditorStore } from '@/app/editor/active-store'
 import { toast } from '@/app/shell/ui'
@@ -19,6 +20,7 @@ import { scheduleStartupUpdateCheck } from '@/app/shell/updater'
 import { startWorkspaceMemory } from '@/app/memory/workspace'
 import { startWatchPolling } from '@/app/ship/watch/service'
 import { startVersionHistory } from '@/app/document/history/start'
+import { startComments } from '@/app/comments/service'
 import { kickSyncEngine } from '@/app/storage/sync'
 import { prepareForReload } from '@/app/tabs'
 
@@ -46,6 +48,8 @@ onMounted(() => {
   startWatchPolling()
   // Open documents keep automatic versions on this computer, and in Cloud when signed in.
   startVersionHistory()
+  // Comments live on this computer first and sync once signed in.
+  startComments()
 })
 </script>
 
@@ -57,6 +61,7 @@ onMounted(() => {
     <SettingsDialog />
     <RecoveryDialog />
     <VersionHistoryDrawer />
+    <CommentsDrawer />
     <PublishLibraryDialog />
     <LibraryUpdateReviewDialog />
     <AppToast />

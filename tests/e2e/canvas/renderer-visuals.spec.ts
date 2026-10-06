@@ -564,3 +564,43 @@ test('luminance masks and transformed tile fills', async () => {
   await editor.canvas.waitForRender()
   await expectCanvas('luminance-masks-and-transformed-tile-fills')
 })
+
+test('comment pins stay the same size at every zoom', async () => {
+  await editor.page.evaluate(async () => {
+    const store = window.redrobDesign?.getStore?.()
+    if (!store) throw new Error('RedrobDesign store not initialized')
+    const comments = await import('/src/app/comments/store.ts' as string)
+    const thread = await import('/src/app/assistant/thread/store.ts' as string)
+    const pageId = store.state.currentPageId
+    const card = store.graph.createNode('FRAME', pageId, {
+      name: 'Card',
+      x: 120,
+      y: 120,
+      width: 320,
+      height: 200,
+      fills: [{ type: 'SOLID', color: { r: 1, g: 1, b: 1, a: 1 }, visible: true, opacity: 1 }]
+    })
+    const key = thread.threadKeyFor(store)
+    await comments.addComment(key, {
+      anchor: { nodeId: card.id, x: 40, y: 60, pageId },
+      text: 'Tighten the hero'
+    })
+    await comments.addComment(key, {
+      anchor: { nodeId: null, x: 520, y: 140, pageId },
+      text: 'Check the price'
+    })
+    store.clearSelection()
+    store.requestRender()
+  })
+  await editor.canvas.waitForRender()
+  await expectCanvas('comment-pins')
+
+  await editor.page.evaluate(() => {
+    const store = window.redrobDesign?.getStore?.()
+    if (!store) throw new Error('RedrobDesign store not initialized')
+    store.state.zoom = 2
+    store.requestRender()
+  })
+  await editor.canvas.waitForRender()
+  await expectCanvas('comment-pins-zoomed')
+})

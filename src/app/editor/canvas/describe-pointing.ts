@@ -4,6 +4,7 @@ import type { Ref } from 'vue'
 import type { Vector } from '@redrob-design/scene-graph/primitives'
 
 import { nodeAtPoint, pointAt } from '@/app/assistant/pointing/store'
+import { commentMode } from '@/app/comments/service'
 import type { EditorStore } from '@/app/editor/active-store'
 
 /** A press that moves less than this is a point, not a pan. */
@@ -31,7 +32,8 @@ export function useDescribePointing(canvasRef: Ref<HTMLCanvasElement | null>, st
   useEventListener(canvasRef, 'mouseup', (event: MouseEvent) => {
     const start = pressed
     pressed = null
-    if (!start || !store.state.viewOnly) return
+    // Placing a comment takes the click instead.
+    if (!start || !store.state.viewOnly || commentMode.value) return
     if (Math.hypot(event.clientX - start.x, event.clientY - start.y) > POINT_SLOP_PX) return
     const point = canvasPoint(event)
     const nodeId = point ? nodeAtPoint(store, point.x, point.y) : null

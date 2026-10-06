@@ -27,9 +27,26 @@ export interface CanvasTheme {
   layoutPadding: Color
   /** Auto-layout gap hover: striped spacing bands between children. */
   layoutGap: Color
+  /** Comment pins on the canvas. */
+  commentPin: Color
 }
 
 export type CanvasThemeColor = keyof CanvasTheme
+
+/**
+ * A comment thread's pin, at a canvas position the host has already
+ * resolved. Drawn at a fixed screen size whatever the zoom.
+ */
+export interface CommentPin {
+  id: string
+  x: number
+  y: number
+  /** A short label inside the pin, such as the thread's number. */
+  label: string
+  resolved: boolean
+  /** The open thread, drawn larger. */
+  active: boolean
+}
 
 export type MeasurementMode = 'off' | 'shallow' | 'deep'
 
@@ -92,4 +109,5 @@ export interface RenderOverlays {
     y: number
     selection?: string[]
   }>
+  commentPins?: CommentPin[]
 }

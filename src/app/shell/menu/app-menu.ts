@@ -18,6 +18,7 @@ import IconZoomOut from '~icons/lucide/zoom-out'
 import type { CommandPaletteGroup, CommandPaletteItem, MenuEntry } from '@redrob-design/vue'
 import { shortcutPlatform, useEditorCommands, useI18n } from '@redrob-design/vue'
 
+import { openComments } from '@/app/comments/service'
 import { runImportDesignTokens } from '@/app/design-system'
 import { openVersionHistory } from '@/app/document/history/service'
 import { useEditorStore } from '@/app/editor/active-store'
@@ -103,6 +104,7 @@ export function useAppMenu() {
     'export-selection': 'exportSelection',
     autosave: 'autosave',
     'version-history': 'versionHistory',
+    comments: 'comments',
     close: 'closeTab',
     copy: 'copy',
     cut: 'cut',
@@ -169,6 +171,7 @@ export function useAppMenu() {
     },
     settings: openSettingsDialog,
     'version-history': openVersionHistory,
+    comments: openComments,
     'export-png': () => exportSelection('png'),
     'export-svg': () => exportSelection('svg'),
     'export-pptx': () => exportSelection('pptx'),

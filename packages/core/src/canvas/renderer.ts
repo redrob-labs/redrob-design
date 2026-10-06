@@ -34,6 +34,7 @@ import * as RenderText from './text'
 export type {
   CanvasTheme,
   CanvasThemeColor,
+  CommentPin,
   MeasurementMode,
   RenderOverlays,
   RulerTheme

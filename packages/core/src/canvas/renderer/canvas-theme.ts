@@ -5,6 +5,7 @@ import type { CanvasTheme, CanvasThemeColor } from '#core/canvas/renderer/types'
 import {
   AUTO_LAYOUT_HOVER_BLUE,
   AUTO_LAYOUT_HOVER_MAGENTA,
+  COMMENT_PIN_COLOR,
   COMPONENT_COLOR,
   MEASUREMENT_COLOR,
   PARENT_OUTLINE_ALPHA,
@@ -19,7 +20,8 @@ export const DEFAULT_CANVAS_THEME: CanvasTheme = {
   snap: SNAP_COLOR,
   measurement: MEASUREMENT_COLOR,
   layoutPadding: { ...AUTO_LAYOUT_HOVER_BLUE, a: 1 },
-  layoutGap: { ...AUTO_LAYOUT_HOVER_MAGENTA, a: 1 }
+  layoutGap: { ...AUTO_LAYOUT_HOVER_MAGENTA, a: 1 },
+  commentPin: COMMENT_PIN_COLOR
 }
 
 /** An overlay colour, from the active theme when there is one, as opaque RGB. */

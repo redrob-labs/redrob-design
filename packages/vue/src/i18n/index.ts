@@ -11,6 +11,7 @@ export {
   useAutomationMessages,
   useCloudMessages,
   useHistoryMessages,
+  useCommentsMessages,
   useCodeMessages,
   useCollaborationMessages,
   useCommandMessages,

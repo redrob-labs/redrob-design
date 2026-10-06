@@ -15,6 +15,8 @@ export const SELECTION_COLOR = { r: 0.1686, g: 0.3216, b: 1, a: 1 } satisfies Co
 export const COMPONENT_COLOR = { r: 0.7569, g: 0.3843, b: 0.9569, a: 1 } satisfies Color
 // accent-pink-3 #ff39ba
 export const SNAP_COLOR = { r: 1, g: 0.2235, b: 0.7294, a: 1 } satisfies Color
+// action-primary #2b52ff, for comment pins
+export const COMMENT_PIN_COLOR = { r: 0.1686, g: 0.3216, b: 1, a: 1 } satisfies Color
 // accent-orange-3 #ff9c1b
 export const MEASUREMENT_COLOR = { r: 1, g: 0.6118, b: 0.1059, a: 1 } satisfies Color
 export const MEASUREMENT_PILL_PADDING_X = 5

@@ -6,6 +6,7 @@ import { parseColor } from '@redrob-design/core/color'
 import {
   AUTO_LAYOUT_HOVER_BLUE,
   AUTO_LAYOUT_HOVER_MAGENTA,
+  COMMENT_PIN_COLOR,
   COMPONENT_COLOR,
   MEASUREMENT_COLOR,
   RULER_BG_COLOR,
@@ -46,6 +47,7 @@ describe('core canvas defaults', () => {
     expectSameRGB(MEASUREMENT_COLOR, token('accent-orange-3'), 'measurement')
     expectSameRGB(AUTO_LAYOUT_HOVER_BLUE, token('accent-sky-3'), 'layout padding')
     expectSameRGB(AUTO_LAYOUT_HOVER_MAGENTA, token('accent-pink-3'), 'layout gap')
+    expectSameRGB(COMMENT_PIN_COLOR, token('action-primary'), 'comment pin')
     expectSameRGB(RULER_BG_COLOR, token('surface-raised'), 'ruler bg')
     expectSameRGB(RULER_TICK_COLOR, token('border-strong'), 'ruler tick')
     expectSameRGB(RULER_TEXT_COLOR, token('ink-muted'), 'ruler text')

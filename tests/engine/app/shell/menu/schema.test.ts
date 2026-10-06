@@ -52,6 +52,7 @@ describe('APP_MENU_SCHEMA', () => {
       'open-storage-workspace',
       'import-design-tokens',
       'version-history',
+      'comments',
       'theme-light',
       'theme-dark',
       'theme-auto',

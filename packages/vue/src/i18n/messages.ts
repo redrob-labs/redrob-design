@@ -7,6 +7,7 @@ import {
   collaborationMessages
 } from '#vue/i18n/messages/collaboration'
 import { commandMessageDefaults, commandMessages } from '#vue/i18n/messages/commands'
+import { commentsMessageDefaults, commentsMessages } from '#vue/i18n/messages/comments'
 import { commonMessageDefaults, commonMessages } from '#vue/i18n/messages/common'
 import { composerMessageDefaults, composerMessages } from '#vue/i18n/messages/composer'
 import { credentialsMessageDefaults, credentialsMessages } from '#vue/i18n/messages/credentials'
@@ -48,6 +49,7 @@ export {
   automationMessages,
   cloudMessages,
   historyMessages,
+  commentsMessages,
   codeMessages,
   collaborationMessages,
   commandMessages,
@@ -83,6 +85,7 @@ export const messageDefaults = {
   automation: automationMessageDefaults,
   cloud: cloudMessageDefaults,
   history: historyMessageDefaults,
+  comments: commentsMessageDefaults,
   code: codeMessageDefaults,
   collaboration: collaborationMessageDefaults,
   commands: commandMessageDefaults,

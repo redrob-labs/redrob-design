@@ -115,6 +115,7 @@ export const APP_MENU_SCHEMA = [
         handler: 'shell',
         palette: { icon: 'file' }
       },
+      { id: 'comments', label: 'Comments…', handler: 'shell', palette: { icon: 'file' } },
       { id: 'close', label: 'Close Tab', shortcut: 'MOD+W' }
     ]
   },

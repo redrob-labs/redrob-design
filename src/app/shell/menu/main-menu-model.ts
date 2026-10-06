@@ -42,6 +42,7 @@ const DESCRIBE_ITEM_IDS: ScreenItemIds = {
     'export-fig',
     'autosave',
     'version-history',
+    'comments',
     'close'
   ]),
   edit: new Set(['edit.undo', 'edit.redo']),

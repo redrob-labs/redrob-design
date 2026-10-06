@@ -42,7 +42,8 @@ export const CANVAS_THEME_PROPERTIES: Record<CanvasThemeColor, string> = {
   snap: '--color-canvas-snap',
   measurement: '--color-canvas-measurement',
   layoutPadding: '--color-canvas-layout-padding',
-  layoutGap: '--color-canvas-layout-gap'
+  layoutGap: '--color-canvas-layout-gap',
+  commentPin: '--color-canvas-comment-pin'
 }
 
 /**

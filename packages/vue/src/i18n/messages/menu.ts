@@ -24,6 +24,7 @@ export const menuMessageDefaults = {
   exportSelectionAsFig: 'Export selection as .fig',
   autosave: 'Auto-save to local file',
   versionHistory: 'Version history…',
+  comments: 'Comments…',
   closeTab: 'Close tab',
 
   copy: 'Copy',

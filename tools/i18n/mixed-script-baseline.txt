@@ -53,6 +53,9 @@ ja:code.downloadTokens
 ja:code.editorHTMLCSSLabel
 ja:collaboration.pasteRoomLinkOrId
 ja:commands.paletteDescription
+ja:comments.notShared
+ja:comments.placing
+ja:comments.shared
 ja:composer.autoText
 ja:composer.challengeText
 ja:composer.crossCheckFoot
@@ -212,6 +215,9 @@ zh-cn:code.downloadTokens
 zh-cn:code.editorHTMLCSSLabel
 zh-cn:collaboration.pasteRoomLinkOrId
 zh-cn:commands.paletteDescription
+zh-cn:comments.notShared
+zh-cn:comments.placing
+zh-cn:comments.shared
 zh-cn:composer.autoText
 zh-cn:composer.challengeText
 zh-cn:composer.crossCheckFoot

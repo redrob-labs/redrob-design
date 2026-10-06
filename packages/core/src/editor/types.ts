@@ -14,7 +14,7 @@ import type { UndoManager } from '@redrob-design/scene-graph/undo'
 
 import type { GuideOverlayState } from '#core/canvas/guides/types'
 import type { CanvasTheme, RulerTheme, SkiaRenderer } from '#core/canvas/renderer'
-import type { MeasurementMode, RenderOverlays } from '#core/canvas/renderer/types'
+import type { CommentPin, MeasurementMode, RenderOverlays } from '#core/canvas/renderer/types'
 import type { SnappingPreferences } from '#core/editor/preferences'
 import type { TextEditor } from '#core/text/editor'
 import type { FontResolutionEvent, FontResolutionSnapshot } from '#core/text/resolver'
@@ -46,6 +46,8 @@ export interface EditorSharedState {
   rulerTheme?: RulerTheme
   /** Overlay colours resolved by the host from its design tokens; absent means core defaults. */
   canvasTheme?: CanvasTheme
+  /** Comment pins on the current page, resolved by the host; absent means none. */
+  commentPins?: CommentPin[]
   sceneVersion: number
 }
 

@@ -18,7 +18,9 @@ export {
   SkiaRenderer,
   type CanvasTheme,
   type CanvasThemeColor,
+  type CommentPin,
   type RenderOverlays,
   type RulerTheme
 } from './renderer'
 export { canvasThemeColor, DEFAULT_CANVAS_THEME } from './renderer/canvas-theme'
+export { COMMENT_PIN_RADIUS, commentPinCenter } from './overlays/comments'
