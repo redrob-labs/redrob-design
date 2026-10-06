@@ -15,7 +15,8 @@ export {
   canCommentOn,
   canCommentOnDocument,
   canEditDocument,
-  canEditKey
+  canEditKey,
+  cloudBindingForKey
 } from './permissions'
 export { grantPendingDevices } from './grants'
 export { applyGraphState, encodeGraphState } from './graph-state'
@@ -42,3 +43,18 @@ export {
 export type { SharedFileEntry } from './service'
 export { MAX_SNAPSHOT_BYTES, loadSnapshot, saveSnapshot } from './snapshot'
 export type { LoadedSnapshot, SaveOutcome } from './snapshot'
+export {
+  createFileComment,
+  deleteFileComment,
+  listFileComments,
+  updateFileComment
+} from './comments'
+export type { RemoteComment } from './comments'
+export {
+  MAX_VERSION_BYTES,
+  deleteFileVersion,
+  listFileVersions,
+  readFileVersion,
+  renameFileVersion,
+  uploadFileVersion
+} from './versions'

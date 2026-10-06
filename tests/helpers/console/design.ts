@@ -9,6 +9,12 @@ import {
   createUploadSchema,
   renameCloudFileSchema,
   updateFileMemberSchema,
+  createFileCommentSchema,
+  createFileVersionSchema,
+  renameFileVersionSchema,
+  updateFileCommentSchema,
+  type FileComment,
+  type FileVersionSummary,
   type CloudFile,
   type FileInvite,
   type FileMember,
@@ -42,6 +48,8 @@ export interface MockDesignState {
   blobs: Map<string, Uint8Array>
   /** The relay ticket every createFileRelayTicket answers with; tests point it at a relay. */
   relay: { url: string; role: FileRole | null }
+  comments: Map<string, FileComment[]>
+  versions: Map<string, Array<FileVersionSummary & { key: string }>>
   /** ticket -> file id; the mock relay admits each once, into that file's room. */
   relayTickets: Map<string, string>
 }
@@ -58,6 +66,8 @@ export function mockDesignState(): MockDesignState {
     uploads: new Map(),
     blobs: new Map(),
     relay: { url: 'wss://relay.mock/v1/rooms', role: null },
+    comments: new Map(),
+    versions: new Map(),
     relayTickets: new Map()
   }
 }
@@ -143,6 +153,150 @@ export function registerDesignFiles(options: {
       },
       201
     )
+  })
+
+  // Comments: sealed, server-timed, tombstoned, If-Match on the quoted updatedAt.
+  let clock = Date.parse(NOW)
+  const tick = () => new Date((clock += 1000)).toISOString()
+  const author = () => ({ id: self().id, name: self().name })
+
+  app.get('/design/files/:fileId/comments', (c) => {
+    const fileId = c.req.param('fileId')
+    const role = access(c, fileId, 'viewer')
+    if (role instanceof Response) return role
+    const since = c.req.query('updatedSince')
+    const items = (state.comments.get(fileId) ?? []).filter((comment) =>
+      since ? comment.updatedAt > since : !comment.deleted
+    )
+    return c.json({ items, nextCursor: null })
+  })
+  authed.post('/design/files/:fileId/comments', async (c) => {
+    const fileId = c.req.param('fileId')
+    const role = access(c, fileId, 'commenter')
+    if (role instanceof Response) return role
+    const request = await parse(c, createFileCommentSchema)
+    if (!request) return fail(c, 400, 'invalid_request')
+    const comments = state.comments.get(fileId) ?? []
+    const existing = comments.find((comment) => comment.id === request.id)
+    if (existing) return c.json(existing, 201)
+    const at = tick()
+    const comment: FileComment = {
+      id: request.id,
+      fileId,
+      threadId: request.threadId,
+      author: author(),
+      ciphertext: request.ciphertext,
+      epoch: request.epoch,
+      resolved: false,
+      deleted: false,
+      createdAt: request.createdAt,
+      updatedAt: at
+    }
+    state.comments.set(fileId, [...comments, comment])
+    return c.json(comment, 201)
+  })
+  authed.patch('/design/files/:fileId/comments/:commentId', async (c) => {
+    const fileId = c.req.param('fileId')
+    const role = access(c, fileId, 'commenter')
+    if (role instanceof Response) return role
+    const request = await parse(c, updateFileCommentSchema)
+    const comment = (state.comments.get(fileId) ?? []).find(
+      (entry) => entry.id === c.req.param('commentId')
+    )
+    if (!request || !comment || comment.deleted) return fail(c, 404, 'not_found')
+    if (request.ciphertext !== undefined && comment.author.id !== self().id)
+      return fail(c, 403, 'forbidden')
+    const ifMatch = c.req.header('if-match')?.replace(/"/g, '')
+    if (ifMatch && ifMatch !== comment.updatedAt) return fail(c, 412, 'precondition_failed')
+    if (request.ciphertext !== undefined) comment.ciphertext = request.ciphertext
+    if (request.epoch !== undefined) comment.epoch = request.epoch
+    if (request.resolved !== undefined) comment.resolved = request.resolved
+    comment.updatedAt = tick()
+    return c.json(comment)
+  })
+  authed.delete('/design/files/:fileId/comments/:commentId', (c) => {
+    const fileId = c.req.param('fileId')
+    const role = access(c, fileId, 'commenter')
+    if (role instanceof Response) return role
+    const id = c.req.param('commentId')
+    const doomed = (state.comments.get(fileId) ?? []).filter(
+      (entry) => !entry.deleted && (entry.id === id || entry.threadId === id)
+    )
+    if (!doomed.some((entry) => entry.id === id)) return fail(c, 404, 'not_found')
+    const at = tick()
+    for (const entry of doomed)
+      Object.assign(entry, { deleted: true, ciphertext: null, updatedAt: at })
+    return c.body(null, 204)
+  })
+
+  // Versions: a sealed .fig per version, uploaded with createUpload(kind version).
+  const summary = ({ key: _key, ...version }: FileVersionSummary & { key: string }) => version
+  app.get('/design/files/:fileId/versions', (c) => {
+    const fileId = c.req.param('fileId')
+    const role = access(c, fileId, 'viewer')
+    if (role instanceof Response) return role
+    const items = (state.versions.get(fileId) ?? []).toReversed().map(summary)
+    return c.json({ items, nextCursor: null })
+  })
+  app.get('/design/files/:fileId/versions/:versionId', (c) => {
+    const fileId = c.req.param('fileId')
+    const role = access(c, fileId, 'viewer')
+    if (role instanceof Response) return role
+    const version = (state.versions.get(fileId) ?? []).find(
+      (entry) => entry.id === c.req.param('versionId')
+    )
+    if (!version) return fail(c, 404, 'not_found')
+    return c.json({ ...summary(version), url: `${BLOB_ORIGIN}/${version.key}`, expiresAt: NOW })
+  })
+  authed.post('/design/files/:fileId/versions', async (c) => {
+    const fileId = c.req.param('fileId')
+    const role = access(c, fileId, 'editor')
+    if (role instanceof Response) return role
+    const request = await parse(c, createFileVersionSchema)
+    const upload = request ? state.uploads.get(request.uploadId) : undefined
+    if (!request || !upload || upload.fileId !== fileId || upload.kind !== 'version') {
+      return fail(c, 404, 'not_found')
+    }
+    if (state.blobs.get(upload.key)?.byteLength !== upload.size)
+      return fail(c, 400, 'invalid_request')
+    state.uploads.delete(request.uploadId)
+    const version = {
+      id: next('version'),
+      fileId,
+      kind: request.kind,
+      encryptedName: request.encryptedName,
+      revision: request.revision,
+      epoch: request.epoch,
+      size: upload.size,
+      createdBy: author(),
+      createdAt: tick(),
+      key: upload.key
+    }
+    state.versions.set(fileId, [...(state.versions.get(fileId) ?? []), version])
+    return c.json(summary(version), 201)
+  })
+  authed.patch('/design/files/:fileId/versions/:versionId', async (c) => {
+    const fileId = c.req.param('fileId')
+    const role = access(c, fileId, 'editor')
+    if (role instanceof Response) return role
+    const request = await parse(c, renameFileVersionSchema)
+    const version = (state.versions.get(fileId) ?? []).find(
+      (entry) => entry.id === c.req.param('versionId')
+    )
+    if (!request || !version) return fail(c, 404, 'not_found')
+    version.encryptedName = request.encryptedName
+    version.kind = request.encryptedName ? 'named' : 'auto'
+    return c.json(summary(version))
+  })
+  authed.delete('/design/files/:fileId/versions/:versionId', (c) => {
+    const fileId = c.req.param('fileId')
+    const role = access(c, fileId, 'editor')
+    if (role instanceof Response) return role
+    const versions = state.versions.get(fileId) ?? []
+    const kept = versions.filter((entry) => entry.id !== c.req.param('versionId'))
+    if (kept.length === versions.length) return fail(c, 404, 'not_found')
+    state.versions.set(fileId, kept)
+    return c.body(null, 204)
   })
 
   authed.post('/design/files', async (c) => {

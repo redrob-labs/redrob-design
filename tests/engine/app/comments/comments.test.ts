@@ -1,7 +1,18 @@
-import { afterEach, beforeEach, describe, expect, test } from 'bun:test'
+import 'fake-indexeddb/auto'
+import { afterEach, beforeEach, describe, expect, test, vi } from 'bun:test'
 
 import { SceneGraph } from '@redrob-design/scene-graph'
 
+import { threadKeyFor } from '@/app/assistant/thread/store'
+import { generateContentKey } from '@/app/cloud/crypto'
+import {
+  bindCloudFile,
+  contentKey,
+  forgetSessionKeys,
+  newCloudFileId,
+  sealText
+} from '@/app/cloud/files'
+import { adoptNewKey } from '@/app/cloud/files/keyring'
 import { mergeRemote, threadsOf } from '@/app/comments/model'
 import { DRAFT_PIN_ID, anchorAt, commentPinsFor } from '@/app/comments/pins'
 import { createMemoryCommentStorage, setCommentStorageForTests } from '@/app/comments/storage'
@@ -17,13 +28,14 @@ import { syncComments } from '@/app/comments/sync'
 import type { LocalComment } from '@/app/comments/types'
 import {
   cloudState,
-  consoleDocumentId,
   createConsoleClient,
   createMemorySnapshotCache,
   setConsoleCacheForTests,
   setConsoleClientForTests,
-  type ConsoleComment
+  type ConsoleComment,
+  type FileComment
 } from '@/app/integrations/console'
+import { createTab } from '@/app/tabs'
 
 import {
   MOCK_TOKEN,
@@ -33,6 +45,23 @@ import {
 } from '#tests/helpers/console/server'
 
 const KEY = 'file:/work/landing.fig'
+
+function setupGlobals() {
+  globalThis.window = {
+    innerWidth: 1024,
+    innerHeight: 768,
+    requestAnimationFrame: (callback: FrameRequestCallback) => {
+      callback(0)
+      return 0
+    },
+    cancelAnimationFrame: vi.fn(),
+    redrobDesign: {},
+    location: { href: 'http://localhost/' } as Location,
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn()
+  } as Window & typeof globalThis
+  globalThis.document = { fonts: { add: vi.fn(), ready: Promise.resolve() } } as Document
+}
 const anchor = { nodeId: null, x: 10, y: 20, pageId: 'page-1' }
 
 function local(overrides: Partial<LocalComment>): LocalComment {
@@ -168,11 +197,35 @@ describe('comments on this computer', () => {
   })
 })
 
-describe('comments in Redrob Cloud', () => {
+describe('comments on a shared file', () => {
   let mock: MockConsole
-  let documentId: string
+  let fileId: string
+  let key: string
+
+  /** Seals a comment the way another collaborator's app would. */
+  async function theirs(id: string, text: string): Promise<FileComment> {
+    const contentKeyFor = await contentKey(fileId, 1)
+    const ciphertext = await sealText(
+      contentKeyFor,
+      { fileId, epoch: 1, purpose: { kind: 'comment' } },
+      JSON.stringify({ id, text, anchor })
+    )
+    return {
+      id,
+      fileId,
+      threadId: null,
+      author: { id: 'user-2', name: 'Sam' },
+      ciphertext,
+      epoch: 1,
+      resolved: false,
+      deleted: false,
+      createdAt: '2026-10-06T09:00:00.000Z',
+      updatedAt: '2026-10-06T09:00:00.000Z'
+    }
+  }
 
   beforeEach(async () => {
+    setupGlobals()
     setConsoleCacheForTests(createMemorySnapshotCache())
     mock = createMockConsole()
     setConsoleClientForTests(
@@ -183,55 +236,105 @@ describe('comments in Redrob Cloud', () => {
       })
     )
     cloudState.status = 'signed-in'
-    documentId = await consoleDocumentId(KEY)
+    cloudState.account = mock.state.account
+    fileId = newCloudFileId()
+    await adoptNewKey(fileId, 1, generateContentKey())
+    mock.state.design.files.set(fileId, {
+      id: fileId,
+      encryptedName: 'c2VhbGVk',
+      role: 'editor',
+      keyEpoch: 1,
+      snapshotRevision: 1,
+      createdAt: '2026-10-06T09:00:00.000Z',
+      updatedAt: '2026-10-06T09:00:00.000Z'
+    })
+    mock.state.design.members.set(fileId, [
+      {
+        userId: mock.state.account.id,
+        email: 'jane@example.com',
+        name: 'Jane',
+        role: 'editor',
+        addedAt: '2026-10-06T09:00:00.000Z'
+      }
+    ])
+    const tab = createTab()
+    bindCloudFile(tab.store, {
+      fileId,
+      name: 'Shared',
+      role: 'editor',
+      epoch: 1,
+      revision: 1,
+      link: null,
+      seed: null
+    })
+    key = threadKeyFor(tab.store)
   })
 
   afterEach(() => {
     cloudState.status = 'signed-out'
+    cloudState.account = null
     setConsoleClientForTests(null)
     setConsoleCacheForTests(null)
+    forgetSessionKeys()
   })
 
-  test('uploads threads made offline with their own ids, then their resolve', async () => {
-    const root = await addComment(KEY, { anchor, text: 'Check the price' })
-    if (!root) throw new Error('expected a comment')
-    await setThreadResolved(KEY, root.id, true)
-    expect(await syncComments(KEY)).toBe('synced')
+  test('a file on this computer keeps its comments here', async () => {
+    await addComment(KEY, { anchor, text: 'Local only' })
+    expect(await syncComments(KEY)).toBe('local')
+    expect(mock.state.design.comments.size).toBe(0)
+  })
 
-    const stored = mock.state.comments.get(documentId) ?? []
+  test('uploads threads made offline sealed, with their own ids, then their resolve', async () => {
+    const root = await addComment(key, { anchor, text: 'Check the price' })
+    if (!root) throw new Error('expected a comment')
+    await setThreadResolved(key, root.id, true)
+    expect(await syncComments(key)).toBe('synced')
+
+    const stored = mock.state.design.comments.get(fileId) ?? []
     expect(stored.map((comment) => comment.id)).toEqual([root.id])
     expect(stored[0].resolved).toBe(true)
-    expect(commentsOf(KEY).every((comment) => comment.synced)).toBe(true)
+    expect(stored[0].ciphertext).not.toContain('price')
+    expect(
+      Buffer.from(stored[0].ciphertext ?? '', 'base64url').includes(Buffer.from('price'))
+    ).toBe(false)
+    expect(commentsOf(key).every((comment) => comment.synced)).toBe(true)
   })
 
-  test("reads other people's comments and keeps the later of two resolves", async () => {
-    mock.state.comments.set(documentId, [remote({ id: 'theirs', documentId, text: 'From Sam' })])
-    await syncComments(KEY)
-    expect(threadsFor(KEY).map((thread) => thread.root.text)).toEqual(['From Sam'])
+  test("reads other people's comments, and resolves them without touching their text", async () => {
+    mock.state.design.comments.set(fileId, [await theirs('theirs-1', 'From Sam')])
+    await syncComments(key)
+    expect(threadsFor(key).map((thread) => thread.root.text)).toEqual(['From Sam'])
+    expect(threadsFor(key)[0].root.author.name).toBe('Sam')
 
-    // Sam reopens after this computer resolves, but before it syncs: Sam's is later.
-    await setThreadResolved(KEY, 'theirs', true)
-    const [theirs] = mock.state.comments.get(documentId) ?? []
-    theirs.resolved = false
-    theirs.updatedAt = new Date(Date.now() + 60_000).toISOString()
-    await syncComments(KEY)
-    await syncComments(KEY)
-    expect(threadsFor(KEY)[0].root.resolved).toBe(false)
+    await setThreadResolved(key, 'theirs-1', true)
+    expect(await syncComments(key)).toBe('synced')
+    const [stored] = mock.state.design.comments.get(fileId) ?? []
+    expect(stored.resolved).toBe(true)
+    expect(stored.author.id).toBe('user-2')
+  })
+
+  test('a comment whose sealed id does not match is not shown', async () => {
+    const moved = await theirs('original', 'Moved by Console')
+    mock.state.design.comments.set(fileId, [{ ...moved, id: 'elsewhere' }])
+    await syncComments(key)
+    expect(threadsFor(key)).toEqual([])
   })
 
   test('deletes in Redrob Cloud too, and drops what was deleted there', async () => {
-    const root = await addComment(KEY, { anchor, text: 'Remove me' })
-    const kept = await addComment(KEY, { anchor, text: 'Keep me' })
+    const root = await addComment(key, { anchor, text: 'Remove me' })
+    const kept = await addComment(key, { anchor, text: 'Keep me' })
     if (!root || !kept) throw new Error('expected comments')
-    await syncComments(KEY)
+    await syncComments(key)
 
-    await deleteComment(KEY, root.id)
-    await syncComments(KEY)
-    expect((mock.state.comments.get(documentId) ?? []).map((c) => c.id)).toEqual([kept.id])
+    await deleteComment(key, root.id)
+    await syncComments(key)
+    const live = (mock.state.design.comments.get(fileId) ?? []).filter((c) => !c.deleted)
+    expect(live.map((c) => c.id)).toEqual([kept.id])
 
-    mock.state.comments.set(documentId, [])
-    await setThreadResolved(KEY, kept.id, true)
-    await syncComments(KEY)
-    expect(commentsOf(KEY)).toEqual([])
+    // Someone else deletes the other one; the tombstone reaches this computer.
+    const [, other] = mock.state.design.comments.get(fileId) ?? []
+    Object.assign(other, { deleted: true, ciphertext: null, updatedAt: '2030-01-01T00:00:00.000Z' })
+    await syncComments(key)
+    expect(commentsOf(key).filter((c) => !c.deleted)).toEqual([])
   })
 })

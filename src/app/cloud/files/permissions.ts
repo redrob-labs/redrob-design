@@ -5,7 +5,7 @@ import type { EditorStore } from '@/app/editor/active-store'
 import type { FileRole } from '@/app/integrations/console'
 import { getTabsSnapshot } from '@/app/tabs'
 
-import { activeCloudFile, cloudBindingOf } from './binding'
+import { activeCloudFile, cloudBindingOf, type CloudFileBinding } from './binding'
 
 /**
  * What the person may do to an open document. A document on this computer allows everything; a
@@ -46,6 +46,12 @@ function storeFor(documentKey: string): EditorStore | null | undefined {
   if (!fileId) return null
   return getTabsSnapshot().find((tab) => tab.store.getSourceIdentity().cloudFileId === fileId)
     ?.store
+}
+
+/** The open shared file a document key names; null for a document on this computer. */
+export function cloudBindingForKey(documentKey: string): CloudFileBinding | null {
+  const store = storeFor(documentKey)
+  return store ? cloudBindingOf(store) : null
 }
 
 export function canCommentOn(documentKey: string): boolean {

@@ -1,8 +1,19 @@
-import { afterEach, beforeEach, describe, expect, test } from 'bun:test'
+import 'fake-indexeddb/auto'
+import { afterEach, beforeEach, describe, expect, test, vi } from 'bun:test'
 
 import { createEditor } from '@redrob-design/core/editor'
 
-import { resetCloudVersionsForTests } from '@/app/document/history/cloud'
+import { threadKeyFor } from '@/app/assistant/thread/store'
+import { generateContentKey } from '@/app/cloud/crypto'
+import {
+  bindCloudFile,
+  contentKey,
+  forgetSessionKeys,
+  newCloudFileId,
+  sealText,
+  setCloudBlobFetchForTests
+} from '@/app/cloud/files'
+import { adoptNewKey } from '@/app/cloud/files/keyring'
 import { createMemoryVersionStore } from '@/app/document/history/memory'
 import {
   AUTO_VERSION_INTERVAL_MS,
@@ -20,11 +31,13 @@ import {
 } from '@/app/document/history/service'
 import { getVersionStore, setVersionStoreForTests } from '@/app/document/history/store'
 import type { VersionMeta } from '@/app/document/history/types'
+import type { EditorStore } from '@/app/editor/active-store'
 import {
   cloudState,
   createConsoleClient,
   setConsoleClientForTests
 } from '@/app/integrations/console'
+import { createTab } from '@/app/tabs'
 
 import {
   MOCK_TOKEN,
@@ -149,11 +162,67 @@ describe('restoring', () => {
   })
 })
 
-describe('versions in Redrob Cloud', () => {
+describe('versions of a shared file in Redrob Cloud', () => {
   let mock: MockConsole
 
+  function setupGlobals() {
+    globalThis.window = {
+      innerWidth: 1024,
+      innerHeight: 768,
+      requestAnimationFrame: (callback: FrameRequestCallback) => {
+        callback(0)
+        return 0
+      },
+      cancelAnimationFrame: vi.fn(),
+      redrobDesign: {},
+      location: { href: 'http://localhost/' } as Location,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn()
+    } as Window & typeof globalThis
+    globalThis.document = { fonts: { add: vi.fn(), ready: Promise.resolve() } } as Document
+  }
+
+  /** An open tab showing a shared file this computer holds the key for. */
+  async function sharedDocument(role: 'editor' | 'viewer' = 'editor') {
+    const fileId = newCloudFileId()
+    await adoptNewKey(fileId, 1, generateContentKey())
+    mock.state.design.files.set(fileId, {
+      id: fileId,
+      encryptedName: 'c2VhbGVk',
+      role,
+      keyEpoch: 1,
+      snapshotRevision: 3,
+      createdAt: '2026-10-06T09:00:00.000Z',
+      updatedAt: '2026-10-06T09:00:00.000Z'
+    })
+    mock.state.design.members.set(fileId, [
+      {
+        userId: mock.state.account.id,
+        email: 'jane@example.com',
+        name: 'Jane',
+        role,
+        addedAt: '2026-10-06T09:00:00.000Z'
+      }
+    ])
+    const tab = createTab()
+    const title = tab.store.graph.createNode('TEXT', tab.store.state.currentPageId, {
+      name: 'Title',
+      text: 'Version one'
+    })
+    bindCloudFile(tab.store, {
+      fileId,
+      name: 'Landing',
+      role,
+      epoch: 1,
+      revision: 3,
+      link: null,
+      seed: null
+    })
+    return { editor: tab.store, fileId, titleId: title.id, key: threadKeyFor(tab.store) }
+  }
+
   beforeEach(() => {
-    resetCloudVersionsForTests()
+    setupGlobals()
     mock = createMockConsole()
     setConsoleClientForTests(
       createConsoleClient({
@@ -162,52 +231,74 @@ describe('versions in Redrob Cloud', () => {
         fetch: mockConsoleFetch(mock)
       })
     )
+    setCloudBlobFetchForTests(mockConsoleFetch(mock))
     cloudState.status = 'signed-in'
   })
 
   afterEach(() => {
     cloudState.status = 'signed-out'
     setConsoleClientForTests(null)
+    setCloudBlobFetchForTests(null)
+    forgetSessionKeys()
   })
 
-  async function settle(): Promise<void> {
-    for (let attempt = 0; attempt < 50; attempt++) {
-      const pending = (await getVersionStore().list('file:/work/landing.fig')).some(
-        (version) => !version.remoteId
-      )
+  async function settle(key: string): Promise<void> {
+    for (let attempt = 0; attempt < 100; attempt++) {
+      const pending = (await getVersionStore().list(key)).some((version) => !version.remoteId)
       if (!pending) return
       await Bun.sleep(5)
     }
   }
 
-  test('uploads each version once with If-Match, and lists what another device saved', async () => {
+  const textOf = (editor: EditorStore, id: string) => {
+    const node = editor.graph.getNode(id)
+    return node?.type === 'TEXT' ? node.text : undefined
+  }
+
+  test('a file on this computer keeps its versions here', async () => {
     const { editor } = document()
-    await saveDocumentVersion(editor, 'named', 'Here')
-    await settle()
-    const [documentId] = mock.state.versions.keys()
-    expect(documentId).toMatch(/^doc_[0-9a-f]{64}$/)
-    expect(mock.state.versions.get(documentId)).toHaveLength(1)
+    await saveDocumentVersion(editor, 'named', 'Local')
+    await Bun.sleep(20)
+    expect(mock.state.design.versions.size).toBe(0)
+  })
 
-    // Another computer saves, so this one's ETag is stale: it reads again and retries.
-    const others = mock.state.versions.get(documentId) ?? []
-    mock.state.versions.set(documentId, [
-      ...others,
-      { ...others[0], id: 'version-other', name: 'From the laptop' }
+  test('uploads each version sealed, names sealed, and lists what a collaborator saved', async () => {
+    const { editor, fileId, key } = await sharedDocument()
+    await saveDocumentVersion(editor, 'named', 'Pricing v2')
+    await settle(key)
+    const stored = mock.state.design.versions.get(fileId) ?? []
+    expect(stored).toHaveLength(1)
+    expect(stored[0].kind).toBe('named')
+    expect(stored[0].revision).toBe(3)
+    expect(stored[0].encryptedName).not.toContain('Pricing')
+    const blob = mock.state.design.blobs.get(stored[0].key)
+    expect(blob && Buffer.from(blob).includes(Buffer.from('Version one'))).toBe(false)
+
+    // A collaborator's version, under a sealed name this computer can open.
+    const sealedName = await sealText(
+      await contentKey(fileId, 1),
+      { fileId, epoch: 1, purpose: { kind: 'version-name' } },
+      'From Sam'
+    )
+    mock.state.design.versions.set(fileId, [
+      ...stored,
+      {
+        ...stored[0],
+        id: 'version-sam',
+        encryptedName: sealedName,
+        createdBy: { id: 'user-2', name: 'Sam' }
+      }
     ])
-    await saveDocumentVersion(editor, 'auto')
-    await settle()
-    expect(mock.state.versions.get(documentId)).toHaveLength(3)
-
     const rows = await listHistory(editor)
-    expect(rows.map((row) => row.origin).toSorted()).toEqual(['cloud', 'local', 'local'])
-    expect(rows.find((row) => row.origin === 'cloud')?.name).toBe('From the laptop')
+    expect(rows.map((row) => row.origin).toSorted()).toEqual(['cloud', 'local'])
+    expect(rows.find((row) => row.origin === 'cloud')?.name).toBe('From Sam')
   })
 
   test('restores a version only Redrob Cloud has', async () => {
-    const { editor, titleId } = document()
+    const { editor, key, titleId } = await sharedDocument()
     await saveDocumentVersion(editor, 'named', 'Shared')
-    await settle()
-    const [local] = await getVersionStore().list('file:/work/landing.fig')
+    await settle(key)
+    const [local] = await getVersionStore().list(key)
     await getVersionStore().remove(local.id)
 
     editor.graph.updateNode(titleId, { text: 'Version two' })
@@ -215,10 +306,21 @@ describe('versions in Redrob Cloud', () => {
     const cloudRow = (await listHistory(editor)).find((row) => row.origin === 'cloud')
     if (!cloudRow) throw new Error('expected a version only Redrob Cloud has')
     await restoreVersion(editor, cloudRow)
-    expect(titleOf(editor)).toBe('Version one')
+    const restored = [...editor.graph.getAllNodes()].find((node) => node.name === 'Title')
+    expect(restored && textOf(editor, restored.id)).toBe('Version one')
+  })
+
+  test('a viewer lists versions but uploads none and cannot restore', async () => {
+    const { editor, fileId } = await sharedDocument('viewer')
+    await saveDocumentVersion(editor, 'auto')
+    await Bun.sleep(30)
+    expect(mock.state.design.versions.get(fileId) ?? []).toHaveLength(0)
+    const [row] = await listHistory(editor)
+    expect(restoreVersion(editor, row)).rejects.toThrow('not change')
   })
 
   test('offline, History shows the versions on this computer', async () => {
+    const { editor } = await sharedDocument()
     setConsoleClientForTests(
       createConsoleClient({
         baseURL: 'https://console.mock/v1',
@@ -226,7 +328,6 @@ describe('versions in Redrob Cloud', () => {
         fetch: () => Promise.reject(new TypeError('offline'))
       })
     )
-    const { editor } = document()
     await saveDocumentVersion(editor, 'auto')
     const rows = await listHistory(editor)
     expect(rows).toHaveLength(1)

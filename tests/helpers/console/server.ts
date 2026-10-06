@@ -2,17 +2,11 @@ import { Hono, type Context } from 'hono'
 import type { z } from 'zod'
 
 import {
-  createCommentSchema,
-  createVersionSchema,
   createWatchSchema,
   publishLibraryRevisionSchema,
   registerDeviceSchema,
-  renameVersionSchema,
-  updateCommentSchema,
   type ConsoleAccount,
-  type ConsoleComment,
   type ConsoleLibraryRevision,
-  type ConsoleVersionSummary,
   type ConsoleWatch,
   type ConsoleWorkspace,
   type ConsoleWorkspaceMemory,
@@ -48,8 +42,6 @@ export interface MockConsoleState {
   modelRates: ModelRatesFeed
   watches: Map<string, ConsoleWatch>
   events: WatchEvent[]
-  versions: Map<string, Array<ConsoleVersionSummary & { snapshot: string }>>
-  comments: Map<string, ConsoleComment[]>
   libraries: Map<string, ConsoleLibraryRevision[]>
   /** How many token polls answer `authorization_pending` before the key. */
   pendingPolls: number
@@ -141,8 +133,6 @@ export function mockConsoleState(): MockConsoleState {
     },
     watches: new Map(),
     events: [],
-    versions: new Map(),
-    comments: new Map(),
     libraries: new Map(),
     pendingPolls: 1,
     denySignIn: false,
@@ -288,114 +278,6 @@ export function createMockConsole(state: MockConsoleState = mockConsoleState()) 
     const mine = new Set(state.watches.keys())
     const items = state.events.slice(start).filter((event) => mine.has(event.watchId))
     return c.json({ items, nextCursor: String(state.events.length) })
-  })
-
-  authed.get('/documents/:documentId/versions', (c) => {
-    const versions = state.versions.get(c.req.param('documentId')) ?? []
-    c.header('ETag', etagOf(versions.length))
-    const summaries = versions.map(({ snapshot: _, ...summary }) => summary).toReversed()
-    return c.json(page(summaries, c.req.query('cursor')))
-  })
-  authed.post('/documents/:documentId/versions', async (c) => {
-    const documentId = c.req.param('documentId')
-    const versions = state.versions.get(documentId) ?? []
-    const ifMatch = c.req.header('if-match')
-    if (ifMatch && ifMatch !== etagOf(versions.length)) return fail(c, 412, 'precondition_failed')
-    const request = await body(c, createVersionSchema)
-    if (!request) return fail(c, 400, 'invalid_request')
-    const version = {
-      id: nextId('version'),
-      documentId,
-      kind: request.kind,
-      name: request.name,
-      createdAt: NOW,
-      revision: request.revision,
-      size: Math.floor((request.snapshot.length * 3) / 4),
-      createdBy: { id: state.account.id, name: state.account.name },
-      snapshot: request.snapshot
-    }
-    state.versions.set(documentId, [...versions, version])
-    c.header('ETag', etagOf(versions.length + 1))
-    const { snapshot: _, ...summary } = version
-    return c.json(summary, 201)
-  })
-  authed.get('/documents/:documentId/versions/:versionId', (c) => {
-    const version = (state.versions.get(c.req.param('documentId')) ?? []).find(
-      (entry) => entry.id === c.req.param('versionId')
-    )
-    return version ? c.json(version) : fail(c, 404, 'not_found')
-  })
-  authed.patch('/documents/:documentId/versions/:versionId', async (c) => {
-    const versions = state.versions.get(c.req.param('documentId')) ?? []
-    const version = versions.find((entry) => entry.id === c.req.param('versionId'))
-    if (!version) return fail(c, 404, 'not_found')
-    const request = await body(c, renameVersionSchema)
-    if (!request) return fail(c, 400, 'invalid_request')
-    version.name = request.name
-    version.kind = 'named'
-    const { snapshot: _, ...summary } = version
-    return c.json(summary)
-  })
-  authed.delete('/documents/:documentId/versions/:versionId', (c) => {
-    const documentId = c.req.param('documentId')
-    const versions = state.versions.get(documentId) ?? []
-    const kept = versions.filter((entry) => entry.id !== c.req.param('versionId'))
-    if (kept.length === versions.length) return fail(c, 404, 'not_found')
-    state.versions.set(documentId, kept)
-    return c.body(null, 204)
-  })
-
-  authed.get('/documents/:documentId/comments', (c) => {
-    const updatedSince = c.req.query('updatedSince')
-    const comments = (state.comments.get(c.req.param('documentId')) ?? []).filter(
-      (comment) => !updatedSince || comment.updatedAt > updatedSince
-    )
-    return c.json(page(comments, c.req.query('cursor')))
-  })
-  authed.post('/documents/:documentId/comments', async (c) => {
-    const documentId = c.req.param('documentId')
-    const request = await body(c, createCommentSchema)
-    if (!request) return fail(c, 400, 'invalid_request')
-    const comments = state.comments.get(documentId) ?? []
-    const existing = comments.find((comment) => comment.id === request.id)
-    if (existing) {
-      c.header('ETag', etagOf(existing.updatedAt))
-      return c.json(existing, 201)
-    }
-    const comment: ConsoleComment = {
-      ...request,
-      documentId,
-      author: { id: state.account.id, name: state.account.name },
-      resolved: false,
-      updatedAt: request.createdAt
-    }
-    state.comments.set(documentId, [...comments, comment])
-    c.header('ETag', etagOf(comment.updatedAt))
-    return c.json(comment, 201)
-  })
-  authed.patch('/documents/:documentId/comments/:commentId', async (c) => {
-    const comments = state.comments.get(c.req.param('documentId')) ?? []
-    const comment = comments.find((entry) => entry.id === c.req.param('commentId'))
-    if (!comment) return fail(c, 404, 'not_found')
-    const ifMatch = c.req.header('if-match')
-    if (ifMatch && ifMatch !== etagOf(comment.updatedAt)) return fail(c, 412, 'precondition_failed')
-    const request = await body(c, updateCommentSchema)
-    if (!request) return fail(c, 400, 'invalid_request')
-    if (request.text !== undefined) comment.text = request.text
-    if (request.resolved !== undefined) comment.resolved = request.resolved
-    if (request.anchor) comment.anchor = request.anchor
-    comment.updatedAt = request.updatedAt
-    c.header('ETag', etagOf(comment.updatedAt))
-    return c.json(comment)
-  })
-  authed.delete('/documents/:documentId/comments/:commentId', (c) => {
-    const documentId = c.req.param('documentId')
-    const commentId = c.req.param('commentId')
-    const comments = state.comments.get(documentId) ?? []
-    const kept = comments.filter((entry) => entry.id !== commentId && entry.threadId !== commentId)
-    if (kept.length === comments.length) return fail(c, 404, 'not_found')
-    state.comments.set(documentId, kept)
-    return c.body(null, 204)
   })
 
   authed.get('/workspaces/:workspaceId/libraries', (c) => {

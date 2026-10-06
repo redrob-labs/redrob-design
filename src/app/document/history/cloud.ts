@@ -1,71 +1,54 @@
-import { decodeBase64, encodeBase64 } from '@redrob-design/core/bytes'
-
+import { cloudFileIdOf } from '@/app/assistant/thread/store'
 import {
-  ConsoleError,
-  consoleClient,
-  consoleDocumentId,
-  signedIn,
-  type ConsoleVersionSummary
-} from '@/app/integrations/console'
+  MAX_VERSION_BYTES,
+  canEditFile,
+  cloudBindingForKey,
+  deleteFileVersion,
+  listFileVersions,
+  readFileVersion,
+  renameFileVersion,
+  uploadFileVersion
+} from '@/app/cloud/files'
+import type { ConsoleVersionSummary } from '@/app/integrations/console'
 
 import type { VersionMeta, VersionStore } from './types'
 
-/** Larger versions stay on this computer; Console answers carry them as base64. */
-export const MAX_CLOUD_VERSION_BYTES = 32 * 1024 * 1024
-
-/** The last version-list ETag seen per Console document id. */
-const listETags = new Map<string, string>()
-
-function isConflict(error: unknown): boolean {
-  return error instanceof ConsoleError && error.kind === 'conflict'
-}
-
-function isMissing(error: unknown): boolean {
-  return error instanceof ConsoleError && error.kind === 'not-found'
-}
-
-/** Versions Redrob Cloud keeps for the document, newest first; empty signed out. */
-export async function listCloudVersions(documentKey: string): Promise<ConsoleVersionSummary[]> {
-  if (!signedIn.value) return []
-  const documentId = await consoleDocumentId(documentKey)
-  const { data, etag } = await consoleClient().call('listVersions', { params: { documentId } })
-  if (etag) listETags.set(documentId, etag)
-  return data.items
-}
-
-async function freshETag(documentId: string): Promise<string | undefined> {
-  const { etag } = await consoleClient().call('listVersions', { params: { documentId } })
-  if (etag) listETags.set(documentId, etag)
-  return etag ?? undefined
-}
-
 /**
- * Uploads a local version that Redrob Cloud does not have yet. If-Match
- * carries the list ETag last seen; another device saving first means one
- * fresh read and one retry, so two computers never overwrite each other's list.
+ * Versions in Redrob Cloud, for shared files only: a file on this computer keeps its versions on
+ * this computer. Each is a sealed `.fig` uploaded on a presigned link, with a sealed name; editors
+ * and owners save them, and everyone with access can list and open them.
  */
+export const MAX_CLOUD_VERSION_BYTES = MAX_VERSION_BYTES
+
+function sharedFile(documentKey: string) {
+  const fileId = cloudFileIdOf(documentKey)
+  const binding = fileId ? cloudBindingForKey(documentKey) : null
+  return binding && fileId === binding.fileId ? binding : null
+}
+
+/** Versions Redrob Cloud keeps for the file, newest first; empty for a file on this computer. */
+export async function listCloudVersions(documentKey: string): Promise<ConsoleVersionSummary[]> {
+  const binding = sharedFile(documentKey)
+  if (!binding) return []
+  return listFileVersions(binding.fileId, binding.link ?? undefined)
+}
+
+/** Uploads a local version Redrob Cloud does not have yet. Editors and owners only. */
 export async function uploadVersion(store: VersionStore, meta: VersionMeta): Promise<VersionMeta> {
-  if (!signedIn.value || meta.remoteId || meta.byteLength > MAX_CLOUD_VERSION_BYTES) return meta
+  const binding = sharedFile(meta.documentKey)
+  if (!binding || !canEditFile(binding.role) || meta.remoteId) return meta
+  if (meta.byteLength > MAX_CLOUD_VERSION_BYTES) return meta
   const bytes = await store.readBytes(meta.id)
   if (!bytes) return meta
-  const documentId = await consoleDocumentId(meta.documentKey)
-  const body = {
+  const copy = new Uint8Array(bytes.byteLength)
+  copy.set(bytes)
+  const remoteId = await uploadFileVersion(binding.fileId, binding.epoch, {
     kind: meta.kind,
     name: meta.name,
-    revision: meta.sceneVersion,
-    snapshot: encodeBase64(bytes)
-  }
-  const create = (ifMatch: string | undefined) =>
-    consoleClient().call('createVersion', { params: { documentId }, body, ifMatch })
-  let response
-  try {
-    response = await create(listETags.get(documentId) ?? (await freshETag(documentId)))
-  } catch (error) {
-    if (!isConflict(error)) throw error
-    response = await create(await freshETag(documentId))
-  }
-  if (response.etag) listETags.set(documentId, response.etag)
-  const uploaded = { ...meta, remoteId: response.data.id }
+    revision: binding.revision,
+    bytes: copy
+  })
+  const uploaded = { ...meta, remoteId }
   await store.update(uploaded)
   return uploaded
 }
@@ -75,7 +58,8 @@ export async function uploadPendingVersions(
   store: VersionStore,
   documentKey: string
 ): Promise<number> {
-  if (!signedIn.value) return 0
+  const binding = sharedFile(documentKey)
+  if (!binding || !canEditFile(binding.role)) return 0
   const pending = (await store.list(documentKey))
     .filter((meta) => !meta.remoteId && meta.byteLength <= MAX_CLOUD_VERSION_BYTES)
     .toReversed()
@@ -85,25 +69,16 @@ export async function uploadPendingVersions(
 
 /** Names a version in Redrob Cloud too, which keeps it past retention there. */
 export async function renameCloudVersion(meta: VersionMeta): Promise<void> {
-  if (!signedIn.value || !meta.remoteId) return
-  const documentId = await consoleDocumentId(meta.documentKey)
-  await consoleClient().call('renameVersion', {
-    params: { documentId, versionId: meta.remoteId },
-    body: { name: meta.name }
-  })
+  const binding = sharedFile(meta.documentKey)
+  if (!binding || !canEditFile(binding.role) || !meta.remoteId) return
+  await renameFileVersion(binding.fileId, binding.epoch, meta.remoteId, meta.name)
 }
 
 /** Deletes a version from Redrob Cloud; one already gone counts as deleted. */
 export async function deleteCloudVersion(meta: VersionMeta): Promise<void> {
-  if (!signedIn.value || !meta.remoteId) return
-  const documentId = await consoleDocumentId(meta.documentKey)
-  try {
-    await consoleClient().call('deleteVersion', {
-      params: { documentId, versionId: meta.remoteId }
-    })
-  } catch (error) {
-    if (!isMissing(error)) throw error
-  }
+  const binding = sharedFile(meta.documentKey)
+  if (!binding || !canEditFile(binding.role) || !meta.remoteId) return
+  await deleteFileVersion(binding.fileId, meta.remoteId)
 }
 
 /** The `.fig` bytes of a version only Redrob Cloud has. */
@@ -111,11 +86,7 @@ export async function readCloudVersion(
   documentKey: string,
   versionId: string
 ): Promise<Uint8Array> {
-  const documentId = await consoleDocumentId(documentKey)
-  const { data } = await consoleClient().call('getVersion', { params: { documentId, versionId } })
-  return decodeBase64(data.snapshot)
-}
-
-export function resetCloudVersionsForTests(): void {
-  listETags.clear()
+  const binding = sharedFile(documentKey)
+  if (!binding) throw new Error('This version is in Redrob Cloud; open the shared file to read it')
+  return readFileVersion(binding.fileId, versionId, binding.link ?? undefined)
 }

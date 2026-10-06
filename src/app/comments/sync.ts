@@ -1,10 +1,14 @@
+import { cloudFileIdOf } from '@/app/assistant/thread/store'
 import {
-  ConsoleError,
-  consoleCache,
-  consoleClient,
-  consoleDocumentId,
-  signedIn
-} from '@/app/integrations/console'
+  canCommentOn,
+  cloudBindingForKey,
+  createFileComment,
+  deleteFileComment,
+  listFileComments,
+  updateFileComment,
+  type CloudFileBinding
+} from '@/app/cloud/files'
+import { ConsoleError, cloudState, consoleCache, signedIn } from '@/app/integrations/console'
 
 import { fromRemote, mergeRemote } from './model'
 import { commentsOf, loadComments, replaceComments } from './store'
@@ -14,95 +18,80 @@ function isCursor(value: unknown): value is string {
   return typeof value === 'string' && value.length > 0
 }
 
-function cursorKey(documentId: string): string {
-  return `comments-since:${documentId}`
+function cursorKey(fileId: string): string {
+  return `comments-since:${fileId}`
 }
 
 function errorKind(error: unknown): string | null {
   return error instanceof ConsoleError ? error.kind : null
 }
 
-/** Reads what changed in Redrob Cloud since the last read and folds it in. */
-async function pull(documentKey: string, documentId: string): Promise<void> {
+/** Reads what changed in Redrob Cloud since the last read and folds it in, deletions included. */
+async function pull(documentKey: string, binding: CloudFileBinding): Promise<void> {
   const cache = consoleCache()
-  const since = await cache.get(cursorKey(documentId), isCursor)
-  const client = consoleClient()
-  const remote = []
-  let cursor: string | undefined
-  do {
-    const { data } = await client.call('listComments', {
-      params: { documentId },
-      query: { updatedSince: since?.value, cursor }
-    })
-    remote.push(...data.items)
-    cursor = data.nextCursor ?? undefined
-  } while (cursor)
+  const since = await cache.get(cursorKey(binding.fileId), isCursor)
+  const remote = await listFileComments(binding.fileId, since?.value, binding.link ?? undefined)
   if (remote.length === 0) return
-  await replaceComments(documentKey, mergeRemote(commentsOf(documentKey), remote, documentKey))
-  const latest = remote
+  const comments = remote.flatMap((entry) => (entry.kind === 'comment' ? [entry.comment] : []))
+  const deleted = new Set(remote.flatMap((entry) => (entry.kind === 'deleted' ? [entry.id] : [])))
+  const merged = mergeRemote(commentsOf(documentKey), comments, documentKey)
+  await replaceComments(
+    documentKey,
+    merged.filter((comment) => !deleted.has(comment.id)),
+    [...deleted]
+  )
+  const latest = comments
     .map((comment) => comment.updatedAt)
     .toSorted()
     .at(-1)
-  if (latest) await cache.put(cursorKey(documentId), latest, null)
+  if (latest) await cache.put(cursorKey(binding.fileId), latest, null)
 }
 
 /** Sends one local change; returns the comment as it stands now, or null once deleted. */
-async function push(comment: LocalComment, documentId: string): Promise<LocalComment | null> {
-  const client = consoleClient()
-  const params = { documentId, commentId: comment.id }
+async function push(
+  comment: LocalComment,
+  binding: CloudFileBinding
+): Promise<LocalComment | null> {
+  const { fileId, epoch } = binding
   if (comment.deleted) {
     try {
-      await client.call('deleteComment', { params })
+      await deleteFileComment(fileId, comment.id)
     } catch (error) {
       if (errorKind(error) !== 'not-found') throw error
     }
     return null
   }
   if (!comment.remote) {
-    const { data } = await client.call('createComment', {
-      params: { documentId },
-      body: {
-        id: comment.id,
-        threadId: comment.threadId,
-        anchor: comment.anchor,
-        text: comment.text,
-        createdAt: comment.createdAt
-      }
-    })
-    const created = fromRemote(data, comment.documentKey)
+    const created = fromRemote(await createFileComment(fileId, epoch, comment), comment.documentKey)
     // A thread resolved before it ever reached Redrob Cloud still needs that edit.
     return comment.resolved === created.resolved
       ? created
-      : push({ ...comment, remote: true, remoteUpdatedAt: created.updatedAt }, documentId)
+      : push({ ...comment, remote: true, remoteUpdatedAt: created.updatedAt }, binding)
   }
-  const { data } = await client.call('updateComment', {
-    params,
-    body: {
-      text: comment.text,
-      resolved: comment.resolved,
-      anchor: comment.anchor,
-      updatedAt: comment.updatedAt
-    },
-    ifMatch: comment.remoteUpdatedAt ? `"${comment.remoteUpdatedAt}"` : undefined
-  })
-  return fromRemote(data, comment.documentKey)
+  const updated = await updateFileComment(
+    fileId,
+    epoch,
+    { ...comment, mine: comment.author.id === cloudState.account?.id },
+    comment.remoteUpdatedAt ? `"${comment.remoteUpdatedAt}"` : undefined
+  )
+  return fromRemote(updated, comment.documentKey)
 }
 
 /**
- * Brings a document's comments in step with Redrob Cloud: first what
- * changed there, then every change made here. A change someone else made
- * first comes back as a conflict; the next sync reads theirs and the later
- * edit wins. Signed out, comments stay on this computer.
+ * Brings a shared file's comments in step with Redrob Cloud: first what changed there, then every
+ * change made here. A change someone else made first comes back as a conflict; the next sync reads
+ * theirs and the later edit wins. A file on this computer keeps its comments here.
  */
 export async function syncComments(documentKey: string): Promise<'synced' | 'local' | 'offline'> {
   await loadComments(documentKey)
-  if (!signedIn.value) return 'local'
-  const documentId = await consoleDocumentId(documentKey)
+  const binding = cloudFileIdOf(documentKey) ? cloudBindingForKey(documentKey) : null
+  if (!binding || (!signedIn.value && !binding.link)) return 'local'
   try {
-    await pull(documentKey, documentId)
+    await pull(documentKey, binding)
+    if (!canCommentOn(documentKey)) return 'synced'
     for (const comment of commentsOf(documentKey).filter((entry) => !entry.synced)) {
       try {
-        const next = await push(comment, documentId)
+        const next = await push(comment, binding)
         const rest = commentsOf(documentKey).filter((entry) => entry.id !== comment.id)
         await replaceComments(documentKey, next ? [...rest, next] : rest, next ? [] : [comment.id])
       } catch (error) {
@@ -113,7 +102,7 @@ export async function syncComments(documentKey: string): Promise<'synced' | 'loc
           await replaceComments(documentKey, rest, [comment.id])
         } else if (kind === 'conflict') {
           // Theirs is newer: read everything again next time, and the later edit wins.
-          await consoleCache().remove(cursorKey(documentId))
+          await consoleCache().remove(cursorKey(binding.fileId))
         } else throw error
       }
     }

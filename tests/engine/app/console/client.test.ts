@@ -75,18 +75,31 @@ describe('Console client', () => {
     expect(missing).toMatchObject({ kind: 'not-found', code: 'not_found' })
   })
 
-  test('keeps ETags and honours If-Match', async () => {
+  test('keeps ETags and honours If-Match and If-None-Match', async () => {
     const { client } = setup()
-    const create = (ifMatch?: string) =>
-      client.call('createVersion', {
-        params: { documentId: 'doc-1' },
-        body: { kind: 'named', name: 'Before pricing', revision: 1, snapshot: 'AAAA' },
-        ifMatch
+    const publish = (
+      revisionId: string,
+      parentRevisionId: string | null,
+      headers: { ifMatch?: string; ifNoneMatch?: '*' }
+    ) =>
+      client.call('publishLibraryRevision', {
+        params: { workspaceId: 'ws-1', libraryId: 'lib-1' },
+        body: {
+          revisionId,
+          name: 'Buttons',
+          publishedAt: '2026-10-06T09:00:00.000Z',
+          assetCount: 1,
+          parentRevisionId,
+          payload: 'AAAA'
+        },
+        ...headers
       })
-    const first = await create('"0"')
-    expect(first.etag).toBe('"1"')
-    expect(first.data.name).toBe('Before pricing')
-    expect((await failure(create('"0"'))).kind).toBe('conflict')
+    const first = await publish('rev-1', null, { ifNoneMatch: '*' })
+    expect(first.etag).toBe('"rev-1"')
+    expect((await failure(publish('rev-x', null, { ifNoneMatch: '*' }))).kind).toBe('conflict')
+    expect((await failure(publish('rev-2', 'rev-1', { ifMatch: '"stale"' }))).kind).toBe('conflict')
+    const second = await publish('rev-2', 'rev-1', { ifMatch: first.etag ?? undefined })
+    expect(second.etag).toBe('"rev-2"')
   })
 
   test('reads Retry-After on rate limits', async () => {

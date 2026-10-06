@@ -2,6 +2,7 @@ import { useIntervalFn } from '@vueuse/core'
 import { ref, watch, watchEffect } from 'vue'
 
 import { threadKeyFor } from '@/app/assistant/thread/store'
+import { activeCloudFile } from '@/app/cloud/files'
 import { signedIn } from '@/app/integrations/console'
 import { activeTab } from '@/app/tabs'
 
@@ -71,10 +72,11 @@ export function startComments(): void {
     { immediate: true }
   )
   const polling = useIntervalFn(syncActive, COMMENT_SYNC_MS, { immediate: false })
+  // Shared files sync, signed in or through a view link; a file on this computer has nothing to.
   watch(
-    signedIn,
-    (isSignedIn) => {
-      if (isSignedIn) {
+    () => Boolean(activeCloudFile.value && (signedIn.value || activeCloudFile.value.link)),
+    (shared) => {
+      if (shared) {
         polling.resume()
         syncActive()
       } else polling.pause()

@@ -216,6 +216,8 @@ export type WatchEvent = z.infer<typeof watchEventSchema>
 
 // --------------------------------------------------------------- versions
 
+/** A version as the app shows it, once its name is opened. Console's shape is fileVersionSummarySchema. */
+
 export const VERSION_KINDS = ['auto', 'named'] as const
 
 export const versionSummarySchema = z.object({
@@ -231,19 +233,9 @@ export const versionSummarySchema = z.object({
 })
 export type ConsoleVersionSummary = z.infer<typeof versionSummarySchema>
 
-export const createVersionSchema = z.object({
-  kind: z.enum(VERSION_KINDS),
-  name: z.string().max(200).nullable(),
-  revision: z.number().int().nonnegative(),
-  /** The `.fig` bytes, base64. */
-  snapshot: z.string().min(1)
-})
-
-export const versionSchema = versionSummarySchema.extend({ snapshot: z.string().min(1) })
-
-export const renameVersionSchema = z.object({ name: z.string().max(200).nullable() })
-
 // --------------------------------------------------------------- comments
+
+/** A comment as the app holds it, once opened. Console's shape is fileCommentSchema. */
 
 export const commentAnchorSchema = z.object({
   /** The layer the pin is attached to; null for a pin on the canvas itself. */
@@ -267,30 +259,6 @@ export const commentSchema = z.object({
   updatedAt: isoTime
 })
 export type ConsoleComment = z.infer<typeof commentSchema>
-
-export const createCommentSchema = z.object({
-  /** Chosen by the app so offline comments keep their id once synced. */
-  id,
-  threadId: id.nullable(),
-  anchor: commentAnchorSchema,
-  text: z.string().min(1).max(10_000),
-  createdAt: isoTime
-})
-
-export const updateCommentSchema = z
-  .object({
-    text: z.string().min(1).max(10_000).optional(),
-    resolved: z.boolean().optional(),
-    anchor: commentAnchorSchema.optional(),
-    updatedAt: isoTime
-  })
-  .refine(
-    (value) =>
-      value.text !== undefined || value.resolved !== undefined || value.anchor !== undefined,
-    {
-      message: 'Nothing to update'
-    }
-  )
 
 // -------------------------------------------------------------- libraries
 
@@ -480,3 +448,62 @@ export const fileRelayTicketSchema = z.object({
   peerId: z.string().min(8).max(200)
 })
 export type FileRelayTicket = z.infer<typeof fileRelayTicketSchema>
+
+// ----------------------------------------------- sealed versions and comments
+
+const author = z.object({ id: id.nullable(), name: z.string() })
+
+export const fileVersionSummarySchema = z.object({
+  id,
+  fileId: id,
+  kind: z.enum(VERSION_KINDS),
+  encryptedName: ciphertext(4096).nullable(),
+  revision: z.number().int().nonnegative(),
+  epoch: z.number().int().positive(),
+  size: z.number().int().nonnegative(),
+  createdBy: author,
+  createdAt: isoTime
+})
+export type FileVersionSummary = z.infer<typeof fileVersionSummarySchema>
+
+export const fileVersionSchema = fileVersionSummarySchema.extend({
+  url: z.string().url(),
+  expiresAt: isoTime
+})
+
+export const createFileVersionSchema = fileVersionSummarySchema
+  .pick({ kind: true, encryptedName: true, revision: true, epoch: true })
+  .extend({ uploadId: id })
+
+export const renameFileVersionSchema = z.object({ encryptedName: ciphertext(4096).nullable() })
+
+/** The text and the pin, sealed together; null once deleted. */
+export const fileCommentSchema = z.object({
+  id,
+  fileId: id,
+  threadId: id.nullable(),
+  author,
+  ciphertext: ciphertext(20_000).nullable(),
+  epoch: z.number().int().positive(),
+  resolved: z.boolean(),
+  deleted: z.boolean(),
+  createdAt: isoTime,
+  updatedAt: isoTime
+})
+export type FileComment = z.infer<typeof fileCommentSchema>
+
+const commentId = z.string().regex(/^[A-Za-z0-9_-]{8,100}$/)
+
+export const createFileCommentSchema = z.object({
+  id: commentId,
+  threadId: commentId.nullable(),
+  ciphertext: ciphertext(20_000),
+  epoch: z.number().int().positive(),
+  createdAt: isoTime
+})
+
+export const updateFileCommentSchema = z.object({
+  ciphertext: ciphertext(20_000).optional(),
+  epoch: z.number().int().positive().optional(),
+  resolved: z.boolean().optional()
+})
