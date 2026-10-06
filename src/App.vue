@@ -15,6 +15,7 @@ import { useEditorStore } from '@/app/editor/active-store'
 import { toast } from '@/app/shell/ui'
 import { useAppTheme } from '@/app/shell/theme'
 import { scheduleStartupUpdateCheck } from '@/app/shell/updater'
+import { startWorkspaceMemory } from '@/app/memory/workspace'
 import { kickSyncEngine } from '@/app/storage/sync'
 import { prepareForReload } from '@/app/tabs'
 
@@ -36,6 +37,8 @@ onMounted(() => {
   toast.setupGlobalErrorHandler()
   scheduleStartupUpdateCheck(updates)
   void kickSyncEngine()
+  // Design Memory reads the signed-in workspace; signed out, it reads the open file.
+  startWorkspaceMemory()
 })
 </script>
 

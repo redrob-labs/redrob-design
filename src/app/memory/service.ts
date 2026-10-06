@@ -34,6 +34,11 @@ export function designMemorySource(): DesignMemorySource {
   return source
 }
 
+/** The app sets the workspace-aware source at start; the stub answers until then. */
+export function setDesignMemorySource(next: DesignMemorySource): void {
+  source = next
+}
+
 export function setDesignMemorySourceForTests(next: DesignMemorySource | null): void {
   source = next ?? stubMemorySource
 }
