@@ -72,6 +72,8 @@ export const panelMessageDefaults = {
   cancel: 'Cancel',
   localLibraries: 'Local',
   storageLibraries: 'Storage',
+  workspaceLibraries: 'Workspace',
+  workspaceLibrariesSignedOut: 'Sign in to Redrob Cloud to use your workspace libraries.',
   storageNotConfigured: 'Storage is not configured',
   storageLibrariesUnavailable: 'This storage provider does not support libraries',
   preferLibrary: 'Prefer this library',

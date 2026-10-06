@@ -127,6 +127,7 @@ ja:panels.libraryId
 ja:panels.localFontsAccessHint
 ja:panels.sizingFillFr
 ja:panels.sizingFixedPx
+ja:panels.workspaceLibrariesSignedOut
 ja:panels.xAxis
 ja:panels.yAxis
 ja:recovery.dialogDescription
@@ -286,6 +287,7 @@ zh-cn:panels.libraryId
 zh-cn:panels.localFontsAccessHint
 zh-cn:panels.sizingFillFr
 zh-cn:panels.sizingFixedPx
+zh-cn:panels.workspaceLibrariesSignedOut
 zh-cn:panels.xAxis
 zh-cn:panels.yAxis
 zh-cn:recovery.dialogDescription

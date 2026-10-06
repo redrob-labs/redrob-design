@@ -8,7 +8,8 @@ import {
 
 import type { LocalLibraryCatalog } from './local'
 
-export type LibraryCatalogSource = 'local' | 'storage'
+/** Where libraries come from: this computer, a storage bucket, or the Redrob Cloud workspace. */
+export type LibraryCatalogSource = 'local' | 'storage' | 'console'
 
 export class RoutedLibraryCatalog implements LibraryCatalog {
   readonly #local: LocalLibraryCatalog
@@ -28,8 +29,13 @@ export class RoutedLibraryCatalog implements LibraryCatalog {
   }
 
   useStorage(remote: LibraryCatalog): void {
+    this.useRemote('storage', remote)
+  }
+
+  /** Reads and publishes through a remote catalog, keeping local copies for offline use. */
+  useRemote(source: Exclude<LibraryCatalogSource, 'local'>, remote: LibraryCatalog): void {
     this.#remote = remote
-    this.#source = 'storage'
+    this.#source = source
   }
 
   async listLibraries(): Promise<LibrarySummary[]> {

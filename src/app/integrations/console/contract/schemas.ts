@@ -293,7 +293,11 @@ export const libraryRevisionSchema = z.object({
 export type ConsoleLibraryRevision = z.infer<typeof libraryRevisionSchema>
 
 export const publishLibraryRevisionSchema = z.object({
+  /** Chosen by the app, which builds the revision; it is also inside the payload. */
+  revisionId: id,
   name: z.string().min(1).max(200),
+  publishedAt: isoTime,
+  assetCount: z.number().int().nonnegative(),
   /** The revision this publish replaces; null for the first publish. */
   parentRevisionId: id.nullable(),
   payload: z.string().min(1)

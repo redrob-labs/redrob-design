@@ -258,6 +258,8 @@
   "cancel": "Abbrechen",
   "localLibraries": "Lokal",
   "storageLibraries": "Speicher",
+  "workspaceLibraries": "Arbeitsbereich",
+  "workspaceLibrariesSignedOut": "Melde dich bei Redrob Cloud an, um die Bibliotheken deines Arbeitsbereichs zu nutzen.",
   "storageNotConfigured": "Der Speicher ist nicht konfiguriert",
   "storageLibrariesUnavailable": "Dieser Speicheranbieter unterstützt keine Bibliotheken",
   "preferLibrary": "Diese Bibliothek bevorzugen",

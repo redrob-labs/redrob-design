@@ -258,6 +258,8 @@
   "cancel": "取消",
   "localLibraries": "本地",
   "storageLibraries": "存储",
+  "workspaceLibraries": "工作区",
+  "workspaceLibrariesSignedOut": "登录 Redrob Cloud 即可使用工作区的库。",
   "storageNotConfigured": "存储未配置",
   "storageLibrariesUnavailable": "该存储提供商不支持库",
   "preferLibrary": "优先使用此库",

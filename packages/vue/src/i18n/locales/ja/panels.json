@@ -275,6 +275,8 @@
   "cancel": "キャンセル",
   "localLibraries": "ローカル",
   "storageLibraries": "ストレージ",
+  "workspaceLibraries": "ワークスペース",
+  "workspaceLibrariesSignedOut": "ワークスペースのライブラリを使うには Redrob Cloud にサインインしてください。",
   "storageNotConfigured": "ストレージが構成されていません",
   "storageLibrariesUnavailable": "このストレージ プロバイダーはライブラリをサポートしていません",
   "preferLibrary": "このライブラリを優先",

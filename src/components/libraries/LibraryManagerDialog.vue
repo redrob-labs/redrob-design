@@ -4,6 +4,7 @@ import { nextTick, watch } from 'vue'
 import { useI18n } from '@redrob-design/vue'
 
 import { useEditorStore } from '@/app/editor/active-store'
+import { signedIn } from '@/app/integrations/console'
 import { openLibraryReview, openPublishLibraryDialog, useLibraryService } from '@/app/libraries'
 import { useLibraryManager } from '@/components/libraries/useLibraryManager'
 import AppPlaceholder from '@/components/ui/AppPlaceholder.vue'
@@ -111,6 +112,15 @@ const navigationClass =
             @click="setSource('storage')"
           >
             {{ panels.storageLibraries }}
+          </button>
+          <button
+            v-if="signedIn"
+            type="button"
+            class="rounded px-2 py-1 text-xs data-[active=true]:bg-hover"
+            :data-active="service.catalogSource === 'console'"
+            @click="setSource('console')"
+          >
+            {{ panels.workspaceLibraries }}
           </button>
         </div>
         <div

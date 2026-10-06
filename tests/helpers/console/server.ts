@@ -407,7 +407,10 @@ export function createMockConsole(state: MockConsoleState = mockConsoleState()) 
     const request = await body(c, publishLibraryRevisionSchema)
     if (!request) return fail(c, 400, 'invalid_request')
     if (request.parentRevisionId !== (latest?.revisionId ?? null)) return fail(c, 409, 'conflict')
-    const revisionId = nextId('rev')
+    if (revisions.some((entry) => entry.revisionId === request.revisionId)) {
+      return fail(c, 409, 'conflict')
+    }
+    const { revisionId } = request
     const revision: ConsoleLibraryRevision = {
       revisionId,
       payload: request.payload,
@@ -415,8 +418,8 @@ export function createMockConsole(state: MockConsoleState = mockConsoleState()) 
         libraryId,
         name: request.name,
         latestRevisionId: revisionId,
-        publishedAt: NOW,
-        assetCount: 0
+        publishedAt: request.publishedAt,
+        assetCount: request.assetCount
       }
     }
     state.libraries.set(libraryId, [...revisions, revision])
