@@ -21,6 +21,7 @@ import { startWorkspaceMemory } from '@/app/memory/workspace'
 import { startWatchPolling } from '@/app/ship/watch/service'
 import { startVersionHistory } from '@/app/document/history/start'
 import { startComments } from '@/app/comments/service'
+import { startCloudDevice } from '@/app/cloud/device'
 import { kickSyncEngine } from '@/app/storage/sync'
 import { prepareForReload } from '@/app/tabs'
 
@@ -50,6 +51,8 @@ onMounted(() => {
   startVersionHistory()
   // Comments live on this computer first and sync once signed in.
   startComments()
+  // Signed in, this computer's public key is registered so shared files can be opened here.
+  startCloudDevice()
 })
 </script>
 
