@@ -112,8 +112,17 @@ export async function auditSurface(
 ): Promise<SweepIssue[]> {
   const issues: SweepIssue[] = []
   if (!(await surface.isVisible())) return [{ kind: 'hidden', detail: name }]
-  // Animations settle before measuring.
-  await page.waitForTimeout(250)
+  // Open and slide-in animations settle before measuring. A cancelled
+  // animation (a theme switch restarts transitions) rejects `finished`,
+  // and has settled just the same.
+  await surface.evaluate((element) =>
+    Promise.all(
+      element
+        .getAnimations({ subtree: true })
+        .filter((animation) => animation.effect?.getTiming().iterations !== Infinity)
+        .map((animation) => animation.finished.catch(() => undefined))
+    )
+  )
   const box = await surface.boundingBox()
   const viewport = page.viewportSize()
   if (box && viewport) {
