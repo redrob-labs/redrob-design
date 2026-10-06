@@ -30,7 +30,7 @@
 - Keep card, account and ID numbers, secret keys, contact details and names you list out of direct-model requests: rules on this computer swap them for placeholders at the Standard, High or Strict level you pick in the composer, the canvas still gets the real values, and each receipt counts what was kept private.
 - Publish a shipped page as a static site to your own S3-compatible bucket: set up a separate Publish site in Storage settings with its own bucket, keys and public address, so the bucket your files sync to stays private; Publish asks once before the page goes public, checks the address, says which typefaces fall back, and Unpublish takes it down.
 - Share component libraries with your Redrob Cloud workspace: signed in, pick Workspace in the library manager to browse, enable and publish the libraries everyone in the workspace uses, with a publish refused instead of overwriting someone else's newer one, and the copies on this computer keep working offline.
-- Collaborate through the Redrob Cloud relay when signed in, so sessions connect on networks that block peer-to-peer and reconnect on their own after a drop; signed out, or when the relay cannot be reached, sessions stay peer-to-peer.
+- Edit a shared file live with the people it is shared with, through the Redrob Cloud relay: every change and cursor is encrypted on this computer before it leaves, sessions reconnect on their own after a drop, editors keep the file saved for whoever opens it next, and people who can only view or comment see changes without making them.
 - Comment on a file from File, Comments, in Describe or Edit: click where the comment goes, on a layer or the canvas, reply, resolve and delete threads, and numbered pins stay the same size at any zoom and follow their layer. Comments stay on this computer and, signed in to Redrob Cloud, sync with your workspace, the later of two edits winning.
 - Go back to an earlier version of a file from File, Version history: Redrob keeps one every 10 minutes while you edit, up to the last 30, plus every version you save by name, each with a preview; Restore puts one back as a single undo step after keeping your latest changes as a version. Signed in to Redrob Cloud, versions upload there too and versions saved on your other computers show up in the list.
 - Let shipped pages update themselves: signed in to Redrob Cloud, Ship watches the workspace's sources, and when a price, a piece of copy or a token changes there the open page proposes its own update in the thread with Keep it and Put it back, changes for a file that is not open wait until it is, and Stop watching ends it. Console only learns a hash of the file, never its path.
@@ -144,6 +144,9 @@
 - Index Figma clipboard children once during import instead of rescanning every pasted node, keeping large flat pastes linear. (#500)
 - Reduce peak memory during `.fig` export by sharing immutable binary resources with the isolated export graph.
 
+### Security
+
+- Stop connecting collaborators peer-to-peer through public signalling and TURN servers: live collaboration only goes through the Redrob Cloud relay, which admits the people Console ticketed and cannot read what it forwards.
 
 ## 0.14.0 — 2026-08-10
 

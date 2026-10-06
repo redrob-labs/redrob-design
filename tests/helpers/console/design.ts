@@ -42,7 +42,8 @@ export interface MockDesignState {
   blobs: Map<string, Uint8Array>
   /** The relay ticket every createFileRelayTicket answers with; tests point it at a relay. */
   relay: { url: string; role: FileRole | null }
-  relayTickets: Set<string>
+  /** ticket -> file id; the mock relay admits each once, into that file's room. */
+  relayTickets: Map<string, string>
 }
 
 export function mockDesignState(): MockDesignState {
@@ -57,7 +58,7 @@ export function mockDesignState(): MockDesignState {
     uploads: new Map(),
     blobs: new Map(),
     relay: { url: 'wss://relay.mock/v1/rooms', role: null },
-    relayTickets: new Set()
+    relayTickets: new Map()
   }
 }
 
@@ -131,7 +132,7 @@ export function registerDesignFiles(options: {
     const role = access(c, fileId, 'viewer')
     if (role instanceof Response) return role
     const ticket = `${next('ticket')}-${fileId}-0123456789abcdef`
-    state.relayTickets.add(ticket)
+    state.relayTickets.set(ticket, fileId)
     return c.json(
       {
         url: state.relay.url,

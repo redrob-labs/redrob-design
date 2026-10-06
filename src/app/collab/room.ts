@@ -2,19 +2,20 @@ import * as decoding from 'lib0/decoding'
 import * as awarenessProtocol from 'y-protocols/awareness'
 import * as Y from 'yjs'
 
-import { joinCollabRoom, type JoinCollabRoom } from '@/app/collab/transport'
+import type { CollabRoomTransport } from '@/app/collab/transport/types'
 
 export type CollabRoomOptions = {
-  roomId: string
+  room: CollabRoomTransport
   ydoc: Y.Doc
   awareness: awarenessProtocol.Awareness
+  /** Viewers and commenters send their cursor and ask to catch up, and change nothing. */
+  readOnly: boolean
   setConnected: () => void
   updatePeersList: () => void
-  joinRoom?: JoinCollabRoom
 }
 
 export type CollabRoomConnection = {
-  room: ReturnType<JoinCollabRoom>
+  room: CollabRoomTransport
   sendYjsUpdate: (data: Uint8Array, peerId?: string) => void
   sendAwareness: (data: Uint8Array, peerId?: string) => void
   sendSyncStep1: (data: Uint8Array, peerId?: string) => void
@@ -37,14 +38,13 @@ function awarenessClientIds(data: Uint8Array): number[] {
 }
 
 export function connectCollabRoom({
-  roomId,
+  room,
   ydoc,
   awareness,
+  readOnly,
   setConnected,
-  updatePeersList,
-  joinRoom = joinCollabRoom
+  updatePeersList
 }: CollabRoomOptions): CollabRoomConnection {
-  const room = joinRoom(roomId)
   const [sendYjsUpdate, getUpdate] = room.makeAction('yjs-update')
   const [sendAwareness, getAwareness] = room.makeAction('awareness')
   const [sendSyncStep1, getSyncStep1] = room.makeAction('sync-step1')
@@ -62,6 +62,7 @@ export function connectCollabRoom({
   })
 
   getSyncStep1((stateVector, peerId) => {
+    if (readOnly) return
     const update = Y.encodeStateAsUpdate(ydoc, stateVector)
     sendSyncReply(update, peerId)
   })
@@ -71,7 +72,7 @@ export function connectCollabRoom({
   })
 
   ydoc.on('update', (update: Uint8Array, origin: unknown) => {
-    if (origin === 'remote') return
+    if (origin === 'remote' || readOnly) return
     sendYjsUpdate(update)
   })
 

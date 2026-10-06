@@ -65,10 +65,18 @@
                           },
                           "role": {
                             "type": "string",
-                            "enum": ["viewer", "developer", "admin"]
+                            "enum": [
+                              "viewer",
+                              "developer",
+                              "admin"
+                            ]
                           }
                         },
-                        "required": ["id", "name", "role"],
+                        "required": [
+                          "id",
+                          "name",
+                          "role"
+                        ],
                         "additionalProperties": false
                       }
                     },
@@ -96,11 +104,23 @@
                           "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
                         }
                       },
-                      "required": ["id", "publicKey", "createdAt", "updatedAt"],
+                      "required": [
+                        "id",
+                        "publicKey",
+                        "createdAt",
+                        "updatedAt"
+                      ],
                       "additionalProperties": false
                     }
                   },
-                  "required": ["id", "name", "email", "currentWorkspaceId", "workspaces", "device"],
+                  "required": [
+                    "id",
+                    "name",
+                    "email",
+                    "currentWorkspaceId",
+                    "workspaces",
+                    "device"
+                  ],
                   "additionalProperties": false
                 }
               }
@@ -214,7 +234,12 @@
                       "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
                     }
                   },
-                  "required": ["id", "publicKey", "createdAt", "updatedAt"],
+                  "required": [
+                    "id",
+                    "publicKey",
+                    "createdAt",
+                    "updatedAt"
+                  ],
                   "additionalProperties": false
                 }
               }
@@ -301,7 +326,9 @@
                     "pattern": "^[A-Za-z0-9_-]{80,200}$"
                   }
                 },
-                "required": ["publicKey"],
+                "required": [
+                  "publicKey"
+                ],
                 "additionalProperties": false
               }
             }
@@ -353,7 +380,11 @@
                           },
                           "kind": {
                             "type": "string",
-                            "enum": ["site", "repository", "sheet"]
+                            "enum": [
+                              "site",
+                              "repository",
+                              "sheet"
+                            ]
                           },
                           "location": {
                             "nullable": true,
@@ -361,7 +392,12 @@
                             "maxLength": 2000
                           }
                         },
-                        "required": ["id", "name", "kind", "location"],
+                        "required": [
+                          "id",
+                          "name",
+                          "kind",
+                          "location"
+                        ],
                         "additionalProperties": false
                       }
                     },
@@ -371,14 +407,25 @@
                         "privacyLevel": {
                           "nullable": true,
                           "type": "string",
-                          "enum": ["standard", "high", "strict"]
+                          "enum": [
+                            "standard",
+                            "high",
+                            "strict"
+                          ]
                         }
                       },
-                      "required": ["privacyLevel"],
+                      "required": [
+                        "privacyLevel"
+                      ],
                       "additionalProperties": false
                     }
                   },
-                  "required": ["id", "name", "sources", "policy"],
+                  "required": [
+                    "id",
+                    "name",
+                    "sources",
+                    "policy"
+                  ],
                   "additionalProperties": false
                 }
               }
@@ -532,12 +579,19 @@
                                   "pattern": "^#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$"
                                 }
                               },
-                              "required": ["token", "hex"],
+                              "required": [
+                                "token",
+                                "hex"
+                              ],
                               "additionalProperties": false
                             }
                           }
                         },
-                        "required": ["name", "note", "swatches"],
+                        "required": [
+                          "name",
+                          "note",
+                          "swatches"
+                        ],
                         "additionalProperties": false
                       }
                     },
@@ -554,7 +608,10 @@
                             "type": "string"
                           }
                         },
-                        "required": ["family", "note"],
+                        "required": [
+                          "family",
+                          "note"
+                        ],
                         "additionalProperties": false
                       }
                     },
@@ -587,7 +644,11 @@
                             "type": "boolean"
                           }
                         },
-                        "required": ["id", "text", "source"],
+                        "required": [
+                          "id",
+                          "text",
+                          "source"
+                        ],
                         "additionalProperties": false
                       }
                     },
@@ -611,7 +672,10 @@
                             "minLength": 1
                           }
                         },
-                        "required": ["plan", "price"],
+                        "required": [
+                          "plan",
+                          "price"
+                        ],
                         "additionalProperties": false
                       }
                     }
@@ -799,7 +863,11 @@
                                 "maximum": 9007199254740991
                               }
                             },
-                            "required": ["label", "level", "of"],
+                            "required": [
+                              "label",
+                              "level",
+                              "of"
+                            ],
                             "additionalProperties": false
                           },
                           "efforts": {
@@ -830,7 +898,11 @@
                                   "maximum": 9007199254740991
                                 }
                               },
-                              "required": ["label", "level", "of"],
+                              "required": [
+                                "label",
+                                "level",
+                                "of"
+                              ],
                               "additionalProperties": false
                             }
                           },
@@ -842,7 +914,12 @@
                             "minimum": 0
                           }
                         },
-                        "required": ["id", "model", "harness", "effort"],
+                        "required": [
+                          "id",
+                          "model",
+                          "harness",
+                          "effort"
+                        ],
                         "additionalProperties": false
                       }
                     },
@@ -855,7 +932,14 @@
                       }
                     }
                   },
-                  "required": ["name", "edition", "note", "publishedAt", "picks", "rates"],
+                  "required": [
+                    "name",
+                    "edition",
+                    "note",
+                    "publishedAt",
+                    "picks",
+                    "rates"
+                  ],
                   "additionalProperties": false
                 }
               }
@@ -949,12 +1033,19 @@
                             "minimum": 0
                           }
                         },
-                        "required": ["match", "inputPerMillion", "outputPerMillion"],
+                        "required": [
+                          "match",
+                          "inputPerMillion",
+                          "outputPerMillion"
+                        ],
                         "additionalProperties": false
                       }
                     }
                   },
-                  "required": ["publishedAt", "rates"],
+                  "required": [
+                    "publishedAt",
+                    "rates"
+                  ],
                   "additionalProperties": false
                 }
               }
@@ -1059,7 +1150,13 @@
                       "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
                     }
                   },
-                  "required": ["documentId", "pageId", "sourceIds", "id", "createdAt"],
+                  "required": [
+                    "documentId",
+                    "pageId",
+                    "sourceIds",
+                    "id",
+                    "createdAt"
+                  ],
                   "additionalProperties": false
                 }
               }
@@ -1162,7 +1259,11 @@
                     }
                   }
                 },
-                "required": ["documentId", "pageId", "sourceIds"],
+                "required": [
+                  "documentId",
+                  "pageId",
+                  "sourceIds"
+                ],
                 "additionalProperties": false
               }
             }
@@ -1327,7 +1428,9 @@
                                 "properties": {
                                   "kind": {
                                     "type": "string",
-                                    "enum": ["text-replace"]
+                                    "enum": [
+                                      "text-replace"
+                                    ]
                                   },
                                   "from": {
                                     "type": "string",
@@ -1337,7 +1440,11 @@
                                     "type": "string"
                                   }
                                 },
-                                "required": ["kind", "from", "to"],
+                                "required": [
+                                  "kind",
+                                  "from",
+                                  "to"
+                                ],
                                 "additionalProperties": false
                               },
                               {
@@ -1345,7 +1452,9 @@
                                 "properties": {
                                   "kind": {
                                     "type": "string",
-                                    "enum": ["token-value"]
+                                    "enum": [
+                                      "token-value"
+                                    ]
                                   },
                                   "token": {
                                     "type": "string",
@@ -1356,7 +1465,11 @@
                                     "minLength": 1
                                   }
                                 },
-                                "required": ["kind", "token", "value"],
+                                "required": [
+                                  "kind",
+                                  "token",
+                                  "value"
+                                ],
                                 "additionalProperties": false
                               },
                               {
@@ -1364,7 +1477,9 @@
                                 "properties": {
                                   "kind": {
                                     "type": "string",
-                                    "enum": ["price"]
+                                    "enum": [
+                                      "price"
+                                    ]
                                   },
                                   "plan": {
                                     "type": "string",
@@ -1379,13 +1494,25 @@
                                     "minLength": 1
                                   }
                                 },
-                                "required": ["kind", "plan", "from", "to"],
+                                "required": [
+                                  "kind",
+                                  "plan",
+                                  "from",
+                                  "to"
+                                ],
                                 "additionalProperties": false
                               }
                             ]
                           }
                         },
-                        "required": ["id", "watchId", "sourceId", "summary", "at", "change"],
+                        "required": [
+                          "id",
+                          "watchId",
+                          "sourceId",
+                          "summary",
+                          "at",
+                          "change"
+                        ],
                         "additionalProperties": false
                       }
                     },
@@ -1395,7 +1522,10 @@
                       "minLength": 1
                     }
                   },
-                  "required": ["items", "nextCursor"],
+                  "required": [
+                    "items",
+                    "nextCursor"
+                  ],
                   "additionalProperties": false
                 }
               }
@@ -1526,7 +1656,10 @@
                           },
                           "kind": {
                             "type": "string",
-                            "enum": ["auto", "named"]
+                            "enum": [
+                              "auto",
+                              "named"
+                            ]
                           },
                           "name": {
                             "nullable": true,
@@ -1560,7 +1693,10 @@
                                 "type": "string"
                               }
                             },
-                            "required": ["id", "name"],
+                            "required": [
+                              "id",
+                              "name"
+                            ],
                             "additionalProperties": false
                           }
                         },
@@ -1583,7 +1719,10 @@
                       "minLength": 1
                     }
                   },
-                  "required": ["items", "nextCursor"],
+                  "required": [
+                    "items",
+                    "nextCursor"
+                  ],
                   "additionalProperties": false
                 }
               }
@@ -1716,7 +1855,10 @@
                     },
                     "kind": {
                       "type": "string",
-                      "enum": ["auto", "named"]
+                      "enum": [
+                        "auto",
+                        "named"
+                      ]
                     },
                     "name": {
                       "nullable": true,
@@ -1750,7 +1892,10 @@
                           "type": "string"
                         }
                       },
-                      "required": ["id", "name"],
+                      "required": [
+                        "id",
+                        "name"
+                      ],
                       "additionalProperties": false
                     }
                   },
@@ -1902,7 +2047,10 @@
                 "properties": {
                   "kind": {
                     "type": "string",
-                    "enum": ["auto", "named"]
+                    "enum": [
+                      "auto",
+                      "named"
+                    ]
                   },
                   "name": {
                     "nullable": true,
@@ -1919,7 +2067,12 @@
                     "minLength": 1
                   }
                 },
-                "required": ["kind", "name", "revision", "snapshot"],
+                "required": [
+                  "kind",
+                  "name",
+                  "revision",
+                  "snapshot"
+                ],
                 "additionalProperties": false
               }
             }
@@ -1956,7 +2109,10 @@
                     },
                     "kind": {
                       "type": "string",
-                      "enum": ["auto", "named"]
+                      "enum": [
+                        "auto",
+                        "named"
+                      ]
                     },
                     "name": {
                       "nullable": true,
@@ -1990,7 +2146,10 @@
                           "type": "string"
                         }
                       },
-                      "required": ["id", "name"],
+                      "required": [
+                        "id",
+                        "name"
+                      ],
                       "additionalProperties": false
                     },
                     "snapshot": {
@@ -2140,7 +2299,10 @@
                     },
                     "kind": {
                       "type": "string",
-                      "enum": ["auto", "named"]
+                      "enum": [
+                        "auto",
+                        "named"
+                      ]
                     },
                     "name": {
                       "nullable": true,
@@ -2174,7 +2336,10 @@
                           "type": "string"
                         }
                       },
-                      "required": ["id", "name"],
+                      "required": [
+                        "id",
+                        "name"
+                      ],
                       "additionalProperties": false
                     }
                   },
@@ -2338,7 +2503,9 @@
                     "maxLength": 200
                   }
                 },
-                "required": ["name"],
+                "required": [
+                  "name"
+                ],
                 "additionalProperties": false
               }
             }
@@ -2515,7 +2682,12 @@
                                 "maxLength": 200
                               }
                             },
-                            "required": ["nodeId", "x", "y", "pageId"],
+                            "required": [
+                              "nodeId",
+                              "x",
+                              "y",
+                              "pageId"
+                            ],
                             "additionalProperties": false
                           },
                           "author": {
@@ -2530,7 +2702,10 @@
                                 "type": "string"
                               }
                             },
-                            "required": ["id", "name"],
+                            "required": [
+                              "id",
+                              "name"
+                            ],
                             "additionalProperties": false
                           },
                           "text": {
@@ -2572,7 +2747,10 @@
                       "minLength": 1
                     }
                   },
-                  "required": ["items", "nextCursor"],
+                  "required": [
+                    "items",
+                    "nextCursor"
+                  ],
                   "additionalProperties": false
                 }
               }
@@ -2739,7 +2917,12 @@
                           "maxLength": 200
                         }
                       },
-                      "required": ["nodeId", "x", "y", "pageId"],
+                      "required": [
+                        "nodeId",
+                        "x",
+                        "y",
+                        "pageId"
+                      ],
                       "additionalProperties": false
                     },
                     "author": {
@@ -2754,7 +2937,10 @@
                           "type": "string"
                         }
                       },
-                      "required": ["id", "name"],
+                      "required": [
+                        "id",
+                        "name"
+                      ],
                       "additionalProperties": false
                     },
                     "text": {
@@ -2955,7 +3141,12 @@
                         "maxLength": 200
                       }
                     },
-                    "required": ["nodeId", "x", "y", "pageId"],
+                    "required": [
+                      "nodeId",
+                      "x",
+                      "y",
+                      "pageId"
+                    ],
                     "additionalProperties": false
                   },
                   "text": {
@@ -2969,7 +3160,13 @@
                     "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
                   }
                 },
-                "required": ["id", "threadId", "anchor", "text", "createdAt"],
+                "required": [
+                  "id",
+                  "threadId",
+                  "anchor",
+                  "text",
+                  "createdAt"
+                ],
                 "additionalProperties": false
               }
             }
@@ -3031,7 +3228,12 @@
                           "maxLength": 200
                         }
                       },
-                      "required": ["nodeId", "x", "y", "pageId"],
+                      "required": [
+                        "nodeId",
+                        "x",
+                        "y",
+                        "pageId"
+                      ],
                       "additionalProperties": false
                     },
                     "author": {
@@ -3046,7 +3248,10 @@
                           "type": "string"
                         }
                       },
-                      "required": ["id", "name"],
+                      "required": [
+                        "id",
+                        "name"
+                      ],
                       "additionalProperties": false
                     },
                     "text": {
@@ -3252,7 +3457,12 @@
                         "maxLength": 200
                       }
                     },
-                    "required": ["nodeId", "x", "y", "pageId"],
+                    "required": [
+                      "nodeId",
+                      "x",
+                      "y",
+                      "pageId"
+                    ],
                     "additionalProperties": false
                   },
                   "updatedAt": {
@@ -3261,7 +3471,9 @@
                     "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
                   }
                 },
-                "required": ["updatedAt"],
+                "required": [
+                  "updatedAt"
+                ],
                 "additionalProperties": false
               }
             }
@@ -3379,134 +3591,6 @@
         ]
       }
     },
-    "/relay/{roomId}/ticket": {
-      "post": {
-        "operationId": "createRelayTicket",
-        "summary": "A short-lived ticket for the collaboration relay WebSocket of one room.",
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "A short-lived ticket for the collaboration relay WebSocket of one room.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "url": {
-                      "type": "string",
-                      "format": "uri"
-                    },
-                    "ticket": {
-                      "type": "string",
-                      "minLength": 16
-                    },
-                    "expiresAt": {
-                      "type": "string",
-                      "format": "date-time",
-                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
-                    }
-                  },
-                  "required": ["url", "ticket", "expiresAt"],
-                  "additionalProperties": false
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "A failure, as `{ \"error\": \"<snake_case_code>\" }`.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "A failure, as `{ \"error\": \"<snake_case_code>\" }`.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "A failure, as `{ \"error\": \"<snake_case_code>\" }`.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "A failure, as `{ \"error\": \"<snake_case_code>\" }`.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "A failure, as `{ \"error\": \"<snake_case_code>\" }`.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            },
-            "headers": {
-              "Retry-After": {
-                "description": "Seconds to wait before retrying.",
-                "schema": {
-                  "type": "integer",
-                  "minimum": 0
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "A failure, as `{ \"error\": \"<snake_case_code>\" }`.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            },
-            "headers": {
-              "Retry-After": {
-                "description": "Seconds to wait before retrying.",
-                "schema": {
-                  "type": "integer",
-                  "minimum": 0
-                }
-              }
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "roomId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ]
-      }
-    },
     "/workspaces/{workspaceId}/libraries": {
       "get": {
         "operationId": "listLibraries",
@@ -3571,7 +3655,10 @@
                       "minLength": 1
                     }
                   },
-                  "required": ["items", "nextCursor"],
+                  "required": [
+                    "items",
+                    "nextCursor"
+                  ],
                   "additionalProperties": false
                 }
               }
@@ -3742,7 +3829,11 @@
                       "minLength": 1
                     }
                   },
-                  "required": ["summary", "revisionId", "payload"],
+                  "required": [
+                    "summary",
+                    "revisionId",
+                    "payload"
+                  ],
                   "additionalProperties": false
                 }
               }
@@ -3927,7 +4018,11 @@
                       "minLength": 1
                     }
                   },
-                  "required": ["summary", "revisionId", "payload"],
+                  "required": [
+                    "summary",
+                    "revisionId",
+                    "payload"
+                  ],
                   "additionalProperties": false
                 }
               }
@@ -4148,7 +4243,12 @@
                     },
                     "role": {
                       "type": "string",
-                      "enum": ["viewer", "commenter", "editor", "owner"]
+                      "enum": [
+                        "viewer",
+                        "commenter",
+                        "editor",
+                        "owner"
+                      ]
                     },
                     "keyEpoch": {
                       "type": "integer",
@@ -4282,11 +4382,17 @@
                         "pattern": "^[A-Za-z0-9_-]+$"
                       }
                     },
-                    "required": ["wrappedKey"],
+                    "required": [
+                      "wrappedKey"
+                    ],
                     "additionalProperties": false
                   }
                 },
-                "required": ["id", "encryptedName", "keyGrant"],
+                "required": [
+                  "id",
+                  "encryptedName",
+                  "keyGrant"
+                ],
                 "additionalProperties": false
               }
             }
@@ -4327,7 +4433,12 @@
                           },
                           "role": {
                             "type": "string",
-                            "enum": ["viewer", "commenter", "editor", "owner"]
+                            "enum": [
+                              "viewer",
+                              "commenter",
+                              "editor",
+                              "owner"
+                            ]
                           },
                           "keyEpoch": {
                             "type": "integer",
@@ -4369,7 +4480,10 @@
                       "minLength": 1
                     }
                   },
-                  "required": ["items", "nextCursor"],
+                  "required": [
+                    "items",
+                    "nextCursor"
+                  ],
                   "additionalProperties": false
                 }
               }
@@ -4487,7 +4601,12 @@
                     },
                     "role": {
                       "type": "string",
-                      "enum": ["viewer", "commenter", "editor", "owner"]
+                      "enum": [
+                        "viewer",
+                        "commenter",
+                        "editor",
+                        "owner"
+                      ]
                     },
                     "keyEpoch": {
                       "type": "integer",
@@ -4653,7 +4772,12 @@
                     },
                     "role": {
                       "type": "string",
-                      "enum": ["viewer", "commenter", "editor", "owner"]
+                      "enum": [
+                        "viewer",
+                        "commenter",
+                        "editor",
+                        "owner"
+                      ]
                     },
                     "keyEpoch": {
                       "type": "integer",
@@ -4794,7 +4918,9 @@
                     "pattern": "^[A-Za-z0-9_-]+$"
                   }
                 },
-                "required": ["encryptedName"],
+                "required": [
+                  "encryptedName"
+                ],
                 "additionalProperties": false
               }
             }
@@ -4943,7 +5069,12 @@
                           },
                           "role": {
                             "type": "string",
-                            "enum": ["viewer", "commenter", "editor", "owner"]
+                            "enum": [
+                              "viewer",
+                              "commenter",
+                              "editor",
+                              "owner"
+                            ]
                           },
                           "addedAt": {
                             "type": "string",
@@ -4951,7 +5082,13 @@
                             "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
                           }
                         },
-                        "required": ["userId", "email", "name", "role", "addedAt"],
+                        "required": [
+                          "userId",
+                          "email",
+                          "name",
+                          "role",
+                          "addedAt"
+                        ],
                         "additionalProperties": false
                       }
                     },
@@ -4972,7 +5109,11 @@
                           },
                           "role": {
                             "type": "string",
-                            "enum": ["viewer", "commenter", "editor"]
+                            "enum": [
+                              "viewer",
+                              "commenter",
+                              "editor"
+                            ]
                           },
                           "createdAt": {
                             "type": "string",
@@ -4980,12 +5121,20 @@
                             "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
                           }
                         },
-                        "required": ["id", "email", "role", "createdAt"],
+                        "required": [
+                          "id",
+                          "email",
+                          "role",
+                          "createdAt"
+                        ],
                         "additionalProperties": false
                       }
                     }
                   },
-                  "required": ["members", "invites"],
+                  "required": [
+                    "members",
+                    "invites"
+                  ],
                   "additionalProperties": false
                 }
               }
@@ -5118,7 +5267,12 @@
                         },
                         "role": {
                           "type": "string",
-                          "enum": ["viewer", "commenter", "editor", "owner"]
+                          "enum": [
+                            "viewer",
+                            "commenter",
+                            "editor",
+                            "owner"
+                          ]
                         },
                         "addedAt": {
                           "type": "string",
@@ -5126,7 +5280,13 @@
                           "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
                         }
                       },
-                      "required": ["userId", "email", "name", "role", "addedAt"],
+                      "required": [
+                        "userId",
+                        "email",
+                        "name",
+                        "role",
+                        "addedAt"
+                      ],
                       "additionalProperties": false
                     },
                     "invite": {
@@ -5145,7 +5305,11 @@
                         },
                         "role": {
                           "type": "string",
-                          "enum": ["viewer", "commenter", "editor"]
+                          "enum": [
+                            "viewer",
+                            "commenter",
+                            "editor"
+                          ]
                         },
                         "createdAt": {
                           "type": "string",
@@ -5153,11 +5317,19 @@
                           "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
                         }
                       },
-                      "required": ["id", "email", "role", "createdAt"],
+                      "required": [
+                        "id",
+                        "email",
+                        "role",
+                        "createdAt"
+                      ],
                       "additionalProperties": false
                     }
                   },
-                  "required": ["member", "invite"],
+                  "required": [
+                    "member",
+                    "invite"
+                  ],
                   "additionalProperties": false
                 }
               }
@@ -5267,10 +5439,17 @@
                   },
                   "role": {
                     "type": "string",
-                    "enum": ["viewer", "commenter", "editor"]
+                    "enum": [
+                      "viewer",
+                      "commenter",
+                      "editor"
+                    ]
                   }
                 },
-                "required": ["email", "role"],
+                "required": [
+                  "email",
+                  "role"
+                ],
                 "additionalProperties": false
               }
             }
@@ -5317,7 +5496,12 @@
                           },
                           "role": {
                             "type": "string",
-                            "enum": ["viewer", "commenter", "editor", "owner"]
+                            "enum": [
+                              "viewer",
+                              "commenter",
+                              "editor",
+                              "owner"
+                            ]
                           },
                           "addedAt": {
                             "type": "string",
@@ -5325,7 +5509,13 @@
                             "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
                           }
                         },
-                        "required": ["userId", "email", "name", "role", "addedAt"],
+                        "required": [
+                          "userId",
+                          "email",
+                          "name",
+                          "role",
+                          "addedAt"
+                        ],
                         "additionalProperties": false
                       }
                     },
@@ -5346,7 +5536,11 @@
                           },
                           "role": {
                             "type": "string",
-                            "enum": ["viewer", "commenter", "editor"]
+                            "enum": [
+                              "viewer",
+                              "commenter",
+                              "editor"
+                            ]
                           },
                           "createdAt": {
                             "type": "string",
@@ -5354,12 +5548,20 @@
                             "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
                           }
                         },
-                        "required": ["id", "email", "role", "createdAt"],
+                        "required": [
+                          "id",
+                          "email",
+                          "role",
+                          "createdAt"
+                        ],
                         "additionalProperties": false
                       }
                     }
                   },
-                  "required": ["members", "invites"],
+                  "required": [
+                    "members",
+                    "invites"
+                  ],
                   "additionalProperties": false
                 }
               }
@@ -5471,10 +5673,17 @@
                 "properties": {
                   "role": {
                     "type": "string",
-                    "enum": ["viewer", "commenter", "editor", "owner"]
+                    "enum": [
+                      "viewer",
+                      "commenter",
+                      "editor",
+                      "owner"
+                    ]
                   }
                 },
-                "required": ["role"],
+                "required": [
+                  "role"
+                ],
                 "additionalProperties": false
               }
             }
@@ -5751,12 +5960,19 @@
                             "maxLength": 200
                           }
                         },
-                        "required": ["epoch", "wrappedKey", "grantedByDeviceId"],
+                        "required": [
+                          "epoch",
+                          "wrappedKey",
+                          "grantedByDeviceId"
+                        ],
                         "additionalProperties": false
                       }
                     }
                   },
-                  "required": ["keyEpoch", "grants"],
+                  "required": [
+                    "keyEpoch",
+                    "grants"
+                  ],
                   "additionalProperties": false
                 }
               }
@@ -5887,7 +6103,11 @@
                         "pattern": "^[A-Za-z0-9_-]{80,200}$"
                       }
                     },
-                    "required": ["deviceId", "userId", "publicKey"],
+                    "required": [
+                      "deviceId",
+                      "userId",
+                      "publicKey"
+                    ],
                     "additionalProperties": false
                   }
                 }
@@ -6008,7 +6228,9 @@
                       "maximum": 9007199254740991
                     }
                   },
-                  "required": ["granted"],
+                  "required": [
+                    "granted"
+                  ],
                   "additionalProperties": false
                 }
               }
@@ -6135,12 +6357,18 @@
                           "pattern": "^[A-Za-z0-9_-]+$"
                         }
                       },
-                      "required": ["deviceId", "epoch", "wrappedKey"],
+                      "required": [
+                        "deviceId",
+                        "epoch",
+                        "wrappedKey"
+                      ],
                       "additionalProperties": false
                     }
                   }
                 },
-                "required": ["grants"],
+                "required": [
+                  "grants"
+                ],
                 "additionalProperties": false
               }
             }
@@ -6175,7 +6403,10 @@
                       "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
                     }
                   },
-                  "required": ["enabled", "createdAt"],
+                  "required": [
+                    "enabled",
+                    "createdAt"
+                  ],
                   "additionalProperties": false
                 }
               }
@@ -6298,7 +6529,10 @@
                       "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
                     }
                   },
-                  "required": ["token", "createdAt"],
+                  "required": [
+                    "token",
+                    "createdAt"
+                  ],
                   "additionalProperties": false
                 }
               }
@@ -6528,7 +6762,9 @@
                         },
                         "method": {
                           "type": "string",
-                          "enum": ["PUT"]
+                          "enum": [
+                            "PUT"
+                          ]
                         },
                         "headers": {
                           "type": "object",
@@ -6542,11 +6778,19 @@
                           "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
                         }
                       },
-                      "required": ["url", "method", "headers", "expiresAt"],
+                      "required": [
+                        "url",
+                        "method",
+                        "headers",
+                        "expiresAt"
+                      ],
                       "additionalProperties": false
                     }
                   },
-                  "required": ["uploadId", "upload"],
+                  "required": [
+                    "uploadId",
+                    "upload"
+                  ],
                   "additionalProperties": false
                 }
               }
@@ -6650,7 +6894,10 @@
                 "properties": {
                   "kind": {
                     "type": "string",
-                    "enum": ["snapshot", "version"]
+                    "enum": [
+                      "snapshot",
+                      "version"
+                    ]
                   },
                   "size": {
                     "type": "integer",
@@ -6659,7 +6906,10 @@
                     "maximum": 9007199254740991
                   }
                 },
-                "required": ["kind", "size"],
+                "required": [
+                  "kind",
+                  "size"
+                ],
                 "additionalProperties": false
               }
             }
@@ -6711,7 +6961,13 @@
                       "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
                     }
                   },
-                  "required": ["revision", "size", "epoch", "url", "expiresAt"],
+                  "required": [
+                    "revision",
+                    "size",
+                    "epoch",
+                    "url",
+                    "expiresAt"
+                  ],
                   "additionalProperties": false
                 }
               }
@@ -6850,7 +7106,11 @@
                       "maximum": 9007199254740991
                     }
                   },
-                  "required": ["revision", "size", "epoch"],
+                  "required": [
+                    "revision",
+                    "size",
+                    "epoch"
+                  ],
                   "additionalProperties": false
                 }
               }
@@ -6969,7 +7229,11 @@
                     "maximum": 9007199254740991
                   }
                 },
-                "required": ["uploadId", "baseRevision", "epoch"],
+                "required": [
+                  "uploadId",
+                  "baseRevision",
+                  "epoch"
+                ],
                 "additionalProperties": false
               }
             }
@@ -7009,7 +7273,12 @@
                     },
                     "role": {
                       "type": "string",
-                      "enum": ["viewer", "commenter", "editor", "owner"]
+                      "enum": [
+                        "viewer",
+                        "commenter",
+                        "editor",
+                        "owner"
+                      ]
                     },
                     "peerId": {
                       "type": "string",
@@ -7017,7 +7286,13 @@
                       "maxLength": 200
                     }
                   },
-                  "required": ["url", "ticket", "expiresAt", "role", "peerId"],
+                  "required": [
+                    "url",
+                    "ticket",
+                    "expiresAt",
+                    "role",
+                    "peerId"
+                  ],
                   "additionalProperties": false
                 }
               }
@@ -7140,7 +7415,9 @@
             "minLength": 1
           }
         },
-        "required": ["error"],
+        "required": [
+          "error"
+        ],
         "additionalProperties": false,
         "description": "Known codes: unauthorized, forbidden, not_found, conflict, precondition_failed, invalid_request, rate_limited, unavailable."
       }

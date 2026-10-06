@@ -23,8 +23,9 @@ export interface RedrobDesignTestHooks {
   crossCheckReplies?: (replies: string[], reviewer: { providerID: string; modelID: string }) => void
   collab?: Pick<
     CollabReturn,
-    'connect' | 'disconnect' | 'updateCursor' | 'updateSelection' | 'setLocalName'
+    'disconnect' | 'updateCursor' | 'updateSelection' | 'setLocalName'
   > & {
+    status: () => string
     peerCount: () => number
     peerSelections: () => Array<string[] | undefined>
   }
@@ -77,7 +78,7 @@ export function exposeCollaborationActions(collab: CollabReturn) {
   if (!appRuntimeConfig.test) return
   const testHooks = (windowAPI().test ??= {})
   testHooks.collab = {
-    connect: collab.connect,
+    status: () => collab.state.value.status,
     disconnect: collab.disconnect,
     updateCursor: collab.updateCursor,
     updateSelection: collab.updateSelection,

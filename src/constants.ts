@@ -1,5 +1,3 @@
-import { IS_BROWSER, IS_TAURI } from '@redrob-design/core/constants'
-
 import ACP_DESIGN_CONTEXT from '@/app/ai/acp/design-context.md'
 
 export {
@@ -63,16 +61,7 @@ export {
 
 import type { Color } from '@redrob-design/scene-graph/primitives'
 
-export const TRYSTERO_APP_ID = 'redrob-design'
-export const ROOM_ID_LENGTH = 8
-export const ROOM_ID_CHARS = 'abcdefghijklmnopqrstuvwxyz0123456789'
-
 export const WEB_APP_ORIGIN = 'https://app.redrob.design'
-
-export function getShareURL(roomId: string): string {
-  const base = IS_TAURI || !IS_BROWSER ? WEB_APP_ORIGIN : window.location.origin
-  return `${base}/share/${roomId}`
-}
 
 /**
  * Remote collaborator colours, from the Redrob design system accent families (tokens.json). Each is

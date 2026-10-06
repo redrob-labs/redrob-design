@@ -83,7 +83,8 @@ Features that use it live in their own domains:
 - `ship/watch/`
 - `document/history/` for versions, with their own IndexedDB
 - `comments/`, local-first, with their own IndexedDB
-- `collab/transport/relay/`, a ticketed WebSocket with a peer-to-peer fallback through `deferredCollabRoom`
+- `cloud/`: `crypto/` (per-file AES-GCM content keys, ECIES key wrapping per device, the device key pair in IndexedDB) and `files/` (sharing, members, view links, sealed snapshots on presigned links)
+- `collab/transport/relay/`, a ticketed WebSocket with every payload sealed to the file; there is no peer-to-peer fallback
 - `libraries/catalog/console.ts`
 
 Conventions:
@@ -178,7 +179,7 @@ Use Conventional Commits (`feat`, `fix`, `refactor`, `perf`, `docs`, `test`, `bu
 - Harness agents live in the optional `@redrob-design/harness` Node companion. Keep it backend-neutral, persist only opaque non-secret resume state, expose the bounded JSONL protocol, and never bundle a JavaScript runtime into Tauri. Pi's in-memory `just-bash` cannot recover across process restarts.
 - ACP transport lives under `src/app/ai/acp/**`; provider definitions in `packages/core/src/constants.ts`; profiles in `src/app/ai/models/**`. Keep provider connections, reusable profiles, and role assignments separate, and resolve credentials lazily.
 - ACP process changes require checking `desktop/capabilities/**`.
-- Collaboration lives under `src/app/collab/**` and uses Trystero, Yjs, and awareness; preserve crypto-safe room IDs and peer cleanup.
+- Collaboration lives under `src/app/collab/**` and uses Yjs and awareness over the Redrob Cloud relay only. A session follows the active tab's shared file (`useCollab` watches `activeCloudFile`), starts from the snapshot's own Yjs bytes, and seals every frame with the file key; editors keep the snapshot saved (`snapshots.ts`, compare-and-swap with merge) and hand the key to new devices. Viewers and commenters send only awareness and `sync-step1`, which is also all the relay forwards from them. Preserve peer cleanup.
 
 ## Code conventions
 

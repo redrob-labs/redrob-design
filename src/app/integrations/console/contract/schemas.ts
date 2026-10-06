@@ -321,15 +321,6 @@ export const publishLibraryRevisionSchema = z.object({
   payload: z.string().min(1)
 })
 
-// ------------------------------------------------------------------ relay
-
-/** The short-lived ticket a client trades for a relay WebSocket. */
-export const relayTicketSchema = z.object({
-  url: z.string().url(),
-  ticket: z.string().min(16),
-  expiresAt: isoTime
-})
-
 // ------------------------------------------------------------ cloud files
 
 /**

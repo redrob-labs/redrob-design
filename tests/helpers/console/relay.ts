@@ -13,13 +13,15 @@ interface RelayConnection {
 
 /**
  * The collaboration relay as Redrob Console must run it, on a local Bun
- * WebSocket server: one-use tickets in `?ticket=`, frames forwarded unchanged
+ * WebSocket server: one-use tickets in `?ticket=` naming the file's room, frames forwarded unchanged
  * to the room or to `targetId`, `senderId` pinned to the connection's hello,
  * and `leave` sent for a connection that drops.
  */
-export function createMockRelay(tickets: Set<string>) {
+export function createMockRelay(tickets: Map<string, string>) {
   const rooms = new Map<string, Set<ServerWebSocket<RelayConnection>>>()
   const refused: string[] = []
+  /** Every binary payload forwarded, as it crossed the relay: what the relay could read. */
+  const payloads: Uint8Array[] = []
 
   function others(socket: ServerWebSocket<RelayConnection>) {
     return [...(rooms.get(socket.data.roomId) ?? [])].filter((peer) => peer !== socket)
@@ -40,8 +42,9 @@ export function createMockRelay(tickets: Set<string>) {
     port: 0,
     fetch(request, bunServer) {
       const url = new URL(request.url)
-      const roomId = decodeURIComponent(url.pathname.split('/').at(-1) ?? '')
       const ticket = url.searchParams.get('ticket') ?? ''
+      // The room is the file the ticket was issued for, as on the real relay.
+      const roomId = tickets.get(ticket) ?? ''
       if (!tickets.delete(ticket)) {
         refused.push(ticket)
         return new Response('unauthorized', { status: 401 })
@@ -65,6 +68,7 @@ export function createMockRelay(tickets: Set<string>) {
           socket.close(1008, 'sender mismatch')
           return
         }
+        if (typeof raw !== 'string') payloads.push(new Uint8Array(raw))
         forward(socket, frame, raw)
       },
       close(socket) {
@@ -82,6 +86,11 @@ export function createMockRelay(tickets: Set<string>) {
     /** Tickets that did not admit a connection. */
     refused,
     connections: (roomId: string) => rooms.get(roomId)?.size ?? 0,
+    payloads,
+    /** Disconnects a room as Console's revocation would: close code 4001, never to return. */
+    revoke(roomId: string) {
+      for (const socket of rooms.get(roomId) ?? []) socket.close(4001, 'access revoked')
+    },
     /** Drops every connection, as a relay restart would. */
     dropAll() {
       for (const room of rooms.values()) for (const socket of room) socket.close(1012, 'restart')

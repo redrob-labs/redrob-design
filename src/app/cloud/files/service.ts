@@ -63,14 +63,16 @@ export async function shareDocument(store: EditorStore): Promise<CloudFileBindin
   await consoleClient().call('createCloudFile', {
     body: { id: fileId, encryptedName, keyGrant: { wrappedKey } }
   })
-  const saved = await saveSnapshot(fileId, epoch, encodeGraphState(store), 0)
+  const seed = encodeGraphState(store)
+  const saved = await saveSnapshot(fileId, epoch, seed, 0)
   const binding: CloudFileBinding = {
     fileId,
     name,
     role: 'owner',
     epoch,
     revision: saved.saved ? saved.revision : 0,
-    link: null
+    link: null,
+    seed
   }
   bindCloudFile(store, binding)
   return binding
@@ -117,7 +119,8 @@ export async function openCloudFile(target: ParsedCloudLink): Promise<EditorStor
       role: file.role,
       epoch: file.keyEpoch,
       revision: snapshot?.revision ?? 0,
-      link: link ?? null
+      link: link ?? null,
+      seed: snapshot?.state ?? null
     })
     store.requestRender()
     return store

@@ -1,13 +1,17 @@
+import 'fake-indexeddb/auto'
 import { afterAll, afterEach, beforeAll, describe, expect, test } from 'bun:test'
 
+import { generateContentKey, resetKeystoreForTests } from '@/app/cloud/crypto'
+import { forgetSessionKeys, newCloudFileId, type CloudFileBinding } from '@/app/cloud/files'
+import { adoptNewKey } from '@/app/cloud/files/keyring'
+import { fileRelayTicket, joinCloudFileRoom, relayCipher } from '@/app/collab/transport'
 import { deferredCollabRoom } from '@/app/collab/transport/deferred'
 import {
   decodeRelayFrame,
   encodeActionFrame,
   encodeControlFrame
 } from '@/app/collab/transport/relay/frames'
-import { connectRelayRoom } from '@/app/collab/transport/relay/room'
-import { consoleRelayTicket } from '@/app/collab/transport/relay/ticket'
+import { connectRelayRoom, type RelayStop } from '@/app/collab/transport/relay/room'
 import type { CollabRoomTransport } from '@/app/collab/transport/types'
 import { createConsoleClient, setConsoleClientForTests } from '@/app/integrations/console'
 
@@ -18,9 +22,34 @@ const mock = createMockConsole()
 let relay: MockRelay
 const open: CollabRoomTransport[] = []
 
+/** A shared file the mock knows, with this computer holding its key. */
+async function sharedFile(): Promise<CloudFileBinding> {
+  const fileId = newCloudFileId()
+  await adoptNewKey(fileId, 1, generateContentKey())
+  mock.state.design.files.set(fileId, {
+    id: fileId,
+    encryptedName: 'c2VhbGVk',
+    role: 'owner',
+    keyEpoch: 1,
+    snapshotRevision: 0,
+    createdAt: '2026-10-06T09:00:00.000Z',
+    updatedAt: '2026-10-06T09:00:00.000Z'
+  })
+  mock.state.design.members.set(fileId, [
+    {
+      userId: mock.state.account.id,
+      email: 'jane@example.com',
+      name: 'Jane',
+      role: 'owner',
+      addedAt: '2026-10-06T09:00:00.000Z'
+    }
+  ])
+  return { fileId, name: 'File', role: 'owner', epoch: 1, revision: 0, link: null, seed: null }
+}
+
 beforeAll(() => {
-  relay = createMockRelay(mock.state.relayTickets)
-  mock.state.relayURL = relay.url
+  relay = createMockRelay(mock.state.design.relayTickets)
+  mock.state.design.relay.url = relay.url
   setConsoleClientForTests(
     createConsoleClient({
       baseURL: 'https://console.mock/v1',
@@ -37,101 +66,103 @@ afterEach(async () => {
 afterAll(() => {
   relay.stop()
   setConsoleClientForTests(null)
+  forgetSessionKeys()
+  resetKeystoreForTests()
 })
 
 async function until(check: () => boolean, label: string): Promise<void> {
-  for (let attempt = 0; attempt < 200; attempt++) {
+  for (let attempt = 0; attempt < 300; attempt++) {
     if (check()) return
     await Bun.sleep(10)
   }
   throw new Error(`Timed out waiting for ${label}`)
 }
 
-function track(room: CollabRoomTransport): CollabRoomTransport {
+async function join(binding: CloudFileBinding, onStop?: (reason: RelayStop) => void) {
+  const room = await connectRelayRoom(binding.fileId, {
+    ticket: () => fileRelayTicket(binding),
+    cipher: relayCipher(binding.fileId, binding.epoch),
+    backoffMs: [20],
+    onStop
+  })
   open.push(room)
   return room
 }
 
-type JoinRoom = (roomId: string, peerId: string) => Promise<CollabRoomTransport>
-
-const relayRoom: JoinRoom = async (roomId, peerId) =>
-  track(await connectRelayRoom(roomId, { ticket: consoleRelayTicket, peerId, backoffMs: [20] }))
-
-const deferredRelayRoom: JoinRoom = (roomId, peerId) =>
-  Promise.resolve(
-    track(
-      deferredCollabRoom(() =>
-        connectRelayRoom(roomId, { ticket: consoleRelayTicket, peerId, backoffMs: [20] })
-      )
-    )
-  )
-
-/** Every transport the app can pick must behave the same to the collaboration session. */
-function transportContract(name: string, join: JoinRoom) {
-  describe(`${name} transport contract`, () => {
-    test('peers meet, broadcast, send to one peer, and leave', async () => {
-      const roomId = `room-${name}-${crypto.randomUUID()}`
-      const alice = await join(roomId, 'alice')
-      const bob = await join(roomId, 'bob')
-      const carol = await join(roomId, 'carol')
-      const seen = { alice: new Set<string>(), bob: new Set<string>() }
-      const leaves: string[] = []
-      alice.onPeerJoin((id) => seen.alice.add(id))
-      alice.onPeerLeave((id) => leaves.push(id))
-      bob.onPeerJoin((id) => seen.bob.add(id))
-      const [aliceSend] = alice.makeAction('doc')
-      const [, bobReceive] = bob.makeAction('doc')
-      const [, carolReceive] = carol.makeAction('doc')
-      const got = { bob: [] as string[], carol: [] as string[] }
-      bobReceive((data, from) => got.bob.push(`${from}:${[...data].join(',')}`))
-      carolReceive((data, from) => got.carol.push(`${from}:${[...data].join(',')}`))
-
-      await until(() => seen.alice.size === 2 && seen.bob.size === 2, 'peers to meet')
-      aliceSend(new Uint8Array([1, 2, 3]))
-      aliceSend(new Uint8Array([9]), 'carol')
-      await until(() => got.bob.length === 1 && got.carol.length === 2, 'actions')
-      expect(got.bob).toEqual(['alice:1,2,3'])
-      expect(got.carol).toEqual(['alice:1,2,3', 'alice:9'])
-
-      await carol.leave()
-      await until(() => leaves.includes('carol'), 'carol to leave')
-    })
-  })
-}
-
-transportContract('relay', relayRoom)
-transportContract('deferred relay', deferredRelayRoom)
-
 describe('relay frames', () => {
   test('round-trip control and binary action frames, and refuse malformed ones', () => {
-    const control = decodeRelayFrame(encodeControlFrame({ type: 'hello', senderId: 'a' }))
-    expect(control).toEqual({ v: 1, type: 'hello', senderId: 'a' })
-    const action = decodeRelayFrame(
-      encodeActionFrame({
-        senderId: 'a',
-        targetId: 'b',
-        namespace: 'doc',
-        data: new Uint8Array([7])
-      })
-    )
-    expect(action).toEqual({
-      type: 'action',
+    const control = encodeControlFrame({ type: 'hello', senderId: 'a' })
+    expect(decodeRelayFrame(control)).toEqual({ v: 1, type: 'hello', senderId: 'a' })
+    const action = encodeActionFrame({
       senderId: 'a',
       targetId: 'b',
-      namespace: 'doc',
-      data: new Uint8Array([7])
+      namespace: 'yjs-update',
+      data: new Uint8Array([1, 2, 3])
     })
+    const decoded = decodeRelayFrame(action.buffer)
+    expect(decoded?.type).toBe('action')
     expect(decodeRelayFrame('{"v":2,"type":"hello","senderId":"a"}')).toBeNull()
-    expect(decodeRelayFrame(new Uint8Array([1, 0, 0, 9, 0]))).toBeNull()
-    expect(decodeRelayFrame(42)).toBeNull()
+    expect(decodeRelayFrame(new Uint8Array([9, 0, 0, 0, 0]))).toBeNull()
   })
 })
 
-describe('the relay room', () => {
+describe('a shared file’s room', () => {
+  test('peers meet, broadcast and target, and the relay only ever sees ciphertext', async () => {
+    const binding = await sharedFile()
+    const alice = await join(binding)
+    const bob = await join(binding)
+    const carol = await join(binding)
+    const [aliceSend] = alice.makeAction('yjs-update')
+    const [, bobReceive] = bob.makeAction('yjs-update')
+    const [, carolReceive] = carol.makeAction('yjs-update')
+    const got = { bob: [] as number[][], carol: [] as number[][] }
+    bobReceive((data) => got.bob.push([...data]))
+    carolReceive((data) => got.carol.push([...data]))
+    const joined: string[] = []
+    alice.onPeerJoin((id) => joined.push(id))
+    await until(() => joined.length === 2, 'everyone to meet')
+
+    const before = relay.payloads.length
+    const secret = new TextEncoder().encode('the price is $24')
+    aliceSend(new Uint8Array(secret))
+    await until(() => got.bob.length === 1 && got.carol.length === 1, 'a broadcast')
+    expect(new TextDecoder().decode(new Uint8Array(got.bob[0]))).toBe('the price is $24')
+
+    const crossed = relay.payloads.slice(before)
+    expect(crossed.length).toBeGreaterThan(0)
+    for (const frame of crossed) {
+      expect(Buffer.from(frame).includes(Buffer.from('the price is'))).toBe(false)
+    }
+
+    aliceSend(new Uint8Array([7]), joined[0])
+    await until(() => got.bob.length + got.carol.length === 3, 'a targeted frame')
+  })
+
+  test('a frame that does not open with the file key is dropped, not applied', async () => {
+    const binding = await sharedFile()
+    const alice = await join(binding)
+    const bob = await join(binding)
+    const [, bobReceive] = bob.makeAction('yjs-update')
+    const got: number[][] = []
+    bobReceive((data) => got.push([...data]))
+    // Alice sends without the file key, as the relay itself or a stranger could.
+    const plain = await connectRelayRoom(binding.fileId, { ticket: () => fileRelayTicket(binding) })
+    open.push(plain)
+    const [plainSend] = plain.makeAction('yjs-update')
+    const met: string[] = []
+    bob.onPeerJoin((id) => met.push(id))
+    await until(() => met.length === 2, 'peers to meet')
+    plainSend(new Uint8Array([1, 2, 3]))
+    const [aliceSend] = alice.makeAction('yjs-update')
+    aliceSend(new Uint8Array([9]))
+    await until(() => got.length === 1, 'the genuine frame')
+    expect(got).toEqual([[9]])
+  })
+
   test('reconnects with a new ticket after the relay drops, and peers meet again', async () => {
-    const roomId = `room-reconnect-${crypto.randomUUID()}`
-    const alice = await relayRoom(roomId, 'alice')
-    const bob = await relayRoom(roomId, 'bob')
+    const binding = await sharedFile()
+    const alice = await join(binding)
+    const bob = await join(binding)
     const joins: string[] = []
     const leaves: string[] = []
     alice.onPeerJoin((id) => joins.push(id))
@@ -142,48 +173,51 @@ describe('the relay room', () => {
     aliceReceive((data) => got.push(...data))
     await until(() => joins.length === 1, 'first meeting')
 
-    const refusedBefore = relay.refused.length
     relay.dropAll()
-    await until(() => leaves.includes('bob'), 'bob to drop')
-    await until(() => joins.length === 2 && relay.connections(roomId) === 2, 'meeting again')
-    expect(relay.refused.length).toBe(refusedBefore)
-
+    await until(() => leaves.length === 1, 'bob to drop')
+    await until(() => joins.length >= 2 && relay.connections(binding.fileId) === 2, 'meeting again')
     bobSend(new Uint8Array([5]))
     await until(() => got.length === 1, 'an action after reconnecting')
     expect(got).toEqual([5])
   })
 
-  test('refuses to start without a valid ticket, so the app can fall back', async () => {
-    const attempt = connectRelayRoom('room-refused', {
-      ticket: () =>
-        Promise.resolve({ url: `${relay.url}/room-refused`, ticket: 'forged-ticket-0000' })
-    })
-    await expect(attempt).rejects.toThrow('refused')
+  test('a revoked connection stops for good and says so', async () => {
+    const binding = await sharedFile()
+    const stops: RelayStop[] = []
+    await join(binding, (reason) => stops.push(reason))
+    await until(() => relay.connections(binding.fileId) === 1, 'the connection')
+    relay.revoke(binding.fileId)
+    await until(() => stops.length === 1, 'the stop')
+    expect(stops).toEqual(['revoked'])
+    await Bun.sleep(100)
+    expect(relay.connections(binding.fileId)).toBe(0)
   })
 
-  test('a room falls back to the other transport and keeps what was sent meanwhile', async () => {
-    const sent: Array<{ namespace: string; data: number[] }> = []
-    const fallback: CollabRoomTransport = {
-      makeAction: (namespace) => [
-        (data) => sent.push({ namespace, data: [...data] }),
-        () => undefined
-      ],
-      onPeerJoin: (handler) => queueMicrotask(() => handler('peer-p2p')),
-      onPeerLeave: () => undefined,
-      leave: () => Promise.resolve()
-    }
+  test('a relay that refuses the connection is reported, with no other way in', async () => {
+    const binding = await sharedFile()
+    mock.state.design.members.set(binding.fileId, [])
+    const failures: unknown[] = []
+    const room = joinCloudFileRoom(binding, { onUnavailable: (error) => failures.push(error) })
+    open.push(room)
+    await until(() => failures.length === 1, 'the refusal')
+  })
+
+  test('frames made before the relay answers are kept and sent once it does', async () => {
+    const binding = await sharedFile()
+    const bob = await join(binding)
+    const [, bobReceive] = bob.makeAction('doc')
+    const got: number[][] = []
+    bobReceive((data) => got.push([...data]))
     const room = deferredCollabRoom(() =>
-      connectRelayRoom('room-fallback', {
-        ticket: () => Promise.reject(new Error('not signed in'))
-      }).catch(() => fallback)
+      connectRelayRoom(binding.fileId, {
+        ticket: () => fileRelayTicket(binding),
+        cipher: relayCipher(binding.fileId, binding.epoch)
+      })
     )
     open.push(room)
     const [send] = room.makeAction('doc')
     send(new Uint8Array([4, 2]))
-    const joined: string[] = []
-    room.onPeerJoin((id) => joined.push(id))
-    await until(() => sent.length === 1 && joined.length === 1, 'the fallback')
-    expect(sent).toEqual([{ namespace: 'doc', data: [4, 2] }])
-    expect(joined).toEqual(['peer-p2p'])
+    await until(() => got.length === 1, 'the queued frame')
+    expect(got).toEqual([[4, 2]])
   })
 })

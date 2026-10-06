@@ -33,7 +33,6 @@ import {
   registerDeviceSchema,
   pageSchema,
   publishLibraryRevisionSchema,
-  relayTicketSchema,
   renameVersionSchema,
   updateCommentSchema,
   versionSchema,
@@ -239,15 +238,6 @@ export const CONSOLE_ROUTES = [
     auth: 'bearer',
     response: null,
     status: 204
-  },
-  {
-    method: 'POST',
-    path: '/relay/{roomId}/ticket',
-    operationId: 'createRelayTicket',
-    summary: 'A short-lived ticket for the collaboration relay WebSocket of one room.',
-    auth: 'bearer',
-    response: relayTicketSchema,
-    status: 201
   },
   {
     method: 'GET',

@@ -6,7 +6,7 @@ describe('app runtime configuration', () => {
   test('parses supported development and presentation flags once', () => {
     expect(
       parseAppRuntimeConfig(
-        '?test&navigation-benchmark&recent-files&no-chrome&no-rulers&renderer=tiled&collabTransport=test&collabRelay=ws%3A%2F%2Flocalhost%3A4000'
+        '?test&navigation-benchmark&recent-files&no-chrome&no-rulers&renderer=tiled'
       )
     ).toEqual({
       test: true,
@@ -15,9 +15,7 @@ describe('app runtime configuration', () => {
       showChrome: false,
       showRulers: false,
       sceneRenderer: 'tiled',
-      sceneRendererOverride: true,
-      collaborationTransport: 'test',
-      collaborationRelayURL: 'ws://localhost:4000'
+      sceneRendererOverride: true
     })
   })
 
@@ -39,17 +37,7 @@ describe('app runtime configuration', () => {
       showChrome: true,
       showRulers: true,
       sceneRenderer: 'retained',
-      sceneRendererOverride: false,
-      collaborationTransport: 'default',
-      collaborationRelayURL: null
+      sceneRendererOverride: false
     })
-  })
-
-  test('picks a collaboration transport, and the default for anything else', () => {
-    const modeOf = (value: string) =>
-      parseAppRuntimeConfig(`?collabTransport=${value}`).collaborationTransport
-    expect(modeOf('relay')).toBe('relay')
-    expect(modeOf('p2p')).toBe('p2p')
-    expect(modeOf('carrier-pigeon')).toBe('default')
   })
 })

@@ -5,7 +5,8 @@ import type { CollabAction, CollabActionReceiver } from './types'
  * the collaboration session registers. Handlers registered late still hear
  * about peers already present.
  */
-export function createPeerRoster(selfId: string) {
+export function createPeerRoster(self: string | (() => string)) {
+  const selfId = typeof self === 'string' ? () => self : self
   const peers = new Set<string>()
   let joinHandler: ((peerId: string) => void) | null = null
   let leaveHandler: ((peerId: string) => void) | null = null
@@ -14,7 +15,7 @@ export function createPeerRoster(selfId: string) {
   }
   return {
     add: (peerId: string): void => {
-      if (peerId === selfId || peers.has(peerId)) return
+      if (peerId === selfId() || peers.has(peerId)) return
       peers.add(peerId)
       joinHandler?.(peerId)
     },

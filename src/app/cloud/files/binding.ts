@@ -16,6 +16,11 @@ export interface CloudFileBinding {
   revision: number
   /** The view link's token, when the tab was opened through one. */
   link: string | null
+  /**
+   * The Yjs state the document was loaded from or shared as. A live session starts its document
+   * from these exact bytes, so every collaborator shares one history rather than merging copies.
+   */
+  seed: Uint8Array | null
 }
 
 const bindings = new WeakMap<EditorStore, CloudFileBinding>()

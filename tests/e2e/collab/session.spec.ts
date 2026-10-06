@@ -3,269 +3,193 @@ import { WebSocketServer, type WebSocket } from 'ws'
 
 import { CanvasHelper } from '#tests/helpers/canvas'
 import { routeConsoleToMock } from '#tests/helpers/console/route'
+import { createMockConsole, type MockConsole } from '#tests/helpers/console/server'
+import { openSettingsFromMenu } from '#tests/helpers/menu'
 
-const ROOM_ID = 'e2e-collaboration-room'
-
-type TestRelay = {
-  url: string
-  pause: () => void
-  resume: () => void
-  queuedCount: () => number
-  close: () => Promise<void>
-}
-
-async function startRelay(): Promise<TestRelay> {
+/**
+ * A ticketed relay in the shape of Redrob Console's: each ticket admits one connection into the
+ * room of the file it was issued for, and frames go to the others in that room unchanged. It
+ * records every binary payload, which is all the relay ever sees of the document.
+ */
+async function startRelay(tickets: Map<string, string>) {
   const rooms = new Map<string, Set<WebSocket>>()
-  const sockets = new Map<WebSocket, { room: Set<WebSocket>; peerId: string | null }>()
-  const queuedMessages: Array<{ sender: WebSocket; room: Set<WebSocket>; text: string }> = []
-  let paused = false
+  const payloads: Buffer[] = []
   const server = new WebSocketServer({ host: '127.0.0.1', port: 0 })
   server.on('connection', (socket, request) => {
-    const roomId = new URL(request.url ?? '/', 'ws://127.0.0.1').searchParams.get('roomId') ?? ''
-    let room = rooms.get(roomId)
-    if (!room) {
-      room = new Set()
-      rooms.set(roomId, room)
+    const ticket = new URL(request.url ?? '/', 'ws://relay').searchParams.get('ticket') ?? ''
+    const fileId = tickets.get(ticket)
+    if (!fileId) {
+      socket.close(4000, 'unauthorized')
+      return
     }
+    tickets.delete(ticket)
+    const room = rooms.get(fileId) ?? new Set<WebSocket>()
+    rooms.set(fileId, room)
     room.add(socket)
-    sockets.set(socket, { room, peerId: null })
-    socket.on('message', (data) => {
-      const text = data.toString()
-      const message = JSON.parse(text) as { senderId?: string }
-      const state = sockets.get(socket)
-      if (state && message.senderId) state.peerId = message.senderId
-      if (paused) {
-        queuedMessages.push({ sender: socket, room, text })
-        return
-      }
+    let senderId: string | null = null
+    socket.on('message', (data, isBinary) => {
+      const bytes = Buffer.isBuffer(data) ? data : Buffer.from(data as ArrayBuffer)
+      if (isBinary) payloads.push(bytes)
+      else senderId ??= (JSON.parse(bytes.toString()) as { senderId?: string }).senderId ?? null
       for (const peer of room) {
-        if (peer !== socket && peer.readyState === peer.OPEN) peer.send(text)
+        if (peer !== socket && peer.readyState === peer.OPEN) peer.send(bytes, { binary: isBinary })
       }
     })
     socket.on('close', () => {
-      const state = sockets.get(socket)
-      room?.delete(socket)
-      sockets.delete(socket)
-      if (!state?.peerId) return
-      const leave = JSON.stringify({ type: 'leave', senderId: state.peerId })
-      for (const peer of state.room) if (peer.readyState === peer.OPEN) peer.send(leave)
+      room.delete(socket)
+      if (!senderId) return
+      const leave = JSON.stringify({ v: 1, type: 'leave', senderId })
+      for (const peer of room) if (peer.readyState === peer.OPEN) peer.send(leave)
     })
   })
-  await new Promise<void>((resolve, reject) => {
+  await new Promise<void>((resolve) => {
     server.once('listening', () => resolve())
-    server.once('error', reject)
   })
   const address = server.address()
   if (typeof address === 'string' || address === null) throw new Error('Test relay unavailable')
   return {
-    url: `ws://127.0.0.1:${address.port}`,
-    pause: () => {
-      paused = true
-    },
-    resume: () => {
-      paused = false
-      for (const message of queuedMessages.splice(0)) {
-        for (const peer of message.room) {
-          if (peer !== message.sender && peer.readyState === peer.OPEN) peer.send(message.text)
-        }
-      }
-    },
-    queuedCount: () => queuedMessages.length,
-    close: async () => {
-      for (const room of rooms.values()) for (const socket of room) socket.terminate()
-      await new Promise<void>((resolve, reject) => {
-        server.close((error) => {
-          if (error) reject(error)
-          else resolve()
-        })
+    url: `ws://127.0.0.1:${address.port}/v1/rooms`,
+    payloads,
+    close: () =>
+      new Promise<void>((resolve) => {
+        for (const room of rooms.values()) for (const socket of room) socket.terminate()
+        server.close(() => resolve())
       })
-    }
   }
 }
 
-type Peer = {
-  context: BrowserContext
-  page: Page
-  canvas: CanvasHelper
-}
+type Peer = { context: BrowserContext; page: Page }
 
-async function createPeer(browser: Browser, name: string, relayURL: string): Promise<Peer> {
+async function openApp(browser: Browser, mock: MockConsole): Promise<Peer> {
   const context = await browser.newContext({ viewport: { width: 1280, height: 800 } })
-  try {
-    const page = await context.newPage()
-    // Feeds and sign-in answer from the mock, so no request leaves the test.
-    await routeConsoleToMock(page)
-    await page.goto(`/?test&collabTransport=test&collabRelay=${encodeURIComponent(relayURL)}`)
-    await page.evaluate(
-      (localName) => window.redrobDesign?.test?.collab?.setLocalName(localName),
-      name
-    )
-    const canvas = new CanvasHelper(page)
-    await canvas.waitForInit()
-    canvas.errors.length = 0
-    return { context, page, canvas }
-  } catch (error) {
-    await context.close()
-    throw error
-  }
+  const page = await context.newPage()
+  await routeConsoleToMock(page, mock)
+  await page.goto('/?test')
+  await new CanvasHelper(page).waitForInit()
+  return { context, page }
 }
 
-function collaborationErrors(peer: Peer): string[] {
-  return peer.canvas.errors.filter((error) => !error.includes('127.0.0.1:7600'))
+async function signIn(page: Page) {
+  await openSettingsFromMenu(page)
+  await page.getByTestId('settings-section-cloud').click()
+  const panel = page.getByTestId('settings-cloud-panel')
+  await panel.getByRole('button', { name: 'Sign in with Redrob Console' }).click()
+  await expect(panel.locator('[data-slot="cloud-account"]')).toHaveText(
+    'Signed in as Jane Designer.',
+    { timeout: 20_000 }
+  )
+  await page.keyboard.press('Escape')
 }
 
-async function connect(peer: Peer) {
-  await peer.page.evaluate((roomId) => {
-    const collab = window.redrobDesign?.test?.collab
-    if (!collab) throw new Error('Collaboration bridge unavailable')
-    collab.connect(roomId)
-  }, ROOM_ID)
-}
+const nodeName = (page: Page, id: string) =>
+  page.evaluate((nodeId) => window.redrobDesign?.getStore?.().graph.getNode(nodeId)?.name, id)
 
-test('two browser peers synchronize editing, awareness, departure, and reconnect', async ({
+test('a shared file is edited live through the relay, end-to-end encrypted, and a view link only watches', async ({
   browser
 }) => {
   test.setTimeout(120_000)
-  const relay = await startRelay()
-  let host: Peer | null = null
-  let guest: Peer | null = null
+  const mock = createMockConsole()
+  mock.state.pendingPolls = 0
+  const relay = await startRelay(mock.state.design.relayTickets)
+  mock.state.design.relay.url = relay.url
+  const peers: Peer[] = []
   try {
-    host = await createPeer(browser, 'Host', relay.url)
-    guest = await createPeer(browser, 'Guest', relay.url)
+    const owner = await openApp(browser, mock)
+    peers.push(owner)
+    await signIn(owner.page)
 
-    await connect(host)
-    await connect(guest)
-    await expect
-      .poll(() => host.page.evaluate(() => window.redrobDesign?.test?.collab?.peerCount()))
-      .toBe(1)
-    await expect
-      .poll(() => guest.page.evaluate(() => window.redrobDesign?.test?.collab?.peerCount()))
-      .toBe(1)
-
-    const nodeId = await host.page.evaluate(() => {
+    const nodeId = await owner.page.evaluate(() => {
       const store = window.redrobDesign?.getStore?.()
-      if (!store) throw new Error('RedrobDesign store not initialized')
-      const node = store.graph.createNode('RECTANGLE', store.state.currentPageId, {
-        name: 'Shared rectangle',
+      if (!store) throw new Error('store not exposed')
+      store.state.documentName = 'Launch plan'
+      return store.graph.createNode('RECTANGLE', store.state.currentPageId, {
+        name: 'Secret pricing card',
         x: 160,
         y: 140,
         width: 120,
         height: 80
-      })
-      store.requestRender()
-      return node.id
+      }).id
     })
 
+    await owner.page.getByTestId('collab-share-button').click()
+    await owner.page.getByTestId('collab-share-file').click()
+    await expect(owner.page.getByTestId('collab-members')).toContainText('You')
     await expect
-      .poll(() =>
-        guest.page.evaluate(
-          (id) => window.redrobDesign?.getStore?.().graph.getNode(id)?.name,
-          nodeId
-        )
-      )
-      .toBe('Shared rectangle')
+      .poll(() => owner.page.evaluate(() => window.redrobDesign?.test?.collab?.status()))
+      .toBe('live')
 
-    await guest.page.evaluate((id) => {
-      const store = window.redrobDesign?.getStore?.()
-      if (!store) throw new Error('RedrobDesign store not initialized')
-      store.updateNode(id, { name: 'Edited by Guest', x: 320 })
-      store.select([id])
-      window.redrobDesign?.test?.collab?.updateSelection([id])
-    }, nodeId)
+    await owner.page.getByTestId('collab-view-link').click()
+    await expect.poll(() => mock.state.design.links.size).toBe(1)
+    const link = await owner.page.evaluate(() => navigator.clipboard.readText()).catch(() => null)
+    const viewLink =
+      link ??
+      (await owner.page.evaluate(async () => {
+        const files = await import('/src/app/cloud/files/index.ts' as string)
+        const store = window.redrobDesign?.getStore?.()
+        const binding = store ? files.cloudBindingOf(store) : null
+        return binding ? files.createViewLink(binding) : ''
+      }))
+    expect(viewLink).toContain('#')
 
+    // Someone with only the link, signed out, in another browser.
+    const viewer = await openApp(browser, mock)
+    peers.push(viewer)
+    await viewer.page.getByTestId('collab-share-button').click()
+    await viewer.page.getByTestId('collab-open-input').fill(viewLink)
+    await viewer.page.getByTestId('collab-open-button').click()
+    await expect.poll(() => nodeName(viewer.page, nodeId)).toBe('Secret pricing card')
     await expect
-      .poll(() =>
-        host.page.evaluate(
-          (id) => window.redrobDesign?.getStore?.().graph.getNode(id)?.name,
-          nodeId
-        )
-      )
-      .toBe('Edited by Guest')
+      .poll(() => viewer.page.evaluate(() => window.redrobDesign?.getStore?.().state.viewOnly))
+      .toBe(true)
     await expect
-      .poll(() => host.page.evaluate(() => window.redrobDesign?.test?.collab?.peerSelections()[0]))
-      .toEqual([nodeId])
+      .poll(() => viewer.page.evaluate(() => window.redrobDesign?.test?.collab?.status()))
+      .toBe('live')
 
-    relay.pause()
-    await guest.page.evaluate((id) => {
-      const store = window.redrobDesign?.getStore?.()
-      if (!store) throw new Error('RedrobDesign store not initialized')
-      store.updateNode(id, { y: 280 })
+    // The owner's edit reaches the viewer live.
+    await owner.page.evaluate((id) => {
+      window.redrobDesign?.getStore?.().updateNode(id, { name: 'Edited by the owner' })
     }, nodeId)
-    await host.page.evaluate((id) => {
-      const store = window.redrobDesign?.getStore?.()
-      if (!store) throw new Error('RedrobDesign store not initialized')
-      store.updateNode(id, { name: 'Host partition edit' })
-    }, nodeId)
-    await expect.poll(() => relay.queuedCount()).toBeGreaterThan(0)
-    relay.resume()
-    for (const peer of [host, guest]) {
-      await expect
-        .poll(() =>
-          peer.page.evaluate((id) => {
-            const node = window.redrobDesign?.getStore?.().graph.getNode(id)
-            return node ? { name: node.name, y: node.y } : null
-          }, nodeId)
-        )
-        .toEqual({ name: 'Host partition edit', y: 280 })
-    }
+    await expect.poll(() => nodeName(viewer.page, nodeId)).toBe('Edited by the owner')
 
-    await guest.page.evaluate(() => {
+    // A change made on the viewer's side goes nowhere.
+    await viewer.page.evaluate((id) => {
+      window.redrobDesign?.getStore?.().updateNode(id, { name: 'Changed by the viewer' })
+    }, nodeId)
+    await viewer.page.waitForTimeout(1000)
+    expect(await nodeName(owner.page, nodeId)).toBe('Edited by the owner')
+
+    // Presence: the owner sees the viewer's cursor.
+    await viewer.page.evaluate(() => {
       const store = window.redrobDesign?.getStore?.()
-      if (!store) throw new Error('RedrobDesign store not initialized')
-      window.redrobDesign?.test?.collab?.updateCursor(420, 260, store.state.currentPageId)
+      if (store)
+        window.redrobDesign?.test?.collab?.updateCursor(420, 260, store.state.currentPageId)
     })
     await expect
       .poll(() =>
-        host.page.evaluate(() => window.redrobDesign?.getStore?.().state.remoteCursors.length)
+        owner.page.evaluate(() => window.redrobDesign?.getStore?.().state.remoteCursors.length)
       )
       .toBe(1)
 
-    expect(collaborationErrors(guest)).toEqual([])
-    await guest.context.close()
-    guest = null
-    await expect
-      .poll(() => host.page.evaluate(() => window.redrobDesign?.test?.collab?.peerCount()))
-      .toBe(0)
+    // The relay forwarded the document and never saw it.
+    expect(relay.payloads.length).toBeGreaterThan(0)
+    for (const payload of relay.payloads) {
+      expect(payload.includes(Buffer.from('Edited by the owner'))).toBe(false)
+      expect(payload.includes(Buffer.from('Secret pricing card'))).toBe(false)
+    }
+    // Nor did the bucket.
+    for (const blob of mock.state.design.blobs.values()) {
+      expect(Buffer.from(blob).includes(Buffer.from('Secret pricing card'))).toBe(false)
+    }
+
+    await viewer.context.close()
+    peers.splice(peers.indexOf(viewer), 1)
     await expect
       .poll(() =>
-        host.page.evaluate(() => window.redrobDesign?.getStore?.().state.remoteCursors.length)
+        owner.page.evaluate(() => window.redrobDesign?.getStore?.().state.remoteCursors.length)
       )
       .toBe(0)
-
-    const reconnectingGuest = await createPeer(browser, 'Guest', relay.url)
-    try {
-      await host.page.evaluate((id) => {
-        const store = window.redrobDesign?.getStore?.()
-        if (!store) throw new Error('RedrobDesign store not initialized')
-        store.updateNode(id, { name: 'Edited while offline', y: 260 })
-      }, nodeId)
-      await connect(reconnectingGuest)
-      await expect
-        .poll(() =>
-          reconnectingGuest.page.evaluate(
-            (id) => window.redrobDesign?.getStore?.().graph.getNode(id)?.name,
-            nodeId
-          )
-        )
-        .toBe('Edited while offline')
-      await expect
-        .poll(() => host.page.evaluate(() => window.redrobDesign?.test?.collab?.peerCount()))
-        .toBe(1)
-      expect(collaborationErrors(reconnectingGuest)).toEqual([])
-    } finally {
-      await reconnectingGuest.context.close()
-    }
-
-    expect(collaborationErrors(host)).toEqual([])
   } finally {
-    try {
-      await guest?.context.close()
-    } finally {
-      try {
-        await host?.context.close()
-      } finally {
-        await relay.close()
-      }
-    }
+    for (const peer of peers) await peer.context.close()
+    await relay.close()
   }
 })
