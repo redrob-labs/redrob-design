@@ -16,10 +16,10 @@ describe('settings dialog sections', () => {
     settingsDialogFocus.value = null
   })
 
-  test('navigation lists five sections in three groups', () => {
+  test('navigation lists six sections in three groups', () => {
     expect(SETTINGS_NAVIGATION.map((group) => [group.id, group.sections])).toEqual([
       ['preferences', ['general']],
-      ['connections', ['mcp', 'storage']],
+      ['connections', ['mcp', 'storage', 'cloud']],
       ['account', ['usage', 'diagnostics']]
     ])
   })

@@ -1,6 +1,6 @@
 ---
 title: Working with Redrob
-description: Describe and Edit, Plan and Run, Design Memory, the free page check, change cards, receipts, language versions, and Ship.
+description: Describe and Edit, Plan and Run, Design Memory, Privacy and Cross-check, the free page check, change cards, receipts, language versions, Ship, comments, versions and workspace libraries.
 ---
 
 # Working with Redrob
@@ -27,7 +27,15 @@ The composer has two modes.
 
 Design Memory is what Redrob reads before it draws. It holds the file's color variables, the typefaces and corner radii it uses, its components, and the Design System's rules. The card in the thread opens it in full.
 
-Until a workspace is connected, Design Memory is read from the open file only, on this computer. The `/demo` route shows a sample workspace.
+Signed out, Design Memory is read from the open file only, on this computer. Signed in to Redrob Cloud (Settings, Cloud), your workspace's tokens, typefaces, rules and prices come first and the file fills in the rest; the last copy keeps working offline, and a workspace admin can set the Privacy level for every member. The `/demo` route shows a sample workspace.
+
+Your own notes on how you like to work live in the Design Memory drawer too. They stay on this computer, and **Download notes** saves them as JSON.
+
+## Privacy and Cross-check
+
+The composer's Privacy level (Standard, High or Strict) decides what rules on this computer swap for placeholders before a request reaches a model: card and account numbers, keys, contact details and names you list. The canvas still gets the real values, and the receipt counts what was kept private. Local agents (ACP, Pi) are not filtered.
+
+Cross-check runs on your Review model. **Fact check** lists what holds up and what does not; **Challenge** argues for and against the direction for up to three rounds. The thread says when the checker comes from the same company as the model that drew.
 
 ## The free page check
 
@@ -61,6 +69,15 @@ The Code panel generates **React + Tailwind**. Values bound to variables become 
 
 - **React + tokens** downloads `Page.jsx` and `tokens.json`.
 - **Export for Figma** saves the page's frames as a `.fig`.
-- **Publish** and **Hand to Claude Code** need connections that don't exist yet. The buttons say so.
+- **Publish** uploads the page as a static site to the Publish site bucket you set up in Settings, Storage, separate from the bucket your files sync to. It asks once before the page goes public, checks the address, and **Unpublish** takes it down.
+- **Hand to Claude Code** sends the page, `tokens.json`, a brief and a preview to Claude Code over MCP when it is connected, or saves them into `.redrob/handoff/<page>/` (desktop) or a zip (browser), with the prompt to run copied.
 
-A shipped page can watch its sources and propose its own change when one moves. That also needs a connected workspace.
+Signed in to Redrob Cloud, a shipped page watches the workspace's sources. When a price, a piece of copy or a token changes there, the open page proposes its own update in the thread with **Keep it** and **Put it back**. **Stop watching** ends it. Console learns a hash of the file, never its path.
+
+## Comments, versions and libraries
+
+- **File, Comments** lists the threads. **Add comment**, then click a layer or the canvas, in Describe or Edit. Pins keep their size at any zoom and follow their layer. Reply, resolve and delete in the thread at the pin.
+- **File, Version history** keeps a version every 10 minutes while you edit, up to the last 30, plus every version you save by name. **Restore** is one undo step and keeps your latest changes as a version first.
+- The library manager's **Workspace** source publishes and reads the libraries everyone in your workspace uses. A publish that would overwrite someone else's newer revision is refused.
+
+All three work on this computer first. Signed in, they sync with your Redrob Cloud workspace, and signed out they say they are not shared. Collaboration sessions also go through the Redrob Cloud relay when signed in, and peer-to-peer otherwise.

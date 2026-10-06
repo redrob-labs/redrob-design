@@ -58,12 +58,42 @@ Thread state lives under `src/app/assistant/`:
 - `changes/` turns one answer into one undo entry and a change set. It uses core's `diffPageSnapshots` and `restoreNodes`.
 - `pointing/` handles Describe pointing.
 - `controls/` holds Plan or Run, the model pick, Memory and Cross-check.
+- `privacy/` is the rules-based redactor. It swaps private terms for placeholders in direct-model requests and tool input, and restores them for the canvas and display. ACP and Pi are not filtered.
+- `cross-check/` runs Fact check and Challenge on the `review` role model after an answer finishes (`turn/finished.ts`).
 
-The page check is in `src/app/review/` and uses the core lint `design-system` preset and `LintFix`. Design Memory is in `src/app/memory/`, behind `DesignMemorySource`. Ship and watch are in `src/app/ship/`.
+The page check is in `src/app/review/` and uses the core lint `design-system` preset and `LintFix`. Design Memory is in `src/app/memory/`, behind `DesignMemorySource`; `workspace.ts` merges the signed-in workspace's memory over the file's, and `notes/` keeps personal notes on this computer. Ship is in `src/app/ship/`: `publish/` uploads static sites to the separate `publish` storage profile, `handoff/` builds the Claude Code bundle (served over MCP by `get_handoff`, or written as files), and `watch/` polls Console for changes in watched sources.
 
 Messages Redrob posts without a model (review, Ship, watched updates) carry `data-*` parts that the AI SDK never sends to the model. They render in `ChatMessage.vue` after a type guard, and they are posted through `provideChatPost`. Cards that answer for the person use `provideChatSend`.
 
-Services with no backend yet (workspace reading, Publish, Hand to Claude Code, watching) answer with the prototype's sample data only on `/demo` (`src/app/runtime/demo.ts`). Everywhere else they must say they are not connected.
+On `/demo` (`src/app/runtime/demo.ts`), workspace reading and watching answer with the prototype's sample data. Elsewhere, a service that needs something the person has not set up (sign-in, a publish bucket, a connected agent) says so instead of pretending.
+
+### Redrob Cloud (Console)
+
+Redrob Cloud is optional: every feature works on this computer signed out, and signing in only adds sharing. The client lives in `src/app/integrations/console/`:
+
+- `contract/` holds zod schemas and a route table, which are the API contract. `openapi.json` is generated from them; regenerate it with `UPDATE_CONSOLE_OPENAPI=1 bun test tests/engine/app/console/contract.test.ts`.
+- `client.ts` validates every response against its schema and maps failures to `ConsoleError` kinds.
+- `session.ts` handles sign-in with the device flow. The token sits at `credentialRef('console', 'session-token')`, apart from model keys.
+- `cache.ts` keeps Console answers offline.
+- `document.ts` sends Console a SHA-256 of the document key, never a file path.
+
+Features that use it live in their own domains:
+
+- `memory/workspace.ts`
+- `ship/watch/`
+- `document/history/` for versions, with their own IndexedDB
+- `comments/`, local-first, with their own IndexedDB
+- `collab/transport/relay/`, a ticketed WebSocket with a peer-to-peer fallback through `deferredCollabRoom`
+- `libraries/catalog/console.ts`
+
+Conventions:
+
+- Local data comes first, and sync merges by id with the later edit winning.
+- Revisioned writes use `If-Match` or `If-None-Match: *`.
+- Ids are chosen on the client so retries stay idempotent.
+- Console never proxies model keys.
+
+`tests/helpers/console/server.ts` (Hono) and `relay.ts` (a Bun WebSocket server) are the mock Console. The mock is the acceptance oracle for the Console team.
 
 Shared agent UI (`Composer`, `Changes`, `Finding`, `AnswerReceipt`, `AgentTimeline`, `MemoryCard`, `PlanQuestions`) is store-free under `src/components/ui/agent/`. Its props contracts are in `types.ts`, after the design system's `index.d.ts`. App types should alias those contracts rather than repeat their shapes, because `test:type-shapes` rejects duplicates.
 
