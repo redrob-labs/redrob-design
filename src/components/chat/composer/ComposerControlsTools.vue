@@ -3,6 +3,7 @@ import ComposerMode from '@/components/ui/agent/ComposerMode.vue'
 import ModelPicker from '@/components/ui/agent/ModelPicker.vue'
 import { useEditorStore } from '@/app/editor/active-store'
 import { assistantControlsFor } from '@/app/assistant/controls/store'
+import { loadConsoleFeeds } from '@/app/integrations/console/app-feeds'
 
 import { useComposerControls } from './useComposerControls'
 
@@ -12,6 +13,8 @@ const { compact = false } = defineProps<{ compact?: boolean }>()
 const controls = assistantControlsFor(useEditorStore())
 
 const { t, modeOptions, pickId, picks, here, source } = useComposerControls(controls)
+// The Leaderboard and price feeds are public: no sign-in, at most one fetch a day.
+void loadConsoleFeeds()
 </script>
 
 <template>

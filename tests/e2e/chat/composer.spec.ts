@@ -1,4 +1,8 @@
+import { CanvasHelper } from '#tests/helpers/canvas'
 import { expect, test } from '#tests/helpers/chat/fixture'
+import { ChatHarness } from '#tests/helpers/chat/harness'
+import { injectMockChatTransport } from '#tests/helpers/chat/transport'
+import { routeConsoleToMock } from '#tests/helpers/console/route'
 
 test('composer enables submission only for non-empty input', async ({ configuredChat: chat }) => {
   await expect(chat.sendButton).toBeDisabled()
@@ -102,4 +106,21 @@ test('Privacy runs at the level the person picks and keeps listed names', async 
   await expect(chat.page.getByRole('textbox', { name: /Names to keep private/ })).toHaveValue(
     'Jane Doe'
   )
+})
+
+test('the model picker shows the Redrob Leaderboard feed edition', async ({ page }) => {
+  test.setTimeout(60_000)
+  await routeConsoleToMock(page)
+  const chat = new ChatHarness(page)
+  await chat.open()
+  await new CanvasHelper(page).waitForInit()
+  await injectMockChatTransport(page)
+  await chat.configureOpenRouter('sk-or-test-key-12345')
+  const picker = page
+    .getByTestId('chat-composer')
+    .getByRole('button', { name: 'Model', exact: true })
+  await picker.click()
+  // A load that raced page start retries once, shortly after.
+  await expect(page.getByText('Redrob Leaderboard, October 2026')).toBeVisible({ timeout: 25_000 })
+  await expect(page.getByRole('button', { name: /GPT-6 Astra/ })).toHaveCount(0)
 })

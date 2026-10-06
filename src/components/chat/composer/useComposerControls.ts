@@ -9,12 +9,9 @@ import {
   resolveAIModelRole,
   setModelRoleAssignment
 } from '@/app/ai/models'
-import {
-  DESIGN_SCREENS_RANKING,
-  RANKING_HERE,
-  RANKING_SOURCE
-} from '@/app/ai/models/ranking/fixture'
+import { RANKING_HERE } from '@/app/ai/models/ranking/fixture'
 import { profileForPick } from '@/app/ai/models/ranking/profiles'
+import { rankedPick, rankedPicks, rankingSource } from '@/app/ai/models/ranking/store'
 import type { AssistantControls } from '@/app/assistant/controls/model'
 import { privacyLevel } from '@/app/assistant/privacy/store'
 import { crossCheckSummary } from '@/components/ui/agent/cross-check'
@@ -142,7 +139,7 @@ export function useComposerControls(controls: AssistantControls) {
     get: () => controls.pickId,
     set: (id: string | null) => {
       controls.pickId = id
-      const pick = DESIGN_SCREENS_RANKING.find((candidate) => candidate.id === id)
+      const pick = rankedPick(id)
       if (!pick) return
       const profile = profileForPick(pick, aiModelSettings.value.models)
       if (profile) setModelRoleAssignment('design', profile.id)
@@ -161,8 +158,8 @@ export function useComposerControls(controls: AssistantControls) {
     memoryOptions,
     statusItems,
     pickId,
-    picks: DESIGN_SCREENS_RANKING,
+    picks: rankedPicks,
     here: RANKING_HERE,
-    source: RANKING_SOURCE
+    source: rankingSource
   }
 }

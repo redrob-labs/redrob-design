@@ -1,3 +1,5 @@
+import { shallowRef } from 'vue'
+
 /**
  * List prices per million tokens, in US dollars, for the models Redrob Design
  * most often runs, so a receipt can say what an answer cost. Matched by model
@@ -24,9 +26,12 @@ export const MODEL_RATES: readonly ModelRate[] = [
   { match: 'deepseek', inputPerMillion: 0.27, outputPerMillion: 1.1 }
 ]
 
+/** The rates in use: the fixture until the Leaderboard's price feed arrives. */
+export const modelRates = shallowRef<readonly ModelRate[]>(MODEL_RATES)
+
 export function rateForModel(model: string): ModelRate | null {
   const id = model.toLowerCase()
-  return MODEL_RATES.find((rate) => id.includes(rate.match)) ?? null
+  return modelRates.value.find((rate) => id.includes(rate.match.toLowerCase())) ?? null
 }
 
 /** The dollar cost of a turn, or null when the model or token counts are unknown. */

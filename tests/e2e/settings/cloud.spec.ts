@@ -1,7 +1,8 @@
 import { expect, test } from '@playwright/test'
 
 import { CanvasHelper } from '#tests/helpers/canvas'
-import { MOCK_USER_CODE, createMockConsole, mockConsoleFetch } from '#tests/helpers/console/server'
+import { routeConsoleToMock } from '#tests/helpers/console/route'
+import { MOCK_USER_CODE, createMockConsole } from '#tests/helpers/console/server'
 import { openSettingsFromMenu } from '#tests/helpers/menu'
 
 test('Redrob Cloud signs in with a Console code, picks a workspace and signs out', async ({
@@ -10,20 +11,7 @@ test('Redrob Cloud signs in with a Console code, picks a workspace and signs out
   test.setTimeout(60_000)
   const mock = createMockConsole()
   mock.state.pendingPolls = 2
-  const answer = mockConsoleFetch(mock)
-  await page.route('https://console.redrob.ai/api/backend/v1/**', async (route) => {
-    const request = route.request()
-    const response = await answer(request.url(), {
-      method: request.method(),
-      headers: request.headers(),
-      body: request.postData() ?? undefined
-    })
-    await route.fulfill({
-      status: response.status,
-      headers: { ...Object.fromEntries(response.headers), 'access-control-allow-origin': '*' },
-      body: await response.text()
-    })
-  })
+  await routeConsoleToMock(page, mock)
 
   await page.goto('/?test')
   await new CanvasHelper(page).waitForInit()

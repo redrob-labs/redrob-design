@@ -1,6 +1,6 @@
 import type { UIMessage } from 'ai'
 
-import { DESIGN_SCREENS_RANKING } from '@/app/ai/models/ranking/fixture'
+import { rankedPick } from '@/app/ai/models/ranking/store'
 import { assistantControlsFor } from '@/app/assistant/controls/store'
 import { setReceipt } from '@/app/assistant/thread/store'
 import type { EditorStore } from '@/app/editor/active-store'
@@ -34,7 +34,7 @@ export function recordKeptPrivate(store: EditorStore, count: number): void {
 /** The effort label the person set on a pinned model, or null under Redrob Auto. */
 function pinnedEffort(store: EditorStore): { pinned: boolean; effort: string | null } {
   const controls = assistantControlsFor(store)
-  const pick = DESIGN_SCREENS_RANKING.find((candidate) => candidate.id === controls.pickId)
+  const pick = rankedPick(controls.pickId)
   if (!pick) return { pinned: false, effort: null }
   const level = controls.effort ?? pick.effort.level
   return {
