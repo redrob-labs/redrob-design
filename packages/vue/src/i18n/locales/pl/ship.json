@@ -2,6 +2,7 @@
   "ship": "Wydaj",
   "shipOpen": "Wydanie jest już otwarte w wątku.",
   "ready": "Sprawdzone i gotowe. To już warstwy, kod i tokeny.",
+  "openOne": "Jedno ustalenie jest nadal otwarte. Możesz wydać mimo to; zostanie w tym wątku.",
   "open": "Otwarte ustalenia: {count}. Możesz wydać mimo to; zostaną w tym wątku.",
   "empty": "Na tej stronie nie ma jeszcze nic do wydania.",
   "actionsLabel": "Sposoby wydania",

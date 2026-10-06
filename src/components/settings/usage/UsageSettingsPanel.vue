@@ -6,7 +6,7 @@ import { diagnostics } from '@/app/diagnostics'
 import { isUsageEnabled } from '@/app/diagnostics/settings'
 import { summarizeUsage, type UsageSummary } from '@/app/usage'
 import SettingsSectionHeader from '@/components/settings/layout/SettingsSectionHeader.vue'
-import Stat from '@/components/ui/agent/Stat.vue'
+import Stat, { type StatUI } from '@/components/ui/agent/Stat.vue'
 
 const { diagnostics: diagnosticMessages, settings } = useI18n()
 const summary = ref<UsageSummary>(summarizeUsage([]))
@@ -30,6 +30,13 @@ onUnmounted(unsubscribe)
 function formatTokenValue(value: number | null): string {
   return value === null ? diagnosticMessages.value.usageNotReported : value.toLocaleString()
 }
+
+/** "Not reported" is a note, not a figure: body size, so it stays on one line. */
+const NOT_REPORTED_UI: StatUI = { value: 'text-sm leading-7 font-normal text-muted' }
+
+function tokenStatUI(value: number | null): StatUI | undefined {
+  return value === null ? NOT_REPORTED_UI : undefined
+}
 </script>
 
 <template>
@@ -45,10 +52,12 @@ function formatTokenValue(value: number | null): string {
       <Stat
         :label="diagnosticMessages.usageInputTokens"
         :value="formatTokenValue(summary.inputTokens)"
+        :ui="tokenStatUI(summary.inputTokens)"
       />
       <Stat
         :label="diagnosticMessages.usageOutputTokens"
         :value="formatTokenValue(summary.outputTokens)"
+        :ui="tokenStatUI(summary.outputTokens)"
       />
     </div>
 

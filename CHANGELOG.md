@@ -67,6 +67,7 @@
 
 ### Fixed
 
+- Label the Settings switch that remembers credentials, keep "Not reported" usage figures on one line, fit the assets search placeholder, and use the singular in "Rename 1 layer" and Ship's "1 finding is still open".
 - Name the fill picker's tabs, selects and gradient stop buttons, the asset details close button, and the layer tree's expand toggles for screen readers.
 - Keep the canvas context menu inside the window on a selected layer, scrolling it when it is taller than the window.
 - Press focused buttons with Enter and Space again; the editor's Enter and space-hand shortcuts no longer take those keys from the control that has focus.

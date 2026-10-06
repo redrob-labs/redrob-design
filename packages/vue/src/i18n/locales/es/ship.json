@@ -2,6 +2,7 @@
   "ship": "Lanzar",
   "shipOpen": "Lanzar ya está abierto en la conversación.",
   "ready": "Revisado y listo. Ya son capas, código y tokens.",
+  "openOne": "Queda 1 hallazgo abierto. Puedes lanzar igualmente; se queda en esta conversación.",
   "open": "Quedan {count} hallazgos abiertos. Puedes lanzar igualmente; se quedan en esta conversación.",
   "empty": "Aún no hay nada que lanzar en esta página.",
   "actionsLabel": "Formas de lanzar",

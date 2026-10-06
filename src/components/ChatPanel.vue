@@ -90,7 +90,7 @@ watch(shipRequest, () => {
   postMessage(
     shipMessage(store.graph, store.state.currentPageId, {
       ready: shipWords.value.ready,
-      open: (count) => shipWords.value.open({ count }),
+      open: (count) => (count === 1 ? shipWords.value.openOne : shipWords.value.open({ count })),
       empty: shipWords.value.empty
     })
   )

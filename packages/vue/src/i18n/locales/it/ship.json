@@ -2,6 +2,7 @@
   "ship": "Pubblica",
   "shipOpen": "Pubblica è già aperto nella conversazione.",
   "ready": "Controllato e pronto. Sono già livelli, codice e token.",
+  "openOne": "C'è ancora 1 rilievo aperto. Puoi pubblicare comunque; resta in questa conversazione.",
   "open": "Ci sono ancora {count} rilievi aperti. Puoi pubblicare comunque; restano in questa conversazione.",
   "empty": "Non c’è ancora niente da pubblicare in questa pagina.",
   "actionsLabel": "Modi per pubblicare",

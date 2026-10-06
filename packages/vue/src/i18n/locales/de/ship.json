@@ -2,6 +2,7 @@
   "ship": "Veröffentlichen",
   "shipOpen": "„Veröffentlichen“ ist im Verlauf schon offen.",
   "ready": "Geprüft und bereit. Es sind schon Ebenen, Code und Tokens.",
+  "openOne": "1 Befund ist noch offen. Du kannst trotzdem veröffentlichen; er bleibt in diesem Verlauf.",
   "open": "{count} Befunde sind noch offen. Du kannst trotzdem veröffentlichen; sie bleiben in diesem Verlauf.",
   "empty": "Auf dieser Seite gibt es noch nichts zu veröffentlichen.",
   "actionsLabel": "Wege zur Veröffentlichung",

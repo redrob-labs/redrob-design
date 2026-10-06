@@ -1,5 +1,6 @@
 {
   "title": "이름 변경",
+  "layersOne": "레이어 1개 이름 변경",
   "layers": "레이어 {count}개 이름 변경",
   "preview": "미리보기",
   "match": "찾을 패턴",

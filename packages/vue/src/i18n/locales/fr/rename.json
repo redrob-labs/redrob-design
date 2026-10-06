@@ -1,5 +1,6 @@
 {
   "title": "Renommer",
+  "layersOne": "Renommer 1 calque",
   "layers": "Renommer {count} calques",
   "preview": "Aperçu",
   "match": "Correspondance",

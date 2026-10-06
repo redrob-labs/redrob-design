@@ -253,7 +253,8 @@ function tryUpdate(): void {
       <icon-lucide-refresh-cw class="mt-0.5 size-3.5 shrink-0 text-muted" />
       <div class="flex min-w-0 flex-col gap-1">
         <p class="text-surface">
-          <b>{{ t.watchTitle }}</b>
+          <b>{{ t.watchTitle }}</b
+          >{{ ' ' }}
           <template v-if="stopped">{{ t.watchStopped }}</template>
           <template v-else>
             {{ sources ? t.watchBody({ sources: sources.join(', ') }) : t.watchNotConnected }}

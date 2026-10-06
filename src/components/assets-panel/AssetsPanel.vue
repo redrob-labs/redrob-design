@@ -330,7 +330,8 @@ async function insertSelectedAsset() {
         data-test-id="assets-search"
         size="sm"
         class="min-w-0 flex-1"
-        :placeholder="panels.searchLocalComponents"
+        :placeholder="common.search"
+        :aria-label="panels.searchLocalComponents"
       />
       <AppButton
         v-bind="insertButton"

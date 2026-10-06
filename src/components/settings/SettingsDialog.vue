@@ -188,12 +188,14 @@ watch(
 
     <AppDialogFooter :ui="{ footer: styles.footer() }">
       <div class="mr-auto flex items-center gap-3">
-        <AppSwitch
-          v-if="!IS_TAURI"
-          v-model="rememberCredentials"
-          :label="credentials.remember"
-          data-test-id="settings-remember-credentials"
-        />
+        <label v-if="!IS_TAURI" class="flex cursor-pointer items-center gap-2 text-xs text-surface">
+          <AppSwitch
+            v-model="rememberCredentials"
+            :label="credentials.remember"
+            data-test-id="settings-remember-credentials"
+          />
+          <span>{{ credentials.remember }}</span>
+        </label>
         <p class="flex items-center gap-1.5 text-xs text-muted">
           <icon-lucide-circle-check class="size-3.5 shrink-0" />
           <span>{{ settings.changesApplyNow }}</span>

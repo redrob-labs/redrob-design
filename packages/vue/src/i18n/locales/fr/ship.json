@@ -2,6 +2,7 @@
   "ship": "Livrer",
   "shipOpen": "Livrer est déjà ouvert dans la conversation.",
   "ready": "Vérifié et prêt. Ce sont déjà des calques, du code et des jetons.",
+  "openOne": "1 constat est encore ouvert. Vous pouvez livrer quand même ; il reste dans cette conversation.",
   "open": "{count} constats sont encore ouverts. Vous pouvez livrer quand même ; ils restent dans cette conversation.",
   "empty": "Il n’y a encore rien à livrer sur cette page.",
   "actionsLabel": "Façons de livrer",

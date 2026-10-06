@@ -7,6 +7,7 @@ export const shipMessageDefaults = {
   ship: 'Ship',
   shipOpen: 'Ship is already open in the thread.',
   ready: 'Checked and ready. It is layers, code and tokens already.',
+  openOne: '1 finding is still open. You can ship anyway; it stays in this thread.',
   open: params('{count} findings are still open. You can ship anyway; they stay in this thread.'),
   empty: 'There is nothing on this page to ship yet.',
   actionsLabel: 'Ways to ship',
