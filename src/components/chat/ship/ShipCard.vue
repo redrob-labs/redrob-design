@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useClipboard } from '@vueuse/core'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 import { useCommonMessages, useShipMessages, useThreadMessages } from '@redrob-design/vue'
 
@@ -21,7 +21,14 @@ import { deliverHandoff, latestHandoffs } from '@/app/ship/handoff/deliver'
 import { agentConnected } from '@/app/ship/handoff/connection'
 import { prepareHandoff } from '@/app/ship/handoff/service'
 import { reactAndTokens, type ShipData } from '@/app/ship/ship'
-import { simulatePriceSheetChange, watchedSources } from '@/app/ship/watch'
+import {
+  isWatching,
+  simulatePriceSheetChange,
+  startWatching,
+  stopWatching,
+  watchedSources
+} from '@/app/ship/watch/service'
+import { demoMode } from '@/app/runtime/demo'
 import { useChatPost } from '@/components/chat/submit'
 import AppButton from '@/components/ui/AppButton.vue'
 import { AppConfirmationDialog } from '@/components/ui/dialog'
@@ -39,6 +46,34 @@ const publishing = ref(false)
 const confirmOpen = ref(false)
 const updated = ref(false)
 const sources = computed(() => watchedSources())
+const watching = computed(() => isWatching(documentId, ship.pageId))
+const stopped = ref(false)
+
+function errorText(error: unknown): string {
+  return error instanceof Error ? error.message : String(error)
+}
+
+// A shipped page watches its workspace's sources once someone is signed in.
+watch(
+  sources,
+  (names) => {
+    if (!names || demoMode.value || stopped.value) return
+    startWatching(documentId, ship.pageId).catch((error: unknown) => {
+      toast.warning(t.value.watchFailed({ error: errorText(error) }))
+    })
+  },
+  { immediate: true }
+)
+
+async function stopWatchingPage(): Promise<void> {
+  try {
+    await stopWatching(documentId, ship.pageId)
+    stopped.value = true
+    toast.info(t.value.watchStopped)
+  } catch (error) {
+    toast.error(t.value.watchFailed({ error: errorText(error) }))
+  }
+}
 const languages = computed(() => {
   const store = getActiveEditorStore()
   return pageLanguages(store.graph, ship.pageId)
@@ -97,9 +132,7 @@ async function unpublish(): Promise<void> {
       toast.info(t.value.unpublished)
     }
   } catch (error) {
-    toast.error(
-      t.value.publishFailed({ error: error instanceof Error ? error.message : String(error) })
-    )
+    toast.error(t.value.publishFailed({ error: errorText(error) }))
   } finally {
     publishing.value = false
   }
@@ -136,9 +169,7 @@ async function handOff(): Promise<void> {
     if (delivery.kind === 'folder') toast.info(t.value.handoffSaved({ path: delivery.path }))
     else toast.info(t.value.handoffDownloaded({ file: delivery.fileName }))
   } catch (error) {
-    toast.error(
-      t.value.handoffFailed({ error: error instanceof Error ? error.message : String(error) })
-    )
+    toast.error(t.value.handoffFailed({ error: errorText(error) }))
   } finally {
     handingOff.value = false
   }
@@ -223,10 +254,22 @@ function tryUpdate(): void {
       <div class="flex min-w-0 flex-col gap-1">
         <p class="text-surface">
           <b>{{ t.watchTitle }}</b>
-          {{ sources ? t.watchBody({ sources: sources.join(', ') }) : t.watchNotConnected }}
+          <template v-if="stopped">{{ t.watchStopped }}</template>
+          <template v-else>
+            {{ sources ? t.watchBody({ sources: sources.join(', ') }) : t.watchNotConnected }}
+          </template>
         </p>
         <button
-          v-if="sources && !updated"
+          v-if="watching && !stopped"
+          type="button"
+          data-slot="ship-stop-watching"
+          class="self-start rounded font-medium text-muted hover:underline focus-visible:ring-2 focus-visible:ring-panel-focus focus-visible:outline-none"
+          @click="stopWatchingPage"
+        >
+          {{ t.stopWatching }}
+        </button>
+        <button
+          v-if="demoMode && sources && !updated"
           type="button"
           class="self-start rounded font-medium text-brand-ink hover:underline focus-visible:ring-2 focus-visible:ring-panel-focus focus-visible:outline-none"
           @click="tryUpdate"

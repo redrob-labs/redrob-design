@@ -1,6 +1,12 @@
 import type { Page } from '@playwright/test'
 
+import { CanvasHelper } from '#tests/helpers/canvas'
 import { expect, test } from '#tests/helpers/chat/fixture'
+import { ChatHarness } from '#tests/helpers/chat/harness'
+import { injectMockChatTransport } from '#tests/helpers/chat/transport'
+import { routeConsoleToMock } from '#tests/helpers/console/route'
+import { createMockConsole } from '#tests/helpers/console/server'
+import { openSettingsFromMenu } from '#tests/helpers/menu'
 
 test.describe.configure({ timeout: 60_000 })
 
@@ -139,4 +145,72 @@ test('Hand to Claude Code downloads the page, tokens and brief as one zip', asyn
       .getByTestId('toast-item')
       .filter({ hasText: 'Unzip it at the root of your repository' })
   ).toBeVisible()
+})
+
+test('a shipped page watches its sources through Console and proposes its own update', async ({
+  page
+}) => {
+  const mock = createMockConsole()
+  await routeConsoleToMock(page, mock)
+  const chat = new ChatHarness(page)
+  await chat.open()
+  await new CanvasHelper(page).waitForInit()
+  await injectMockChatTransport(page)
+  await chat.configureOpenRouter('sk-or-test-key-12345')
+
+  await openSettingsFromMenu(page)
+  await page.getByTestId('settings-section-cloud').click()
+  const panel = page.getByTestId('settings-cloud-panel')
+  await panel.getByRole('button', { name: 'Sign in with Redrob Console' }).click()
+  await expect(panel.locator('[data-slot="cloud-account"]')).toHaveText(
+    'Signed in as Jane Designer.',
+    { timeout: 20_000 }
+  )
+  await page.getByTestId('app-settings-done').click()
+
+  await page.evaluate(() => {
+    const store = window.redrobDesign?.getStore?.()
+    if (!store) throw new Error('Editor store is not exposed')
+    const card = store.graph.createNode('FRAME', store.state.currentPageId, {
+      name: 'Team',
+      width: 400,
+      height: 300
+    })
+    store.graph.createNode('TEXT', card.id, { name: 'Price', text: '$24 per person' })
+    store.requestRender()
+  })
+  await page.getByTestId('mode-switch').getByRole('button', { name: 'Describe' }).click()
+  await page.getByTestId('describe-ship').click()
+
+  const watchNote = chat.assistantMessage().locator('[data-slot="ship-watch"]')
+  await expect(watchNote).toContainText('It watches redrob.io, Pricing sheet, Q4')
+  await expect(watchNote.getByRole('button', { name: 'Stop watching' })).toBeVisible()
+  expect(mock.state.watches.size).toBe(1)
+  const [watch] = mock.state.watches.values()
+  expect(watch.documentId).toMatch(/^doc_[0-9a-f]{64}$/)
+
+  // The first poll takes a cursor; the change after it lands on the page.
+  await page.evaluate(async () => {
+    const service = await import('/src/app/ship/watch/service.ts' as string)
+    await service.pollWatchEvents()
+  })
+  mock.state.events.push({
+    id: 'event-1',
+    watchId: watch.id,
+    sourceId: 'src-sheet',
+    summary: 'Team is $28 now',
+    at: '2026-10-06T10:00:00.000Z',
+    change: { kind: 'price', plan: 'Team', from: '$24', to: '$28' }
+  })
+  await page.evaluate(async () => {
+    const service = await import('/src/app/ship/watch/service.ts' as string)
+    await service.pollWatchEvents()
+  })
+  await expect(page.getByText('Pricing sheet, Q4 changed (Team is $28 now)')).toBeVisible()
+  const text = await page.evaluate(() => {
+    const store = window.redrobDesign?.getStore?.()
+    const node = [...(store?.graph.nodes.values() ?? [])].find((n) => n.name === 'Price')
+    return node?.type === 'TEXT' ? node.text : null
+  })
+  expect(text).toBe('$28 per person')
 })

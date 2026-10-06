@@ -5,7 +5,7 @@ import { createEditor } from '@redrob-design/core/editor'
 import { changeSetFor, changeSets } from '@/app/assistant/changes/store'
 import { demoMode } from '@/app/runtime/demo'
 import { hasShipMessage, isShipData, reactAndTokens, shipMessage } from '@/app/ship/ship'
-import { simulatePriceSheetChange, watchedSources } from '@/app/ship/watch'
+import { simulatePriceSheetChange, watchedSources } from '@/app/ship/watch/service'
 
 const words = {
   ready: 'Ready',

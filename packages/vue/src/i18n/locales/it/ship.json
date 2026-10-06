@@ -31,5 +31,10 @@
   "publishUnreachable": "I file sono caricati, ma {url} non risponde ancora. Rendi pubblico il bucket presso il tuo fornitore.",
   "publishFontFallbacks": "Questi caratteri non sono sul web, i visitatori vedono un sostituto: {fonts}.",
   "publishConfirmHeading": "Pubblicare questa pagina?",
-  "publishConfirmText": "Chiunque abbia l'indirizzo potrà vederla. Va nel tuo bucket di pubblicazione e Ritira la toglie."
+  "publishConfirmText": "Chiunque abbia l'indirizzo potrà vederla. Va nel tuo bucket di pubblicazione e Ritira la toglie.",
+  "watchUpdated": "{source} è cambiato ({summary}), quindi la pagina propone il proprio aggiornamento.",
+  "watchNoMatch": "{source} è cambiato ({summary}), ma niente in questa pagina mostra cosa si è mosso.",
+  "stopWatching": "Smetti di seguire",
+  "watchStopped": "Questa pagina non segue più le sue fonti.",
+  "watchFailed": "Impossibile seguire le fonti: {error}"
 }

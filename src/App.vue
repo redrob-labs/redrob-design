@@ -16,6 +16,7 @@ import { toast } from '@/app/shell/ui'
 import { useAppTheme } from '@/app/shell/theme'
 import { scheduleStartupUpdateCheck } from '@/app/shell/updater'
 import { startWorkspaceMemory } from '@/app/memory/workspace'
+import { startWatchPolling } from '@/app/ship/watch/service'
 import { kickSyncEngine } from '@/app/storage/sync'
 import { prepareForReload } from '@/app/tabs'
 
@@ -39,6 +40,8 @@ onMounted(() => {
   void kickSyncEngine()
   // Design Memory reads the signed-in workspace; signed out, it reads the open file.
   startWorkspaceMemory()
+  // Shipped pages hear about changes in their watched sources while the app is open.
+  startWatchPolling()
 })
 </script>
 

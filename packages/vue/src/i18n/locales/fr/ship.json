@@ -31,5 +31,10 @@
   "publishUnreachable": "Les fichiers sont envoyés, mais {url} ne répond pas encore. Rendez le bucket public chez votre fournisseur.",
   "publishFontFallbacks": "Ces polices ne sont pas sur le web, les visiteurs voient une police de secours : {fonts}.",
   "publishConfirmHeading": "Publier cette page ?",
-  "publishConfirmText": "Toute personne qui a l'adresse pourra la voir. Elle va dans votre bucket de publication, et Dépublier la retire."
+  "publishConfirmText": "Toute personne qui a l'adresse pourra la voir. Elle va dans votre bucket de publication, et Dépublier la retire.",
+  "watchUpdated": "{source} a changé ({summary}) : la page propose sa propre mise à jour.",
+  "watchNoMatch": "{source} a changé ({summary}), mais rien sur cette page ne montre ce qui a bougé.",
+  "stopWatching": "Ne plus surveiller",
+  "watchStopped": "Cette page ne surveille plus ses sources.",
+  "watchFailed": "Impossible de surveiller les sources : {error}"
 }

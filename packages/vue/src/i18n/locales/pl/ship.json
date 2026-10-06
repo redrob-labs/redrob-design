@@ -31,5 +31,10 @@
   "publishUnreachable": "Pliki są wysłane, ale {url} jeszcze nie odpowiada. Udostępnij bucket publicznie u dostawcy.",
   "publishFontFallbacks": "Tych krojów nie ma w sieci, odwiedzający zobaczą zamiennik: {fonts}.",
   "publishConfirmHeading": "Opublikować tę stronę?",
-  "publishConfirmText": "Każdy, kto zna adres, będzie mógł ją zobaczyć. Trafia do twojego bucketu publikacji, a Cofnij publikację ją usuwa."
+  "publishConfirmText": "Każdy, kto zna adres, będzie mógł ją zobaczyć. Trafia do twojego bucketu publikacji, a Cofnij publikację ją usuwa.",
+  "watchUpdated": "{source} się zmienił ({summary}), więc strona sama proponuje aktualizację.",
+  "watchNoMatch": "{source} się zmienił ({summary}), ale nic na tej stronie nie pokazuje tego, co się zmieniło.",
+  "stopWatching": "Przestań obserwować",
+  "watchStopped": "Ta strona nie obserwuje już swoich źródeł.",
+  "watchFailed": "Nie można obserwować źródeł: {error}"
 }

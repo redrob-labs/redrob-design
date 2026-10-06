@@ -31,5 +31,10 @@
   "publishUnreachable": "ファイルはアップロード済みですが、{url} はまだ応答しません。プロバイダーでバケットを公開してください。",
   "publishFontFallbacks": "次の書体はウェブにないため、代替書体で表示されます: {fonts}",
   "publishConfirmHeading": "このページを公開しますか?",
-  "publishConfirmText": "アドレスを知っている人は誰でも見られます。公開用バケットに置かれ、取り下げると削除されます。"
+  "publishConfirmText": "アドレスを知っている人は誰でも見られます。公開用バケットに置かれ、取り下げると削除されます。",
+  "watchUpdated": "{source} が変わったため（{summary}）、ページが自分で更新を提案します。",
+  "watchNoMatch": "{source} が変わりましたが（{summary}）、このページには変わった内容を表示しているものがありません。",
+  "stopWatching": "見守りをやめる",
+  "watchStopped": "このページはソースを見守らなくなりました。",
+  "watchFailed": "ソースを見守れませんでした: {error}"
 }

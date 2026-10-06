@@ -26,6 +26,7 @@ import { useI18n, useShipMessages, useThreadMessages, vTestId } from '@redrob-de
 import { turnSteps } from '@/components/chat/timeline/steps'
 import { useOpeningReview } from '@/components/chat/review/useOpeningReview'
 import { useCrossCheck } from '@/components/chat/cross-check/useCrossCheck'
+import { useWatchUpdates } from '@/components/chat/ship/useWatchUpdates'
 import { provideChatPost, provideChatSend } from '@/components/chat/submit'
 import { saveThread, threadKeyFor } from '@/app/assistant/thread/store'
 import { hasShipMessage, shipMessage, shipRequest } from '@/app/ship/ship'
@@ -76,6 +77,7 @@ function postMessage(message: UIMessage): void {
 }
 provideChatPost(postMessage)
 useCrossCheck(postMessage)
+useWatchUpdates(postMessage, () => chat.value !== null)
 
 watch(shipRequest, () => {
   const current = chat.value

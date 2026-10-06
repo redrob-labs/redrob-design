@@ -53,7 +53,12 @@ export const shipMessageDefaults = {
     'Once a workspace is connected, it can watch a price sheet or a site and propose its own change.',
   tryUpdate: 'Try it: the price sheet changes',
   updateChanged: 'Pricing sheet, Q4 changed, so the page proposes its own update.',
-  updateNothing: 'The price sheet changed, but no layer on this page shows the old price.'
+  updateNothing: 'The price sheet changed, but no layer on this page shows the old price.',
+  watchUpdated: params('{source} changed ({summary}), so the page proposes its own update.'),
+  watchNoMatch: params('{source} changed ({summary}), but nothing on this page shows what moved.'),
+  stopWatching: 'Stop watching',
+  watchStopped: 'This page no longer watches its sources.',
+  watchFailed: params('Could not watch the sources: {error}')
 } as const
 
 export const shipMessages = i18n('ship', shipMessageDefaults)

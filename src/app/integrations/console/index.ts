@@ -15,6 +15,7 @@ export type {
   ConsoleRequest,
   ConsoleResponse
 } from './client'
+export { consoleDocumentId } from './document'
 export { consoleOpenAPI } from './contract/openapi'
 export { CONSOLE_ROUTES, consoleRoute, routePath } from './contract/routes'
 export type { ConsoleOperationId, ConsoleRoute } from './contract/routes'

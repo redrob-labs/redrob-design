@@ -31,5 +31,10 @@
   "publishUnreachable": "文件已上传，但 {url} 还没有响应。请在服务商处将存储桶设为公开。",
   "publishFontFallbacks": "这些字体不在网上，访客会看到替代字体：{fonts}。",
   "publishConfirmHeading": "发布这个页面？",
-  "publishConfirmText": "任何知道地址的人都能看到它。它会放进你的发布存储桶，取消发布会把它移除。"
+  "publishConfirmText": "任何知道地址的人都能看到它。它会放进你的发布存储桶，取消发布会把它移除。",
+  "watchUpdated": "{source} 已变化（{summary}），因此页面自行提出更新。",
+  "watchNoMatch": "{source} 已变化（{summary}），但此页面没有显示变化内容的图层。",
+  "stopWatching": "停止关注",
+  "watchStopped": "此页面不再关注其来源。",
+  "watchFailed": "无法关注来源：{error}"
 }

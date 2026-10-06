@@ -31,5 +31,10 @@
   "publishUnreachable": "Die Dateien sind hochgeladen, aber {url} antwortet noch nicht. Mache den Bucket bei deinem Anbieter öffentlich.",
   "publishFontFallbacks": "Diese Schriften gibt es nicht im Web, Besucher sehen eine Ersatzschrift: {fonts}.",
   "publishConfirmHeading": "Diese Seite veröffentlichen?",
-  "publishConfirmText": "Jeder mit der Adresse kann sie sehen. Sie landet in deinem Veröffentlichungs-Bucket, und Zurückziehen nimmt sie wieder herunter."
+  "publishConfirmText": "Jeder mit der Adresse kann sie sehen. Sie landet in deinem Veröffentlichungs-Bucket, und Zurückziehen nimmt sie wieder herunter.",
+  "watchUpdated": "{source} hat sich geändert ({summary}), also schlägt die Seite selbst eine Aktualisierung vor.",
+  "watchNoMatch": "{source} hat sich geändert ({summary}), aber nichts auf dieser Seite zeigt, was sich bewegt hat.",
+  "stopWatching": "Nicht mehr beobachten",
+  "watchStopped": "Diese Seite beobachtet ihre Quellen nicht mehr.",
+  "watchFailed": "Die Quellen können nicht beobachtet werden: {error}"
 }
