@@ -125,8 +125,7 @@ test('the canvas context menu renders cleanly on the canvas', async ({ page }) =
   expect(issues).toEqual([])
 })
 
-// The layer menu is taller than the window and does not scroll: see fix/ui-context-menu-fit.
-test.fixme('the canvas context menu fits the window on a layer', async ({ page }) => {
+test('the canvas context menu fits the window on a layer', async ({ page }) => {
   const errors = await openSweepApp(page)
   await seedPage(page)
   const issues: SweepIssue[] = []

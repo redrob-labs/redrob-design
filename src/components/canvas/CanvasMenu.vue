@@ -57,8 +57,11 @@ function removeSelectedGuide() {
   store.setSelectedGuide(null)
 }
 
+// A layer's menu can be taller than the window: Reka keeps it on screen, and the
+// available height lets it scroll instead of running off the bottom.
 const menuCls = useMenuUI({
-  content: 'min-w-56 shadow-md animate-in fade-in zoom-in-95',
+  content:
+    'min-w-56 max-h-(--reka-context-menu-content-available-height) overflow-y-auto shadow-md animate-in fade-in zoom-in-95',
   separator: 'my-1'
 })
 const componentMenu = menu({ tone: 'component' })
@@ -92,7 +95,7 @@ function contextCommandIcon(id: EditorCommandId | undefined): Component | undefi
 </script>
 
 <template>
-  <ContextMenuContent :class="cls.menu" :side-offset="2" align="start">
+  <ContextMenuContent :class="cls.menu" :side-offset="2" :collision-padding="8" align="start">
     <template v-if="selectedGuide">
       <ContextMenuItem data-property="guide" :class="cls.item" @select="removeSelectedGuide">
         <span>{{ t.removeGuide }}</span>
@@ -172,7 +175,7 @@ function contextCommandIcon(id: EditorCommandId | undefined): Component | undefi
             <IconChevronRight class="size-3.5 text-muted" />
           </ContextMenuSubTrigger>
           <ContextMenuPortal>
-            <ContextMenuSubContent :class="cls.submenu">
+            <ContextMenuSubContent :class="cls.submenu" :collision-padding="8">
               <ContextMenuItem
                 v-for="(sub, j) in item.sub"
                 :key="j"
