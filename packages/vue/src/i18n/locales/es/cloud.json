@@ -1,0 +1,17 @@
+{
+  "heading": "Redrob Cloud",
+  "description": "Opcional. Inicia sesión para compartir Design Memory, comentarios, versiones y bibliotecas con tu espacio de trabajo. Tus archivos y claves de IA se quedan donde están.",
+  "signedOut": "Sin sesión. Todo funciona en este equipo sin cuenta.",
+  "signIn": "Iniciar sesión con Redrob Console",
+  "signingIn": "Esperando a que apruebes este código en Redrob Console.",
+  "openConsole": "Abrir Redrob Console",
+  "cancel": "Cancelar",
+  "signedInAs": "Sesión iniciada como {name}.",
+  "workspace": "Espacio de trabajo",
+  "noWorkspace": "Esta cuenta aún no está en ningún espacio de trabajo.",
+  "signOut": "Cerrar sesión",
+  "unreachable": "No se pudo conectar con Redrob Console. Las funciones de la nube esperan a que responda.",
+  "denied": "No se aprobó el inicio de sesión.",
+  "expired": "El código caducó antes de aprobarse. Inténtalo de nuevo.",
+  "role": "{role} en este espacio de trabajo"
+}

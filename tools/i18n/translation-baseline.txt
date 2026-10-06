@@ -16,6 +16,8 @@ de:ai.responses
 de:automation.port
 de:automation.status
 de:automation.version
+de:cloud.heading
+de:cloud.workspace
 de:code.editorDesignLabel
 de:code.sourceDesignJSX
 de:code.sourceHTMLCSS
@@ -51,6 +53,7 @@ de:panels.radialGradient
 de:panels.radius
 de:panels.textCaseOriginal
 de:plan.memoryHeading
+de:settings.sectionCloud
 de:settings.themeSystem
 de:storage.bucket
 de:storage.providerAmazonS3
@@ -81,6 +84,7 @@ es:ai.connectRedrobUnreachable
 es:ai.responses
 es:ai.toolError
 es:automation.statusError
+es:cloud.heading
 es:code.editorDesignLabel
 es:code.sourceDesignJSX
 es:code.sourceHTMLCSS
@@ -104,6 +108,7 @@ es:panels.variables
 es:plan.memoryHeading
 es:plan.pricePlan
 es:settings.general
+es:settings.sectionCloud
 es:ship.reactTokens
 es:storage.bucket
 es:storage.providerAmazonS3
@@ -127,6 +132,7 @@ fr:ai.modelRoleVision
 fr:ai.responses
 fr:automation.port
 fr:automation.version
+fr:cloud.heading
 fr:code.editorDesignLabel
 fr:code.sourceDesignJSX
 fr:code.sourceHTMLCSS
@@ -175,6 +181,7 @@ fr:plan.memoryHeading
 fr:plan.questionsLabel
 fr:settings.diagnostics
 fr:settings.notifications
+fr:settings.sectionCloud
 fr:storage.bucket
 fr:storage.providerAmazonS3
 fr:storage.providerBackblaze
@@ -197,6 +204,7 @@ it:ai.connectRedrobFailed
 it:ai.connectRedrobHint
 it:ai.connectRedrobUnreachable
 it:ai.responses
+it:cloud.heading
 it:code.editorDesignLabel
 it:code.sourceDesignJSX
 it:code.sourceHTMLCSS
@@ -222,6 +230,7 @@ it:panels.layout
 it:plan.memoryHeading
 it:rendering.settingsTitle
 it:settings.media
+it:settings.sectionCloud
 it:storage.bucket
 it:storage.endpoint
 it:storage.providerAmazonS3
@@ -237,6 +246,7 @@ ja:ai.connectRedrobExpired
 ja:ai.connectRedrobFailed
 ja:ai.connectRedrobHint
 ja:ai.connectRedrobUnreachable
+ja:cloud.heading
 ja:code.editorDesignLabel
 ja:code.sourceDesignJSX
 ja:code.sourceHTMLCSS
@@ -248,12 +258,15 @@ ja:panels.colorFormatHsl
 ja:panels.colorFormatOkhcl
 ja:panels.colorFormatRgb
 ja:panels.framePresetCategoryFigmaCommunity
+ja:settings.sectionCloud
 ja:storage.providerAmazonS3
 ja:storage.providerBackblaze
 ja:storage.providerR2
+ko:cloud.heading
 ko:code.sourceTailwindJSX
 ko:composer.auto
 ko:panels.ai
+ko:settings.sectionCloud
 ko:thread.threadRegion
 pl:ai.completions
 pl:ai.connectRedrob
@@ -268,6 +281,7 @@ pl:ai.modelAgentConnection
 pl:ai.modelConfiguration
 pl:ai.responses
 pl:automation.port
+pl:cloud.heading
 pl:code.editorDesignLabel
 pl:code.sourceDesignJSX
 pl:code.sourceHTMLCSS
@@ -289,6 +303,7 @@ pl:panels.kerning
 pl:plan.memoryHeading
 pl:plan.pricePlan
 pl:settings.media
+pl:settings.sectionCloud
 pl:storage.providerAmazonS3
 pl:storage.providerBackblaze
 pl:storage.providerR2
@@ -304,6 +319,7 @@ ru:ai.connectRedrobFailed
 ru:ai.connectRedrobHint
 ru:ai.connectRedrobUnreachable
 ru:ai.responses
+ru:cloud.heading
 ru:code.editorDesignLabel
 ru:code.sourceDesignJSX
 ru:code.sourceHTMLCSS
@@ -316,6 +332,7 @@ ru:panels.colorFormatOkhcl
 ru:panels.colorFormatRgb
 ru:panels.framePresetCategoryFigmaCommunity
 ru:plan.memoryHeading
+ru:settings.sectionCloud
 ru:storage.providerAmazonS3
 ru:storage.providerBackblaze
 ru:storage.providerR2
@@ -330,6 +347,7 @@ zh-cn:ai.connectRedrobFailed
 zh-cn:ai.connectRedrobHint
 zh-cn:ai.connectRedrobUnreachable
 zh-cn:ai.responses
+zh-cn:cloud.heading
 zh-cn:code.editorDesignLabel
 zh-cn:code.sourceDesignJSX
 zh-cn:code.sourceHTMLCSS
@@ -342,6 +360,7 @@ zh-cn:panels.colorFormatOkhcl
 zh-cn:panels.colorFormatRgb
 zh-cn:panels.framePresetCategoryFigmaCommunity
 zh-cn:panels.maskTypeAlpha
+zh-cn:settings.sectionCloud
 zh-cn:storage.providerAmazonS3
 zh-cn:storage.providerBackblaze
 zh-cn:storage.providerR2

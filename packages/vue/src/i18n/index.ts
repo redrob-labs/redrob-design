@@ -9,6 +9,7 @@ export {
   useHomeMessages,
   useComposerMessages,
   useAutomationMessages,
+  useCloudMessages,
   useCodeMessages,
   useCollaborationMessages,
   useCommandMessages,

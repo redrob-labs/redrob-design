@@ -42,6 +42,11 @@ ja:automation.rootDirectoryDescription
 ja:automation.searchTools
 ja:automation.serverURL
 ja:automation.toolsRestartNotice
+ja:cloud.description
+ja:cloud.openConsole
+ja:cloud.signIn
+ja:cloud.signingIn
+ja:cloud.unreachable
 ja:code.copyJSXReference
 ja:code.copyTokensCSS
 ja:code.downloadTokens
@@ -193,6 +198,11 @@ zh-cn:automation.rootDirectoryDescription
 zh-cn:automation.searchTools
 zh-cn:automation.serverURL
 zh-cn:automation.toolsRestartNotice
+zh-cn:cloud.description
+zh-cn:cloud.openConsole
+zh-cn:cloud.signIn
+zh-cn:cloud.signingIn
+zh-cn:cloud.unreachable
 zh-cn:code.copyJSXReference
 zh-cn:code.copyTokensCSS
 zh-cn:code.downloadTokens

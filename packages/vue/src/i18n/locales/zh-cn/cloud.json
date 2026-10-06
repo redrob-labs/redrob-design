@@ -1,0 +1,17 @@
+{
+  "heading": "Redrob Cloud",
+  "description": "可选。登录后可与工作区共享 Design Memory、评论、版本和组件库。你的文件和 AI 密钥保持不变。",
+  "signedOut": "未登录。无需账户，所有功能都能在这台电脑上使用。",
+  "signIn": "使用 Redrob Console 登录",
+  "signingIn": "正在等待你在 Redrob Console 中批准这个代码。",
+  "openConsole": "打开 Redrob Console",
+  "cancel": "取消",
+  "signedInAs": "已登录为 {name}。",
+  "workspace": "工作区",
+  "noWorkspace": "此账户还没有加入任何工作区。",
+  "signOut": "退出登录",
+  "unreachable": "无法连接 Redrob Console。云功能会等待它响应。",
+  "denied": "登录未被批准。",
+  "expired": "代码在批准前已过期。请重试。",
+  "role": "此工作区的{role}"
+}

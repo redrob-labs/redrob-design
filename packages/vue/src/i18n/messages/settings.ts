@@ -32,6 +32,7 @@ export const settingsMessageDefaults = {
   navAccount: 'Account',
   sectionAgentsAndMCP: 'Agents and MCP',
   sectionStorage: 'Storage',
+  sectionCloud: 'Redrob Cloud',
   appearance: 'Appearance',
   theme: 'Theme',
   themeDescription: 'The canvas page follows it, unless the page has its own color.',

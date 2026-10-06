@@ -1,0 +1,17 @@
+{
+  "heading": "Redrob Cloud",
+  "description": "Optional. Melde dich an, um Design Memory, Kommentare, Versionen und Bibliotheken mit deinem Workspace zu teilen. Deine Dateien und KI-Schlüssel bleiben, wo sie sind.",
+  "signedOut": "Nicht angemeldet. Alles funktioniert ohne Konto auf diesem Computer.",
+  "signIn": "Mit Redrob Console anmelden",
+  "signingIn": "Warte darauf, dass du diesen Code in Redrob Console bestätigst.",
+  "openConsole": "Redrob Console öffnen",
+  "cancel": "Abbrechen",
+  "signedInAs": "Angemeldet als {name}.",
+  "workspace": "Workspace",
+  "noWorkspace": "Dieses Konto ist noch in keinem Workspace.",
+  "signOut": "Abmelden",
+  "unreachable": "Redrob Console war nicht erreichbar. Cloud-Funktionen warten, bis sie antwortet.",
+  "denied": "Die Anmeldung wurde nicht bestätigt.",
+  "expired": "Der Code ist abgelaufen, bevor er bestätigt wurde. Versuche es erneut.",
+  "role": "{role} in diesem Workspace"
+}

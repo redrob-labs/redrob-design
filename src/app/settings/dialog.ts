@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 
-/** The five Settings destinations, as the approved prototype groups them. */
-export type SettingsSection = 'general' | 'mcp' | 'storage' | 'usage' | 'diagnostics'
+/** The Settings destinations, as the approved prototype groups them, plus Redrob Cloud. */
+export type SettingsSection = 'general' | 'mcp' | 'storage' | 'cloud' | 'usage' | 'diagnostics'
 
 /**
  * Names older callers still use. `ai` (models and keys) now lives in Agents and
@@ -19,7 +19,7 @@ export interface SettingsNavigationGroup {
 
 export const SETTINGS_NAVIGATION: readonly SettingsNavigationGroup[] = [
   { id: 'preferences', sections: ['general'] },
-  { id: 'connections', sections: ['mcp', 'storage'] },
+  { id: 'connections', sections: ['mcp', 'storage', 'cloud'] },
   { id: 'account', sections: ['usage', 'diagnostics'] }
 ]
 

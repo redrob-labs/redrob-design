@@ -24,6 +24,8 @@ export type DeviceProduct =
   | 'code'
   | 'cowork'
   | 'design'
+  /** Redrob Design Cloud: a session for workspaces, not a model key. */
+  | 'design-cloud'
   | 'extension'
   | 'office'
   | 'work'

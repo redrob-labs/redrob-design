@@ -1,0 +1,17 @@
+{
+  "heading": "Redrob Cloud",
+  "description": "Opcjonalne. Zaloguj się, by udostępniać Design Memory, komentarze, wersje i biblioteki w obszarze roboczym. Twoje pliki i klucze AI zostają tam, gdzie są.",
+  "signedOut": "Nie zalogowano. Wszystko działa na tym komputerze bez konta.",
+  "signIn": "Zaloguj się przez Redrob Console",
+  "signingIn": "Czekam, aż zatwierdzisz ten kod w Redrob Console.",
+  "openConsole": "Otwórz Redrob Console",
+  "cancel": "Anuluj",
+  "signedInAs": "Zalogowano jako {name}.",
+  "workspace": "Obszar roboczy",
+  "noWorkspace": "To konto nie należy jeszcze do żadnego obszaru roboczego.",
+  "signOut": "Wyloguj",
+  "unreachable": "Nie udało się połączyć z Redrob Console. Funkcje chmury czekają na odpowiedź.",
+  "denied": "Logowanie nie zostało zatwierdzone.",
+  "expired": "Kod wygasł przed zatwierdzeniem. Spróbuj ponownie.",
+  "role": "{role} w tym obszarze roboczym"
+}

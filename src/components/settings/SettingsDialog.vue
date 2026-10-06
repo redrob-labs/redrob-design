@@ -9,6 +9,7 @@ import { IS_TAURI } from '@redrob-design/core/constants'
 import IconActivity from '~icons/lucide/activity'
 import IconChart from '~icons/lucide/chart-no-axes-column'
 import IconCloud from '~icons/lucide/cloud'
+import IconCloudCog from '~icons/lucide/cloud-cog'
 import IconPlug from '~icons/lucide/plug'
 import IconSliders from '~icons/lucide/sliders-horizontal'
 
@@ -21,6 +22,7 @@ import {
   settingsDialogOpen,
   settingsDialogSection
 } from '@/app/settings/dialog'
+import CloudSettingsPanel from '@/components/settings/cloud/CloudSettingsPanel.vue'
 import DiagnosticsSettingsPanel from '@/components/settings/diagnostics/DiagnosticsSettingsPanel.vue'
 import GeneralSettingsPanel from '@/components/settings/general/GeneralSettingsPanel.vue'
 import SettingsGroup from '@/components/settings/layout/SettingsGroup.vue'
@@ -65,6 +67,7 @@ const SECTION_ICONS: Record<SettingsSection, Component> = {
   general: IconSliders,
   mcp: IconPlug,
   storage: IconCloud,
+  cloud: IconCloudCog,
   usage: IconChart,
   diagnostics: IconActivity
 }
@@ -73,6 +76,7 @@ const sectionLabels = computed<Record<SettingsSection, string>>(() => ({
   general: settings.value.general,
   mcp: settings.value.sectionAgentsAndMCP,
   storage: settings.value.sectionStorage,
+  cloud: settings.value.sectionCloud,
   usage: settings.value.usage,
   diagnostics: settings.value.diagnostics
 }))
@@ -173,6 +177,8 @@ watch(
             </SettingsGroup>
           </div>
         </section>
+
+        <CloudSettingsPanel v-else-if="settingsDialogSection === 'cloud'" />
 
         <UsageSettingsPanel v-else-if="settingsDialogSection === 'usage'" />
 

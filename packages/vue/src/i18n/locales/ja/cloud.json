@@ -1,0 +1,17 @@
+{
+  "heading": "Redrob Cloud",
+  "description": "任意です。サインインすると、Design Memory、コメント、バージョン、ライブラリをワークスペースと共有できます。ファイルと AI キーはそのままです。",
+  "signedOut": "サインインしていません。アカウントなしでもこのコンピューターですべて使えます。",
+  "signIn": "Redrob Console でサインイン",
+  "signingIn": "Redrob Console でこのコードを承認するのを待っています。",
+  "openConsole": "Redrob Console を開く",
+  "cancel": "キャンセル",
+  "signedInAs": "{name} としてサインイン中です。",
+  "workspace": "ワークスペース",
+  "noWorkspace": "このアカウントはまだワークスペースに入っていません。",
+  "signOut": "サインアウト",
+  "unreachable": "Redrob Console に接続できませんでした。応答があるまでクラウド機能は待機します。",
+  "denied": "サインインは承認されませんでした。",
+  "expired": "承認される前にコードの有効期限が切れました。もう一度お試しください。",
+  "role": "このワークスペースの{role}"
+}

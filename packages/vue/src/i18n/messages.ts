@@ -1,5 +1,6 @@
 import { aiMessageDefaults, aiMessages } from '#vue/i18n/messages/ai'
 import { automationMessageDefaults, automationMessages } from '#vue/i18n/messages/automation'
+import { cloudMessageDefaults, cloudMessages } from '#vue/i18n/messages/cloud'
 import { codeMessageDefaults, codeMessages } from '#vue/i18n/messages/code'
 import {
   collaborationMessageDefaults,
@@ -44,6 +45,7 @@ export {
   homeMessages,
   composerMessages,
   automationMessages,
+  cloudMessages,
   codeMessages,
   collaborationMessages,
   commandMessages,
@@ -77,6 +79,7 @@ export const messageDefaults = {
   home: homeMessageDefaults,
   composer: composerMessageDefaults,
   automation: automationMessageDefaults,
+  cloud: cloudMessageDefaults,
   code: codeMessageDefaults,
   collaboration: collaborationMessageDefaults,
   commands: commandMessageDefaults,
