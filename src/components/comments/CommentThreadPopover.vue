@@ -4,6 +4,7 @@ import { computed, ref } from 'vue'
 
 import { useCommentsMessages } from '@redrob-design/vue'
 
+import { canCommentOn } from '@/app/cloud/files'
 import { draftAnchor, stopCommenting } from '@/app/comments/service'
 import {
   MAX_COMMENT_LENGTH,
@@ -27,6 +28,8 @@ const { documentKey, reference } = defineProps<{
 }>()
 
 const t = useCommentsMessages()
+/** Viewers read threads; commenting starts at the commenter role. */
+const mayComment = computed(() => canCommentOn(documentKey))
 const text = ref('')
 const busy = ref(false)
 const thread = computed(() =>
@@ -108,6 +111,7 @@ function remove(comment: LocalComment): void {
             </span>
             <div class="flex items-center gap-1">
               <AppButton
+                v-if="mayComment"
                 size="xs"
                 color="neutral"
                 variant="ghost"
@@ -132,6 +136,7 @@ function remove(comment: LocalComment): void {
                 <b class="text-surface">{{ authorOf(comment) }}</b>
                 <span class="text-muted">{{ dateFormat.format(new Date(comment.createdAt)) }}</span>
                 <IconButton
+                  v-if="mayComment"
                   class="ml-auto"
                   :label="comment.id === thread.id ? t.deleteThread : t.deleteComment"
                   @click="remove(comment)"
@@ -143,7 +148,7 @@ function remove(comment: LocalComment): void {
             </li>
           </ul>
         </template>
-        <form class="flex flex-col gap-2" @submit.prevent="post">
+        <form v-if="mayComment" class="flex flex-col gap-2" @submit.prevent="post">
           <label class="flex flex-col">
             <span class="sr-only">{{ thread ? t.replyPlaceholder : t.placeholder }}</span>
             <AppTextarea

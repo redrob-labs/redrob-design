@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 
+import { activeFilePermissions } from '@/app/cloud/files'
+
 import { useHistoryMessages } from '@redrob-design/vue'
 
 import {
@@ -165,6 +167,7 @@ async function restore(entry: HistoryEntry): Promise<void> {
             </p>
             <div class="flex flex-wrap gap-1.5">
               <AppButton
+                v-if="activeFilePermissions.edit"
                 size="xs"
                 color="primary"
                 variant="solid"

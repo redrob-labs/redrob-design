@@ -4,6 +4,7 @@ import { exportFigFile } from '@redrob-design/core/io/formats/fig'
 import { renderThumbnail } from '@redrob-design/core/io/formats/raster'
 
 import { threadKeyFor, type ThreadIdentity } from '@/app/assistant/thread/store'
+import { ReadOnlyFileError, canEditKey } from '@/app/cloud/files/permissions'
 
 import {
   deleteCloudVersion,
@@ -203,6 +204,7 @@ export async function restoreVersion(
   document: HistoryDocument,
   entry: HistoryEntry
 ): Promise<void> {
+  if (!canEditKey(threadKeyFor(document))) throw new ReadOnlyFileError()
   const bytes = await bytesOf(threadKeyFor(document), entry)
   if (!bytes) throw new Error('This version is no longer on this computer')
   if (versionedAt.get(document) !== document.state.sceneVersion) {

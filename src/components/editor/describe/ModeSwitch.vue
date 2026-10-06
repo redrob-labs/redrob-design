@@ -2,7 +2,7 @@
 import { tv } from 'tailwind-variants'
 import { ToggleGroupItem, ToggleGroupRoot } from 'reka-ui'
 
-import { useThreadMessages } from '@redrob-design/vue'
+import { useSharingMessages, useThreadMessages } from '@redrob-design/vue'
 
 import { activeTab, activeTabMode, setTabMode } from '@/app/tabs'
 import Tip from '@/components/ui/Tip.vue'
@@ -10,6 +10,7 @@ import theme from '@/theme/agent/controls'
 
 /** Describe or Edit for the open file, in the tab bar. The same switch in both modes. */
 const t = useThreadMessages()
+const sharing = useSharingMessages()
 const styles = tv(theme)()
 
 function select(value: unknown): void {
@@ -20,6 +21,14 @@ function select(value: unknown): void {
 </script>
 
 <template>
+  <span
+    v-if="activeTab?.readOnly"
+    data-test-id="view-only-badge"
+    class="mr-1.5 inline-flex h-6 items-center gap-1 rounded-full border border-border px-2 text-[11px] text-muted"
+  >
+    <icon-lucide-eye class="size-3" />
+    {{ sharing.viewOnly }}
+  </span>
   <ToggleGroupRoot
     type="single"
     :model-value="activeTabMode"

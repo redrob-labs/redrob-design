@@ -90,7 +90,7 @@ const horizontalSplitterStyles = tv(splitterTheme)({ direction: 'horizontal' })
     <div class="relative flex min-w-0 flex-1">
       <EditorCanvas />
       <MobileHud />
-      <Toolbar v-if="activeTabMode !== 'describe'" />
+      <Toolbar v-if="activeTabMode !== 'describe' && !activeTab?.readOnly" />
     </div>
     <MobileDrawer />
   </div>

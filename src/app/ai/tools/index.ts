@@ -11,6 +11,7 @@ import {
 import type { StepBudget, ToolLogEntry } from '@redrob-design/core/tools'
 
 import { makeFigmaFromStore } from '@/app/automation/bridge/figma-factory'
+import { assertCanEdit } from '@/app/cloud/files/permissions'
 import { getActiveEditorStore } from '@/app/editor/active-store'
 import type { EditorStore } from '@/app/editor/active-store'
 import { ensureGraphFonts } from '@/app/editor/fonts'
@@ -83,6 +84,8 @@ export function createAITools(store: EditorStore) {
     {
       getFigma: () => makeFigmaFromStore(store),
       executeTool: async (def, figma, args) => {
+        // A shared file opened read-only: Redrob explains instead of changing what nobody saves.
+        if (def.mutates) assertCanEdit(store)
         return def.mutates
           ? store.runMutationWithLayout(
               () => def.execute(figma, args),

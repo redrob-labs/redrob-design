@@ -3,6 +3,7 @@ import { computed } from 'vue'
 
 import { useCommentsMessages } from '@redrob-design/vue'
 
+import { activeFilePermissions } from '@/app/cloud/files'
 import { activeDocumentKey, commentsPanelOpen, startCommenting } from '@/app/comments/service'
 import { activeThreadId, threadsFor } from '@/app/comments/store'
 import type { CommentThread } from '@/app/comments/types'
@@ -49,7 +50,13 @@ function openThread(thread: CommentThread): void {
       <p class="text-muted" data-slot="comments-sharing">
         {{ signedIn ? t.shared : t.notShared }}
       </p>
-      <AppButton class="self-start" color="primary" variant="solid" @click="startCommenting">
+      <AppButton
+        v-if="activeFilePermissions.comment"
+        class="self-start"
+        color="primary"
+        variant="solid"
+        @click="startCommenting"
+      >
         <template #leading><icon-lucide-message-circle-plus /></template>
         {{ t.add }}
       </AppButton>

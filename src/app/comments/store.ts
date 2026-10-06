@@ -1,5 +1,6 @@
 import { ref, shallowReactive } from 'vue'
 
+import { assertCanComment } from '@/app/cloud/files/permissions'
 import { cloudState } from '@/app/integrations/console'
 
 import { threadsOf } from './model'
@@ -84,6 +85,7 @@ export async function addComment(
   documentKey: string,
   input: { anchor: CommentAnchor; text: string; threadId?: string | null }
 ): Promise<LocalComment | null> {
+  assertCanComment(documentKey)
   const text = input.text.trim().slice(0, MAX_COMMENT_LENGTH)
   if (text === '') return null
   await loadComments(documentKey)
@@ -115,6 +117,7 @@ export function setThreadResolved(
   threadId: string,
   resolved: boolean
 ): Promise<void> {
+  assertCanComment(documentKey)
   return change(documentKey, new Set([threadId]), (comment) => ({
     ...comment,
     resolved,
@@ -128,6 +131,7 @@ export function setThreadResolved(
  * Comments Redrob Cloud has wait as deleted until it confirms.
  */
 export async function deleteComment(documentKey: string, id: string): Promise<void> {
+  assertCanComment(documentKey)
   await loadComments(documentKey)
   const doomed = new Set(
     commentsOf(documentKey)

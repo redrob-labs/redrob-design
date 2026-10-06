@@ -7,6 +7,16 @@ export {
 } from './binding'
 export type { CloudFileBinding } from './binding'
 export { setCloudBlobFetchForTests, CloudTransferError } from './blob'
+export {
+  ReadOnlyFileError,
+  activeFilePermissions,
+  assertCanComment,
+  assertCanEdit,
+  canCommentOn,
+  canCommentOnDocument,
+  canEditDocument,
+  canEditKey
+} from './permissions'
 export { grantPendingDevices } from './grants'
 export { applyGraphState, encodeGraphState } from './graph-state'
 export { CloudKeyPendingError, contentKey, forgetSessionKeys, rawContentKey } from './keyring'
