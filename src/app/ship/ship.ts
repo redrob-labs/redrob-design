@@ -5,7 +5,6 @@ import { exportDTCG, selectionToJSX } from '@redrob-design/core/design-jsx'
 import type { SceneGraph } from '@redrob-design/scene-graph'
 
 import { reviewPage } from '@/app/review/findings'
-import { demoMode } from '@/app/runtime/demo'
 
 /** Bumped by the Ship button; the open thread posts the ship message. */
 export const shipRequest = ref(0)
@@ -90,15 +89,4 @@ export function reactAndTokens(graph: SceneGraph, pageId: string): { jsx: string
     ''
   ].join('\n')
   return { jsx, tokens: `${JSON.stringify(exportDTCG(graph), null, 2)}\n` }
-}
-
-/**
- * Handing off needs a service that is not connected yet. On /demo it answers
- * the way the prototype does; elsewhere it says so. Publishing lives in
- * `./publish/service`.
- */
-export type ShipStubResult = { connected: true; detail: string } | { connected: false }
-
-export function handToClaudeCode(): ShipStubResult {
-  return demoMode.value ? { connected: true, detail: 'MCP' } : { connected: false }
 }

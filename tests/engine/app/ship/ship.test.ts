@@ -4,13 +4,7 @@ import { createEditor } from '@redrob-design/core/editor'
 
 import { changeSetFor, changeSets } from '@/app/assistant/changes/store'
 import { demoMode } from '@/app/runtime/demo'
-import {
-  handToClaudeCode,
-  hasShipMessage,
-  isShipData,
-  reactAndTokens,
-  shipMessage
-} from '@/app/ship/ship'
+import { hasShipMessage, isShipData, reactAndTokens, shipMessage } from '@/app/ship/ship'
 import { simulatePriceSheetChange, watchedSources } from '@/app/ship/watch'
 
 const words = {
@@ -56,13 +50,11 @@ describe('Ship', () => {
     expect(JSON.parse(tokens)).toEqual({})
   })
 
-  test('handing off and watching say not connected outside demo mode', () => {
-    expect(handToClaudeCode()).toEqual({ connected: false })
+  test('watching says not connected outside demo mode', () => {
     expect(watchedSources()).toBeNull()
     expect(simulatePriceSheetChange(pricing().editor, { changed: 'c', nothing: 'n' })).toBeNull()
 
     demoMode.value = true
-    expect(handToClaudeCode()).toMatchObject({ connected: true })
     expect(watchedSources()?.length).toBeGreaterThan(0)
   })
 

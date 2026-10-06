@@ -115,6 +115,8 @@ describe('MCP server auto-generated auth token', () => {
       const health = (await healthResp.json()) as HealthResponse
       expect(health.authRequired).toBe(true)
       expect(health.tools).toBeUndefined()
+      // Whether an agent is connected is configuration too.
+      expect('clientSessions' in health).toBe(false)
     } finally {
       await handle.close()
     }

@@ -35,7 +35,8 @@ export const shipMessageDefaults = {
     'Anyone with the address can see it. It goes to your publish bucket, and Unpublish takes it down.',
   reactTokens: 'React + tokens',
   handToClaudeCode: 'Hand to Claude Code',
-  handedOff: 'Handed to Claude Code over MCP: the page, tokens.json and the brief.',
+  handedOffMCP:
+    'Sent to Claude Code over MCP: the page, tokens.json and the brief. Run /mcp__redrob-design__redrob_handoff there; the command is copied.',
   handoffSaved: params(
     'Saved the page, tokens.json and the brief to {path}. The prompt for Claude Code is copied.'
   ),
@@ -43,8 +44,6 @@ export const shipMessageDefaults = {
     'Downloaded {file}. Unzip it at the root of your repository; the prompt for Claude Code is copied.'
   ),
   handoffFailed: params('Could not hand off: {error}'),
-  handoffNotConnected:
-    'Handing to Claude Code needs its MCP connection. Connect it in Settings, under Agents and MCP.',
   exportForFigma: 'Export for Figma',
   watchTitle: 'This page updates itself.',
   watchBody: params(

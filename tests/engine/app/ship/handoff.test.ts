@@ -85,3 +85,39 @@ describe('hand-off bundle', () => {
     expect(handoffPrompt('x')).toBe('claude "Implement .redrob/handoff/x/brief.md"')
   })
 })
+
+describe('hand-off over MCP', () => {
+  test('counts as connected only with a running server and a live agent session', async () => {
+    const { agentConnected } = await import('@/app/ship/handoff/connection')
+    const connection = (status: string, clientSessions: number) => ({
+      refresh: () => Promise.resolve(),
+      state: { status, clientSessions }
+    })
+    expect(await agentConnected(connection('running', 1))).toBe(true)
+    expect(await agentConnected(connection('running', 0))).toBe(false)
+    expect(await agentConnected(connection('stopped', 2))).toBe(false)
+  })
+
+  test('the app serves the latest bundle with text files as text and the preview as base64', async () => {
+    const { handoffResponse } = await import('@/app/automation/bridge/handoff-handler')
+    const { editor, pageId } = pricing()
+    const bundle = buildHandoff({
+      graph: editor.graph,
+      pageId,
+      messages: thread,
+      memory: '',
+      preview: new Uint8Array([1, 2, 3])
+    })
+    const response = handoffResponse('doc:1', bundle) as {
+      ok: boolean
+      result: { slug: string; files: Array<{ name: string; text?: string; base64?: string }> }
+    }
+    expect(response.ok).toBe(true)
+    expect(response.result.slug).toBe('pricing')
+    expect(response.result.files.find((file) => file.name === 'preview.png')?.base64).toBe('AQID')
+    expect(response.result.files.find((file) => file.name === 'brief.md')?.text).toContain(
+      '# Pricing'
+    )
+    expect(handoffResponse('doc:missing', null)).toMatchObject({ ok: false })
+  })
+})

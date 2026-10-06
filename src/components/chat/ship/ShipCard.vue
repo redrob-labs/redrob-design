@@ -16,9 +16,11 @@ import {
   unpublishPage,
   type PublishResult
 } from '@/app/ship/publish/service'
-import { deliverHandoff } from '@/app/ship/handoff/deliver'
+import { MCP_PROMPT } from '@/app/ship/handoff/bundle'
+import { deliverHandoff, latestHandoffs } from '@/app/ship/handoff/deliver'
+import { agentConnected } from '@/app/ship/handoff/connection'
 import { prepareHandoff } from '@/app/ship/handoff/service'
-import { handToClaudeCode, reactAndTokens, type ShipData } from '@/app/ship/ship'
+import { reactAndTokens, type ShipData } from '@/app/ship/ship'
 import { simulatePriceSheetChange, watchedSources } from '@/app/ship/watch'
 import { useChatPost } from '@/components/chat/submit'
 import AppButton from '@/components/ui/AppButton.vue'
@@ -118,13 +120,16 @@ const { copy: copyText } = useClipboard()
  * brief and a preview, in the repository on desktop or as a zip in the browser.
  */
 async function handOff(): Promise<void> {
-  if (handToClaudeCode().connected) {
-    toast.info(t.value.handedOff)
-    return
-  }
   handingOff.value = true
   try {
     const bundle = await prepareHandoff(getActiveEditorStore(), ship.pageId)
+    // A connected agent reads the hand-off over MCP; files are the fallback.
+    if (await agentConnected()) {
+      latestHandoffs.set(documentId, bundle)
+      await copyText(MCP_PROMPT).catch(() => undefined)
+      toast.info(t.value.handedOffMCP)
+      return
+    }
     const delivery = await deliverHandoff(documentId, bundle)
     if (delivery.kind === 'cancelled') return
     await copyText(bundle.prompt).catch(() => undefined)

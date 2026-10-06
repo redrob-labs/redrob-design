@@ -101,6 +101,9 @@ export function buildHandoff(input: HandoffInput): HandoffBundle {
   return { slug, files, prompt: handoffPrompt(slug) }
 }
 
+/** What to type in Claude Code when it reads the hand-off over MCP. */
+export const MCP_PROMPT = '/mcp__redrob-design__redrob_handoff'
+
 export function handoffPrompt(slug: string): string {
   return `claude "Implement ${HANDOFF_DIR}/${slug}/brief.md"`
 }
