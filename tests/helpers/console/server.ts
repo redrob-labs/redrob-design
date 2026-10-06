@@ -42,6 +42,10 @@ export interface MockConsoleState {
   versions: Map<string, Array<ConsoleVersionSummary & { snapshot: string }>>
   comments: Map<string, ConsoleComment[]>
   libraries: Map<string, ConsoleLibraryRevision[]>
+  /** Where tickets point; tests set it to a mock relay from `relay.ts`. */
+  relayURL: string
+  /** Tickets issued and not used yet; the relay takes each once. */
+  relayTickets: Set<string>
   /** How many token polls answer `authorization_pending` before the key. */
   pendingPolls: number
   /** When true, the device flow answers `access_denied`. */
@@ -129,6 +133,8 @@ export function mockConsoleState(): MockConsoleState {
     versions: new Map(),
     comments: new Map(),
     libraries: new Map(),
+    relayURL: 'wss://console.redrob.ai/api/backend/v1/relay',
+    relayTickets: new Set(),
     pendingPolls: 1,
     denySignIn: false,
     requests: []
@@ -354,16 +360,19 @@ export function createMockConsole(state: MockConsoleState = mockConsoleState()) 
     return c.body(null, 204)
   })
 
-  authed.post('/relay/:roomId/ticket', (c) =>
-    c.json(
+  authed.post('/relay/:roomId/ticket', (c) => {
+    const roomId = c.req.param('roomId')
+    const ticket = `${nextId('ticket')}-${roomId}-0123456789abcdef`
+    state.relayTickets.add(ticket)
+    return c.json(
       {
-        url: `wss://console.redrob.ai/api/backend/v1/relay/${encodeURIComponent(c.req.param('roomId'))}`,
-        ticket: `ticket-${c.req.param('roomId')}-0123456789abcdef`,
+        url: `${state.relayURL}/${encodeURIComponent(roomId)}`,
+        ticket,
         expiresAt: '2026-10-06T09:05:00.000Z'
       },
       201
     )
-  )
+  })
 
   authed.get('/workspaces/:workspaceId/libraries', (c) => {
     if (!member(c.req.param('workspaceId'))) return fail(c, 403, 'forbidden')

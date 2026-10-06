@@ -2,6 +2,7 @@ import { expect, test, type Browser, type BrowserContext, type Page } from '@pla
 import { WebSocketServer, type WebSocket } from 'ws'
 
 import { CanvasHelper } from '#tests/helpers/canvas'
+import { routeConsoleToMock } from '#tests/helpers/console/route'
 
 const ROOM_ID = 'e2e-collaboration-room'
 
@@ -92,6 +93,8 @@ async function createPeer(browser: Browser, name: string, relayURL: string): Pro
   const context = await browser.newContext({ viewport: { width: 1280, height: 800 } })
   try {
     const page = await context.newPage()
+    // Feeds and sign-in answer from the mock, so no request leaves the test.
+    await routeConsoleToMock(page)
     await page.goto(`/?test&collabTransport=test&collabRelay=${encodeURIComponent(relayURL)}`)
     await page.evaluate(
       (localName) => window.redrobDesign?.test?.collab?.setLocalName(localName),

@@ -44,4 +44,12 @@ describe('app runtime configuration', () => {
       collaborationRelayURL: null
     })
   })
+
+  test('picks a collaboration transport, and the default for anything else', () => {
+    const modeOf = (value: string) =>
+      parseAppRuntimeConfig(`?collabTransport=${value}`).collaborationTransport
+    expect(modeOf('relay')).toBe('relay')
+    expect(modeOf('p2p')).toBe('p2p')
+    expect(modeOf('carrier-pigeon')).toBe('default')
+  })
 })

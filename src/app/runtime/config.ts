@@ -2,7 +2,17 @@ import { appPreferences, type CanvasRenderingMode } from '@/app/settings/prefere
 import { IS_BROWSER } from '@/constants'
 
 export type SceneRendererMode = CanvasRenderingMode
-export type CollaborationTransportMode = 'default' | 'test'
+/**
+ * `default` uses the Redrob Cloud relay when signed in and peer-to-peer
+ * otherwise; `relay` and `p2p` force one; `test` is the dev-only local relay.
+ */
+export type CollaborationTransportMode = 'default' | 'test' | 'relay' | 'p2p'
+
+const TRANSPORT_MODES: readonly CollaborationTransportMode[] = ['default', 'test', 'relay', 'p2p']
+
+function transportMode(value: string | null): CollaborationTransportMode {
+  return TRANSPORT_MODES.find((mode) => mode === value) ?? 'default'
+}
 
 export interface AppRuntimeConfig {
   test: boolean
@@ -32,7 +42,7 @@ export function parseAppRuntimeConfig(
     showRulers: !params.has('no-rulers'),
     sceneRenderer,
     sceneRendererOverride: renderer === 'tiled' || renderer === 'retained',
-    collaborationTransport: params.get('collabTransport') === 'test' ? 'test' : 'default',
+    collaborationTransport: transportMode(params.get('collabTransport')),
     collaborationRelayURL: params.get('collabRelay')
   }
 }

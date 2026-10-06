@@ -1,7 +1,8 @@
 import { appRuntimeConfig } from '@/app/runtime/config'
 import { IS_BROWSER } from '@/constants'
 
-import type { CollabAction, CollabActionReceiver, CollabRoomTransport } from './types'
+import { createActionRegistry, createPeerRoster } from './roster'
+import type { CollabRoomTransport } from './types'
 
 const MAX_TEST_MESSAGE_BYTES = 8 * 1024 * 1024
 
@@ -67,11 +68,8 @@ export function joinTestCollabRoom(roomId: string): CollabRoomTransport {
   }
   const peerId = crypto.randomUUID()
   const socket = new WebSocket(relayURL(roomId))
-  const peers = new Set<string>()
-  const receivers = new Map<string, CollabActionReceiver>()
+  const roster = createPeerRoster(peerId)
   const pending: TestTransportMessage[] = []
-  let joinHandler: ((peerId: string) => void) | null = null
-  let leaveHandler: ((peerId: string) => void) | null = null
   let left = false
 
   function post(message: TestTransportMessage) {
@@ -79,11 +77,9 @@ export function joinTestCollabRoom(roomId: string): CollabRoomTransport {
     else pending.push(message)
   }
 
-  function addPeer(id: string) {
-    if (id === peerId || peers.has(id)) return
-    peers.add(id)
-    joinHandler?.(id)
-  }
+  const actions = createActionRegistry((namespace, data, targetId) => {
+    post({ type: 'action', senderId: peerId, targetId, namespace, data: Array.from(data) })
+  })
 
   socket.addEventListener('open', () => {
     for (const message of pending.splice(0)) socket.send(JSON.stringify(message))
@@ -97,54 +93,31 @@ export function joinTestCollabRoom(roomId: string): CollabRoomTransport {
     if (!message || message.senderId === peerId) return
     if (message.targetId && message.targetId !== peerId) return
     if (message.type === 'hello') {
-      addPeer(message.senderId)
+      roster.add(message.senderId)
       post({ type: 'welcome', senderId: peerId, targetId: message.senderId })
       return
     }
     if (message.type === 'welcome') {
-      addPeer(message.senderId)
+      roster.add(message.senderId)
       return
     }
     if (message.type === 'leave') {
-      if (peers.delete(message.senderId)) leaveHandler?.(message.senderId)
+      roster.remove(message.senderId)
     } else {
-      addPeer(message.senderId)
-      receivers.get(message.namespace)?.(new Uint8Array(message.data), message.senderId)
+      roster.add(message.senderId)
+      actions.receivers.get(message.namespace)?.(new Uint8Array(message.data), message.senderId)
     }
   })
 
   return {
-    makeAction(namespace): CollabAction {
-      return [
-        (data, targetId) => {
-          post({
-            type: 'action',
-            senderId: peerId,
-            targetId,
-            namespace,
-            data: Array.from(data)
-          })
-        },
-        (handler) => {
-          if (receivers.has(namespace)) {
-            throw new Error(`Collaboration action ${namespace} is already registered`)
-          }
-          receivers.set(namespace, handler)
-        }
-      ]
-    },
-    onPeerJoin(handler) {
-      joinHandler = handler
-      for (const id of peers) queueMicrotask(() => handler(id))
-    },
-    onPeerLeave(handler) {
-      leaveHandler = handler
-    },
+    makeAction: actions.makeAction,
+    onPeerJoin: roster.onPeerJoin,
+    onPeerLeave: roster.onPeerLeave,
     async leave() {
       if (left) return
       left = true
-      peers.clear()
-      receivers.clear()
+      roster.clear()
+      actions.receivers.clear()
       const leaveMessage = JSON.stringify({ type: 'leave', senderId: peerId })
       if (socket.readyState === WebSocket.CONNECTING) {
         await new Promise<void>((resolve) => {
