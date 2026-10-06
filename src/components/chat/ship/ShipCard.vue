@@ -1,24 +1,37 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 
-import { useShipMessages, useThreadMessages } from '@redrob-design/vue'
+import { useCommonMessages, useShipMessages, useThreadMessages } from '@redrob-design/vue'
 
 import { getActiveEditorStore } from '@/app/editor/active-store'
 import { downloadBlob } from '@/app/document/io/browser'
 import { pageLanguages } from '@/app/language/versions'
 import { toast } from '@/app/shell/ui'
-import { handToClaudeCode, publishPage, reactAndTokens, type ShipData } from '@/app/ship/ship'
+import { threadKeyFor } from '@/app/assistant/thread/store'
+import { openSettingsDialog } from '@/app/settings/dialog'
+import {
+  publishPage,
+  publishedSlug,
+  unpublishPage,
+  type PublishResult
+} from '@/app/ship/publish/service'
+import { handToClaudeCode, reactAndTokens, type ShipData } from '@/app/ship/ship'
 import { simulatePriceSheetChange, watchedSources } from '@/app/ship/watch'
 import { useChatPost } from '@/components/chat/submit'
 import AppButton from '@/components/ui/AppButton.vue'
+import { AppConfirmationDialog } from '@/components/ui/dialog'
 
 /** The ways a page ships, and the note that it keeps watching its sources. */
 const { ship } = defineProps<{ ship: ShipData }>()
 
 const t = useShipMessages()
+const common = useCommonMessages()
 const thread = useThreadMessages()
 const post = useChatPost()
-const published = ref(false)
+const documentId = threadKeyFor(getActiveEditorStore())
+const published = ref(publishedSlug(documentId, ship.pageId) !== null)
+const publishing = ref(false)
+const confirmOpen = ref(false)
 const updated = ref(false)
 const sources = computed(() => watchedSources())
 const languages = computed(() => {
@@ -26,14 +39,65 @@ const languages = computed(() => {
   return pageLanguages(store.graph, ship.pageId)
 })
 
+/** The first publish makes the page public, so it asks first; later ones update it. */
 function publish(): void {
-  const result = publishPage()
-  if (!result.connected) {
-    toast.warning(t.value.publishNotConnected)
+  if (published.value) void runPublish()
+  else confirmOpen.value = true
+}
+
+function report(result: PublishResult): void {
+  if (result.status === 'no-profile' || result.status === 'no-public-url') {
+    toast.warning(
+      result.status === 'no-profile' ? t.value.publishNoBucket : t.value.publishNoSiteURL
+    )
+    openSettingsDialog('storage')
     return
   }
+  if (result.status === 'upload-failed') {
+    toast.error(t.value.publishFailed({ error: result.detail }))
+    return
+  }
+  if (result.status === 'unreachable') {
+    published.value = true
+    toast.warning(t.value.publishUnreachable({ url: result.detail }))
+    return
+  }
+  if (result.status !== 'published') return
   published.value = true
-  toast.info(t.value.publishedTo({ site: result.detail }))
+  toast.info(
+    result.verified
+      ? t.value.publishedTo({ site: result.url })
+      : t.value.publishedUnverified({ site: result.url })
+  )
+  if (result.fontFallbacks.length > 0) {
+    toast.info(t.value.publishFontFallbacks({ fonts: result.fontFallbacks.join(', ') }))
+  }
+}
+
+async function runPublish(): Promise<void> {
+  publishing.value = true
+  try {
+    const store = getActiveEditorStore()
+    report(await publishPage({ graph: store.graph, pageId: ship.pageId, documentId }))
+  } finally {
+    publishing.value = false
+  }
+}
+
+async function unpublish(): Promise<void> {
+  publishing.value = true
+  try {
+    if (await unpublishPage({ pageId: ship.pageId, documentId })) {
+      published.value = false
+      toast.info(t.value.unpublished)
+    }
+  } catch (error) {
+    toast.error(
+      t.value.publishFailed({ error: error instanceof Error ? error.message : String(error) })
+    )
+  } finally {
+    publishing.value = false
+  }
 }
 
 function downloadReact(): void {
@@ -79,12 +143,23 @@ function tryUpdate(): void {
       <AppButton
         color="primary"
         variant="solid"
-        :disabled="published"
+        :loading="publishing"
+        :disabled="publishing"
         data-slot="ship-publish"
         @click="publish"
       >
         <template #leading><icon-lucide-globe /></template>
-        {{ published ? t.published : t.publish }}
+        {{ published ? t.publishAgain : t.publish }}
+      </AppButton>
+      <AppButton
+        v-if="published"
+        color="neutral"
+        variant="ghost"
+        :disabled="publishing"
+        data-slot="ship-unpublish"
+        @click="unpublish"
+      >
+        {{ t.unpublish }}
       </AppButton>
       <AppButton color="neutral" variant="outline" data-slot="ship-react" @click="downloadReact">
         <template #leading><icon-lucide-code /></template>
@@ -122,5 +197,13 @@ function tryUpdate(): void {
         </button>
       </div>
     </div>
+    <AppConfirmationDialog
+      v-model:open="confirmOpen"
+      :heading="t.publishConfirmHeading"
+      :description="t.publishConfirmText"
+      :cancel-label="common.cancel"
+      :confirm-label="t.publish"
+      @confirm="runPublish"
+    />
   </section>
 </template>

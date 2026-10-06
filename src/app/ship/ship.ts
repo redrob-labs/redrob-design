@@ -93,14 +93,11 @@ export function reactAndTokens(graph: SceneGraph, pageId: string): { jsx: string
 }
 
 /**
- * Publishing and handing off need services that are not connected yet. On
- * /demo they answer the way the prototype does; elsewhere they say so.
+ * Handing off needs a service that is not connected yet. On /demo it answers
+ * the way the prototype does; elsewhere it says so. Publishing lives in
+ * `./publish/service`.
  */
 export type ShipStubResult = { connected: true; detail: string } | { connected: false }
-
-export function publishPage(): ShipStubResult {
-  return demoMode.value ? { connected: true, detail: 'redrob.io/pricing' } : { connected: false }
-}
 
 export function handToClaudeCode(): ShipStubResult {
   return demoMode.value ? { connected: true, detail: 'MCP' } : { connected: false }

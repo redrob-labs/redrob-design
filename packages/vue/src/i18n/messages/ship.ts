@@ -13,7 +13,26 @@ export const shipMessageDefaults = {
   publish: 'Publish',
   published: 'Published',
   publishedTo: params('Published to {site}.'),
-  publishNotConnected: 'Publishing needs a connected site, and none is connected yet.',
+  publishAgain: 'Publish again',
+  unpublish: 'Unpublish',
+  unpublished: 'The page is no longer published.',
+  publishedUnverified: params(
+    'Uploaded to {site}. This browser could not check the address; open it to make sure the bucket is public.'
+  ),
+  publishNoBucket:
+    'Publishing needs a publish bucket. Set one up in Settings, under Storage, Publish site.',
+  publishNoSiteURL:
+    'Publishing needs the public address of the publish bucket. Add it in Settings, under Storage, Publish site.',
+  publishFailed: params('Could not publish: {error}'),
+  publishUnreachable: params(
+    'The files are uploaded, but {url} does not answer yet. Make the publish bucket public with your provider.'
+  ),
+  publishFontFallbacks: params(
+    'These typefaces are not on the web, so visitors see a fallback: {fonts}.'
+  ),
+  publishConfirmHeading: 'Publish this page?',
+  publishConfirmText:
+    'Anyone with the address can see it. It goes to your publish bucket, and Unpublish takes it down.',
   reactTokens: 'React + tokens',
   handToClaudeCode: 'Hand to Claude Code',
   handedOff: 'Handed to Claude Code over MCP: the page, tokens.json and the brief.',

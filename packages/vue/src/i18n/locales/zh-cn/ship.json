@@ -8,7 +8,6 @@
   "publish": "上线",
   "published": "已上线",
   "publishedTo": "已上线到 {site}。",
-  "publishNotConnected": "上线需要已连接的网站，目前还没有。",
   "reactTokens": "React 与令牌",
   "handToClaudeCode": "交给 Claude Code",
   "handedOff": "已通过 MCP 交给 Claude Code：页面、tokens.json 和需求。",
@@ -19,5 +18,16 @@
   "watchNotConnected": "连接工作区后，它可以关注价格表或网站并自行提出修改。",
   "tryUpdate": "试一试：价格表发生变化",
   "updateChanged": "第四季度价格表已变化，因此页面自行提出更新。",
-  "updateNothing": "价格表已变化，但此页面没有图层显示旧价格。"
+  "updateNothing": "价格表已变化，但此页面没有图层显示旧价格。",
+  "publishAgain": "再次发布",
+  "unpublish": "取消发布",
+  "unpublished": "该页面已不再发布。",
+  "publishedUnverified": "已上传到 {site}。此浏览器无法检查该地址，请打开它确认存储桶已公开。",
+  "publishNoBucket": "发布需要一个发布存储桶。请在设置的存储、发布站点中设置。",
+  "publishNoSiteURL": "发布需要发布存储桶的公开地址。请在设置的存储、发布站点中添加。",
+  "publishFailed": "无法发布：{error}",
+  "publishUnreachable": "文件已上传，但 {url} 还没有响应。请在服务商处将存储桶设为公开。",
+  "publishFontFallbacks": "这些字体不在网上，访客会看到替代字体：{fonts}。",
+  "publishConfirmHeading": "发布这个页面？",
+  "publishConfirmText": "任何知道地址的人都能看到它。它会放进你的发布存储桶，取消发布会把它移除。"
 }

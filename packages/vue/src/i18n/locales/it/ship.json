@@ -8,7 +8,6 @@
   "publish": "Metti online",
   "published": "Online",
   "publishedTo": "Online su {site}.",
-  "publishNotConnected": "Per mettere online serve un sito collegato, e non ce n’è ancora nessuno.",
   "reactTokens": "React + token",
   "handToClaudeCode": "Passa a Claude Code",
   "handedOff": "Passato a Claude Code via MCP: la pagina, tokens.json e il brief.",
@@ -19,5 +18,16 @@
   "watchNotConnected": "Quando colleghi uno spazio di lavoro, potrà seguire un listino o un sito e proporre una modifica.",
   "tryUpdate": "Provalo: il listino cambia",
   "updateChanged": "Il listino del quarto trimestre è cambiato, quindi la pagina propone il proprio aggiornamento.",
-  "updateNothing": "Il listino è cambiato, ma nessun livello di questa pagina mostra il prezzo vecchio."
+  "updateNothing": "Il listino è cambiato, ma nessun livello di questa pagina mostra il prezzo vecchio.",
+  "publishAgain": "Pubblica di nuovo",
+  "unpublish": "Ritira",
+  "unpublished": "La pagina non è più pubblicata.",
+  "publishedUnverified": "Caricato su {site}. Questo browser non ha potuto controllare l'indirizzo; aprilo per assicurarti che il bucket sia pubblico.",
+  "publishNoBucket": "Per pubblicare serve un bucket. Configuralo in Impostazioni, sotto Archiviazione, Sito di pubblicazione.",
+  "publishNoSiteURL": "Per pubblicare serve l'indirizzo pubblico del bucket. Aggiungilo in Impostazioni, sotto Archiviazione, Sito di pubblicazione.",
+  "publishFailed": "Pubblicazione non riuscita: {error}",
+  "publishUnreachable": "I file sono caricati, ma {url} non risponde ancora. Rendi pubblico il bucket presso il tuo fornitore.",
+  "publishFontFallbacks": "Questi caratteri non sono sul web, i visitatori vedono un sostituto: {fonts}.",
+  "publishConfirmHeading": "Pubblicare questa pagina?",
+  "publishConfirmText": "Chiunque abbia l'indirizzo potrà vederla. Va nel tuo bucket di pubblicazione e Ritira la toglie."
 }

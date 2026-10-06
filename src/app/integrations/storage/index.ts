@@ -31,6 +31,7 @@ export type {
   LibraryObjectSummary,
   LibraryObjectValue,
   LibraryObjectWriteOptions,
+  SiteObjectStore,
   StoragePreferenceField,
   StorageProviderID,
   StorageProviderRegistration,

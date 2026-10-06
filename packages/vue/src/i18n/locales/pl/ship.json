@@ -8,7 +8,6 @@
   "publish": "Opublikuj",
   "published": "Opublikowano",
   "publishedTo": "Opublikowano w {site}.",
-  "publishNotConnected": "Publikacja wymaga połączonej witryny, a żadna nie jest jeszcze połączona.",
   "reactTokens": "React + tokeny",
   "handToClaudeCode": "Przekaż do Claude Code",
   "handedOff": "Przekazano do Claude Code przez MCP: stronę, tokens.json i brief.",
@@ -19,5 +18,16 @@
   "watchNotConnected": "Po połączeniu obszaru roboczego może obserwować cennik lub witrynę i sama proponować zmianę.",
   "tryUpdate": "Wypróbuj: zmienia się cennik",
   "updateChanged": "Cennik na czwarty kwartał się zmienił, więc strona sama proponuje aktualizację.",
-  "updateNothing": "Cennik się zmienił, ale żadna warstwa na tej stronie nie pokazuje starej ceny."
+  "updateNothing": "Cennik się zmienił, ale żadna warstwa na tej stronie nie pokazuje starej ceny.",
+  "publishAgain": "Opublikuj ponownie",
+  "unpublish": "Cofnij publikację",
+  "unpublished": "Strona nie jest już opublikowana.",
+  "publishedUnverified": "Wysłano do {site}. Ta przeglądarka nie mogła sprawdzić adresu; otwórz go, by upewnić się, że bucket jest publiczny.",
+  "publishNoBucket": "Do publikacji potrzebny jest bucket. Ustaw go w Ustawieniach, w sekcji Pamięć, Strona publikacji.",
+  "publishNoSiteURL": "Do publikacji potrzebny jest publiczny adres bucketu. Dodaj go w Ustawieniach, w sekcji Pamięć, Strona publikacji.",
+  "publishFailed": "Nie udało się opublikować: {error}",
+  "publishUnreachable": "Pliki są wysłane, ale {url} jeszcze nie odpowiada. Udostępnij bucket publicznie u dostawcy.",
+  "publishFontFallbacks": "Tych krojów nie ma w sieci, odwiedzający zobaczą zamiennik: {fonts}.",
+  "publishConfirmHeading": "Opublikować tę stronę?",
+  "publishConfirmText": "Każdy, kto zna adres, będzie mógł ją zobaczyć. Trafia do twojego bucketu publikacji, a Cofnij publikację ją usuwa."
 }

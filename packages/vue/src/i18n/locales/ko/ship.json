@@ -8,7 +8,6 @@
   "publish": "게시",
   "published": "게시됨",
   "publishedTo": "{site}에 게시했습니다.",
-  "publishNotConnected": "게시하려면 연결된 사이트가 필요하지만 아직 없습니다.",
   "reactTokens": "React + 토큰",
   "handToClaudeCode": "Claude Code에 넘기기",
   "handedOff": "MCP로 Claude Code에 넘겼습니다. 페이지, tokens.json, 요청 내용입니다.",
@@ -19,5 +18,16 @@
   "watchNotConnected": "워크스페이스를 연결하면 가격표나 사이트를 지켜보고 스스로 변경을 제안할 수 있습니다.",
   "tryUpdate": "해 보기: 가격표가 바뀝니다",
   "updateChanged": "4분기 가격표가 바뀌어 페이지가 스스로 업데이트를 제안합니다.",
-  "updateNothing": "가격표가 바뀌었지만 이 페이지에는 이전 가격을 보여 주는 레이어가 없습니다."
+  "updateNothing": "가격표가 바뀌었지만 이 페이지에는 이전 가격을 보여 주는 레이어가 없습니다.",
+  "publishAgain": "다시 게시",
+  "unpublish": "게시 취소",
+  "unpublished": "페이지가 더 이상 게시되지 않습니다.",
+  "publishedUnverified": "{site}에 올렸습니다. 이 브라우저에서는 주소를 확인하지 못했습니다. 열어서 버킷이 공개되어 있는지 확인하세요.",
+  "publishNoBucket": "게시하려면 게시용 버킷이 필요합니다. 설정의 저장소, 게시 사이트에서 설정하세요.",
+  "publishNoSiteURL": "게시하려면 게시용 버킷의 공개 주소가 필요합니다. 설정의 저장소, 게시 사이트에서 추가하세요.",
+  "publishFailed": "게시하지 못했습니다: {error}",
+  "publishUnreachable": "파일은 올렸지만 {url}이(가) 아직 응답하지 않습니다. 제공업체에서 버킷을 공개하세요.",
+  "publishFontFallbacks": "다음 서체는 웹에 없어 대체 서체로 보입니다: {fonts}",
+  "publishConfirmHeading": "이 페이지를 게시할까요?",
+  "publishConfirmText": "주소를 아는 사람은 누구나 볼 수 있습니다. 게시용 버킷에 올라가며 게시 취소로 내릴 수 있습니다."
 }

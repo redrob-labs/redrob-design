@@ -8,7 +8,6 @@ import {
   handToClaudeCode,
   hasShipMessage,
   isShipData,
-  publishPage,
   reactAndTokens,
   shipMessage
 } from '@/app/ship/ship'
@@ -57,14 +56,13 @@ describe('Ship', () => {
     expect(JSON.parse(tokens)).toEqual({})
   })
 
-  test('publishing, handing off and watching say not connected outside demo mode', () => {
-    expect(publishPage()).toEqual({ connected: false })
+  test('handing off and watching say not connected outside demo mode', () => {
     expect(handToClaudeCode()).toEqual({ connected: false })
     expect(watchedSources()).toBeNull()
     expect(simulatePriceSheetChange(pricing().editor, { changed: 'c', nothing: 'n' })).toBeNull()
 
     demoMode.value = true
-    expect(publishPage()).toMatchObject({ connected: true })
+    expect(handToClaudeCode()).toMatchObject({ connected: true })
     expect(watchedSources()?.length).toBeGreaterThan(0)
   })
 

@@ -8,7 +8,6 @@
   "publish": "Publier",
   "published": "Publié",
   "publishedTo": "Publié sur {site}.",
-  "publishNotConnected": "Publier demande un site connecté, et aucun ne l’est encore.",
   "reactTokens": "React + jetons",
   "handToClaudeCode": "Confier à Claude Code",
   "handedOff": "Confié à Claude Code via MCP : la page, tokens.json et le brief.",
@@ -19,5 +18,16 @@
   "watchNotConnected": "Une fois un espace de travail connecté, elle pourra surveiller une grille tarifaire ou un site et proposer son propre changement.",
   "tryUpdate": "Essayez : la grille tarifaire change",
   "updateChanged": "La grille tarifaire du quatrième trimestre a changé : la page propose sa propre mise à jour.",
-  "updateNothing": "La grille tarifaire a changé, mais aucun calque de cette page n’affiche l’ancien prix."
+  "updateNothing": "La grille tarifaire a changé, mais aucun calque de cette page n’affiche l’ancien prix.",
+  "publishAgain": "Publier à nouveau",
+  "unpublish": "Dépublier",
+  "unpublished": "La page n'est plus publiée.",
+  "publishedUnverified": "Envoyé sur {site}. Ce navigateur n'a pas pu vérifier l'adresse ; ouvrez-la pour vous assurer que le bucket est public.",
+  "publishNoBucket": "Pour publier, il faut un bucket. Configurez-le dans Réglages, sous Stockage, Site de publication.",
+  "publishNoSiteURL": "Pour publier, il faut l'adresse publique du bucket. Ajoutez-la dans Réglages, sous Stockage, Site de publication.",
+  "publishFailed": "Publication impossible : {error}",
+  "publishUnreachable": "Les fichiers sont envoyés, mais {url} ne répond pas encore. Rendez le bucket public chez votre fournisseur.",
+  "publishFontFallbacks": "Ces polices ne sont pas sur le web, les visiteurs voient une police de secours : {fonts}.",
+  "publishConfirmHeading": "Publier cette page ?",
+  "publishConfirmText": "Toute personne qui a l'adresse pourra la voir. Elle va dans votre bucket de publication, et Dépublier la retire."
 }

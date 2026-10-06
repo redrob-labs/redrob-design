@@ -8,7 +8,6 @@
   "publish": "公開する",
   "published": "公開済み",
   "publishedTo": "{site} に公開しました。",
-  "publishNotConnected": "公開するにはサイトの接続が必要ですが、まだ接続されていません。",
   "reactTokens": "React とトークン",
   "handToClaudeCode": "Claude Code に渡す",
   "handedOff": "MCP 経由で Claude Code に渡しました。ページ、tokens.json、概要です。",
@@ -19,5 +18,16 @@
   "watchNotConnected": "ワークスペースを接続すると、価格表やサイトを見守り、自分で変更を提案できます。",
   "tryUpdate": "試す：価格表が変わる",
   "updateChanged": "第 4 四半期の価格表が変わったため、ページが自分で更新を提案します。",
-  "updateNothing": "価格表は変わりましたが、このページに古い価格を表示しているレイヤーはありません。"
+  "updateNothing": "価格表は変わりましたが、このページに古い価格を表示しているレイヤーはありません。",
+  "publishAgain": "もう一度公開",
+  "unpublish": "公開を取り下げる",
+  "unpublished": "このページは公開されていません。",
+  "publishedUnverified": "{site} にアップロードしました。このブラウザーではアドレスを確認できませんでした。開いてバケットが公開されているか確かめてください。",
+  "publishNoBucket": "公開には公開用バケットが必要です。設定のストレージ、公開サイトで設定してください。",
+  "publishNoSiteURL": "公開には公開用バケットの公開アドレスが必要です。設定のストレージ、公開サイトで追加してください。",
+  "publishFailed": "公開できませんでした: {error}",
+  "publishUnreachable": "ファイルはアップロード済みですが、{url} はまだ応答しません。プロバイダーでバケットを公開してください。",
+  "publishFontFallbacks": "次の書体はウェブにないため、代替書体で表示されます: {fonts}",
+  "publishConfirmHeading": "このページを公開しますか?",
+  "publishConfirmText": "アドレスを知っている人は誰でも見られます。公開用バケットに置かれ、取り下げると削除されます。"
 }
