@@ -18,6 +18,7 @@ import { protectedPrompt } from '@/app/assistant/privacy/prompt'
 import { privacyVaultFor, rememberThreadPrivacy } from '@/app/assistant/privacy/store'
 import { protectTools } from '@/app/assistant/privacy/tools'
 import { loadThread, saveThread, saveThreadNow, threadKeyFor } from '@/app/assistant/thread/store'
+import { userTexts } from '@/app/assistant/thread/text'
 import { emitAnswerFinished } from '@/app/assistant/turn/finished'
 import { turnContext, turnInstructions } from '@/app/assistant/turn/instructions'
 import {
@@ -89,17 +90,6 @@ export async function createACPTransport(providerID: AIProviderID, turnContextFo
     modelId,
     turnContext: turnContextFor
   })
-}
-
-function userTextsOf(messages: readonly UIMessage[]): string[] {
-  return messages
-    .filter((message) => message.role === 'user')
-    .map((message) =>
-      message.parts
-        .filter((part): part is { type: 'text'; text: string } => part.type === 'text')
-        .map((part) => part.text)
-        .join('\n')
-    )
 }
 
 export function createToolLoopTransport({
@@ -316,7 +306,7 @@ export function createChatSessionManager({
         saveThread(threadKeyFor(currentChatStore), chat.messages)
       }
       const messages = currentChatMessages.get(store) ?? (await loadThread(threadKeyFor(store)))
-      rememberThreadPrivacy(store, userTextsOf(messages))
+      rememberThreadPrivacy(store, userTexts(messages))
       let transport: ChatTransport<UIMessage>
       if (isACPProvider.value) transport = await createActiveACPTransport(store)
       else if (isHarnessProvider.value) transport = await createActiveHarnessTransport(store)

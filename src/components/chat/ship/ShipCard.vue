@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useClipboard } from '@vueuse/core'
 import { computed, ref } from 'vue'
 
 import { useCommonMessages, useShipMessages, useThreadMessages } from '@redrob-design/vue'
@@ -15,6 +16,8 @@ import {
   unpublishPage,
   type PublishResult
 } from '@/app/ship/publish/service'
+import { deliverHandoff } from '@/app/ship/handoff/deliver'
+import { prepareHandoff } from '@/app/ship/handoff/service'
 import { handToClaudeCode, reactAndTokens, type ShipData } from '@/app/ship/ship'
 import { simulatePriceSheetChange, watchedSources } from '@/app/ship/watch'
 import { useChatPost } from '@/components/chat/submit'
@@ -107,10 +110,33 @@ function downloadReact(): void {
   downloadBlob(encoder.encode(tokens), 'tokens.json', 'application/json')
 }
 
-function handOff(): void {
-  const result = handToClaudeCode()
-  if (result.connected) toast.info(t.value.handedOff)
-  else toast.warning(t.value.handoffNotConnected)
+const handingOff = ref(false)
+const { copy: copyText } = useClipboard()
+
+/**
+ * Always leaves Claude Code something to read: the page, its tokens, the
+ * brief and a preview, in the repository on desktop or as a zip in the browser.
+ */
+async function handOff(): Promise<void> {
+  if (handToClaudeCode().connected) {
+    toast.info(t.value.handedOff)
+    return
+  }
+  handingOff.value = true
+  try {
+    const bundle = await prepareHandoff(getActiveEditorStore(), ship.pageId)
+    const delivery = await deliverHandoff(documentId, bundle)
+    if (delivery.kind === 'cancelled') return
+    await copyText(bundle.prompt).catch(() => undefined)
+    if (delivery.kind === 'folder') toast.info(t.value.handoffSaved({ path: delivery.path }))
+    else toast.info(t.value.handoffDownloaded({ file: delivery.fileName }))
+  } catch (error) {
+    toast.error(
+      t.value.handoffFailed({ error: error instanceof Error ? error.message : String(error) })
+    )
+  } finally {
+    handingOff.value = false
+  }
 }
 
 /** The whole page as a .fig file Figma opens with its layers intact. */
@@ -165,7 +191,14 @@ function tryUpdate(): void {
         <template #leading><icon-lucide-code /></template>
         {{ t.reactTokens }}
       </AppButton>
-      <AppButton color="neutral" variant="outline" data-slot="ship-handoff" @click="handOff">
+      <AppButton
+        color="neutral"
+        variant="outline"
+        :loading="handingOff"
+        :disabled="handingOff"
+        data-slot="ship-handoff"
+        @click="handOff"
+      >
         <template #leading><icon-lucide-terminal /></template>
         {{ t.handToClaudeCode }}
       </AppButton>

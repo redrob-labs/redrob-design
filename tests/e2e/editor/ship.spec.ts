@@ -125,3 +125,18 @@ test('Publish uploads the page to the publish bucket and Unpublish takes it down
   ).toBeVisible()
   expect([...objects.keys()].filter((key) => key.startsWith('/site/sites/pricing/'))).toEqual([])
 })
+
+test('Hand to Claude Code downloads the page, tokens and brief as one zip', async ({
+  configuredChat: chat
+}) => {
+  await shipPricingPage(chat.page)
+  const ways = chat.assistantMessage().getByRole('group', { name: 'Ways to ship' })
+  const download = chat.page.waitForEvent('download')
+  await ways.getByRole('button', { name: 'Hand to Claude Code' }).click()
+  expect((await download).suggestedFilename()).toBe('redrob-handoff-pricing.zip')
+  await expect(
+    chat.page
+      .getByTestId('toast-item')
+      .filter({ hasText: 'Unzip it at the root of your repository' })
+  ).toBeVisible()
+})

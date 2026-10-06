@@ -3,6 +3,7 @@ import type { UIMessage } from 'ai'
 import type { SceneGraph } from '@redrob-design/scene-graph'
 
 import type { ChangeDetail } from '@/app/assistant/changes/store'
+import { messageText } from '@/app/assistant/thread/text'
 
 /** Longest text a change line quotes, so one long paragraph cannot fill the check. */
 const MAX_QUOTED = 240
@@ -34,13 +35,9 @@ export function describeChanges(items: readonly ChangeDetail[], graph: SceneGrap
   return lines
 }
 
-/** The words of a message, without tool calls or data parts. */
+/** The words of a message, trimmed, without tool calls or data parts. */
 export function answerText(message: UIMessage): string {
-  return message.parts
-    .filter((part): part is { type: 'text'; text: string } => part.type === 'text')
-    .map((part) => part.text)
-    .join('\n')
-    .trim()
+  return messageText(message).trim()
 }
 
 /** The person's brief for an answer: the last thing they said before it. */
