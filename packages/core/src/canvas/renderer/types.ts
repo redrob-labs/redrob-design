@@ -29,6 +29,11 @@ export interface CanvasTheme {
   layoutGap: Color
   /** Comment pins on the canvas. */
   commentPin: Color
+  /**
+   * The canvas page behind the layers, when the page has no colour of its own. Optional: a theme
+   * that leaves it out keeps the light default, which is also the `.fig` page default.
+   */
+  page?: Color
 }
 
 export type CanvasThemeColor = keyof CanvasTheme

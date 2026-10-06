@@ -2,7 +2,7 @@ import { useLocalStorage, usePreferredDark } from '@vueuse/core'
 import { computed, watch } from 'vue'
 
 import type { CanvasTheme, CanvasThemeColor, RulerTheme } from '@redrob-design/core/canvas'
-import { parseColor } from '@redrob-design/core/color'
+import { parseColor, tryParseColor } from '@redrob-design/core/color'
 import { IS_BROWSER } from '@redrob-design/core/constants'
 
 import { getActiveEditorStoreOrNull, useActiveEditorStoreRef } from '@/app/editor/active-store'
@@ -37,6 +37,7 @@ export const resolvedAppTheme = computed<'dark' | 'light'>(() =>
 
 /** CSS custom properties `src/app.css` publishes for the canvas, by CanvasTheme field. */
 export const CANVAS_THEME_PROPERTIES: Record<CanvasThemeColor, string> = {
+  page: '--color-canvas-page',
   selection: '--color-canvas-selection',
   component: '--color-canvas-component',
   snap: '--color-canvas-snap',
@@ -60,6 +61,13 @@ export function readCanvasTheme(read: (property: string) => string): {
   for (const [key, property] of Object.entries(CANVAS_THEME_PROPERTIES) as Array<
     [CanvasThemeColor, string]
   >) {
+    if (key === 'page') {
+      // Optional: a value the browser left unresolved, or the transparent initial value, keeps the
+      // renderer's default page rather than painting it black.
+      const page = tryParseColor(read(property).trim())
+      if (page && page.a > 0) canvas.page = page
+      continue
+    }
     canvas[key] = color(property)
   }
   return {

@@ -100,7 +100,7 @@ test.describe('Render performance', () => {
         renderer.viewportWidth = 1280
         renderer.viewportHeight = 800
         renderer.showRulers = false
-        renderer.pageColor = store.state.pageColor
+        renderer.pageColor = store.state.pageColor ?? renderer.pageColor
         renderer.pageId = store.state.currentPageId
       }
 
@@ -221,7 +221,7 @@ test.describe('Render performance', () => {
           renderer.viewportWidth = 1280
           renderer.viewportHeight = 800
           renderer.showRulers = false
-          renderer.pageColor = store.state.pageColor
+          renderer.pageColor = store.state.pageColor ?? renderer.pageColor
           renderer.pageId = pageId
         }
 

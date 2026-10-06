@@ -1,11 +1,16 @@
 import { describe, expect, test } from 'bun:test'
 import { readFileSync } from 'node:fs'
 
-import { canvasThemeColor, DEFAULT_CANVAS_THEME } from '@redrob-design/core/canvas'
+import {
+  canvasThemeColor,
+  DEFAULT_CANVAS_THEME,
+  resolvePageColor
+} from '@redrob-design/core/canvas'
 import { parseColor } from '@redrob-design/core/color'
 import {
   AUTO_LAYOUT_HOVER_BLUE,
   AUTO_LAYOUT_HOVER_MAGENTA,
+  CANVAS_BG_COLOR,
   COMMENT_PIN_COLOR,
   COMPONENT_COLOR,
   MEASUREMENT_COLOR,
@@ -29,6 +34,11 @@ function token(name: string, theme: 'light' | 'dark' = 'light'): Color {
   const value = tokens.get(name)?.[theme]
   if (!value) throw new Error(`@redrob-labs/ui has no token ${name}`)
   return parseColor(value)
+}
+
+function expectPage(page: Color | undefined): Color {
+  if (!page) throw new Error('readCanvasTheme left the page out')
+  return page
 }
 
 function expectSameRGB(actual: Color, expected: Color, label: string) {
@@ -71,13 +81,55 @@ describe('canvasThemeColor', () => {
     expect(canvasThemeColor(null, 'snap')).toEqual({ ...DEFAULT_CANVAS_THEME.snap, a: 1 })
   })
 
+  test('the default page is the .fig page default', () => {
+    expect(canvasThemeColor(null, 'page')).toEqual({ ...CANVAS_BG_COLOR, a: 1 })
+  })
+
   test('prefers the host theme and always returns opaque RGB', () => {
     const theme = { ...DEFAULT_CANVAS_THEME, selection: { r: 0.1, g: 0.2, b: 0.3, a: 0.4 } }
     expect(canvasThemeColor(theme, 'selection')).toEqual({ r: 0.1, g: 0.2, b: 0.3, a: 1 })
   })
 })
 
+describe('resolvePageColor', () => {
+  const dark = { ...DEFAULT_CANVAS_THEME, page: token('surface-sunken', 'dark') }
+
+  test('a page with no colour of its own follows the theme', () => {
+    expectSameRGB(resolvePageColor(null, dark), token('surface-sunken', 'dark'), 'dark page')
+    expectSameRGB(resolvePageColor(null, null), CANVAS_BG_COLOR, 'default page')
+  })
+
+  test("a page's own colour wins over the theme", () => {
+    const own = { r: 0.2, g: 0.4, b: 0.6, a: 0.5 }
+    expect(resolvePageColor(own, dark)).toEqual(own)
+  })
+})
+
 describe('readCanvasTheme', () => {
+  test('the light page matches the .fig page default', () => {
+    // app.css mixes 4% ink into the light page, in sRGB.
+    const base = token('surface-base')
+    const ink = token('ink-primary')
+    const mix = (channel: 'r' | 'g' | 'b') => base[channel] * 0.96 + ink[channel] * 0.04
+    expectSameRGB({ r: mix('r'), g: mix('g'), b: mix('b'), a: 1 }, CANVAS_BG_COLOR, 'light page')
+    const css = readFileSync(repoPath('src/app.css'), 'utf8')
+    expect(css).toContain(
+      '--color-canvas-page: color-mix(in srgb, var(--surface-base) 96%, var(--ink-primary));'
+    )
+    expect(css).toContain('--color-canvas-page: var(--surface-sunken);')
+  })
+
+  test('leaves the page out when the browser hands back no usable colour', () => {
+    for (const value of ['', 'rgba(0, 0, 0, 0)', 'color-mix(in srgb, #fff 96%, #000)']) {
+      const { canvas } = readCanvasTheme((name) => (name === '--color-canvas-page' ? value : ''))
+      expect(canvas.page, value).toBeUndefined()
+    }
+    const { canvas } = readCanvasTheme((name) =>
+      name === '--color-canvas-page' ? 'rgb(28, 31, 38)' : ''
+    )
+    expectSameRGB(expectPage(canvas.page), token('surface-sunken', 'dark'), 'resolved page')
+  })
+
   test('reads every canvas property app.css publishes', () => {
     const css = readFileSync(repoPath('src/app.css'), 'utf8')
     for (const property of Object.values(CANVAS_THEME_PROPERTIES)) {

@@ -5,6 +5,7 @@ import type { CanvasTheme, CanvasThemeColor } from '#core/canvas/renderer/types'
 import {
   AUTO_LAYOUT_HOVER_BLUE,
   AUTO_LAYOUT_HOVER_MAGENTA,
+  CANVAS_BG_COLOR,
   COMMENT_PIN_COLOR,
   COMPONENT_COLOR,
   MEASUREMENT_COLOR,
@@ -21,7 +22,8 @@ export const DEFAULT_CANVAS_THEME: CanvasTheme = {
   measurement: MEASUREMENT_COLOR,
   layoutPadding: { ...AUTO_LAYOUT_HOVER_BLUE, a: 1 },
   layoutGap: { ...AUTO_LAYOUT_HOVER_MAGENTA, a: 1 },
-  commentPin: COMMENT_PIN_COLOR
+  commentPin: COMMENT_PIN_COLOR,
+  page: CANVAS_BG_COLOR
 }
 
 /** An overlay colour, from the active theme when there is one, as opaque RGB. */
@@ -29,8 +31,19 @@ export function canvasThemeColor(
   theme: CanvasTheme | null | undefined,
   key: CanvasThemeColor
 ): Color {
-  const color = theme?.[key] ?? DEFAULT_CANVAS_THEME[key]
+  const color = theme?.[key] ?? DEFAULT_CANVAS_THEME[key] ?? CANVAS_BG_COLOR
   return { r: color.r, g: color.g, b: color.b, a: 1 }
+}
+
+/**
+ * The colour the canvas page is painted: the page's own colour when it has one, otherwise the
+ * theme's page colour, so a page nobody coloured follows the light and dark themes.
+ */
+export function resolvePageColor(
+  pageColor: Color | null | undefined,
+  theme: CanvasTheme | null | undefined
+): Color {
+  return pageColor ? { ...pageColor } : canvasThemeColor(theme, 'page')
 }
 
 /** The same colour at a given alpha, for the stroke/fill pairs overlays draw. */

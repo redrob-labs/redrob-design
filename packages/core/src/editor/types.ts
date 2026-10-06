@@ -95,7 +95,11 @@ export interface EditorViewState {
     side?: 'top' | 'right' | 'bottom' | 'left'
   } | null
   panX: number
-  pageColor: Color
+  /**
+   * The page's own background, set from the Page section. `null` means it has none and follows the
+   * theme's page colour; read the painted colour with `resolvePageColor`.
+   */
+  pageColor: Color | null
   panY: number
   zoom: number
   navigation: NavigationState

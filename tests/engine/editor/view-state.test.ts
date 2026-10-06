@@ -21,17 +21,24 @@ describe('editor state ownership', () => {
     const state = createDefaultEditorState('page')
     state.selectedIds = new Set(['selected'])
     state.snapGuides = [{ axis: 'x', position: 10, from: 0, to: 20 }]
+    state.pageColor = { r: 0.2, g: 0.2, b: 0.2, a: 1 }
     const source = pickEditorViewState(state)
     const copy = copyEditorViewState(source)
 
     copy.selectedIds.add('pane-only')
     copy.snapGuides.length = 0
-    copy.pageColor.r = 0.5
+    if (copy.pageColor) copy.pageColor.r = 0.5
     copy.navigation.phase = 'zoom'
 
     expect(source.selectedIds).toEqual(new Set(['selected']))
     expect(source.snapGuides).toHaveLength(1)
-    expect(source.pageColor.r).not.toBe(0.5)
+    expect(source.pageColor).toEqual({ r: 0.2, g: 0.2, b: 0.2, a: 1 })
+    expect(copy.pageColor?.r).toBe(0.5)
     expect(source.navigation.phase).toBe('idle')
+  })
+
+  test('a new page has no colour of its own, so it follows the theme', () => {
+    expect(createDefaultEditorViewState('page').pageColor).toBeNull()
+    expect(copyEditorViewState(createDefaultEditorViewState('page')).pageColor).toBeNull()
   })
 })

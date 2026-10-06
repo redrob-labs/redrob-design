@@ -82,6 +82,27 @@
 }
 
 /*
+ * The canvas page behind the layers, for pages with no colour of their own. Light is the `.fig` page
+ * default (#f5f5f5, core's CANVAS_BG_COLOR), so a file looks the same here and in Figma: 4% ink on
+ * the light page. Dark is the sunken surface, one step above the panels, so white frames stand out.
+ */
+/* Registered as a colour so getComputedStyle hands theme.ts the mix already resolved to rgb(). */
+@property --color-canvas-page {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: transparent;
+}
+
+:root,
+[data-theme='light'] {
+  --color-canvas-page: color-mix(in srgb, var(--surface-base) 96%, var(--ink-primary));
+}
+
+[data-theme='dark'] {
+  --color-canvas-page: var(--surface-sunken);
+}
+
+/*
  * The app's semantic Tailwind names, pointed at the design system. `inline` makes each utility carry
  * the `var(--surface-*)` reference itself, so a subtree with its own `data-theme` (a Storybook story,
  * a docs demo) resolves against its own theme instead of the root's. `static` still emits every

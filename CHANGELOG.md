@@ -67,6 +67,8 @@
 
 ### Fixed
 
+- Paint the canvas page in the dark theme's colour until you give the page a colour of its own, as Settings describes; light keeps the `.fig` page default.
+- Load CanvasKit for headless rendering and CLI export on Windows, including from folders with spaces in their path.
 - Show one focus ring on the Home search field, the Redrob composer and grouped inputs instead of a ring around the field and a second one inside it.
 - Label the Settings switch that remembers credentials, keep "Not reported" usage figures on one line, fit the assets search placeholder, and use the singular in "Rename 1 layer" and Ship's "1 finding is still open".
 - Name the fill picker's tabs, selects and gradient stop buttons, the asset details close button, and the layer tree's expand toggles for screen readers.
