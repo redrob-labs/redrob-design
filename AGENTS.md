@@ -69,13 +69,13 @@ On `/demo` (`src/app/runtime/demo.ts`), workspace reading and watching answer wi
 
 ### Redrob Cloud (Console)
 
-Redrob Cloud is optional: every feature works on this computer signed out, and signing in only adds sharing. The client lives in `src/app/integrations/console/`:
+Redrob Cloud is optional: every feature works on this computer signed out, and signing in only adds sharing. Console serves sign-in (`/design/me`, device keys), shared files with members, roles, invites and view links, sealed snapshots and versions on presigned S3 links, sealed comments, and relay tickets (redrob-console `apps/api/src/design`, `apps/relay`, `infra/`). Workspace memory, watches, workspace libraries and the feeds are contract-only for now; their services fall back to the file, the cache or bundled fixtures when Console answers 404. The client lives in `src/app/integrations/console/`:
 
 - `contract/` holds zod schemas and a route table, which are the API contract. `openapi.json` is generated from them; regenerate it with `UPDATE_CONSOLE_OPENAPI=1 bun test tests/engine/app/console/contract.test.ts`.
 - `client.ts` validates every response against its schema and maps failures to `ConsoleError` kinds.
 - `session.ts` handles sign-in with the device flow. The token sits at `credentialRef('console', 'session-token')`, apart from model keys.
 - `cache.ts` keeps Console answers offline.
-- `document.ts` sends Console a SHA-256 of the document key, never a file path.
+- `document.ts` sends Console a SHA-256 of the document key, never a file path; only Ship watch still uses it. Shared files are keyed by their cloud file id (`threadKeyFor` returns `cloud:<fileId>`).
 
 Features that use it live in their own domains:
 
@@ -90,6 +90,7 @@ Features that use it live in their own domains:
 Conventions:
 
 - Local data comes first, and sync merges by id with the later edit winning.
+- Everything a shared file holds at Console (name, snapshot, versions, comments, live frames) is sealed with its content key first (`src/app/cloud/crypto`), with associated data naming the file, epoch and purpose. Never send a shared file's content to Console unsealed.
 - Revisioned writes use `If-Match` or `If-None-Match: *`.
 - Ids are chosen on the client so retries stay idempotent.
 - Console never proxies model keys.

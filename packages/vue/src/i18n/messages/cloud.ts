@@ -6,7 +6,7 @@ import { i18n } from '#vue/i18n/create'
 export const cloudMessageDefaults = {
   heading: 'Redrob Cloud',
   description:
-    'Optional. Sign in to share Design Memory, comments, versions and libraries with your workspace. Your files and AI keys stay where they are.',
+    'Optional. Sign in to share files with the people you invite, end-to-end encrypted, with their comments and versions. Your files and AI keys stay where they are.',
   signedOut: 'Not signed in. Everything works on this computer without an account.',
   signIn: 'Sign in with Redrob Console',
   signingIn: 'Waiting for you to approve this code in Redrob Console.',

@@ -20,7 +20,7 @@ graph TB
             end
         end
         MCP["MCP Server (90 tools, stdio+HTTP)"]
-        Collab["P2P Collab (Trystero + Yjs)"]
+        Collab["Collaboration (Yjs over the Redrob Cloud relay)"]
     end
 ```
 
@@ -86,9 +86,9 @@ Inverse-command pattern. Before applying any change, affected fields are snapsho
 
 Figma-compatible bidirectional clipboard. Encodes/decodes Kiwi binary (same format as .fig files) via native browser copy/paste events. Handles vector path scaling, instance children, component set detection, and override application.
 
-### P2P Collaboration
+### Collaboration
 
-Real-time peer-to-peer collaboration via Trystero (WebRTC) + Yjs CRDT. No server relay — signaling over MQTT public brokers, STUN/TURN for NAT traversal. Awareness protocol provides live cursors, selections, and presence. Local persistence via y-indexeddb.
+Real-time collaboration on shared files via Yjs CRDT over the Redrob Cloud relay, a ticketed WebSocket. Every payload is sealed with the file's AES-256-GCM content key before it leaves the app, and keys are wrapped per device (ECIES over P-256), so neither the relay nor Console can read the document. Snapshots are sealed Yjs state on presigned S3 links, saved by compare-and-swap. Awareness provides live cursors, selections and presence. There is no peer-to-peer path.
 
 ### CLI-to-App RPC Bridge
 

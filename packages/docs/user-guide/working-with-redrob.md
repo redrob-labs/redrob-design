@@ -80,4 +80,4 @@ Signed in to Redrob Cloud, a shipped page watches the workspace's sources. When 
 - **File, Version history** keeps a version every 10 minutes while you edit, up to the last 30, plus every version you save by name. **Restore** is one undo step and keeps your latest changes as a version first.
 - The library manager's **Workspace** source publishes and reads the libraries everyone in your workspace uses. A publish that would overwrite someone else's newer revision is refused.
 
-All three work on this computer first. Signed in, they sync with your Redrob Cloud workspace, and signed out they say they are not shared. Collaboration sessions also go through the Redrob Cloud relay when signed in, and peer-to-peer otherwise.
+All three work on this computer first. Once a file is shared (Share, Share this file), its comments and versions sync, end-to-end encrypted, for everyone with access, and live editing goes through the Redrob Cloud relay. A file that is not shared keeps them here. See [Collaboration](/programmable/collaboration). Workspace libraries need Redrob Console to serve them, which it does not yet.

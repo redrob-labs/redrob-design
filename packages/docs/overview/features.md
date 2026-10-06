@@ -115,7 +115,7 @@ All commands support `--json`. Install: `npm install -g @redrob-design/cli` (or 
 
 ## Real-Time Collaboration
 
-P2P via WebRTC — no server required. Share a link and edit together.
+Share a file with the people you invite and edit it together, end-to-end encrypted through Redrob Cloud. View links open it read-only for anyone.
 
 - Live cursors with colored arrows and name pills
 - Presence avatars
