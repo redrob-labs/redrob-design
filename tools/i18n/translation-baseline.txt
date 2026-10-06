@@ -25,6 +25,7 @@ de:code.sourceTailwindJSX
 de:common.ok
 de:composer.auto
 de:composer.privacyStandard
+de:history.inCloud
 de:home.newWebsite
 de:menu.text
 de:panels.ai
@@ -214,6 +215,7 @@ it:composer.auto
 it:composer.privacy
 it:composer.privacyStandard
 it:files.homeTab
+it:history.inCloud
 it:menu.file
 it:panels.ai
 it:panels.auto

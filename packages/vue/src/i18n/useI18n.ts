@@ -14,6 +14,7 @@ import {
   composerMessages,
   automationMessages,
   cloudMessages,
+  historyMessages,
   codeMessages,
   collaborationMessages,
   commandMessages,
@@ -51,6 +52,7 @@ export const useHomeMessages = () => useI18nNamespace(homeMessages)
 export const useComposerMessages = () => useI18nNamespace(composerMessages)
 export const useAutomationMessages = () => useI18nNamespace(automationMessages)
 export const useCloudMessages = () => useI18nNamespace(cloudMessages)
+export const useHistoryMessages = () => useI18nNamespace(historyMessages)
 export const useCodeMessages = () => useI18nNamespace(codeMessages)
 export const useCollaborationMessages = () => useI18nNamespace(collaborationMessages)
 export const useCommandMessages = () => useI18nNamespace(commandMessages)
@@ -86,6 +88,7 @@ export function useI18n() {
     composer: useComposerMessages(),
     automation: useAutomationMessages(),
     cloud: useCloudMessages(),
+    history: useHistoryMessages(),
     code: useCodeMessages(),
     collaboration: useCollaborationMessages(),
     commands: useCommandMessages(),

@@ -14,6 +14,7 @@ import { diagnosticsMessageDefaults, diagnosticsMessages } from '#vue/i18n/messa
 import { editorMessageDefaults, editorMessages } from '#vue/i18n/messages/editor'
 import { filesMessageDefaults, filesMessages } from '#vue/i18n/messages/files'
 import { fontsMessageDefaults, fontsMessages } from '#vue/i18n/messages/fonts'
+import { historyMessageDefaults, historyMessages } from '#vue/i18n/messages/history'
 import { homeMessageDefaults, homeMessages } from '#vue/i18n/messages/home'
 import { mediaMessageDefaults, mediaMessages } from '#vue/i18n/messages/media'
 import { menuMessageDefaults, menuMessages } from '#vue/i18n/messages/menu'
@@ -46,6 +47,7 @@ export {
   composerMessages,
   automationMessages,
   cloudMessages,
+  historyMessages,
   codeMessages,
   collaborationMessages,
   commandMessages,
@@ -80,6 +82,7 @@ export const messageDefaults = {
   composer: composerMessageDefaults,
   automation: automationMessageDefaults,
   cloud: cloudMessageDefaults,
+  history: historyMessageDefaults,
   code: codeMessageDefaults,
   collaboration: collaborationMessageDefaults,
   commands: commandMessageDefaults,

@@ -19,6 +19,7 @@ import type { CommandPaletteGroup, CommandPaletteItem, MenuEntry } from '@redrob
 import { shortcutPlatform, useEditorCommands, useI18n } from '@redrob-design/vue'
 
 import { runImportDesignTokens } from '@/app/design-system'
+import { openVersionHistory } from '@/app/document/history/service'
 import { useEditorStore } from '@/app/editor/active-store'
 import { designTokensMessages } from '@/app/i18n/design-tokens'
 import { openSettingsDialog } from '@/app/settings/dialog'
@@ -101,6 +102,7 @@ export function useAppMenu() {
     'save-as': 'saveAs',
     'export-selection': 'exportSelection',
     autosave: 'autosave',
+    'version-history': 'versionHistory',
     close: 'closeTab',
     copy: 'copy',
     cut: 'cut',
@@ -166,6 +168,7 @@ export function useAppMenu() {
       if (activeTab.value) void closeTab(activeTab.value.id)
     },
     settings: openSettingsDialog,
+    'version-history': openVersionHistory,
     'export-png': () => exportSelection('png'),
     'export-svg': () => exportSelection('svg'),
     'export-pptx': () => exportSelection('pptx'),

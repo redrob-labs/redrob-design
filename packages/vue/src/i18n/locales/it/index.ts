@@ -13,6 +13,7 @@ import diagnostics from './diagnostics.json'
 import editor from './editor.json'
 import files from './files.json'
 import fonts from './fonts.json'
+import history from './history.json'
 import home from './home.json'
 import media from './media.json'
 import menu from './menu.json'
@@ -42,6 +43,7 @@ export default {
   composer,
   automation,
   cloud,
+  history,
   code,
   collaboration,
   commands,

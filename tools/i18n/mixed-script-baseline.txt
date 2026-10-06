@@ -89,6 +89,9 @@ ja:files.importHTMLCSSDescription
 ja:files.orEdgeForFullSupport
 ja:files.useChrome
 ja:fonts.downloadFallbackPacksDescription
+ja:history.inCloud
+ja:history.notShared
+ja:history.shared
 ja:home.lede
 ja:home.newSocial
 ja:home.suggestionLaunch
@@ -243,6 +246,10 @@ zh-cn:files.importHTMLCSSDescription
 zh-cn:files.orEdgeForFullSupport
 zh-cn:files.useChrome
 zh-cn:fonts.downloadFallbackPacksDescription
+zh-cn:history.description
+zh-cn:history.inCloud
+zh-cn:history.notShared
+zh-cn:history.shared
 zh-cn:home.lede
 zh-cn:home.suggestionLaunch
 zh-cn:home.suggestionOnboarding

@@ -23,6 +23,7 @@ export const menuMessageDefaults = {
   exportSelectionAsPPTX: 'Export selection as PPTX',
   exportSelectionAsFig: 'Export selection as .fig',
   autosave: 'Auto-save to local file',
+  versionHistory: 'Version history…',
   closeTab: 'Close tab',
 
   copy: 'Copy',

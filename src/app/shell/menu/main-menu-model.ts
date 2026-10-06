@@ -41,6 +41,7 @@ const DESCRIBE_ITEM_IDS: ScreenItemIds = {
     'export-pptx',
     'export-fig',
     'autosave',
+    'version-history',
     'close'
   ]),
   edit: new Set(['edit.undo', 'edit.redo']),

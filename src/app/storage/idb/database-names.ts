@@ -1,6 +1,7 @@
 /** Stable names for the app's independent IndexedDB databases. */
 export const APP_DATABASE_NAMES = {
   credentials: 'redrob-design-credentials',
+  history: 'redrob-design-history',
   libraries: 'redrob-design-libraries',
   localCanvas: 'redrob-design-cloud-local',
   outbox: 'redrob-design-cloud-outbox',

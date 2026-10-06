@@ -72,6 +72,10 @@
         "checkbox": true
       },
       {
+        "id": "version-history",
+        "label": "Version History…"
+      },
+      {
         "id": "close",
         "label": "Close Tab",
         "accelerator": "CmdOrCtrl+W"

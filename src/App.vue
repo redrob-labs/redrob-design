@@ -10,6 +10,7 @@ import AppToast from '@/components/Shell/AppToast.vue'
 import PublishLibraryDialog from '@/components/libraries/PublishLibraryDialog.vue'
 import LibraryUpdateReviewDialog from '@/components/libraries/review/LibraryUpdateReviewDialog.vue'
 import RecoveryDialog from '@/components/recovery/RecoveryDialog.vue'
+import VersionHistoryDrawer from '@/components/history/VersionHistoryDrawer.vue'
 import SettingsDialog from '@/components/settings/SettingsDialog.vue'
 import { useEditorStore } from '@/app/editor/active-store'
 import { toast } from '@/app/shell/ui'
@@ -17,6 +18,7 @@ import { useAppTheme } from '@/app/shell/theme'
 import { scheduleStartupUpdateCheck } from '@/app/shell/updater'
 import { startWorkspaceMemory } from '@/app/memory/workspace'
 import { startWatchPolling } from '@/app/ship/watch/service'
+import { startVersionHistory } from '@/app/document/history/start'
 import { kickSyncEngine } from '@/app/storage/sync'
 import { prepareForReload } from '@/app/tabs'
 
@@ -42,6 +44,8 @@ onMounted(() => {
   startWorkspaceMemory()
   // Shipped pages hear about changes in their watched sources while the app is open.
   startWatchPolling()
+  // Open documents keep automatic versions on this computer, and in Cloud when signed in.
+  startVersionHistory()
 })
 </script>
 
@@ -52,6 +56,7 @@ onMounted(() => {
     </AppShell>
     <SettingsDialog />
     <RecoveryDialog />
+    <VersionHistoryDrawer />
     <PublishLibraryDialog />
     <LibraryUpdateReviewDialog />
     <AppToast />
