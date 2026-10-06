@@ -10,6 +10,7 @@ export {
   useComposerMessages,
   useAutomationMessages,
   useCloudMessages,
+  useSharingMessages,
   useHistoryMessages,
   useCommentsMessages,
   useCodeMessages,

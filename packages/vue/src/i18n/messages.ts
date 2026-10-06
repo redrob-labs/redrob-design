@@ -27,6 +27,7 @@ import { renameMessageDefaults, renameMessages } from '#vue/i18n/messages/rename
 import { renderingMessageDefaults, renderingMessages } from '#vue/i18n/messages/rendering'
 import { reviewMessageDefaults, reviewMessages } from '#vue/i18n/messages/review'
 import { settingsMessageDefaults, settingsMessages } from '#vue/i18n/messages/settings'
+import { sharingMessageDefaults, sharingMessages } from '#vue/i18n/messages/sharing'
 import { shipMessageDefaults, shipMessages } from '#vue/i18n/messages/ship'
 import { storageMessageDefaults, storageMessages } from '#vue/i18n/messages/storage'
 import { threadMessageDefaults, threadMessages } from '#vue/i18n/messages/thread'
@@ -48,6 +49,7 @@ export {
   composerMessages,
   automationMessages,
   cloudMessages,
+  sharingMessages,
   historyMessages,
   commentsMessages,
   codeMessages,
@@ -84,6 +86,7 @@ export const messageDefaults = {
   composer: composerMessageDefaults,
   automation: automationMessageDefaults,
   cloud: cloudMessageDefaults,
+  sharing: sharingMessageDefaults,
   history: historyMessageDefaults,
   comments: commentsMessageDefaults,
   code: codeMessageDefaults,

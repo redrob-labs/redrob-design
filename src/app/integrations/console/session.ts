@@ -76,7 +76,8 @@ export function selectWorkspace(id: string): void {
 
 export const signedIn = computed(() => cloudState.status === 'signed-in')
 
-function appFetch(): ConsoleFetch {
+/** The fetch the app reaches Console and its presigned storage links with. */
+export function appFetch(): ConsoleFetch {
   if (!isTauri()) return (url, init) => fetch(url, init)
   return async (url, init) => {
     const { tauriFetch } = await import('@/app/tauri/http')

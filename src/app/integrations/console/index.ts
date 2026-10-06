@@ -24,6 +24,8 @@ export {
   CLOUD_DEVICE_PRODUCT,
   CONSOLE_SESSION_REF,
   activeWorkspaceId,
+  appFetch,
+  cloudInstallId,
   cancelCloudSignIn,
   cloudState,
   consoleClient,

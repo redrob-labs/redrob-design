@@ -329,3 +329,163 @@ export const relayTicketSchema = z.object({
   ticket: z.string().min(16),
   expiresAt: isoTime
 })
+
+// ------------------------------------------------------------ cloud files
+
+/**
+ * Ciphertext and wrapped keys, base64url. Console stores them without being able to read them:
+ * every name, snapshot, version and comment of a cloud file is sealed by the app first.
+ */
+const ciphertext = (max: number) =>
+  z
+    .string()
+    .min(1)
+    .max(max)
+    .regex(/^[A-Za-z0-9_-]+$/)
+
+/** What someone may do to one shared file. Separate from their workspace role. */
+export const FILE_ROLES = ['viewer', 'commenter', 'editor', 'owner'] as const
+export type FileRole = (typeof FILE_ROLES)[number]
+/** What an invite can grant; ownership is only handed over by changing a member's role. */
+export const INVITE_ROLES = ['viewer', 'commenter', 'editor'] as const
+export type InviteRole = (typeof INVITE_ROLES)[number]
+
+export const cloudFileSchema = z.object({
+  id,
+  encryptedName: ciphertext(4096),
+  role: z.enum(FILE_ROLES),
+  keyEpoch: z.number().int().positive(),
+  snapshotRevision: z.number().int().nonnegative(),
+  createdAt: isoTime,
+  updatedAt: isoTime
+})
+export type CloudFile = z.infer<typeof cloudFileSchema>
+
+/** Chosen by the app, so the name and key can be sealed to the file before Console has it. */
+export const cloudFileId = z.string().regex(/^dfl_[0-9a-f]{32}$/)
+
+export const createCloudFileSchema = z.object({
+  id: cloudFileId,
+  encryptedName: ciphertext(4096),
+  keyGrant: z.object({ wrappedKey: ciphertext(1024) })
+})
+
+export const renameCloudFileSchema = z.object({ encryptedName: ciphertext(4096) })
+
+export const fileMemberSchema = z.object({
+  userId: id,
+  email: z.string().email(),
+  name: z.string().min(1).max(200),
+  role: z.enum(FILE_ROLES),
+  addedAt: isoTime
+})
+export type FileMember = z.infer<typeof fileMemberSchema>
+
+export const fileInviteSchema = z.object({
+  id,
+  email: z.string().email(),
+  role: z.enum(INVITE_ROLES),
+  createdAt: isoTime
+})
+export type FileInvite = z.infer<typeof fileInviteSchema>
+
+export const fileMembersSchema = z.object({
+  members: z.array(fileMemberSchema),
+  invites: z.array(fileInviteSchema)
+})
+export type FileMembers = z.infer<typeof fileMembersSchema>
+
+export const addFileMemberSchema = z.object({
+  email: z.string().email().max(320),
+  role: z.enum(INVITE_ROLES)
+})
+
+/** Exactly one is set: a member when the address has an account, else an invite. */
+export const addedFileMemberSchema = z.object({
+  member: fileMemberSchema.nullable(),
+  invite: fileInviteSchema.nullable()
+})
+
+export const updateFileMemberSchema = z.object({ role: z.enum(FILE_ROLES) })
+
+export const fileKeysSchema = z.object({
+  keyEpoch: z.number().int().positive(),
+  grants: z.array(
+    z.object({
+      epoch: z.number().int().positive(),
+      wrappedKey: ciphertext(1024),
+      grantedByDeviceId: id.nullable()
+    })
+  )
+})
+
+export const pendingDeviceSchema = z.object({
+  deviceId: id,
+  userId: id,
+  publicKey: devicePublicKey
+})
+export type PendingDevice = z.infer<typeof pendingDeviceSchema>
+
+export const createKeyGrantsSchema = z.object({
+  grants: z
+    .array(
+      z.object({ deviceId: id, epoch: z.number().int().positive(), wrappedKey: ciphertext(1024) })
+    )
+    .min(1)
+    .max(100)
+})
+
+export const createdKeyGrantsSchema = z.object({ granted: z.number().int().nonnegative() })
+
+export const fileLinkSchema = z.object({ enabled: z.boolean(), createdAt: isoTime.nullable() })
+export const createdFileLinkSchema = z.object({
+  token: z.string().min(16).max(200),
+  createdAt: isoTime
+})
+
+export const UPLOAD_KINDS = ['snapshot', 'version'] as const
+
+export const createUploadSchema = z.object({
+  kind: z.enum(UPLOAD_KINDS),
+  size: z.number().int().positive()
+})
+
+export const uploadSchema = z.object({
+  uploadId: id,
+  upload: z.object({
+    url: z.string().url(),
+    method: z.literal('PUT'),
+    headers: z.record(z.string(), z.string()),
+    expiresAt: isoTime
+  })
+})
+export type CloudUpload = z.infer<typeof uploadSchema>
+
+export const snapshotSchema = z.object({
+  revision: z.number().int().positive(),
+  size: z.number().int().nonnegative(),
+  epoch: z.number().int().positive(),
+  url: z.string().url(),
+  expiresAt: isoTime
+})
+
+export const commitSnapshotSchema = z.object({
+  uploadId: id,
+  baseRevision: z.number().int().nonnegative(),
+  epoch: z.number().int().positive()
+})
+
+export const committedSnapshotSchema = z.object({
+  revision: z.number().int().positive(),
+  size: z.number().int().nonnegative(),
+  epoch: z.number().int().positive()
+})
+
+export const fileRelayTicketSchema = z.object({
+  url: z.string().url(),
+  ticket: z.string().min(16),
+  expiresAt: isoTime,
+  role: z.enum(FILE_ROLES),
+  peerId: z.string().min(8).max(200)
+})
+export type FileRelayTicket = z.infer<typeof fileRelayTicketSchema>

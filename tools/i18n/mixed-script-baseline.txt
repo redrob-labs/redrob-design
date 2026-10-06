@@ -140,6 +140,11 @@ ja:settings.interfaceLanguageDescription
 ja:settings.modelsAndKeysDescription
 ja:settings.sectionAgentsAndMCP
 ja:settings.temporaryDisableSnappingHint
+ja:sharing.notALink
+ja:sharing.pasteLink
+ja:sharing.signInToOpen
+ja:sharing.signInToShare
+ja:sharing.unreachable
 ja:ship.exportForFigma
 ja:ship.handedOffMCP
 ja:ship.handoffDownloaded
@@ -300,6 +305,11 @@ zh-cn:settings.interfaceLanguageDescription
 zh-cn:settings.modelsAndKeysDescription
 zh-cn:settings.sectionAgentsAndMCP
 zh-cn:settings.temporaryDisableSnappingHint
+zh-cn:sharing.notALink
+zh-cn:sharing.pasteLink
+zh-cn:sharing.signInToOpen
+zh-cn:sharing.signInToShare
+zh-cn:sharing.unreachable
 zh-cn:ship.exportForFigma
 zh-cn:ship.handedOffMCP
 zh-cn:ship.handoffDownloaded

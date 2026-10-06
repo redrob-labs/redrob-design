@@ -45,6 +45,7 @@ export interface Tab {
   store: EditorStore
   kind: TabKind
   mode: TabMode
+  readOnly?: boolean // a shared file opened by someone who may not change it
 }
 
 const io = new IORegistry(BUILTIN_IO_FORMATS)
@@ -124,9 +125,18 @@ export function setTabMode(tabId: string, mode: TabMode): void {
   const tabIndex = tabsRef.value.findIndex((candidate) => candidate.id === tabId)
   if (tabIndex === -1) return
   const tab = tabsRef.value[tabIndex]
-  tab.store.setViewOnly(mode === 'describe')
+  tab.store.setViewOnly(mode === 'describe' || tab.readOnly === true)
   if (tab.mode === mode) return
   tabsRef.value = tabsRef.value.with(tabIndex, { ...tab, mode })
+}
+
+/** Makes a tab view-only whatever its mode, or lets its mode decide again. */
+export function setTabReadOnly(tabId: string, readOnly: boolean): void {
+  tabsRef.value = tabsRef.value.map((tab) => {
+    if (tab.id !== tabId) return tab
+    tab.store.setViewOnly(readOnly || tab.mode === 'describe')
+    return { ...tab, readOnly }
+  })
 }
 
 export const activeTabMode = computed<TabMode>(() => activeTab.value?.mode ?? 'edit')
@@ -199,7 +209,8 @@ function isDOMImportFile(file: File): boolean {
   return /\.(html?|xhtml)$/i.test(file.name)
 }
 
-function reusableTabStore(): { store: EditorStore; created: boolean } {
+/** The current tab if it is Home or untouched, else a new one; `created` means close it on failure. */
+export function reusableTabStore(): { store: EditorStore; created: boolean } {
   const current = activeTab.value
   if (current?.kind === 'home') {
     leaveHome(current.id)

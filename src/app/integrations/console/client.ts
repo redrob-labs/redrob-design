@@ -48,6 +48,11 @@ export interface ConsoleClientOptions {
 
 export interface ConsoleRequest {
   params?: Record<string, string>
+  /**
+   * A view link's token. Sent in X-Redrob-Link instead of the session, on the routes a link may
+   * read, so someone opening a link is a viewer there whether or not they are signed in.
+   */
+  link?: string
   query?: Record<string, string | undefined>
   body?: unknown
   ifMatch?: string
@@ -152,7 +157,9 @@ export function createConsoleClient(options: ConsoleClientOptions) {
     request: ConsoleRequest
   ): Promise<Record<string, string>> {
     const headers: Record<string, string> = { Accept: 'application/json' }
-    if (route.auth === 'bearer') {
+    if (route.auth === 'bearer-or-link' && request.link) {
+      headers['X-Redrob-Link'] = request.link
+    } else if (route.auth !== 'public') {
       const token = await options.token()
       if (!token) throw new ConsoleError('not-signed-in', 'Sign in to Redrob Cloud first')
       headers.Authorization = `Bearer ${token}`

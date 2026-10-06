@@ -1,6 +1,25 @@
-import type { z } from 'zod'
+import { z } from 'zod'
 
 import {
+  addFileMemberSchema,
+  addedFileMemberSchema,
+  cloudFileSchema,
+  commitSnapshotSchema,
+  committedSnapshotSchema,
+  createCloudFileSchema,
+  createKeyGrantsSchema,
+  createUploadSchema,
+  createdFileLinkSchema,
+  createdKeyGrantsSchema,
+  fileKeysSchema,
+  fileLinkSchema,
+  fileMembersSchema,
+  fileRelayTicketSchema,
+  pendingDeviceSchema,
+  renameCloudFileSchema,
+  snapshotSchema,
+  updateFileMemberSchema,
+  uploadSchema,
   createCommentSchema,
   createVersionSchema,
   createWatchSchema,
@@ -33,8 +52,11 @@ export interface ConsoleRoute {
   path: string
   operationId: string
   summary: string
-  /** Public feeds need no sign-in; everything else takes the session token. */
-  auth: 'public' | 'bearer'
+  /**
+   * Public feeds need no sign-in; everything else takes the session token. `bearer-or-link` also
+   * answers a view link's token in X-Redrob-Link, for the routes a link may read.
+   */
+  auth: 'public' | 'bearer' | 'bearer-or-link'
   query?: Record<string, { description: string; required?: boolean }>
   body?: z.ZodType
   response: z.ZodType | null
@@ -255,6 +277,184 @@ export const CONSOLE_ROUTES = [
     body: publishLibraryRevisionSchema,
     response: libraryRevisionSchema,
     revisioned: true,
+    status: 201
+  },
+  // ------------------------------------------------------------ cloud files
+  {
+    method: 'POST',
+    path: '/design/files',
+    operationId: 'createCloudFile',
+    summary: 'Share a file: Console keeps its sealed name and this device’s wrapped key.',
+    auth: 'bearer',
+    body: createCloudFileSchema,
+    response: cloudFileSchema,
+    status: 201
+  },
+  {
+    method: 'GET',
+    path: '/design/files',
+    operationId: 'listCloudFiles',
+    summary: 'Files shared with this person, most recently changed first.',
+    auth: 'bearer',
+    query: cursorQuery,
+    response: pageSchema(cloudFileSchema)
+  },
+  {
+    method: 'GET',
+    path: '/design/files/{fileId}',
+    operationId: 'getCloudFile',
+    summary: 'A shared file and the caller’s role on it.',
+    auth: 'bearer-or-link',
+    response: cloudFileSchema
+  },
+  {
+    method: 'PATCH',
+    path: '/design/files/{fileId}',
+    operationId: 'renameCloudFile',
+    summary: 'Rename a shared file. Editors and owners.',
+    auth: 'bearer',
+    body: renameCloudFileSchema,
+    response: cloudFileSchema
+  },
+  {
+    method: 'DELETE',
+    path: '/design/files/{fileId}',
+    operationId: 'deleteCloudFile',
+    summary: 'Delete a shared file and everything stored for it. Owners only.',
+    auth: 'bearer',
+    response: null,
+    status: 204
+  },
+  {
+    method: 'GET',
+    path: '/design/files/{fileId}/members',
+    operationId: 'listFileMembers',
+    summary: 'Who has access, and who is invited.',
+    auth: 'bearer',
+    response: fileMembersSchema
+  },
+  {
+    method: 'POST',
+    path: '/design/files/{fileId}/members',
+    operationId: 'addFileMember',
+    summary: 'Share with an address. Editors and owners.',
+    auth: 'bearer',
+    body: addFileMemberSchema,
+    response: addedFileMemberSchema,
+    status: 201
+  },
+  {
+    method: 'PATCH',
+    path: '/design/files/{fileId}/members/{userId}',
+    operationId: 'updateFileMember',
+    summary: 'Change someone’s role. Owners only.',
+    auth: 'bearer',
+    body: updateFileMemberSchema,
+    response: fileMembersSchema
+  },
+  {
+    method: 'DELETE',
+    path: '/design/files/{fileId}/members/{userId}',
+    operationId: 'removeFileMember',
+    summary: 'Remove someone, or leave.',
+    auth: 'bearer',
+    response: null,
+    status: 204
+  },
+  {
+    method: 'DELETE',
+    path: '/design/files/{fileId}/invites/{inviteId}',
+    operationId: 'revokeFileInvite',
+    summary: 'Withdraw an invite.',
+    auth: 'bearer',
+    response: null,
+    status: 204
+  },
+  {
+    method: 'GET',
+    path: '/design/files/{fileId}/keys',
+    operationId: 'getFileKeys',
+    summary: 'This device’s wrapped copies of the file key.',
+    auth: 'bearer',
+    response: fileKeysSchema
+  },
+  {
+    method: 'GET',
+    path: '/design/files/{fileId}/pending-devices',
+    operationId: 'listPendingDevices',
+    summary: 'Members’ devices still waiting for the file key. Editors and owners.',
+    auth: 'bearer',
+    response: z.array(pendingDeviceSchema)
+  },
+  {
+    method: 'POST',
+    path: '/design/files/{fileId}/grants',
+    operationId: 'createKeyGrants',
+    summary: 'Hand the file key, wrapped, to pending devices.',
+    auth: 'bearer',
+    body: createKeyGrantsSchema,
+    response: createdKeyGrantsSchema
+  },
+  {
+    method: 'GET',
+    path: '/design/files/{fileId}/link',
+    operationId: 'getFileLink',
+    summary: 'Whether the file has a live view link.',
+    auth: 'bearer',
+    response: fileLinkSchema
+  },
+  {
+    method: 'POST',
+    path: '/design/files/{fileId}/link',
+    operationId: 'createFileLink',
+    summary: 'Make a new view link, retiring the old one.',
+    auth: 'bearer',
+    response: createdFileLinkSchema,
+    status: 201
+  },
+  {
+    method: 'DELETE',
+    path: '/design/files/{fileId}/link',
+    operationId: 'revokeFileLink',
+    summary: 'Turn the view link off.',
+    auth: 'bearer',
+    response: null,
+    status: 204
+  },
+  {
+    method: 'POST',
+    path: '/design/files/{fileId}/uploads',
+    operationId: 'createUpload',
+    summary: 'A presigned link to upload one sealed snapshot or version.',
+    auth: 'bearer',
+    body: createUploadSchema,
+    response: uploadSchema,
+    status: 201
+  },
+  {
+    method: 'GET',
+    path: '/design/files/{fileId}/snapshot',
+    operationId: 'getSnapshot',
+    summary: 'The current sealed snapshot, as a short-lived download link.',
+    auth: 'bearer-or-link',
+    response: snapshotSchema
+  },
+  {
+    method: 'PUT',
+    path: '/design/files/{fileId}/snapshot',
+    operationId: 'commitSnapshot',
+    summary: 'Commit an uploaded snapshot if nobody has since its base revision.',
+    auth: 'bearer',
+    body: commitSnapshotSchema,
+    response: committedSnapshotSchema
+  },
+  {
+    method: 'POST',
+    path: '/design/files/{fileId}/relay-ticket',
+    operationId: 'createFileRelayTicket',
+    summary: 'A one-use ticket for the file’s collaboration room.',
+    auth: 'bearer-or-link',
+    response: fileRelayTicketSchema,
     status: 201
   }
 ] as const satisfies readonly ConsoleRoute[]

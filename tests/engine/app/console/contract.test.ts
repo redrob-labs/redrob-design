@@ -35,7 +35,7 @@ describe('Console contract', () => {
     for (const route of CONSOLE_ROUTES) {
       const operation = document.paths[route.path][route.method.toLowerCase()]
       expect(operation.responses).toHaveProperty('429')
-      if (route.auth === 'bearer') {
+      if (route.auth !== 'public') {
         expect(operation.responses).toHaveProperty('401')
         expect(operation.security).toEqual([{ bearer: [] }])
       } else {

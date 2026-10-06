@@ -6,15 +6,29 @@ import type { TurnReceipt } from '@/app/assistant/turn/usage'
 
 import { getThreadStorage, toolCallIdsOf, type PlanAnswers } from './storage'
 
-/** What a thread is keyed by: the file's path when it has one, else its recovery id. */
+/**
+ * What a thread, its comments and its versions are keyed by: the Redrob Cloud file when the
+ * document is one, else the file's path, else its recovery id.
+ */
 export interface ThreadIdentity {
-  getSourceIdentity(): { path?: string | null }
+  getSourceIdentity(): { path?: string | null; cloudFileId?: string | null }
   getRecoveryId(): string
 }
 
+/** Keys of shared files start with this; only they sync with Redrob Cloud. */
+export const CLOUD_DOCUMENT_KEY_PREFIX = 'cloud:'
+
 export function threadKeyFor(store: ThreadIdentity): string {
-  const path = store.getSourceIdentity().path
+  const { path, cloudFileId } = store.getSourceIdentity()
+  if (cloudFileId) return `${CLOUD_DOCUMENT_KEY_PREFIX}${cloudFileId}`
   return path ? `file:${path}` : `doc:${store.getRecoveryId()}`
+}
+
+/** The Redrob Cloud file a document key names, or null for a document on this computer only. */
+export function cloudFileIdOf(documentKey: string): string | null {
+  return documentKey.startsWith(CLOUD_DOCUMENT_KEY_PREFIX)
+    ? documentKey.slice(CLOUD_DOCUMENT_KEY_PREFIX.length)
+    : null
 }
 
 /** Receipts for every answer in every open thread, by message id. */

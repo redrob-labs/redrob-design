@@ -26,6 +26,7 @@ import rename from './rename.json'
 import rendering from './rendering.json'
 import review from './review.json'
 import settings from './settings.json'
+import sharing from './sharing.json'
 import ship from './ship.json'
 import storage from './storage.json'
 import thread from './thread.json'
@@ -44,6 +45,7 @@ export default {
   composer,
   automation,
   cloud,
+  sharing,
   history,
   comments,
   code,

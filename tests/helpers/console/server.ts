@@ -21,6 +21,14 @@ import {
   type WatchEvent
 } from '@/app/integrations/console/contract/schemas'
 
+import {
+  BLOB_ORIGIN,
+  answerBlob,
+  mockDesignState,
+  registerDesignFiles,
+  type MockDesignState
+} from './design'
+
 /**
  * A Redrob Console that lives in memory: every endpoint in the contract,
  * with the same conventions, fed by fixtures. It is the acceptance oracle
@@ -53,6 +61,8 @@ export interface MockConsoleState {
   denySignIn: boolean
   /** The install id each device authorization named, in order. */
   installIds: Array<string | null>
+  /** Redrob Cloud files; see design.ts. */
+  design: MockDesignState
   /** Every request, for assertions. */
   requests: Array<{ method: string; path: string; authorized: boolean }>
 }
@@ -143,6 +153,7 @@ export function mockConsoleState(): MockConsoleState {
     pendingPolls: 1,
     denySignIn: false,
     installIds: [],
+    design: mockDesignState(),
     requests: []
   }
 }
@@ -460,6 +471,15 @@ export function createMockConsole(state: MockConsoleState = mockConsoleState()) 
     return c.json(revision, 201)
   })
 
+  registerDesignFiles({
+    app,
+    authed,
+    state: state.design,
+    self: () => state.account,
+    authorized: (c) => c.req.header('authorization') === `Bearer ${MOCK_TOKEN}`,
+    fail
+  })
+
   app.route('/', authed)
   app.notFound((c) => fail(c, 404, 'not_found'))
   return { app, state }
@@ -474,6 +494,7 @@ export const MOCK_BASE_PATHS = ['/api/backend/v1', '/v1'] as const
 export function mockConsoleFetch(mock: MockConsole) {
   return (input: string, init?: RequestInit): Promise<Response> => {
     const url = new URL(input)
+    if (url.origin === BLOB_ORIGIN) return answerBlob(mock.state.design, url, init)
     const prefix = MOCK_BASE_PATHS.find((base) => url.pathname.startsWith(base)) ?? ''
     const path = `${url.pathname.slice(prefix.length)}${url.search}`
     return Promise.resolve(mock.app.fetch(new Request(`http://mock${path}`, init)))

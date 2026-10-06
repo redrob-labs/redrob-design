@@ -41,6 +41,17 @@ function operation(route: ConsoleRoute): JSONSchema {
     })),
     ...(route.revisioned && route.method !== 'GET'
       ? [{ name: 'If-Match', in: 'header', required: false, schema: { type: 'string' } }]
+      : []),
+    ...(route.auth === 'bearer-or-link'
+      ? [
+          {
+            name: 'X-Redrob-Link',
+            in: 'header',
+            required: false,
+            description: 'A view link token, instead of the session. Grants viewer access.',
+            schema: { type: 'string' }
+          }
+        ]
       : [])
   ]
   const status = String(route.status ?? 200)
@@ -53,7 +64,7 @@ function operation(route: ConsoleRoute): JSONSchema {
     '429': { ...ERROR_RESPONSE, headers: { 'Retry-After': RETRY_AFTER } },
     '503': { ...ERROR_RESPONSE, headers: { 'Retry-After': RETRY_AFTER } }
   }
-  if (route.auth === 'bearer') {
+  if (route.auth !== 'public') {
     responses['401'] = ERROR_RESPONSE
     responses['403'] = ERROR_RESPONSE
   }
@@ -65,7 +76,7 @@ function operation(route: ConsoleRoute): JSONSchema {
   const result: JSONSchema = {
     operationId: route.operationId,
     summary: route.summary,
-    security: route.auth === 'bearer' ? [{ bearer: [] }] : [],
+    security: route.auth === 'public' ? [] : [{ bearer: [] }],
     responses
   }
   if (parameters.length > 0) result.parameters = parameters

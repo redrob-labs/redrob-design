@@ -22,6 +22,7 @@ import {
 import { openSettingsDialog } from '@/app/settings/dialog'
 import { openFileFromPath } from '@/app/shell/menu/use'
 import { createStorageWorkspaceSource } from '@/app/storage/workspace/source'
+import SharedWithYou from '@/components/home/SharedWithYou.vue'
 import { openStorageDocumentInNewTab } from '@/app/tabs'
 import HomeBrief from '@/components/home/brief/HomeBrief.vue'
 import HomeSearchActions from '@/components/home/search/HomeSearchActions.vue'
@@ -319,6 +320,8 @@ function formattedDate(updatedAt: string): string {
           <p class="mt-1 text-xs text-muted">{{ files.noRecentFilesDescription }}</p>
         </div>
       </section>
+
+      <SharedWithYou />
 
       <section class="mt-7">
         <div class="mb-3 flex items-start gap-3">
