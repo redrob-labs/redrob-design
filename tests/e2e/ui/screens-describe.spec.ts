@@ -147,8 +147,7 @@ test('Design Memory and a toast render cleanly', async ({ page }) => {
   expect(issues).toEqual([])
 })
 
-// The layer tree's expand toggles have no accessible name: see fix/ui-layer-tree-toggle-names.
-test.fixme('the demo route renders cleanly', async ({ page }) => {
+test('the demo route renders cleanly', async ({ page }) => {
   const errors = await openSweepApp(page, '/demo')
   const issues: SweepIssue[] = []
   for (const theme of SWEEP_THEMES) {

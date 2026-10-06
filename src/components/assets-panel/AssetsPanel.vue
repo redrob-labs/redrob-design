@@ -62,7 +62,7 @@ type AssetGroup = {
 const editor = useEditorStore()
 const libraryService = useLibraryService()
 const remoteAssets = libraryService.enabledAssets
-const { panels, commands } = useI18n()
+const { panels, commands, common } = useI18n()
 const query = ref('')
 const assetView = ref<AssetView>('grid')
 const detailsOpen = ref(false)
@@ -523,6 +523,7 @@ async function insertSelectedAsset() {
           </div>
         </div>
         <DialogClose
+          :aria-label="common.close"
           data-test-id="asset-details-close"
           class="flex size-7 cursor-pointer items-center justify-center rounded border-none bg-transparent text-muted hover:bg-hover hover:text-surface"
         >

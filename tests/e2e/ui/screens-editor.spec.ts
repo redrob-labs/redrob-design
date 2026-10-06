@@ -154,8 +154,7 @@ test('the command palette and zoom menu render cleanly', async ({ page }) => {
   expect(issues).toEqual([])
 })
 
-// The solid, gradient and image tabs have no accessible name: see fix/ui-fill-picker-tab-names.
-test.fixme('the fill picker and property panel render cleanly', async ({ page }) => {
+test('the fill picker and property panel render cleanly', async ({ page }) => {
   const errors = await openSweepApp(page)
   await seedPage(page)
   await selectCard(page)
@@ -170,7 +169,13 @@ test.fixme('the fill picker and property panel render cleanly', async ({ page })
     const picker = page
       .getByRole('dialog')
       .filter({ has: page.getByTestId('fill-picker-tab-solid') })
-    issues.push(...(await auditAndClose(page, picker, 'fill-picker', theme, errors)))
+    await expect(picker).toBeVisible()
+    issues.push(...(await auditSurface(page, picker, 'fill-picker', theme, errors)))
+    for (const tab of ['gradient', 'image', 'solid'] as const) {
+      await picker.getByTestId(`fill-picker-tab-${tab}`).click()
+      issues.push(...(await auditSurface(page, picker, `fill-picker-${tab}`, theme, errors)))
+    }
+    issues.push(...(await closesWithEscape(page, picker, 'fill-picker')))
   }
   expect(issues).toEqual([])
 })
@@ -212,8 +217,7 @@ test('the layers and assets panels and their dialogs render cleanly', async ({ p
   expect(issues).toEqual([])
 })
 
-// The close button is an unnamed icon: see fix/ui-asset-details-close-name.
-test.fixme('the asset details dialog renders cleanly', async ({ page }) => {
+test('the asset details dialog renders cleanly', async ({ page }) => {
   const errors = await openSweepApp(page)
   await seedPage(page)
   const issues: SweepIssue[] = []

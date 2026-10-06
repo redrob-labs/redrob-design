@@ -38,6 +38,7 @@ watch(renameInput, (input) => {
     <LayerTreeDisclosure
       :expanded="expanded"
       :visible="hasChildren"
+      :name="node.name"
       @toggle="actions.toggleExpand"
     />
     <component

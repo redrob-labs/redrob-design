@@ -302,6 +302,7 @@ pl:panels.colorFormatRgb
 pl:panels.design
 pl:panels.framePresetCategoryFigmaCommunity
 pl:panels.framePresetCategoryTablet
+pl:panels.gradient
 pl:panels.kerning
 pl:plan.memoryHeading
 pl:plan.pricePlan

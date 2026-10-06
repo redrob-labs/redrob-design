@@ -63,6 +63,7 @@ const styles = computed(() =>
     <LayerTreeDisclosure
       :expanded="expanded"
       :visible="hasChildren"
+      :name="node.name"
       @toggle="actions.toggleExpand"
     />
 
