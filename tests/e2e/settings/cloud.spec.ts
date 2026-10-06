@@ -33,7 +33,9 @@ test('Redrob Cloud signs in with a Console code, picks a workspace and signs out
   await expect(workspace).toHaveValue('ws-1')
   await workspace.selectOption('ws-2')
   await expect(workspace).toHaveValue('ws-2')
-  expect(mock.state.requests.find((request) => request.path === '/me')?.authorized).toBe(true)
+  expect(mock.state.requests.find((request) => request.path === '/design/me')?.authorized).toBe(
+    true
+  )
 
   await panel.getByRole('button', { name: 'Sign out' }).click()
   await expect(panel).toContainText('Not signed in')

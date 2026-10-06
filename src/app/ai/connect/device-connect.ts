@@ -24,7 +24,7 @@ export type DeviceProduct =
   | 'code'
   | 'cowork'
   | 'design'
-  /** Redrob Design Cloud: a session for workspaces, not a model key. */
+  /** Redrob Design Cloud: shared files, not a model key. Console refuses it at the gateway. */
   | 'design-cloud'
   | 'extension'
   | 'office'
@@ -116,12 +116,17 @@ function asString(value: unknown): string {
 
 export async function startDeviceAuthorization(
   product: DeviceProduct,
-  deps: Pick<DeviceConnectDeps, 'fetch'>
+  deps: Pick<DeviceConnectDeps, 'fetch'>,
+  /**
+   * Which installation is asking. Console requires it for `design-cloud`, which keeps one key per
+   * installation so signing in on a second computer does not sign the first one out.
+   */
+  installId?: string
 ): Promise<DeviceAuthorization> {
   const response = await deps.fetch(apiURL('/device/authorize'), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ product })
+    body: JSON.stringify(installId === undefined ? { product } : { product, installId })
   })
   if (!response.ok) {
     throw new Error(`Console refused the connect request (HTTP ${response.status}).`)

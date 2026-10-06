@@ -6,6 +6,7 @@ import {
   createVersionSchema,
   createWatchSchema,
   publishLibraryRevisionSchema,
+  registerDeviceSchema,
   renameVersionSchema,
   updateCommentSchema,
   type ConsoleAccount,
@@ -50,6 +51,8 @@ export interface MockConsoleState {
   pendingPolls: number
   /** When true, the device flow answers `access_denied`. */
   denySignIn: boolean
+  /** The install id each device authorization named, in order. */
+  installIds: Array<string | null>
   /** Every request, for assertions. */
   requests: Array<{ method: string; path: string; authorized: boolean }>
 }
@@ -62,10 +65,12 @@ export function mockConsoleState(): MockConsoleState {
       id: 'user-1',
       name: 'Jane Designer',
       email: 'jane@example.com',
+      currentWorkspaceId: 'ws-1',
       workspaces: [
         { id: 'ws-1', name: 'Redrob Office', role: 'admin' },
-        { id: 'ws-2', name: 'Side project', role: 'editor' }
-      ]
+        { id: 'ws-2', name: 'Side project', role: 'developer' }
+      ],
+      device: null
     },
     workspaces: new Map([
       [
@@ -137,6 +142,7 @@ export function mockConsoleState(): MockConsoleState {
     relayTickets: new Set(),
     pendingPolls: 1,
     denySignIn: false,
+    installIds: [],
     requests: []
   }
 }
@@ -178,8 +184,19 @@ export function createMockConsole(state: MockConsoleState = mockConsoleState()) 
 
   // Device flow (RFC 8628), as the app's device-connect client speaks it.
   app.post('/device/authorize', async (c) => {
-    const request = (await c.req.json().catch(() => null)) as { product?: unknown } | null
+    const request = (await c.req.json().catch(() => null)) as {
+      product?: unknown
+      installId?: unknown
+    } | null
     if (typeof request?.product !== 'string') return fail(c, 400, 'invalid_request')
+    // Console keeps one Design Cloud key per installation, so it must say which one is asking.
+    if (
+      request.product === 'design-cloud' &&
+      (typeof request.installId !== 'string' || !/^[A-Za-z0-9_-]{16,64}$/.test(request.installId))
+    ) {
+      return fail(c, 400, 'invalid_request')
+    }
+    state.installIds.push(typeof request.installId === 'string' ? request.installId : null)
     return c.json({
       deviceCode: `device-${request.product}`,
       userCode: MOCK_USER_CODE,
@@ -214,7 +231,23 @@ export function createMockConsole(state: MockConsoleState = mockConsoleState()) 
     await next()
   })
 
-  authed.get('/me', (c) => c.json(state.account))
+  authed.get('/design/me', (c) => c.json(state.account))
+  authed.put('/design/devices/current', async (c) => {
+    const request = await body(c, registerDeviceSchema)
+    if (!request) return fail(c, 400, 'invalid_request')
+    const existing = state.account.device
+    const device =
+      existing?.publicKey === request.publicKey
+        ? existing
+        : {
+            id: existing?.id ?? nextId('device'),
+            publicKey: request.publicKey,
+            createdAt: existing?.createdAt ?? NOW,
+            updatedAt: NOW
+          }
+    state.account = { ...state.account, device }
+    return c.json(device)
+  })
 
   function member(workspaceId: string): boolean {
     return state.account.workspaces.some((workspace) => workspace.id === workspaceId)

@@ -8,8 +8,10 @@ import {
   leaderboardFeedSchema,
   libraryRevisionSchema,
   librarySummarySchema,
+  deviceSchema,
   meSchema,
   modelRatesFeedSchema,
+  registerDeviceSchema,
   pageSchema,
   publishLibraryRevisionSchema,
   relayTicketSchema,
@@ -23,7 +25,7 @@ import {
   workspaceSchema
 } from './schemas'
 
-export type ConsoleMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE'
+export type ConsoleMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
 
 export interface ConsoleRoute {
   method: ConsoleMethod
@@ -48,11 +50,20 @@ const cursorQuery = { cursor: { description: 'Opaque cursor from the previous pa
 export const CONSOLE_ROUTES = [
   {
     method: 'GET',
-    path: '/me',
+    path: '/design/me',
     operationId: 'getMe',
-    summary: 'The signed-in account and the workspaces it belongs to.',
+    summary: 'Who this installation is signed in as, its workspaces, and its device key.',
     auth: 'bearer',
     response: meSchema
+  },
+  {
+    method: 'PUT',
+    path: '/design/devices/current',
+    operationId: 'registerDevice',
+    summary: "Register this installation's public key, or replace it.",
+    auth: 'bearer',
+    body: registerDeviceSchema,
+    response: deviceSchema
   },
   {
     method: 'GET',

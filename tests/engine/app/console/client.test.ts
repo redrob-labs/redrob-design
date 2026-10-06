@@ -62,7 +62,7 @@ describe('Console client', () => {
     const { client, mock } = setup(null)
     expect((await client.call('getLeaderboardFeed')).data.edition).toBe('October 2026')
     expect((await failure(client.call('getMe'))).kind).toBe('not-signed-in')
-    expect(mock.state.requests.some((request) => request.path === '/me')).toBe(false)
+    expect(mock.state.requests.some((request) => request.path === '/design/me')).toBe(false)
   })
 
   test('maps Console errors to what the app acts on', async () => {
@@ -160,6 +160,26 @@ describe('Redrob Cloud sign-in', () => {
     await signOutOfCloud()
     expect(cloudState.status).toBe('signed-out')
     expect(await appCredentialServices.manager.status(CONSOLE_SESSION_REF)).toBe('missing')
+  })
+
+  test('names this installation, the same one every time, so other computers stay signed in', async () => {
+    setConsoleCacheForTests(createMemorySnapshotCache())
+    const { mock, deps } = cloudDeps()
+    setConsoleClientForTests(
+      createConsoleClient({
+        baseURL: BASE,
+        token: () => appCredentialServices.resolver.resolve(CONSOLE_SESSION_REF),
+        fetch: mockConsoleFetch(mock)
+      })
+    )
+    expect(await signInToCloud(deps)).toBe('signed-in')
+    await signOutOfCloud()
+    expect(await signInToCloud(deps)).toBe('signed-in')
+    const [first, second] = mock.state.installIds
+    expect(first).toMatch(/^[A-Za-z0-9_-]{16,64}$/)
+    expect(second).toBe(first)
+    expect(cloudState.account?.currentWorkspaceId).toBe('ws-1')
+    await signOutOfCloud()
   })
 
   test('a refused sign-in leaves the person signed out', async () => {

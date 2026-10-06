@@ -1,6 +1,8 @@
 import { useLocalStorage } from '@vueuse/core'
 import { computed, reactive } from 'vue'
 
+import { encodeBase64 } from '@redrob-design/core/bytes'
+
 import {
   runDeviceConnect,
   startDeviceAuthorization,
@@ -40,11 +42,32 @@ const selectedWorkspace = useLocalStorage<string | null>('redrob-design:cloud:wo
   writeDefaults: false
 })
 
-/** The workspace features read from: the one picked, else the account's first. */
+/**
+ * Which installation this is, to Console. Not a secret: it only keeps this computer's key apart from
+ * the same person's other computers, so it lives in ordinary storage and survives signing out.
+ */
+const installation = useLocalStorage<string | null>('redrob-design:cloud:install', null, {
+  writeDefaults: false
+})
+
+const INSTALL_ID_BYTES = 24
+
+export function cloudInstallId(): string {
+  if (installation.value && /^[A-Za-z0-9_-]{16,64}$/.test(installation.value)) {
+    return installation.value
+  }
+  const id = encodeBase64(crypto.getRandomValues(new Uint8Array(INSTALL_ID_BYTES)), 'base64url')
+  installation.value = id
+  return id
+}
+
+/** The workspace features read from: the one picked, else the one this installation was approved into. */
 export const activeWorkspaceId = computed<string | null>(() => {
-  const workspaces = cloudState.account?.workspaces ?? []
+  const account = cloudState.account
+  const workspaces = account?.workspaces ?? []
   const picked = workspaces.find((workspace) => workspace.id === selectedWorkspace.value)
-  return picked?.id ?? workspaces.at(0)?.id ?? null
+  const current = workspaces.find((workspace) => workspace.id === account?.currentWorkspaceId)
+  return picked?.id ?? current?.id ?? workspaces.at(0)?.id ?? null
 })
 
 export function selectWorkspace(id: string): void {
@@ -151,7 +174,7 @@ export async function signInToCloud(
   cloudState.error = null
   let authorization: DeviceAuthorization
   try {
-    authorization = await startDeviceAuthorization(CLOUD_DEVICE_PRODUCT, deps)
+    authorization = await startDeviceAuthorization(CLOUD_DEVICE_PRODUCT, deps, cloudInstallId())
   } catch (error) {
     cloudState.status = 'unreachable'
     cloudState.error = error instanceof Error ? error.message : String(error)

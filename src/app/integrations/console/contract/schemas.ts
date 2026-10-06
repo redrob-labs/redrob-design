@@ -37,7 +37,8 @@ export function pageSchema<T extends z.ZodType>(item: T) {
 
 // ---------------------------------------------------------------- account
 
-export const WORKSPACE_ROLES = ['viewer', 'editor', 'admin'] as const
+/** Console's workspace roles. What someone may do to a shared file is its own role; see `files`. */
+export const WORKSPACE_ROLES = ['viewer', 'developer', 'admin'] as const
 
 export const workspaceSummarySchema = z.object({
   id,
@@ -45,13 +46,30 @@ export const workspaceSummarySchema = z.object({
   role: z.enum(WORKSPACE_ROLES)
 })
 
+/** P-256 public key, SPKI DER, base64url: what `exportKey('spki')` gives for an ECDH key. */
+export const devicePublicKey = z.string().regex(/^[A-Za-z0-9_-]{80,200}$/)
+
+/** This installation, once it has registered the public half of its key pair. */
+export const deviceSchema = z.object({
+  id,
+  publicKey: devicePublicKey,
+  createdAt: isoTime,
+  updatedAt: isoTime
+})
+export type ConsoleDevice = z.infer<typeof deviceSchema>
+
 export const meSchema = z.object({
   id,
   name: z.string().min(1).max(200),
-  email: z.string().email().nullable(),
-  workspaces: z.array(workspaceSummarySchema)
+  email: z.string().email(),
+  /** The workspace this installation was approved into. */
+  currentWorkspaceId: id,
+  workspaces: z.array(workspaceSummarySchema),
+  device: deviceSchema.nullable()
 })
 export type ConsoleAccount = z.infer<typeof meSchema>
+
+export const registerDeviceSchema = z.object({ publicKey: devicePublicKey })
 
 // -------------------------------------------------------------- workspace
 
