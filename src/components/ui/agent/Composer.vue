@@ -87,7 +87,7 @@ defineExpose({
 
 <template>
   <div data-slot="composer" :class="styles.root({ class: ui?.root })">
-    <div data-slot="composer-box" :class="styles.box({ class: ui?.box })">
+    <div data-slot="composer-box" data-focus-ring="within" :class="styles.box({ class: ui?.box })">
       <div v-if="$slots.context" data-slot="composer-context" :class="styles.context()">
         <slot name="context" />
       </div>

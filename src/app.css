@@ -224,10 +224,21 @@ body {
   font-family: var(--font-sans-kr);
 }
 
-/* One visible keyboard focus indicator. Zero specificity, so a component's own ring still wins. */
+/*
+ * One visible keyboard focus indicator. It is unlayered, so it beats Tailwind utilities, `outline-none`
+ * included, and every focusable control keeps a visible ring.
+ */
 :where(button, a, input, select, textarea, summary, [tabindex]):focus-visible {
   outline: var(--focus-ring-width) solid var(--focus-ring);
   outline-offset: var(--focus-ring-width);
+}
+
+/*
+ * A wrapper that draws the focus ring for the field inside it says so with
+ * `data-focus-ring="within"`; the field then skips its own, so focus shows once.
+ */
+:where([data-focus-ring='within']) :where(input, textarea):focus-visible {
+  outline: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

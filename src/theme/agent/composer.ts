@@ -1,7 +1,7 @@
 const composerTheme = {
   slots: {
     root: 'flex flex-col gap-2',
-    box: 'flex flex-col rounded-xl border border-border-strong bg-panel shadow-sm transition-colors focus-within:border-accent',
+    box: 'flex flex-col rounded-xl border border-border-strong bg-panel shadow-sm transition-colors focus-within:border-accent focus-within:ring-2 focus-within:ring-accent/30',
     context: 'flex flex-wrap gap-1.5 px-3 pt-3',
     input:
       'block w-full resize-none overflow-y-auto bg-transparent px-3.5 pt-3 pb-1 text-[14px] leading-6 text-surface outline-none placeholder:text-muted disabled:cursor-not-allowed disabled:opacity-60',

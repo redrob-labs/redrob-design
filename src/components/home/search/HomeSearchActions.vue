@@ -63,6 +63,7 @@ function start(preset: StartPreset): void {
 <template>
   <div class="flex min-w-0 flex-1 flex-col gap-2 sm:flex-row sm:items-center">
     <label
+      data-focus-ring="within"
       class="flex h-10 min-w-0 flex-1 items-center gap-2 rounded-md border border-border bg-panel px-3 focus-within:border-accent focus-within:ring-2 focus-within:ring-accent/30 sm:h-9 sm:max-w-80"
     >
       <icon-lucide-search class="size-4 shrink-0 text-muted" />
