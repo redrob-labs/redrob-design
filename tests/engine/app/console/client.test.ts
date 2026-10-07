@@ -75,31 +75,48 @@ describe('Console client', () => {
     expect(missing).toMatchObject({ kind: 'not-found', code: 'not_found' })
   })
 
-  test('keeps ETags and honours If-Match and If-None-Match', async () => {
-    const { client } = setup()
-    const publish = (
-      revisionId: string,
-      parentRevisionId: string | null,
-      headers: { ifMatch?: string; ifNoneMatch?: '*' }
-    ) =>
-      client.call('publishLibraryRevision', {
-        params: { workspaceId: 'ws-1', libraryId: 'lib-1' },
-        body: {
-          revisionId,
-          name: 'Buttons',
-          publishedAt: '2026-10-06T09:00:00.000Z',
-          assetCount: 1,
-          parentRevisionId,
-          payload: 'AAAA'
-        },
-        ...headers
+  test('keeps ETags and honours If-Match', async () => {
+    const { client, mock } = setup()
+    const memory = await client.call('getWorkspaceMemory', { params: { workspaceId: 'ws-1' } })
+    expect(memory.etag).toBe('"3"')
+
+    const fileId = 'dfl_00000000000000000000000000000001'
+    mock.state.design.files.set(fileId, {
+      id: fileId,
+      encryptedName: 'c2VhbGVk',
+      role: 'owner',
+      keyEpoch: 1,
+      snapshotRevision: 0,
+      createdAt: '2026-10-06T09:00:00.000Z',
+      updatedAt: '2026-10-06T09:00:00.000Z'
+    })
+    mock.state.design.members.set(fileId, [
+      {
+        userId: 'user-1',
+        email: 'jane@example.com',
+        name: 'Jane',
+        role: 'owner',
+        addedAt: '2026-10-06T09:00:00.000Z'
+      }
+    ])
+    const created = await client.call('createComment', {
+      params: { fileId },
+      body: {
+        id: 'comment-0001',
+        threadId: null,
+        ciphertext: 'c2VhbGVk',
+        epoch: 1,
+        createdAt: '2026-10-06T09:00:00.000Z'
+      }
+    })
+    const update = (ifMatch: string) =>
+      client.call('updateComment', {
+        params: { fileId, commentId: 'comment-0001' },
+        body: { resolved: true },
+        ifMatch
       })
-    const first = await publish('rev-1', null, { ifNoneMatch: '*' })
-    expect(first.etag).toBe('"rev-1"')
-    expect((await failure(publish('rev-x', null, { ifNoneMatch: '*' }))).kind).toBe('conflict')
-    expect((await failure(publish('rev-2', 'rev-1', { ifMatch: '"stale"' }))).kind).toBe('conflict')
-    const second = await publish('rev-2', 'rev-1', { ifMatch: first.etag ?? undefined })
-    expect(second.etag).toBe('"rev-2"')
+    expect((await failure(update('"stale"'))).kind).toBe('conflict')
+    expect((await update(`"${created.data.updatedAt}"`)).data.resolved).toBe(true)
   })
 
   test('reads Retry-After on rate limits', async () => {

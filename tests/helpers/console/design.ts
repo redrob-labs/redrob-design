@@ -10,6 +10,8 @@ import {
   renameCloudFileSchema,
   updateFileMemberSchema,
   createFileCommentSchema,
+  publishFileLibraryRevisionSchema,
+  type FileLibrarySummary,
   createFileVersionSchema,
   renameFileVersionSchema,
   updateFileCommentSchema,
@@ -50,6 +52,8 @@ export interface MockDesignState {
   relay: { url: string; role: FileRole | null }
   comments: Map<string, FileComment[]>
   versions: Map<string, Array<FileVersionSummary & { key: string }>>
+  /** libraryId -> revisions, oldest first */
+  libraries: Map<string, LibraryRevision[]>
   /** ticket -> file id; the mock relay admits each once, into that file's room. */
   relayTickets: Map<string, string>
 }
@@ -68,8 +72,18 @@ export function mockDesignState(): MockDesignState {
     relay: { url: 'wss://relay.mock/v1/rooms', role: null },
     comments: new Map(),
     versions: new Map(),
+    libraries: new Map(),
     relayTickets: new Map()
   }
+}
+
+type LibraryRevision = {
+  summary: FileLibrarySummary
+  revisionId: string
+  parentRevisionId: string | null
+  epoch: number
+  size: number
+  key: string
 }
 
 const NOW = '2026-10-06T09:00:00.000Z'
@@ -297,6 +311,68 @@ export function registerDesignFiles(options: {
     if (kept.length === versions.length) return fail(c, 404, 'not_found')
     state.versions.set(fileId, kept)
     return c.body(null, 204)
+  })
+
+  // Libraries: published from a shared file, readable by its members, compare-and-swap on parent.
+  const memberOf = (fileId: string) =>
+    state.members.get(fileId)?.some((member) => member.userId === self().id) ?? false
+  const libraryRevision = (revision: LibraryRevision, latest: LibraryRevision) => ({
+    summary: { ...latest.summary },
+    revisionId: revision.revisionId,
+    parentRevisionId: revision.parentRevisionId,
+    epoch: revision.epoch,
+    size: revision.size,
+    url: `${BLOB_ORIGIN}/${revision.key}`,
+    expiresAt: NOW
+  })
+  authed.get('/design/libraries', (c) => {
+    const items = [...state.libraries.values()]
+      .map((revisions) => revisions.at(-1))
+      .filter((latest) => latest !== undefined && memberOf(latest.summary.fileId))
+      .map((latest) => latest?.summary)
+    return c.json({ items, nextCursor: null })
+  })
+  authed.get('/design/libraries/:libraryId/revisions/:revisionId', (c) => {
+    const revisions = state.libraries.get(c.req.param('libraryId')) ?? []
+    const latest = revisions.at(-1)
+    const wanted = c.req.param('revisionId')
+    const revision =
+      wanted === 'latest' ? latest : revisions.find((entry) => entry.revisionId === wanted)
+    if (!revision || !latest || !memberOf(revision.summary.fileId)) return fail(c, 404, 'not_found')
+    return c.json(libraryRevision(revision, latest))
+  })
+  authed.post('/design/libraries/:libraryId/revisions', async (c) => {
+    const libraryId = c.req.param('libraryId')
+    const request = await parse(c, publishFileLibraryRevisionSchema)
+    if (!request) return fail(c, 400, 'invalid_request')
+    const role = access(c, request.fileId, 'editor')
+    if (role instanceof Response) return role
+    const revisions = state.libraries.get(libraryId) ?? []
+    const latest = revisions.at(-1)
+    if (latest && latest.summary.fileId !== request.fileId) return fail(c, 409, 'conflict')
+    if ((latest?.revisionId ?? null) !== request.parentRevisionId) return fail(c, 409, 'conflict')
+    const upload = state.uploads.get(request.uploadId)
+    if (!upload || upload.fileId !== request.fileId || upload.kind !== 'library')
+      return fail(c, 404, 'not_found')
+    state.uploads.delete(request.uploadId)
+    const revision: LibraryRevision = {
+      summary: {
+        libraryId,
+        fileId: request.fileId,
+        encryptedName: request.encryptedName,
+        latestRevisionId: request.revisionId,
+        publishedAt: request.publishedAt,
+        assetCount: request.assetCount,
+        epoch: request.epoch
+      },
+      revisionId: request.revisionId,
+      parentRevisionId: request.parentRevisionId,
+      epoch: request.epoch,
+      size: upload.size,
+      key: upload.key
+    }
+    state.libraries.set(libraryId, [...revisions, revision])
+    return c.json(libraryRevision(revision, revision), 201)
   })
 
   authed.post('/design/files', async (c) => {

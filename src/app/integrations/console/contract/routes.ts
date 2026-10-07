@@ -9,6 +9,9 @@ import {
   createCloudFileSchema,
   createKeyGrantsSchema,
   createUploadSchema,
+  fileLibraryRevisionSchema,
+  fileLibrarySummarySchema,
+  publishFileLibraryRevisionSchema,
   createFileCommentSchema,
   createFileVersionSchema,
   fileCommentSchema,
@@ -29,14 +32,11 @@ import {
   uploadSchema,
   createWatchSchema,
   leaderboardFeedSchema,
-  libraryRevisionSchema,
-  librarySummarySchema,
   deviceSchema,
   meSchema,
   modelRatesFeedSchema,
   registerDeviceSchema,
   pageSchema,
-  publishLibraryRevisionSchema,
   watchEventSchema,
   watchSchema,
   workspaceMemorySchema,
@@ -238,32 +238,29 @@ export const CONSOLE_ROUTES = [
   },
   {
     method: 'GET',
-    path: '/workspaces/{workspaceId}/libraries',
+    path: '/design/libraries',
     operationId: 'listLibraries',
-    summary: 'Component libraries published to the workspace.',
+    summary: 'Libraries published from shared files this person can open, latest revision each.',
     auth: 'bearer',
     query: cursorQuery,
-    response: pageSchema(librarySummarySchema)
+    response: pageSchema(fileLibrarySummarySchema)
   },
   {
     method: 'GET',
-    path: '/workspaces/{workspaceId}/libraries/{libraryId}/revisions/{revisionId}',
+    path: '/design/libraries/{libraryId}/revisions/{revisionId}',
     operationId: 'getLibraryRevision',
-    summary: 'A library revision; `latest` names the newest.',
+    summary: 'A sealed library revision; `latest` names the newest. A short-lived download link.',
     auth: 'bearer',
-    response: libraryRevisionSchema,
-    revisioned: true
+    response: fileLibraryRevisionSchema
   },
   {
     method: 'POST',
-    path: '/workspaces/{workspaceId}/libraries/{libraryId}/revisions',
+    path: '/design/libraries/{libraryId}/revisions',
     operationId: 'publishLibraryRevision',
-    summary:
-      'Publish a revision. If-Match carries the latest revision ETag; If-None-Match: * for a new library.',
+    summary: 'Publish a sealed revision from a shared file, on top of the revision it names.',
     auth: 'bearer',
-    body: publishLibraryRevisionSchema,
-    response: libraryRevisionSchema,
-    revisioned: true,
+    body: publishFileLibraryRevisionSchema,
+    response: fileLibraryRevisionSchema,
     status: 201
   },
   // ------------------------------------------------------------ cloud files

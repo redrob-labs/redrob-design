@@ -3,10 +3,8 @@ import type { z } from 'zod'
 
 import {
   createWatchSchema,
-  publishLibraryRevisionSchema,
   registerDeviceSchema,
   type ConsoleAccount,
-  type ConsoleLibraryRevision,
   type ConsoleWatch,
   type ConsoleWorkspace,
   type ConsoleWorkspaceMemory,
@@ -42,7 +40,6 @@ export interface MockConsoleState {
   modelRates: ModelRatesFeed
   watches: Map<string, ConsoleWatch>
   events: WatchEvent[]
-  libraries: Map<string, ConsoleLibraryRevision[]>
   /** How many token polls answer `authorization_pending` before the key. */
   pendingPolls: number
   /** When true, the device flow answers `access_denied`. */
@@ -133,7 +130,6 @@ export function mockConsoleState(): MockConsoleState {
     },
     watches: new Map(),
     events: [],
-    libraries: new Map(),
     pendingPolls: 1,
     denySignIn: false,
     installIds: [],
@@ -278,59 +274,6 @@ export function createMockConsole(state: MockConsoleState = mockConsoleState()) 
     const mine = new Set(state.watches.keys())
     const items = state.events.slice(start).filter((event) => mine.has(event.watchId))
     return c.json({ items, nextCursor: String(state.events.length) })
-  })
-
-  authed.get('/workspaces/:workspaceId/libraries', (c) => {
-    if (!member(c.req.param('workspaceId'))) return fail(c, 403, 'forbidden')
-    const summaries = [...state.libraries.values()].map((revisions) => revisions.at(-1)?.summary)
-    return c.json(
-      page(
-        summaries.filter((summary) => summary !== undefined),
-        c.req.query('cursor')
-      )
-    )
-  })
-  authed.get('/workspaces/:workspaceId/libraries/:libraryId/revisions/:revisionId', (c) => {
-    const revisions = state.libraries.get(c.req.param('libraryId')) ?? []
-    const wanted = c.req.param('revisionId')
-    const revision =
-      wanted === 'latest'
-        ? revisions.at(-1)
-        : revisions.find((entry) => entry.revisionId === wanted)
-    if (!revision) return fail(c, 404, 'not_found')
-    c.header('ETag', etagOf(revision.revisionId))
-    return c.json(revision)
-  })
-  authed.post('/workspaces/:workspaceId/libraries/:libraryId/revisions', async (c) => {
-    const libraryId = c.req.param('libraryId')
-    const revisions = state.libraries.get(libraryId) ?? []
-    const latest = revisions.at(-1)
-    const ifMatch = c.req.header('if-match')
-    const ifNoneMatch = c.req.header('if-none-match')
-    if (ifNoneMatch === '*' && latest) return fail(c, 412, 'precondition_failed')
-    if (ifMatch && ifMatch !== etagOf(latest?.revisionId ?? ''))
-      return fail(c, 412, 'precondition_failed')
-    const request = await body(c, publishLibraryRevisionSchema)
-    if (!request) return fail(c, 400, 'invalid_request')
-    if (request.parentRevisionId !== (latest?.revisionId ?? null)) return fail(c, 409, 'conflict')
-    if (revisions.some((entry) => entry.revisionId === request.revisionId)) {
-      return fail(c, 409, 'conflict')
-    }
-    const { revisionId } = request
-    const revision: ConsoleLibraryRevision = {
-      revisionId,
-      payload: request.payload,
-      summary: {
-        libraryId,
-        name: request.name,
-        latestRevisionId: revisionId,
-        publishedAt: request.publishedAt,
-        assetCount: request.assetCount
-      }
-    }
-    state.libraries.set(libraryId, [...revisions, revision])
-    c.header('ETag', etagOf(revisionId))
-    return c.json(revision, 201)
   })
 
   registerDesignFiles({

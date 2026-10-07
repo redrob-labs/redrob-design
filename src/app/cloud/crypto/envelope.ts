@@ -23,6 +23,8 @@ export type SealPurpose =
   | { kind: 'version' }
   | { kind: 'version-name' }
   | { kind: 'comment' }
+  | { kind: 'library' }
+  | { kind: 'library-name' }
   | { kind: 'frame'; namespace: string; senderId: string }
 
 export class CloudCryptoError extends Error {

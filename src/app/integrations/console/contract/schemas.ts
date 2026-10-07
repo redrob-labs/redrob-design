@@ -260,35 +260,6 @@ export const commentSchema = z.object({
 })
 export type ConsoleComment = z.infer<typeof commentSchema>
 
-// -------------------------------------------------------------- libraries
-
-export const librarySummarySchema = z.object({
-  libraryId: id,
-  name: z.string().min(1).max(200),
-  latestRevisionId: id,
-  publishedAt: isoTime,
-  assetCount: z.number().int().nonnegative()
-})
-
-export const libraryRevisionSchema = z.object({
-  summary: librarySummarySchema,
-  revisionId: id,
-  /** The serialized revision (`serializeLibraryRevision`), base64. */
-  payload: z.string().min(1)
-})
-export type ConsoleLibraryRevision = z.infer<typeof libraryRevisionSchema>
-
-export const publishLibraryRevisionSchema = z.object({
-  /** Chosen by the app, which builds the revision; it is also inside the payload. */
-  revisionId: id,
-  name: z.string().min(1).max(200),
-  publishedAt: isoTime,
-  assetCount: z.number().int().nonnegative(),
-  /** The revision this publish replaces; null for the first publish. */
-  parentRevisionId: id.nullable(),
-  payload: z.string().min(1)
-})
-
 // ------------------------------------------------------------ cloud files
 
 /**
@@ -402,7 +373,7 @@ export const createdFileLinkSchema = z.object({
   createdAt: isoTime
 })
 
-export const UPLOAD_KINDS = ['snapshot', 'version'] as const
+export const UPLOAD_KINDS = ['snapshot', 'version', 'library'] as const
 
 export const createUploadSchema = z.object({
   kind: z.enum(UPLOAD_KINDS),
@@ -506,4 +477,41 @@ export const updateFileCommentSchema = z.object({
   ciphertext: ciphertext(20_000).optional(),
   epoch: z.number().int().positive().optional(),
   resolved: z.boolean().optional()
+})
+
+// ------------------------------------------------------- sealed libraries
+
+const libraryId = z.string().regex(/^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$/)
+
+export const fileLibrarySummarySchema = z.object({
+  libraryId,
+  /** The shared file it is published from; its key seals the library. */
+  fileId: id,
+  encryptedName: ciphertext(4096),
+  latestRevisionId: libraryId,
+  publishedAt: isoTime,
+  assetCount: z.number().int().nonnegative(),
+  epoch: z.number().int().positive()
+})
+export type FileLibrarySummary = z.infer<typeof fileLibrarySummarySchema>
+
+export const fileLibraryRevisionSchema = z.object({
+  summary: fileLibrarySummarySchema,
+  revisionId: libraryId,
+  parentRevisionId: libraryId.nullable(),
+  epoch: z.number().int().positive(),
+  size: z.number().int().nonnegative(),
+  url: z.string().url(),
+  expiresAt: isoTime
+})
+
+export const publishFileLibraryRevisionSchema = z.object({
+  fileId: id,
+  uploadId: id,
+  revisionId: libraryId,
+  parentRevisionId: libraryId.nullable(),
+  encryptedName: ciphertext(4096),
+  assetCount: z.number().int().nonnegative(),
+  epoch: z.number().int().positive(),
+  publishedAt: isoTime
 })

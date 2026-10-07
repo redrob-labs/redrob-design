@@ -3283,10 +3283,10 @@
         ]
       }
     },
-    "/workspaces/{workspaceId}/libraries": {
+    "/design/libraries": {
       "get": {
         "operationId": "listLibraries",
-        "summary": "Component libraries published to the workspace.",
+        "summary": "Libraries published from shared files this person can open, latest revision each.",
         "security": [
           {
             "bearer": []
@@ -3294,7 +3294,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Component libraries published to the workspace.",
+            "description": "Libraries published from shared files this person can open, latest revision each.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3307,18 +3307,22 @@
                         "properties": {
                           "libraryId": {
                             "type": "string",
-                            "minLength": 1,
-                            "maxLength": 200
+                            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$"
                           },
-                          "name": {
+                          "fileId": {
                             "type": "string",
                             "minLength": 1,
                             "maxLength": 200
+                          },
+                          "encryptedName": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 4096,
+                            "pattern": "^[A-Za-z0-9_-]+$"
                           },
                           "latestRevisionId": {
                             "type": "string",
-                            "minLength": 1,
-                            "maxLength": 200
+                            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$"
                           },
                           "publishedAt": {
                             "type": "string",
@@ -3329,14 +3333,22 @@
                             "type": "integer",
                             "minimum": 0,
                             "maximum": 9007199254740991
+                          },
+                          "epoch": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "exclusiveMinimum": true,
+                            "maximum": 9007199254740991
                           }
                         },
                         "required": [
                           "libraryId",
-                          "name",
+                          "fileId",
+                          "encryptedName",
                           "latestRevisionId",
                           "publishedAt",
-                          "assetCount"
+                          "assetCount",
+                          "epoch"
                         ],
                         "additionalProperties": false
                       }
@@ -3383,16 +3395,6 @@
               }
             }
           },
-          "404": {
-            "description": "A failure, as `{ \"error\": \"<snake_case_code>\" }`.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
           "429": {
             "description": "A failure, as `{ \"error\": \"<snake_case_code>\" }`.",
             "content": {
@@ -3434,14 +3436,6 @@
         },
         "parameters": [
           {
-            "name": "workspaceId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "cursor",
             "in": "query",
             "required": false,
@@ -3453,10 +3447,10 @@
         ]
       }
     },
-    "/workspaces/{workspaceId}/libraries/{libraryId}/revisions/{revisionId}": {
+    "/design/libraries/{libraryId}/revisions/{revisionId}": {
       "get": {
         "operationId": "getLibraryRevision",
-        "summary": "A library revision; `latest` names the newest.",
+        "summary": "A sealed library revision; `latest` names the newest. A short-lived download link.",
         "security": [
           {
             "bearer": []
@@ -3464,7 +3458,7 @@
         ],
         "responses": {
           "200": {
-            "description": "A library revision; `latest` names the newest.",
+            "description": "A sealed library revision; `latest` names the newest. A short-lived download link.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3475,18 +3469,22 @@
                       "properties": {
                         "libraryId": {
                           "type": "string",
-                          "minLength": 1,
-                          "maxLength": 200
+                          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$"
                         },
-                        "name": {
+                        "fileId": {
                           "type": "string",
                           "minLength": 1,
                           "maxLength": 200
+                        },
+                        "encryptedName": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 4096,
+                          "pattern": "^[A-Za-z0-9_-]+$"
                         },
                         "latestRevisionId": {
                           "type": "string",
-                          "minLength": 1,
-                          "maxLength": 200
+                          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$"
                         },
                         "publishedAt": {
                           "type": "string",
@@ -3497,36 +3495,65 @@
                           "type": "integer",
                           "minimum": 0,
                           "maximum": 9007199254740991
+                        },
+                        "epoch": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "exclusiveMinimum": true,
+                          "maximum": 9007199254740991
                         }
                       },
                       "required": [
                         "libraryId",
-                        "name",
+                        "fileId",
+                        "encryptedName",
                         "latestRevisionId",
                         "publishedAt",
-                        "assetCount"
+                        "assetCount",
+                        "epoch"
                       ],
                       "additionalProperties": false
                     },
                     "revisionId": {
                       "type": "string",
-                      "minLength": 1,
-                      "maxLength": 200
+                      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$"
                     },
-                    "payload": {
+                    "parentRevisionId": {
+                      "nullable": true,
                       "type": "string",
-                      "minLength": 1
+                      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$"
+                    },
+                    "epoch": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "exclusiveMinimum": true,
+                      "maximum": 9007199254740991
+                    },
+                    "size": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 9007199254740991
+                    },
+                    "url": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "expiresAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
                     }
                   },
-                  "required": ["summary", "revisionId", "payload"],
+                  "required": [
+                    "summary",
+                    "revisionId",
+                    "parentRevisionId",
+                    "epoch",
+                    "size",
+                    "url",
+                    "expiresAt"
+                  ],
                   "additionalProperties": false
-                }
-              }
-            },
-            "headers": {
-              "ETag": {
-                "schema": {
-                  "type": "string"
                 }
               }
             }
@@ -3611,14 +3638,6 @@
           }
         },
         "parameters": [
-          {
-            "name": "workspaceId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "name": "libraryId",
             "in": "path",
@@ -3638,10 +3657,10 @@
         ]
       }
     },
-    "/workspaces/{workspaceId}/libraries/{libraryId}/revisions": {
+    "/design/libraries/{libraryId}/revisions": {
       "post": {
         "operationId": "publishLibraryRevision",
-        "summary": "Publish a revision. If-Match carries the latest revision ETag; If-None-Match: * for a new library.",
+        "summary": "Publish a sealed revision from a shared file, on top of the revision it names.",
         "security": [
           {
             "bearer": []
@@ -3649,7 +3668,7 @@
         ],
         "responses": {
           "201": {
-            "description": "Publish a revision. If-Match carries the latest revision ETag; If-None-Match: * for a new library.",
+            "description": "Publish a sealed revision from a shared file, on top of the revision it names.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3660,18 +3679,22 @@
                       "properties": {
                         "libraryId": {
                           "type": "string",
-                          "minLength": 1,
-                          "maxLength": 200
+                          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$"
                         },
-                        "name": {
+                        "fileId": {
                           "type": "string",
                           "minLength": 1,
                           "maxLength": 200
+                        },
+                        "encryptedName": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 4096,
+                          "pattern": "^[A-Za-z0-9_-]+$"
                         },
                         "latestRevisionId": {
                           "type": "string",
-                          "minLength": 1,
-                          "maxLength": 200
+                          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$"
                         },
                         "publishedAt": {
                           "type": "string",
@@ -3682,36 +3705,65 @@
                           "type": "integer",
                           "minimum": 0,
                           "maximum": 9007199254740991
+                        },
+                        "epoch": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "exclusiveMinimum": true,
+                          "maximum": 9007199254740991
                         }
                       },
                       "required": [
                         "libraryId",
-                        "name",
+                        "fileId",
+                        "encryptedName",
                         "latestRevisionId",
                         "publishedAt",
-                        "assetCount"
+                        "assetCount",
+                        "epoch"
                       ],
                       "additionalProperties": false
                     },
                     "revisionId": {
                       "type": "string",
-                      "minLength": 1,
-                      "maxLength": 200
+                      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$"
                     },
-                    "payload": {
+                    "parentRevisionId": {
+                      "nullable": true,
                       "type": "string",
-                      "minLength": 1
+                      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$"
+                    },
+                    "epoch": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "exclusiveMinimum": true,
+                      "maximum": 9007199254740991
+                    },
+                    "size": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 9007199254740991
+                    },
+                    "url": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "expiresAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
                     }
                   },
-                  "required": ["summary", "revisionId", "payload"],
+                  "required": [
+                    "summary",
+                    "revisionId",
+                    "parentRevisionId",
+                    "epoch",
+                    "size",
+                    "url",
+                    "expiresAt"
+                  ],
                   "additionalProperties": false
-                }
-              }
-            },
-            "headers": {
-              "ETag": {
-                "schema": {
-                  "type": "string"
                 }
               }
             }
@@ -3747,26 +3799,6 @@
             }
           },
           "404": {
-            "description": "A failure, as `{ \"error\": \"<snake_case_code>\" }`.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "A failure, as `{ \"error\": \"<snake_case_code>\" }`.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "412": {
             "description": "A failure, as `{ \"error\": \"<snake_case_code>\" }`.",
             "content": {
               "application/json": {
@@ -3817,25 +3849,9 @@
         },
         "parameters": [
           {
-            "name": "workspaceId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "libraryId",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "If-Match",
-            "in": "header",
-            "required": false,
             "schema": {
               "type": "string"
             }
@@ -3848,44 +3864,57 @@
               "schema": {
                 "type": "object",
                 "properties": {
+                  "fileId": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200
+                  },
+                  "uploadId": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200
+                  },
                   "revisionId": {
                     "type": "string",
-                    "minLength": 1,
-                    "maxLength": 200
+                    "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$"
                   },
-                  "name": {
+                  "parentRevisionId": {
+                    "nullable": true,
+                    "type": "string",
+                    "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$"
+                  },
+                  "encryptedName": {
                     "type": "string",
                     "minLength": 1,
-                    "maxLength": 200
-                  },
-                  "publishedAt": {
-                    "type": "string",
-                    "format": "date-time",
-                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+                    "maxLength": 4096,
+                    "pattern": "^[A-Za-z0-9_-]+$"
                   },
                   "assetCount": {
                     "type": "integer",
                     "minimum": 0,
                     "maximum": 9007199254740991
                   },
-                  "parentRevisionId": {
-                    "nullable": true,
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 200
+                  "epoch": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "exclusiveMinimum": true,
+                    "maximum": 9007199254740991
                   },
-                  "payload": {
+                  "publishedAt": {
                     "type": "string",
-                    "minLength": 1
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
                   }
                 },
                 "required": [
+                  "fileId",
+                  "uploadId",
                   "revisionId",
-                  "name",
-                  "publishedAt",
-                  "assetCount",
                   "parentRevisionId",
-                  "payload"
+                  "encryptedName",
+                  "assetCount",
+                  "epoch",
+                  "publishedAt"
                 ],
                 "additionalProperties": false
               }
@@ -6426,7 +6455,7 @@
                 "properties": {
                   "kind": {
                     "type": "string",
-                    "enum": ["snapshot", "version"]
+                    "enum": ["snapshot", "version", "library"]
                   },
                   "size": {
                     "type": "integer",
