@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.15.0 — 2026-10-08
+
 ### Added
 
 - Share a file with the people you invite, from Share in the editor: Redrob Cloud keeps it end-to-end encrypted, each person gets a role (owner, can edit, can comment or can view), people from other workspaces can be invited by email, a view link opens it for reading with nothing else, and files shared with you are listed on Home and open from a pasted link.
