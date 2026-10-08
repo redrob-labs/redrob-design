@@ -204,6 +204,28 @@ function resolveTextAutoResize(node: SceneNode, graph: SceneGraph): SceneNode['t
   return node.textAutoResize
 }
 
+// Kiwi omits the defaults (LEFT / TOP). Mirror the textAutoResize rule: write
+// them back only when the node was authored here, is non-default, or the
+// imported raw fields carried them -- otherwise a round trip grows fields the
+// source never had.
+function serializeTextAlignment(
+  node: SceneNode,
+  nc: KiwiNodeChange,
+  rawNodeFields: Record<string, unknown>
+): void {
+  const authoredHere = !node.source.id
+  if (
+    authoredHere ||
+    node.textAlignHorizontal !== 'LEFT' ||
+    'textAlignHorizontal' in rawNodeFields
+  ) {
+    nc.textAlignHorizontal = node.textAlignHorizontal
+  }
+  if (authoredHere || node.textAlignVertical !== 'TOP' || 'textAlignVertical' in rawNodeFields) {
+    nc.textAlignVertical = node.textAlignVertical
+  }
+}
+
 function serializeTextProps(
   node: SceneNode,
   nc: KiwiNodeChange,
@@ -229,19 +251,7 @@ function serializeTextProps(
   if (!node.source.id || autoResize !== 'NONE' || 'textAutoResize' in rawNodeFields) {
     nc.textAutoResize = autoResize
   }
-  // Kiwi omits defaults (LEFT / TOP). Mirror textAutoResize: write them back
-  // only when the node was authored here, is non-default, or the imported raw
-  // fields carried them -- otherwise the round trip grows fields the source lacked.
-  if (
-    !node.source.id ||
-    node.textAlignHorizontal !== 'LEFT' ||
-    'textAlignHorizontal' in rawNodeFields
-  ) {
-    nc.textAlignHorizontal = node.textAlignHorizontal
-  }
-  if (!node.source.id || node.textAlignVertical !== 'TOP' || 'textAlignVertical' in rawNodeFields) {
-    nc.textAlignVertical = node.textAlignVertical
-  }
+  serializeTextAlignment(node, nc, rawNodeFields)
   nc.textUserLayoutVersion = 4
   nc.textExplicitLayoutVersion = 1
   nc.textBidiVersion = 1
