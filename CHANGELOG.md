@@ -4,6 +4,7 @@
 
 ### Added
 
+- Label each AI chat session on this device for the Redrob Console's AI work insights, and send the labels to the workspace of the Redrob connection. Only labels and counts are sent (how deep the work went, whether the canvas changed, how many messages, whether a run was stopped), never what was typed, what the model wrote, or the file.
 - Label each Redrob Auto request with its Model Guide profession and task on this device, so Console routes it to the best-ranked model for that work, and show the Model Guide from the Redrob model profile. The labeller's model downloads after launch when a Redrob connection exists; until then requests route as before.
 - Add a searchable command palette for editor and application actions.
 - Render triangle and line arrow stroke caps on lines and open vector paths, and choose them from the stroke cap picker.

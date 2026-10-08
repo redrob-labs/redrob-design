@@ -11,6 +11,7 @@ import {
 import type { StepBudget, ToolLogEntry } from '@redrob-design/core/tools'
 import type { SceneNode } from '@redrob-design/scene-graph'
 
+import { recordInsight } from '@/app/ai/insights/recorder'
 import { makeFigmaFromStore } from '@/app/automation/bridge/figma-factory'
 import { getActiveEditorStore } from '@/app/editor/active-store'
 import type { EditorStore } from '@/app/editor/active-store'
@@ -98,6 +99,7 @@ export function createAITools(store: EditorStore) {
           : def.execute(figma, args)
       },
       onAfterExecute: async (def) => {
+        recordInsight(store, { kind: 'tool', changed: !!def.mutates })
         if (def.mutates) {
           store.requestRender()
           if (beforeSnapshot) {

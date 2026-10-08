@@ -11,6 +11,7 @@ import { classifyAIChatError, type AIChatFailure } from '@/app/ai/chat/failure'
 import { resolveLanguageModelID } from '@/app/ai/chat/model'
 import { buildReasoningProviderOptions, type AIProviderOptions } from '@/app/ai/chat/reasoning'
 import SYSTEM_PROMPT from '@/app/ai/chat/system-prompt.md?raw'
+import { recordInsight } from '@/app/ai/insights/recorder'
 import { createAIModelRuntime, resolveModelConnectionAPIKey } from '@/app/ai/models'
 import { MAX_AGENT_STEPS, createAITools, recordStep, resetRunSteps } from '@/app/ai/tools'
 import {
@@ -73,6 +74,26 @@ export async function createACPTransport(providerID: AIProviderID) {
   return new ACPChatTransport({ agentDef, cwd: await homeDir(), modelId })
 }
 
+/**
+ * Whether the person's newest message went with a file or an image: the "attaches the source" label.
+ * Reads only part types, never their content.
+ */
+function lastUserMessageHasFile(options: unknown): boolean {
+  const messages = (options as { messages?: unknown }).messages
+  if (!Array.isArray(messages)) return false
+  for (let i = messages.length - 1; i >= 0; i--) {
+    const message = messages[i] as { role?: unknown; content?: unknown }
+    if (message.role !== 'user') continue
+    return (
+      Array.isArray(message.content) &&
+      message.content.some(
+        (part: { type?: unknown }) => part.type === 'file' || part.type === 'image'
+      )
+    )
+  }
+  return false
+}
+
 export function createToolLoopTransport({
   store,
   providerID,
@@ -100,6 +121,7 @@ export function createToolLoopTransport({
     providerOptions,
     prepareCall: (options) => {
       resetRunSteps(store)
+      recordInsight(store, { kind: 'message', context: lastUserMessageHasFile(options) })
       return {
         ...options,
         maxOutputTokens,
@@ -163,6 +185,9 @@ export function createChatSessionManager({
   }): void {
     if (!isAbort && !isDisconnect && !isError) {
       recordChatCompleted({ finishReason: finishReason ?? null })
+    }
+    if (currentChatStore && (isAbort || (!isDisconnect && !isError))) {
+      recordInsight(currentChatStore, { kind: isAbort ? 'stopped' : 'answer' })
     }
   }
 
