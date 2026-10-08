@@ -4,7 +4,7 @@ import { createS3StorageAdapter } from './s3/adapter'
 export const S3_STORAGE_PROVIDER = defineStorageProvider({
   id: 's3-compatible',
   label: 'S3 storage',
-  description: 'AWS S3, Backblaze B2, Cloudflare R2, MinIO, and compatible storage',
+  description: 'AWS S3, Backblaze B2, MinIO, and other S3-compatible storage',
   preferenceFields: [
     { id: 'endpoint', label: 'Endpoint', kind: 'url', required: true },
     { id: 'bucket', label: 'Bucket', kind: 'text', required: true },

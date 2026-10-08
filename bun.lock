@@ -112,7 +112,6 @@
         "@wdio/spec-reporter": "9.30.1",
         "@wdio/tauri-service": "1.3.0",
         "changelog-parser": "^4.1.0",
-        "cloudflare-redirect-parser": "^1.0.0",
         "esbuild": "^0.27.7",
         "expect-webdriverio": "5.7.0",
         "fake-indexeddb": "^6.2.5",
@@ -160,7 +159,7 @@
     },
     "packages/cli": {
       "name": "@redrob-design/cli",
-      "version": "0.14.0",
+      "version": "0.15.0",
       "bin": {
         "redrob-design": "./bin/redrob-design.js",
       },
@@ -179,7 +178,7 @@
     },
     "packages/core": {
       "name": "@redrob-design/core",
-      "version": "0.14.0",
+      "version": "0.15.0",
       "dependencies": {
         "@chenglou/pretext": "^0.0.7",
         "@iconify/utils": "^3.1.4",
@@ -240,7 +239,7 @@
     },
     "packages/dom-css": {
       "name": "@redrob-design/dom-css",
-      "version": "0.14.0",
+      "version": "0.15.0",
       "dependencies": {
         "@acemir/cssom": "^0.9.31",
         "parse5": "^8.0.1",
@@ -260,7 +259,7 @@
     },
     "packages/fig": {
       "name": "@redrob-design/fig",
-      "version": "0.14.0",
+      "version": "0.15.0",
       "dependencies": {
         "es-toolkit": "^1.51.0",
         "fflate": "^0.8.3",
@@ -277,7 +276,7 @@
     },
     "packages/harness": {
       "name": "@redrob-design/harness",
-      "version": "0.14.0",
+      "version": "0.15.0",
       "bin": {
         "redrob-design-harness": "./dist/stdio.mjs",
       },
@@ -293,7 +292,7 @@
     },
     "packages/kiwi": {
       "name": "@redrob-design/kiwi",
-      "version": "0.14.0",
+      "version": "0.15.0",
       "dependencies": {
         "fflate": "^0.8.3",
         "fzstd": "^0.1.1",
@@ -306,7 +305,7 @@
     },
     "packages/mcp": {
       "name": "@redrob-design/mcp",
-      "version": "0.14.0",
+      "version": "0.15.0",
       "bin": {
         "redrob-design-mcp": "./dist/stdio.mjs",
         "redrob-design-mcp-http": "./dist/index.mjs",
@@ -327,7 +326,7 @@
     },
     "packages/pen": {
       "name": "@redrob-design/pen",
-      "version": "0.14.0",
+      "version": "0.15.0",
       "dependencies": {
         "culori": "^4.0.2",
       },
@@ -343,7 +342,7 @@
     },
     "packages/scene-graph": {
       "name": "@redrob-design/scene-graph",
-      "version": "0.14.0",
+      "version": "0.15.0",
       "dependencies": {
         "es-toolkit": "^1.51.0",
         "nanoevents": "^9.1.0",
@@ -357,7 +356,7 @@
     },
     "packages/vue": {
       "name": "@redrob-design/vue",
-      "version": "0.14.0",
+      "version": "0.15.0",
       "dependencies": {
         "@atlaskit/pragmatic-drag-and-drop": "^1.8.1",
         "@atlaskit/pragmatic-drag-and-drop-hitbox": "^1.2.0",
@@ -1994,8 +1993,6 @@
     "cliui": ["cliui@8.0.1", "", { "dependencies": { "string-width": "^4.2.0", "strip-ansi": "^6.0.1", "wrap-ansi": "^7.0.0" } }, "sha512-BSeNnyus75C4//NQ9gQt1/csTXyo/8Sb+afLAkzAptFuMsod9HFokGNudZpi/oQV73hnVK+sR+5PVRMd+Dr7YQ=="],
 
     "clone": ["clone@1.0.4", "", {}, "sha512-JQHZ2QMW6l3aH/j6xCqQThY/9OH4D/9ls34cgkUBiEeocRTU04tHfKPBsUK1PqZCUQM7GiA0IIXJSuXHI64Kbg=="],
-
-    "cloudflare-redirect-parser": ["cloudflare-redirect-parser@1.0.0", "", {}, "sha512-puEB3wmP47RICu/CboTHd237Up/r3Nagsr622mJxWgvEVfRxNlKceNfpPieMYDe/E1nYJsf6iempsrkitgQZVw=="],
 
     "collapse-white-space": ["collapse-white-space@2.1.0", "", {}, "sha512-loKTxY1zCOuG4j9f6EPnuyyYkf58RnhhWTvRoZEokgB+WbdXehfjFviyOVYkqzEWz1Q5kRiZdBYS5SwxbQYwzw=="],
 

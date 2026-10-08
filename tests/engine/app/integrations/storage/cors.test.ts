@@ -44,7 +44,7 @@ describe('cloud S3 CORS helpers', () => {
     const origins = collectCloudCORSOrigins()
     expect(origins).toContain(WEB_APP_ORIGIN)
     expect(origins).toContain('https://*.redrob.design')
-    expect(origins).toContain('https://*.redrob-design.pages.dev')
+    expect(origins.some((origin) => origin.includes('pages.dev'))).toBe(false)
     expect(origins).toContain('http://localhost:*')
     expect(origins).toContain('http://127.0.0.1:*')
   })

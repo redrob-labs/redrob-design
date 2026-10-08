@@ -13,10 +13,6 @@ describe('inferS3Region', () => {
     expect(inferS3Region('https://s3-us-east-1.amazonaws.com')).toBe('us-east-1')
   })
 
-  test('uses auto for Cloudflare R2', () => {
-    expect(inferS3Region('https://abc123.r2.cloudflarestorage.com')).toBe('auto')
-  })
-
   test('falls back for custom MinIO hosts', () => {
     expect(inferS3Region('https://minio.example.com')).toBe('us-east-1')
   })

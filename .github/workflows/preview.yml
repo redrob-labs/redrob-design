@@ -1,4 +1,4 @@
-name: Preview
+name: Web build
 
 on:
   pull_request:
@@ -9,14 +9,14 @@ on:
       - '*.md'
 
 concurrency:
-  group: preview-${{ github.event.pull_request.number }}
+  group: web-build-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 permissions:
   contents: read
 
 jobs:
-  preview:
+  web-build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -27,11 +27,3 @@ jobs:
         run: bun run format:check
 
       - run: bun run build
-
-      - name: Upload preview artifact
-        uses: actions/upload-artifact@v7
-        with:
-          name: preview-dist
-          path: dist
-          if-no-files-found: error
-          retention-days: 1
