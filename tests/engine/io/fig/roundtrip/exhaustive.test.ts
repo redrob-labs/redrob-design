@@ -71,8 +71,8 @@ const SPECS: FixtureSpec[] = [
     // from `open-pencil` to `redrob-design`; zstd happens to compress the longer
     // string better, hence the smaller archive. Verified by normalizing the id
     // out of both decompressed data chunks and comparing them byte for byte.
-    g1ExportSize: 497111,
-    g2ExportSize: 497111
+    g1ExportSize: 496397,
+    g2ExportSize: 496397
   }
 ]
 

@@ -84,6 +84,10 @@ export function buildComponentPropertyDefinitionIndex(
 function sameNodeReference(ctx: VerifierContext, a: string, b: string): boolean {
   const aPath = ctx.aNodePaths.get(a)
   const bPath = ctx.bNodePaths.get(b)
+  // A value that resolves to no node on either side is an external library
+  // component key (e.g. INSTANCE_SWAP preferredValues), which must survive
+  // the round trip byte-for-byte rather than as a node path.
+  if (aPath === undefined && bPath === undefined) return a === b
   return aPath !== undefined && aPath === bPath
 }
 

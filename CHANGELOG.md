@@ -70,6 +70,7 @@
 
 ### Fixed
 
+- Keep `.fig` round trips byte-stable for text alignment: re-exporting an imported file no longer adds `LEFT`/`TOP` alignment fields the original omitted.
 - Paint the canvas page in the dark theme's colour until you give the page a colour of its own, as Settings describes; light keeps the `.fig` page default.
 - Load CanvasKit for headless rendering and CLI export on Windows, including from folders with spaces in their path.
 - Show one focus ring on the Home search field, the Redrob composer and grouped inputs instead of a ring around the field and a second one inside it.
