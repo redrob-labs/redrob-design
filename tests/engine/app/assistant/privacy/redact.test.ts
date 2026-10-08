@@ -51,7 +51,7 @@ describe('privacy rules', () => {
   test('secret keys by prefix at every level, random tokens from High up', () => {
     expect(redact('key sk-ant-REDACTEDREDACTEDREDACTED', 'standard')).toBe('key [KEY_1]')
     expect(redact('key AKIAIOSFODNN7EXAMPLE', 'standard')).toBe('key [KEY_1]')
-    const token = 'q8Zr2LmX7vB4nT9kP1wY6sD3fH5jG0cE'
+    const token = 'q8Zr2LmX7vB4nT9kP1wY6sD3fH5jG0cE' // gitleaks:allow - made-up token the redactor must catch
     expect(redact(`token ${token}`)).toBe('token [KEY_1]')
     expect(redact(`token ${token}`, 'standard')).toBe(`token ${token}`)
   })
