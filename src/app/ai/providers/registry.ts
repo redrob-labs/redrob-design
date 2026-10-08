@@ -5,6 +5,7 @@ import { createOpenRouter } from '@openrouter/ai-sdk-provider'
 import { REDROB_CONSOLE_API_BASE } from '@redrob-design/core/constants'
 import type { AIProviderID } from '@redrob-design/core/constants'
 
+import { sessionHeaderFetch } from '@/app/ai/insights/recorder'
 import {
   createAnthropicCompatibleAdapter,
   createOpenAICompatibleAdapter
@@ -28,7 +29,10 @@ const MODEL_PROVIDER_ADAPTERS = {
     create(config, runtime) {
       return redrobAdapter.create(config, {
         ...runtime,
-        fetch: labellingFetch(runtime.fetch ?? ((input, init) => fetch(input, init)))
+        // and the insights session it belongs to (insights/recorder.ts), for the console's cost join
+        fetch: sessionHeaderFetch(
+          labellingFetch(runtime.fetch ?? ((input, init) => fetch(input, init)))
+        )
       })
     }
   },
