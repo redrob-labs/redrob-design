@@ -118,5 +118,17 @@
   "connectRedrobExpired": "승인되기 전에 코드가 만료되었습니다. 다시 시도하세요.",
   "connectRedrobUnreachable": "Redrob Console에 연결할 수 없습니다. 네트워크를 확인하세요.",
   "connectRedrobFailed": "연결이 완료되지 않았습니다. 다시 시도하세요.",
-  "connectRedrobCancel": "취소"
+  "connectRedrobCancel": "취소",
+  "modelGuideOpen": "레드롭 Auto가 고르는 방법",
+  "modelGuideTitle": "모델 가이드",
+  "modelGuideDescription": "직업, 작업, 작업 언어별로 레드롭 Auto가 순서대로 시도하는 모델과 표시된 추론 강도입니다.",
+  "modelGuideLoading": "모델 가이드를 불러오는 중…",
+  "modelGuideUnavailable": "모델 가이드를 불러오지 못했습니다. 연결을 확인하고 다시 시도하세요.",
+  "modelGuideProfession": "직업",
+  "modelGuideTask": "하려는 일",
+  "modelGuideLanguage": "작업 언어",
+  "modelGuideLanguageEn": "영어",
+  "modelGuideLanguageKo": "한국어",
+  "modelGuideLanguageHi": "힌디어",
+  "modelGuideEdition": "{date}판"
 }

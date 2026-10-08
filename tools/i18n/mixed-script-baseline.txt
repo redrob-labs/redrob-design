@@ -17,6 +17,8 @@ ja:ai.connectionTestNetworkFailed
 ja:ai.connectProvider
 ja:ai.customModelID
 ja:ai.getProviderAPIKey
+ja:ai.modelGuideDescription
+ja:ai.modelGuideOpen
 ja:ai.modelID
 ja:ai.modelIDPlaceholder
 ja:ai.modelRoleDesignDescription
@@ -127,6 +129,8 @@ zh-cn:ai.connectionTestNetworkFailed
 zh-cn:ai.connectProvider
 zh-cn:ai.customModelID
 zh-cn:ai.getProviderAPIKey
+zh-cn:ai.modelGuideDescription
+zh-cn:ai.modelGuideOpen
 zh-cn:ai.modelID
 zh-cn:ai.modelIDPlaceholder
 zh-cn:ai.modelRoleDesignDescription
