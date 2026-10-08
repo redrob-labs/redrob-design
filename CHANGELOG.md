@@ -11,6 +11,7 @@
 ### Added
 
 - Share a file with the people you invite, from Share in the editor: Redrob Cloud keeps it end-to-end encrypted, each person gets a role (owner, can edit, can comment or can view), people from other workspaces can be invited by email, a view link opens it for reading with nothing else, and files shared with you are listed on Home and open from a pasted link.
+- Label each Redrob Auto request with its Model Guide profession and task on this device, so Console routes it to the best-ranked model for that work, and show the Model Guide from the Redrob model profile.
 - Add a searchable command palette for editor and application actions.
 - Render triangle and line arrow stroke caps on lines and open vector paths, and choose them from the stroke cap picker.
 - Expose component properties and instance-swap targets through the Figma API and automation.
