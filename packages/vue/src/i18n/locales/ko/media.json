@@ -4,8 +4,8 @@
   "vectorizeProvider": "벡터화 서비스",
   "pexelsAPIKey": "Pexels API 키 (스톡 사진)",
   "unsplashAccessKey": "Unsplash 액세스 키",
-  "stockPhotoToolOptional": "선택 사항 — stock_photo 도구용",
-  "pexelsAlternativeOptional": "선택 사항 — Pexels 대체용",
+  "stockPhotoToolOptional": "선택 사항, stock_photo 도구용",
+  "pexelsAlternativeOptional": "선택 사항, Pexels 대체용",
   "getPexelsAPIKey": "무료 Pexels API 키 발급 →",
   "getUnsplashAccessKey": "무료 Unsplash 액세스 키 발급 →"
 }

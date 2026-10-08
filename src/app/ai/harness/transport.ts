@@ -6,6 +6,8 @@ import type {
   HarnessTurnEvent
 } from '@redrob-design/harness'
 
+import { withTurnContext } from '@/app/assistant/turn/context'
+
 import { spawnHarnessProcess, type HarnessProcess } from './process'
 
 interface PendingRequest {
@@ -70,7 +72,9 @@ export class HarnessChatTransport implements ChatTransport<UIMessage> {
   constructor(
     private readonly sessionId: string,
     private readonly configuration: HarnessSessionConfiguration,
-    private readonly environment: Record<string, string>
+    private readonly environment: Record<string, string>,
+    /** Plan or Run and Design Memory for this turn, read when the turn is sent. */
+    private readonly turnContext: (() => string) | null = null
   ) {}
 
   async sendMessages({
@@ -125,7 +129,10 @@ export class HarnessChatTransport implements ChatTransport<UIMessage> {
         void process.send({
           id: requestId,
           method: 'session.turn',
-          params: { sessionId: this.sessionId, prompt: text }
+          params: {
+            sessionId: this.sessionId,
+            prompt: this.turnContext ? withTurnContext(text, this.turnContext()) : text
+          }
         })
       }
     })

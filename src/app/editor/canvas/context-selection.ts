@@ -10,7 +10,7 @@ export function createCanvasContextSelection(
 ) {
   function selectAtContextPoint(event: MouseEvent) {
     const canvas = canvasRef.value
-    if (!canvas) return
+    if (!canvas || store.state.viewOnly) return
     const rect = canvas.getBoundingClientRect()
     const sx = event.clientX - rect.left
     const sy = event.clientY - rect.top

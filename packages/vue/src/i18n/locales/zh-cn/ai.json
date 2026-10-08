@@ -112,7 +112,7 @@
   "modelsTitle": "模型",
   "connectRedrob": "Connect Redrob",
   "connectRedrobHint": "Sign in to Redrob Console and the key is stored for you.",
-  "connectRedrobWaiting": "Enter {code} at {url} — waiting for approval.",
+  "connectRedrobWaiting": "在 {url} 输入 {code}，然后等待批准。",
   "connectRedrobConnected": "Connected. The workspace key is stored.",
   "connectRedrobDenied": "The request was declined in Console.",
   "connectRedrobExpired": "The code expired before it was approved. Try again.",

@@ -63,6 +63,18 @@ export interface LibraryObjectStore {
   listObjects(prefix: string): Promise<LibraryObjectSummary[]>
 }
 
+/** Plain objects under a prefix, for published sites: written with their own caching. */
+export interface SiteObjectStore {
+  getObject(key: string): Promise<Uint8Array | null>
+  putObject(
+    key: string,
+    bytes: Uint8Array,
+    contentType: string,
+    cacheControl: string
+  ): Promise<void>
+  deleteObject(key: string): Promise<void>
+}
+
 export interface StorageAdapter {
   testConnection(): Promise<StorageConnectionResult>
   listDocuments(): Promise<StorageDocument[]>
@@ -83,6 +95,7 @@ export interface StorageAdapter {
   getThumbnail?(id: string): Promise<Uint8Array | null>
   putThumbnail?(id: string, bytes: Uint8Array): Promise<void>
   libraryObjects?: LibraryObjectStore
+  siteObjects?: SiteObjectStore
 }
 
 export type StoragePreferenceField = {

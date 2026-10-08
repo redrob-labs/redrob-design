@@ -15,5 +15,11 @@
   "bucket": "バケット",
   "region": "リージョン",
   "accessKeyID": "アクセスキー ID",
-  "secretAccessKey": "シークレットアクセスキー"
+  "secretAccessKey": "シークレットアクセスキー",
+  "publishHeading": "公開サイト",
+  "publishDescription": "公開すると、出荷したページをこのバケットにアップロードします。ファイルを同期する場所とは別です。バケットの公開はプロバイダー側で設定してください。Redrob が読み取り権限を変えることはありません。",
+  "publicSiteURL": "公開サイトのURL",
+  "publicSiteURLHint": "このバケットが配信されるアドレス。例: https://site.example.com",
+  "siteURLNotHttps": "https のアドレスを使ってください。",
+  "siteURLInvalid": "クエリや # を含まない完全なウェブアドレスを入力してください。"
 }

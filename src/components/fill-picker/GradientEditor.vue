@@ -36,6 +36,7 @@ function listStopClass(active: boolean) {
     <div>
       <div class="mb-2 w-28">
         <AppSelect
+          :label="panels.gradientType"
           :model-value="root.subtype"
           :options="root.subtypes"
           @update:model-value="root.actions.setSubtype($event)"
@@ -74,6 +75,8 @@ function listStopClass(active: boolean) {
           <span class="text-[11px] text-muted">{{ panels.stops }}</span>
           <Tip :label="panels.addStop">
             <button
+              type="button"
+              :aria-label="panels.addStop"
               class="flex size-4 cursor-pointer items-center justify-center rounded border-none bg-transparent p-0 text-muted hover:text-surface"
               data-test-id="fill-picker-add-stop"
               @click="root.actions.addStop"
@@ -108,6 +111,8 @@ function listStopClass(active: boolean) {
             @click.stop
           />
           <button
+            type="button"
+            :aria-label="panels.selectStop({ index: String(idx + 1) })"
             class="size-4 shrink-0 cursor-pointer rounded border border-border p-0"
             :style="{ background: s.css }"
             @click.stop="s.actions.select"

@@ -13,6 +13,7 @@ import {
 } from '@/app/automation/mcp/preferences'
 import { mcpRuntime, refreshMCPRuntime, restartMCPRuntime } from '@/app/automation/mcp/runtime'
 import { isTauri } from '@/app/tauri/env'
+import SettingsSectionHeader from '@/components/settings/layout/SettingsSectionHeader.vue'
 import AppInput from '@/components/ui/AppInput.vue'
 import AppSwitch from '@/components/ui/AppSwitch.vue'
 
@@ -83,10 +84,10 @@ function enableAllTools(): void {
 
 <template>
   <section class="flex flex-col gap-4" data-test-id="settings-mcp-automation-panel">
-    <div>
-      <h3 class="text-xs font-semibold text-surface">{{ settings.automation }}</h3>
-      <p class="mt-1 text-[11px] text-muted">{{ automation.description }}</p>
-    </div>
+    <SettingsSectionHeader>
+      {{ settings.sectionAgentsAndMCP }}
+      <template #description>{{ automation.description }}</template>
+    </SettingsSectionHeader>
 
     <div class="rounded border border-border bg-panel p-3 text-[11px]">
       <dl class="grid grid-cols-[7rem_1fr] gap-x-3 gap-y-2">
@@ -96,9 +97,9 @@ function enableAllTools(): void {
             class="size-2 rounded-full"
             :class="
               mcpRuntime.status === 'running'
-                ? 'bg-green-500'
+                ? 'bg-success'
                 : mcpRuntime.status === 'error'
-                  ? 'bg-red-500'
+                  ? 'bg-error'
                   : 'bg-muted'
             "
           />
@@ -166,7 +167,7 @@ function enableAllTools(): void {
 
     <p
       v-if="mcpRuntime.error"
-      class="rounded border border-red-500/30 bg-red-500/10 p-3 text-[11px] text-red-400"
+      class="rounded border border-error-border bg-error-bg p-3 text-[11px] text-error"
     >
       {{ mcpRuntime.error }}
     </p>
@@ -255,7 +256,7 @@ function enableAllTools(): void {
     <div>
       <button
         type="button"
-        class="rounded bg-accent px-3 py-1.5 text-[11px] font-medium text-white hover:bg-accent/90 disabled:opacity-50"
+        class="rounded bg-accent px-3 py-1.5 text-[11px] font-medium text-on-accent hover:bg-accent-hover disabled:opacity-50"
         :disabled="mcpRuntime.status === 'starting' || mcpRuntime.externallyManaged"
         data-test-id="settings-mcp-restart"
         @click="restart"

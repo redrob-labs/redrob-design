@@ -74,6 +74,9 @@ function cancelFromEscape(event: KeyboardEvent) {
           <div class="mb-2 flex items-center gap-0.5">
             <Tip :label="panels.solid">
               <button
+                type="button"
+                :aria-label="panels.solid"
+                :aria-pressed="root.category === 'SOLID'"
                 :data-active="root.category === 'SOLID' || undefined"
                 :class="tabClass(root.category === 'SOLID')"
                 data-test-id="fill-picker-tab-solid"
@@ -82,8 +85,11 @@ function cancelFromEscape(event: KeyboardEvent) {
                 <icon-lucide-square class="size-3.5" />
               </button>
             </Tip>
-            <Tip :label="panels.linearGradient">
+            <Tip :label="panels.gradient">
               <button
+                type="button"
+                :aria-label="panels.gradient"
+                :aria-pressed="root.category === 'GRADIENT'"
                 :data-active="root.category === 'GRADIENT' || undefined"
                 :class="tabClass(root.category === 'GRADIENT')"
                 data-test-id="fill-picker-tab-gradient"
@@ -94,6 +100,9 @@ function cancelFromEscape(event: KeyboardEvent) {
             </Tip>
             <Tip :label="panels.image">
               <button
+                type="button"
+                :aria-label="panels.image"
+                :aria-pressed="root.category === 'IMAGE'"
                 :data-active="root.category === 'IMAGE' || undefined"
                 :class="tabClass(root.category === 'IMAGE')"
                 data-test-id="fill-picker-tab-image"

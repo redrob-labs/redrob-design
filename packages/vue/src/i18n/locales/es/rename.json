@@ -1,5 +1,6 @@
 {
   "title": "Renombrar",
+  "layersOne": "Renombrar 1 capa",
   "layers": "Renombrar {count} capas",
   "preview": "Vista previa",
   "match": "Coincidencia",

@@ -16,7 +16,7 @@ const { ai } = useI18n()
       <button
         type="button"
         data-test-id="provider-setup-open-settings"
-        class="w-full rounded bg-accent py-1.5 text-xs font-medium text-white hover:bg-accent/90"
+        class="w-full rounded bg-accent py-1.5 text-xs font-medium text-on-accent hover:bg-accent-hover"
         @click="openSettingsDialog('ai')"
       >
         {{ ai.openProviderSettings }}

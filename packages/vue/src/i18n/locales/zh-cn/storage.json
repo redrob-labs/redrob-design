@@ -15,5 +15,11 @@
   "bucket": "存储桶",
   "region": "区域",
   "accessKeyID": "访问密钥 ID",
-  "secretAccessKey": "机密访问密钥"
+  "secretAccessKey": "机密访问密钥",
+  "publishHeading": "发布站点",
+  "publishDescription": "发布会把交付的页面上传到这个存储桶，与文件同步的位置分开。请在服务商处将存储桶设为公开；Redrob 从不更改谁可以读取它。",
+  "publicSiteURL": "公开站点网址",
+  "publicSiteURLHint": "这个存储桶对外提供的地址，例如 https://site.example.com。",
+  "siteURLNotHttps": "请使用 https 地址。",
+  "siteURLInvalid": "请输入完整网址，不要带查询或 # 部分。"
 }

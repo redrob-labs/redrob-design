@@ -76,6 +76,12 @@ export class LibraryService implements ComponentCatalog {
     writeLibraryCatalogSource('storage')
   }
 
+  /** The signed-in workspace's libraries in Redrob Cloud. */
+  useConsoleCatalog(catalog: LibraryCatalog): void {
+    this.#routedCatalog?.useRemote('console', catalog)
+    writeLibraryCatalogSource('console')
+  }
+
   get summaries() {
     return this.#summaries
   }

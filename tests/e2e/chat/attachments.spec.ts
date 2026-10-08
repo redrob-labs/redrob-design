@@ -36,7 +36,7 @@ test('current selection toggles and remains visible in history', async ({
 
 test('image drafts can be attached and removed', async ({ configuredChat: chat }) => {
   const chooser = chat.page.waitForEvent('filechooser')
-  await chat.page.getByRole('button', { name: 'Attach images' }).click()
+  await chat.page.getByRole('button', { name: 'Add files' }).click()
   await (await chooser).setFiles([PILOT, PYTHON])
 
   await expect(chat.page.getByText('pilot_avatar.png', { exact: true })).toBeVisible()
@@ -49,7 +49,7 @@ test('image drafts can be attached and removed', async ({ configuredChat: chat }
 test('sent images and text appear immediately in history', async ({ configuredChat: chat }) => {
   await chat.input.fill('Use these images for the new layout')
   const chooser = chat.page.waitForEvent('filechooser')
-  await chat.page.getByRole('button', { name: 'Attach images' }).click()
+  await chat.page.getByRole('button', { name: 'Add files' }).click()
   await (await chooser).setFiles([PILOT, PYTHON])
   await chat.sendButton.click()
 
@@ -72,7 +72,7 @@ test('node context stays hidden when combined with an image', async ({ configure
   await chat.input.fill('Use this reference')
   await chat.page.getByRole('button', { name: 'Add current selection as context' }).click()
   const chooser = chat.page.waitForEvent('filechooser')
-  await chat.page.getByRole('button', { name: 'Attach images' }).click()
+  await chat.page.getByRole('button', { name: 'Add files' }).click()
   await (await chooser).setFiles(PILOT)
   await chat.sendButton.click()
 

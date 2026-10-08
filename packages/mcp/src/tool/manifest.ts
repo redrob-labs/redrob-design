@@ -91,6 +91,15 @@ export function createToolDescriptors(filesystemEnabled: boolean): ToolDescripto
       availability: 'default',
       capabilities: [],
       enabled: true
+    },
+    {
+      name: 'get_handoff',
+      description:
+        'Get the page handed off from Redrob Design: its brief, Page.jsx, tokens.json and resource links.',
+      effect: 'read',
+      availability: 'default',
+      capabilities: ['document:read'],
+      enabled: true
     }
   )
   return descriptors

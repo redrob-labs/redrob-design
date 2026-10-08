@@ -1,7 +1,6 @@
 import { useClipboard } from '@vueuse/core'
 import { computed, inject, provide, proxyRefs } from 'vue'
 import type { InjectionKey, ShallowUnwrapRef } from 'vue'
-import { useRouter } from 'vue-router'
 import IconFilePlus from '~icons/lucide/file-plus'
 import IconFolderOpen from '~icons/lucide/folder-open'
 import IconImageDown from '~icons/lucide/image-down'
@@ -10,19 +9,20 @@ import IconZoomIn from '~icons/lucide/zoom-in'
 
 import { useEditorCommands, useI18n } from '@redrob-design/vue'
 
+import { memberLink, shareDocument } from '@/app/cloud/files'
 import { DEFAULT_COLLAB_STATE, useCollabInjected } from '@/app/collab/use'
 import { useEditorStore } from '@/app/editor/active-store'
 import { toolIcons } from '@/app/editor/icons'
 import { useNotificationMessages } from '@/app/i18n/notifications'
+import { signedIn } from '@/app/integrations/console'
+import { openSettingsDialog } from '@/app/settings/dialog'
 import { openFileDialog } from '@/app/shell/menu/use'
 import { toast } from '@/app/shell/ui'
 import type { ToolbarActionItem } from '@/components/Toolbar/types'
-import { getShareURL } from '@/constants'
 
 type MenuAction = ToolbarActionItem
 
 function createMobileHudContext() {
-  const router = useRouter()
   const collab = useCollabInjected()
   const store = useEditorStore()
   const { copy } = useClipboard()
@@ -57,18 +57,23 @@ function createMobileHudContext() {
     getCommand('edit.redo').run()
   }
 
-  function share() {
-    if (!collab) return
-    const roomId = collab.shareCurrentDoc()
-    void router.push(`/share/${roomId}`)
-    void copy(getShareURL(roomId))
-    toast.info(notifications.value.linkCopied)
+  /** Shares the open file through Redrob Cloud and copies its link, or asks to sign in first. */
+  async function share() {
+    if (!signedIn.value) {
+      openSettingsDialog('cloud')
+      return
+    }
+    try {
+      const binding = await shareDocument(store)
+      void copy(memberLink(binding.fileId))
+      toast.info(notifications.value.linkCopied)
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : String(error))
+    }
   }
 
   function disconnect() {
-    if (!collab) return
-    collab.disconnect()
-    void router.push('/')
+    collab?.disconnect()
   }
 
   function toggleFollowPeer(clientId: number) {

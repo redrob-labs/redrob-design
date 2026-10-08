@@ -8,7 +8,7 @@ export class ChatHarness {
   }
 
   get chatTab() {
-    return this.page.getByRole('tab', { name: 'AI' })
+    return this.page.getByRole('tab', { name: 'Redrob' })
   }
 
   get designTab() {
@@ -20,7 +20,7 @@ export class ChatHarness {
   }
 
   get sendButton() {
-    return this.page.getByTestId('chat-send-button')
+    return this.page.getByTestId('chat-composer').locator('[data-slot="composer-send"]')
   }
 
   get profileTrigger() {
@@ -51,7 +51,7 @@ export class ChatHarness {
     await this.page.locator('[data-model-id]').first().click()
     await this.page.getByTestId('settings-model-provider').click()
     await this.page.getByRole('option', { name: 'OpenRouter' }).click()
-    await this.page.getByLabel('Name').fill('Claude Sonnet')
+    await this.page.getByLabel('Name', { exact: true }).fill('Claude Sonnet')
     await this.apiKeyInput.fill(apiKey)
     await this.page.getByRole('button', { name: 'Save model' }).click()
     await this.page.getByTestId('app-settings-done').click()

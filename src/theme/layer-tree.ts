@@ -9,7 +9,7 @@ const layerTreeTheme = {
     label: 'min-w-0 flex-1 truncate',
     actions: 'flex shrink-0 items-center gap-0.5',
     action:
-      'flex size-4 items-center justify-center rounded text-current outline-none hover:bg-white/15 focus-visible:ring-1 focus-visible:ring-panel-focus',
+      'flex size-4 items-center justify-center rounded text-current outline-none hover:bg-current/15 focus-visible:ring-1 focus-visible:ring-panel-focus',
     actionIcon: 'size-3',
     dropIndicator: 'pointer-events-none absolute bg-accent',
     renameRow: 'flex w-full items-center gap-1 py-1',

@@ -12,6 +12,10 @@ Redrob Design is an open-source, Figma-compatible design editor — fully local,
 Throughout this guide, keyboard shortcuts use Mac notation: <kbd>⌘</kbd> = <kbd>Command</kbd> (<kbd>Ctrl</kbd> on Windows/Linux), <kbd>⌥</kbd> = <kbd>Option</kbd> (<kbd>Alt</kbd>), <kbd>⇧</kbd> = <kbd>Shift</kbd>.
 :::
 
+## Working with Redrob
+
+- [Working with Redrob](./working-with-redrob) — Describe and Edit, Plan, Design Memory, the free page check, changes, receipts and Ship
+
 ## Getting Around
 
 - [Canvas Navigation](./canvas-navigation) — panning, zooming, and the hand tool

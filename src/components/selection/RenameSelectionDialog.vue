@@ -30,7 +30,10 @@ const canSubmit = computed(() => hasRenameInput.value && preview.value.error ===
 const hasAscendingNumber = computed(() => /\$n+/.test(replacement.value))
 const hasDescendingNumber = computed(() => /\$N+/.test(replacement.value))
 const showStartNumber = computed(() => hasAscendingNumber.value || hasDescendingNumber.value)
-const title = computed(() => rename.value.layers({ count: String(selectedNodes.value.length) }))
+const title = computed(() => {
+  const count = selectedNodes.value.length
+  return count === 1 ? rename.value.layersOne : rename.value.layers({ count: String(count) })
+})
 
 watch(
   () => store.state.renameSelectionOpen,
@@ -143,7 +146,7 @@ function submit() {
       <button
         type="button"
         :disabled="!canSubmit"
-        class="h-8 cursor-pointer rounded bg-accent px-3 text-xs font-medium text-white disabled:cursor-default disabled:opacity-40"
+        class="h-8 cursor-pointer rounded bg-accent px-3 text-xs font-medium text-on-accent disabled:cursor-default disabled:opacity-40"
         @click="submit"
       >
         {{ rename.title }}

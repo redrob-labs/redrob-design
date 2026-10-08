@@ -3,6 +3,11 @@ import type { StorageDocumentBinding } from '@/app/integrations/storage/types'
 export type DocumentSourceIdentity = Readonly<{
   handle: FileSystemFileHandle | null
   path: string | null
+  /**
+   * The Redrob Cloud file this document is, when it is one. Comments, versions and the assistant
+   * thread key on it, so everyone sharing the file shares them; saving a local copy drops it.
+   */
+  cloudFileId?: string | null
 }>
 
 export type DocumentSourceAccess = {

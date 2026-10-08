@@ -2,6 +2,7 @@ import { evalCode } from './analyze'
 import { calc } from './calc'
 import { render } from './create'
 import { describe } from './describe'
+import { addLanguageVersion } from './language'
 import {
   setFill,
   setLayout,
@@ -12,6 +13,7 @@ import {
   setTextProperties,
   updateNode
 } from './modify'
+import { askPlanQuestions, createDirections } from './plan'
 import { findNodes, getJSX, getNode, getSelection } from './read'
 import type { ToolDef } from './schema'
 import { stockPhoto } from './stock-photo'
@@ -28,6 +30,10 @@ export const CORE_TOOLS: ToolDef[] = [
   getNode,
   findNodes,
   getJSX,
+  // Plan
+  askPlanQuestions,
+  createDirections,
+  addLanguageVersion,
   // Create
   render,
   // Modify

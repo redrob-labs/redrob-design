@@ -1,4 +1,5 @@
 import { expect, test } from '#tests/helpers/chat/fixture'
+import { setAppTheme, tokenColor } from '#tests/helpers/theme'
 
 test('completed responses release streaming parser history', async ({ configuredChat: chat }) => {
   await chat.submit('Show a code block')
@@ -11,20 +12,16 @@ test('completed responses release streaming parser history', async ({ configured
 test('code blocks follow light and dark themes', async ({ configuredChat: chat }) => {
   await chat.submit('Show a code block')
   const code = chat.assistantMessage().locator('.shiki').first()
-  await expect(code).toHaveCSS('background-color', 'rgb(30, 30, 30)')
-  await expect(code.locator('span').filter({ hasText: 'const' }).first()).not.toHaveCSS(
-    'color',
-    'rgb(240, 240, 240)'
-  )
+  // The block sits on the input surface token in either theme.
+  await expect(code).toHaveCSS('background-color', await tokenColor(chat.page, '--color-input'))
+  const keyword = code.locator('span').filter({ hasText: 'const' }).first()
+  const darkKeyword = await keyword.evaluate((element) => getComputedStyle(element).color)
 
-  await chat.page.evaluate(async () => {
-    const themeModulePath = '/src/app/shell/theme.ts'
-    const themeModule = await import(themeModulePath)
-    themeModule.useAppTheme().setTheme('light')
-  })
-  await chat.page.waitForFunction(() => document.documentElement.dataset.theme === 'light')
+  await setAppTheme(chat.page, 'light')
   await expect(chat.page.locator('.chat-markdown').last()).toHaveClass(/light/)
-  await expect(code).toHaveCSS('background-color', 'rgb(255, 255, 255)')
+  await expect(code).toHaveCSS('background-color', await tokenColor(chat.page, '--color-input'))
+  // Syntax colours switch with the theme too.
+  await expect(keyword).not.toHaveCSS('color', darkKeyword)
 })
 
 test('Markdown blocks unsafe links and cross-origin images', async ({ configuredChat: chat }) => {

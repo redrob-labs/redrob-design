@@ -21,7 +21,7 @@ const menuCls = useMenuUI({
   <DropdownMenuRoot>
     <DropdownMenuTrigger as-child>
       <button
-        class="flex size-8 cursor-pointer items-center justify-center rounded-full border border-white/10 bg-panel/70 shadow-md backdrop-blur-xl select-none active:bg-hover"
+        class="flex size-8 cursor-pointer items-center justify-center rounded-full border border-border bg-panel/70 shadow-md backdrop-blur-xl select-none active:bg-hover"
       >
         <icon-lucide-menu class="size-3.5 text-surface" />
       </button>

@@ -1,5 +1,4 @@
 import { createGuideOverlayState } from '#core/canvas/guides/types'
-import { CANVAS_BG_COLOR } from '#core/constants'
 import type { EditorState, EditorViewState } from '#core/editor/types'
 
 export function createDefaultEditorViewState(pageId: string): EditorViewState {
@@ -14,13 +13,14 @@ export function createDefaultEditorViewState(pageId: string): EditorViewState {
     layoutInsertIndicator: null,
     hoveredNodeId: null,
     measurementMode: 'off',
+    viewOnly: false,
     editingTextId: null,
     penState: null,
     penCursorX: null,
     penCursorY: null,
     autoLayoutHover: null,
     panX: 0,
-    pageColor: { ...CANVAS_BG_COLOR },
+    pageColor: null,
     panY: 0,
     zoom: 1,
     navigation: { phase: 'idle', generation: 0, lastInputAt: 0 },
@@ -43,7 +43,7 @@ export function copyEditorViewState(source: EditorViewState): EditorViewState {
     layoutInsertIndicator: structuredClone(source.layoutInsertIndicator),
     penState: structuredClone(source.penState),
     autoLayoutHover: structuredClone(source.autoLayoutHover),
-    pageColor: { ...source.pageColor },
+    pageColor: source.pageColor ? { ...source.pageColor } : null,
     navigation: { ...source.navigation },
     nodeEditState: structuredClone(source.nodeEditState)
   }

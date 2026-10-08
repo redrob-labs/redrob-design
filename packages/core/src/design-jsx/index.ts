@@ -74,5 +74,14 @@ export { transformDesignJSXExpression } from './transform'
 
 import jsxReference from '#core/tools/prompts/jsx-reference.md?raw'
 
-export { sceneNodeToJSX, selectionToJSX, type JSXFormat } from '#core/io/formats/jsx'
+export {
+  exportDTCG,
+  exportTokensCSS,
+  sceneNodeToJSX,
+  selectionToJSX,
+  tokenCSSName,
+  type DTCGGroup,
+  type DTCGToken,
+  type JSXFormat
+} from '#core/io/formats/jsx'
 export const JSX_REFERENCE: string = jsxReference

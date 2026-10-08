@@ -1,5 +1,6 @@
 {
   "title": "名前を変更",
+  "layersOne": "1 個のレイヤー名を変更",
   "layers": "{count} 個のレイヤー名を変更",
   "preview": "プレビュー",
   "match": "一致",

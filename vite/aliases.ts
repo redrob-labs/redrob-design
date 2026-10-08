@@ -52,6 +52,12 @@ export function createRedrobAliases(rootDir: string) {
     { find: '@redrob-design/vue', replacement: resolve(rootDir, 'packages/vue/src') },
     { find: /^@redrob-design\/core$/, replacement: resolve(rootDir, 'packages/core/src/index.ts') },
     { find: '@redrob-design/core', replacement: resolve(rootDir, 'packages/core/src') },
+    // The package's `browser` build is a global script with no exports; its CommonJS
+    // entry has none of Node's modules and pre-bundles cleanly for the browser.
+    {
+      find: /^@acemir\/cssom$/,
+      replacement: resolve(rootDir, 'node_modules/@acemir/cssom/lib/index.js')
+    },
     {
       find: 'opentype.js',
       replacement: resolve(rootDir, 'node_modules/opentype.js/dist/opentype.mjs')

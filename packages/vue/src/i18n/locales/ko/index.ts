@@ -2,24 +2,34 @@ import type { ComponentsJSON } from '@nanostores/i18n'
 
 import ai from './ai.json'
 import automation from './automation.json'
+import cloud from './cloud.json'
 import code from './code.json'
 import collaboration from './collaboration.json'
 import commands from './commands.json'
+import comments from './comments.json'
 import common from './common.json'
+import composer from './composer.json'
 import credentials from './credentials.json'
 import diagnostics from './diagnostics.json'
 import editor from './editor.json'
 import files from './files.json'
 import fonts from './fonts.json'
+import history from './history.json'
+import home from './home.json'
 import media from './media.json'
 import menu from './menu.json'
 import pages from './pages.json'
 import panels from './panels.json'
+import plan from './plan.json'
 import recovery from './recovery.json'
 import rename from './rename.json'
 import rendering from './rendering.json'
+import review from './review.json'
 import settings from './settings.json'
+import sharing from './sharing.json'
+import ship from './ship.json'
 import storage from './storage.json'
+import thread from './thread.json'
 import tools from './tools.json'
 import updates from './updates.json'
 import variableTypes from './variable-types.json'
@@ -27,7 +37,17 @@ import variables from './variables.json'
 
 export default {
   ai,
+  ship,
+  plan,
+  review,
+  thread,
+  home,
+  composer,
   automation,
+  cloud,
+  sharing,
+  history,
+  comments,
   code,
   collaboration,
   commands,

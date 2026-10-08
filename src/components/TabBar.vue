@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { TabsList, TabsRoot, TabsTrigger } from 'reka-ui'
 import { tv } from 'tailwind-variants'
 
+import MainMenu from '@/components/main-menu/MainMenu.vue'
 import PreparationIndicator from '@/components/preparation/tab/Indicator.vue'
 import Tip from '@/components/ui/Tip.vue'
 import tabBarTheme from '@/theme/tab-bar'
@@ -44,8 +45,10 @@ function onClose(e: MouseEvent, tabId: string) {
     v-if="tabs.length > 0"
     v-model="modelValue"
     activation-mode="automatic"
+    data-test-id="tabbar"
     :class="baseStyles.root()"
   >
+    <MainMenu />
     <TabsList :class="baseStyles.list()">
       <TabsTrigger
         v-for="tab in tabs"
@@ -59,16 +62,16 @@ function onClose(e: MouseEvent, tabId: string) {
         <icon-lucide-house v-if="tab.isHome" :class="baseStyles.icon()" />
         <PreparationIndicator v-else-if="tab.isPreparing" :progress="tab.preparationProgress" />
         <icon-lucide-file v-else :class="baseStyles.icon()" />
-        <span :class="baseStyles.label()">{{ tab.isHome ? files.newTab : tab.name }}</span>
+        <span :class="baseStyles.label()">{{ tab.isHome ? files.homeTab : tab.name }}</span>
         <Tip
           v-if="!tab.isHome || tabs.length > 1"
-          :label="files.closeTab({ name: tab.isHome ? files.newTab : tab.name })"
+          :label="files.closeTab({ name: tab.isHome ? files.homeTab : tab.name })"
         >
           <button
             data-test-id="tabbar-close"
             :class="tabBarStyles({ active: tab.isActive }).close()"
             :data-active="tab.isActive || undefined"
-            :aria-label="files.closeTab({ name: tab.isHome ? files.newTab : tab.name })"
+            :aria-label="files.closeTab({ name: tab.isHome ? files.homeTab : tab.name })"
             tabindex="-1"
             @click="onClose($event, tab.id)"
           >
@@ -87,5 +90,8 @@ function onClose(e: MouseEvent, tabId: string) {
         <icon-lucide-plus :class="baseStyles.newIcon()" />
       </button>
     </Tip>
+    <div data-test-id="tabbar-end" :class="baseStyles.end()">
+      <slot name="end" />
+    </div>
   </TabsRoot>
 </template>

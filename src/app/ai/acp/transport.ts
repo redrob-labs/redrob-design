@@ -16,6 +16,7 @@ import {
 
 import { formatUnknownError } from '@/app/ai/chat/failure'
 import SYSTEM_PROMPT from '@/app/ai/chat/system-prompt.md?raw'
+import { withTurnContext } from '@/app/assistant/turn/context'
 import { describeDiagnosticError, recordACPTransportFailure } from '@/app/diagnostics'
 import { buildACPMCPServers } from '@/app/integrations/mcp'
 
@@ -135,10 +136,18 @@ export class ACPChatTransport implements ChatTransport<UIMessage> {
   private modelId: string
   private sentContext = false
   private destroying = false
+  private turnContext: (() => string) | null
 
-  constructor(options: { agentDef: ACPAgentDef; cwd?: string; modelId?: string }) {
+  constructor(options: {
+    agentDef: ACPAgentDef
+    cwd?: string
+    modelId?: string
+    /** Plan or Run and Design Memory for this turn, read when the turn is sent. */
+    turnContext?: () => string
+  }) {
     this.agentDef = options.agentDef
     this.cwd = options.cwd ?? '.'
+    this.turnContext = options.turnContext ?? null
     this.modelId =
       options.agentDef.id === REDROB_CODE_AGENT_ID
         ? normalizeRedrobCodeModelId(options.modelId)
@@ -166,7 +175,8 @@ export class ACPChatTransport implements ChatTransport<UIMessage> {
       this.session = await this.spawnAgent()
     }
 
-    const promptText = this.sentContext ? text : `${SYSTEM_PROMPT}\n\n${text}`
+    const turnText = this.turnContext ? withTurnContext(text, this.turnContext()) : text
+    const promptText = this.sentContext ? turnText : `${SYSTEM_PROMPT}\n\n${turnText}`
     this.sentContext = true
 
     const { connection, sessionId } = this.session

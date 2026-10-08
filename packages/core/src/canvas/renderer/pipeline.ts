@@ -2,13 +2,20 @@ import type { Canvas } from 'canvaskit-wasm'
 
 import type { SceneGraph } from '@redrob-design/scene-graph'
 import { computeDescendantVisualBounds } from '@redrob-design/scene-graph/geometry'
+import type { Color } from '@redrob-design/scene-graph/primitives'
 
 import type { RenderOverlays, SkiaRenderer } from '#core/canvas/renderer'
 import type { EditorState } from '#core/editor/types'
 import { emitNavigationTrace } from '#core/profiler'
 
+import { applyCanvasThemePaints, resolvePageColor } from './canvas-theme'
 import { drawChromePass, drawLabelPass, drawOverlayPass } from './overlay-pass'
 import { renderSceneBacking, updateSceneBackingPreviewState } from './retained-backing'
+import { invalidateScenePicture } from './state'
+
+function sameColor(a: Color, b: Color): boolean {
+  return a.r === b.r && a.g === b.g && a.b === b.b && a.a === b.a
+}
 
 export function renderSceneToCanvas(
   r: SkiaRenderer,
@@ -47,8 +54,20 @@ export function renderFromEditorState(
   r.viewportWidth = viewportWidth
   r.viewportHeight = viewportHeight
   r.showRulers = showRulers
-  r.pageColor = state.pageColor
   r.rulerTheme = state.rulerTheme ?? null
+  const canvasTheme = state.canvasTheme ?? null
+  if (canvasTheme !== r.canvasTheme) {
+    r.canvasTheme = canvasTheme
+    applyCanvasThemePaints(r)
+  }
+  const pageColor = resolvePageColor(state.pageColor, canvasTheme)
+  // The retained backing and the tiles are cleared with the page colour when they are built, so a
+  // new colour (a theme switch on an uncoloured page) has to rebuild them.
+  if (!sameColor(pageColor, r.pageColor)) {
+    r.pageColor = pageColor
+    invalidateScenePicture(r)
+    r.tiledScene.invalidateStructure()
+  }
   r.pageId = state.currentPageId
   r.navigationPhase = state.navigation.phase
   r.navigationGeneration = state.navigation.generation
@@ -77,6 +96,7 @@ export function renderFromEditorState(
         : null,
       nodeEditState: state.nodeEditState ?? null,
       remoteCursors: state.remoteCursors,
+      commentPins: state.commentPins,
       autoLayoutHover: state.autoLayoutHover
     },
     state.sceneVersion,

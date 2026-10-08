@@ -37,10 +37,15 @@ import { findTabByFileIdentity } from '@/app/tabs/open/identity'
 
 export type TabKind = 'home' | 'document'
 
+/** Describe: talk about the file and point at it. Edit: change it directly. */
+export type TabMode = 'describe' | 'edit'
+
 export interface Tab {
   id: string
   store: EditorStore
   kind: TabKind
+  mode: TabMode
+  readOnly?: boolean // a shared file opened by someone who may not change it
 }
 
 const io = new IORegistry(BUILTIN_IO_FORMATS)
@@ -94,14 +99,14 @@ export function getTabsSnapshot(): Tab[] {
 
 export function createTab(store?: EditorStore, initialGraph?: SceneGraph): Tab {
   const s = store ?? createEditorStore(initialGraph)
-  const tab: Tab = { id: generateTabId(), store: s, kind: 'document' }
+  const tab: Tab = { id: generateTabId(), store: s, kind: 'document', mode: 'edit' }
   tabsRef.value = [...tabsRef.value, tab]
   activateTab(tab)
   return tab
 }
 
 export function createHomeTab(): Tab {
-  const tab: Tab = { id: generateTabId(), store: createEditorStore(), kind: 'home' }
+  const tab: Tab = { id: generateTabId(), store: createEditorStore(), kind: 'home', mode: 'edit' }
   tabsRef.value = [...tabsRef.value, tab]
   activateTab(tab)
   return tab
@@ -114,6 +119,27 @@ export function leaveHome(tabId: string): void {
   if (tab.kind !== 'home') return
   tabsRef.value = tabsRef.value.with(tabIndex, { ...tab, kind: 'document' })
 }
+
+/** Switches a tab between Describe and Edit; Describe stops direct editing. */
+export function setTabMode(tabId: string, mode: TabMode): void {
+  const tabIndex = tabsRef.value.findIndex((candidate) => candidate.id === tabId)
+  if (tabIndex === -1) return
+  const tab = tabsRef.value[tabIndex]
+  tab.store.setViewOnly(mode === 'describe' || tab.readOnly === true)
+  if (tab.mode === mode) return
+  tabsRef.value = tabsRef.value.with(tabIndex, { ...tab, mode })
+}
+
+/** Makes a tab view-only whatever its mode, or lets its mode decide again. */
+export function setTabReadOnly(tabId: string, readOnly: boolean): void {
+  tabsRef.value = tabsRef.value.map((tab) => {
+    if (tab.id !== tabId) return tab
+    tab.store.setViewOnly(readOnly || tab.mode === 'describe')
+    return { ...tab, readOnly }
+  })
+}
+
+export const activeTabMode = computed<TabMode>(() => activeTab.value?.mode ?? 'edit')
 
 export function createDocumentInCurrentTab(): Tab {
   const current = activeTab.value
@@ -183,7 +209,8 @@ function isDOMImportFile(file: File): boolean {
   return /\.(html?|xhtml)$/i.test(file.name)
 }
 
-function reusableTabStore(): { store: EditorStore; created: boolean } {
+/** The current tab if it is Home or untouched, else a new one; `created` means close it on failure. */
+export function reusableTabStore(): { store: EditorStore; created: boolean } {
   const current = activeTab.value
   if (current?.kind === 'home') {
     leaveHome(current.id)

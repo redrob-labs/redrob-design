@@ -1,8 +1,8 @@
 const switchTheme = {
   slots: {
-    root: 'relative inline-flex shrink-0 cursor-pointer items-center rounded-full border border-border bg-panel-field outline-none transition-colors hover:border-border-strong focus-visible:ring-1 focus-visible:ring-panel-focus data-[state=checked]:border-accent data-[state=checked]:bg-accent',
+    root: 'relative inline-flex shrink-0 cursor-pointer items-center rounded-full border border-border bg-panel-field outline-none transition-colors hover:border-border-strong focus-visible:ring-1 focus-visible:ring-panel-focus data-[state=checked]:border-accent data-[state=checked]:bg-accent data-[state=checked]:hover:border-accent-hover data-[state=checked]:hover:bg-accent-hover',
     thumb:
-      'pointer-events-none block rounded-full bg-muted shadow-sm transition-transform data-[state=checked]:bg-white'
+      'pointer-events-none block rounded-full bg-muted shadow-sm transition-transform ease-settle data-[state=checked]:bg-on-accent'
   },
   variants: {
     size: {

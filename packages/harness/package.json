@@ -1,6 +1,6 @@
 {
   "name": "@redrob-design/harness",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "private": false,
   "license": "MIT",
   "description": "Optional Redrob Design companion CLI for coding-agent Harness sessions",

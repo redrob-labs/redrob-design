@@ -8,7 +8,7 @@ export const credentialsMessageDefaults = {
   backendBrowser: 'encrypted browser storage',
   backendMemory: 'this session only',
   remember: 'Remember credentials on this browser',
-  savedReplace: 'Key saved — enter new to replace',
+  savedReplace: 'Key saved. Enter a new one to replace it',
   getAPIKey: 'Get API key →'
 } as const
 

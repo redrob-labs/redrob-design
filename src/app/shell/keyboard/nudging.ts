@@ -13,7 +13,7 @@ const NUDGE_DELTAS: Partial<Record<string, [number, number]>> = {
 
 export function bindNudgeKeys(store: EditorStore) {
   useEventListener(window, 'keydown', (e: KeyboardEvent) => {
-    if (isEditing(e) || store.state.editingTextId) return
+    if (isEditing(e) || store.state.editingTextId || store.state.viewOnly) return
     if (isReservedModShortcut(e)) e.preventDefault()
     if (e.metaKey || e.ctrlKey || e.altKey) return
 

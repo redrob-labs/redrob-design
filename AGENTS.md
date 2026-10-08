@@ -18,6 +18,7 @@ Bun workspace packages:
 - `cli` — headless `.fig` inspection, export, and linting with `citty` and `agentfmt`.
 - `mcp` — stdio and Hono HTTP MCP server reusing Core tools.
 - `harness` — optional Node companion for HarnessAgent sessions and its bounded JSONL host protocol; Tauri launches the separately installed command.
+- `brand`: private brand tokens, fonts, and Node helpers (`@redrob-design/brand`); its tests run as part of `bun run test:unit`.
 - `docs` — published VitePress site. Use `bun run docs:dev`, `bun run docs:build` for fast checks, and `bun run docs:build:production` for deployment output.
 
 The root Tauri/Vite app lives in `src/`; app services and state belong under `src/app/**`, views under `src/views/**`, and app UI under `src/components/**`.
@@ -46,6 +47,58 @@ Headless SDK fields compose variable/token binding through `BindingProvider` and
 
 Property-panel anatomy in `packages/vue/src/primitives/PropertySection/`, `SegmentedControl/`, and `PropertyList/` is controlled and editor-agnostic. Connect PropertyList events to RedrobDesign selection and undo through `useEditorPropertyList()` or an app adapter; never call `useEditor()` from these primitives.
 
+### Redrob assistant surfaces
+
+Each document tab is in Describe or Edit (`Tab.mode`, `setTabMode` in `src/app/tabs/`). Describe turns on core's view-only flag (`editor.setViewOnly`, `EditorViewState.viewOnly`, `view-only:changed`). Input layers stand down while it is on: `useCanvasInput`, text edit, the context menu, clipboard, nudging, tool keys, and shortcuts outside `VIEW_ONLY_SHORTCUT_IDS`. Programmatic edits, Redrob's included, still run. Gate new direct-input paths on `state.viewOnly`, and never block tool or automation mutations with it.
+
+Thread state lives under `src/app/assistant/`:
+
+- `thread/` holds the per-file IndexedDB thread and its receipts.
+- `turn/` holds pricing, usage and the per-answer instructions with Design Memory.
+- `changes/` turns one answer into one undo entry and a change set. It uses core's `diffPageSnapshots` and `restoreNodes`.
+- `pointing/` handles Describe pointing.
+- `controls/` holds Plan or Run, the model pick, Memory and Cross-check.
+- `privacy/` is the rules-based redactor. It swaps private terms for placeholders in direct-model requests and tool input, and restores them for the canvas and display. ACP and Pi are not filtered.
+- `cross-check/` runs Fact check and Challenge on the `review` role model after an answer finishes (`turn/finished.ts`).
+
+The page check is in `src/app/review/` and uses the core lint `design-system` preset and `LintFix`. Design Memory is in `src/app/memory/`, behind `DesignMemorySource`; `workspace.ts` merges the signed-in workspace's memory over the file's, and `notes/` keeps personal notes on this computer. Ship is in `src/app/ship/`: `publish/` uploads static sites to the separate `publish` storage profile, `handoff/` builds the Claude Code bundle (served over MCP by `get_handoff`, or written as files), and `watch/` polls Console for changes in watched sources.
+
+Messages Redrob posts without a model (review, Ship, watched updates) carry `data-*` parts that the AI SDK never sends to the model. They render in `ChatMessage.vue` after a type guard, and they are posted through `provideChatPost`. Cards that answer for the person use `provideChatSend`.
+
+On `/demo` (`src/app/runtime/demo.ts`), workspace reading and watching answer with the prototype's sample data. Elsewhere, a service that needs something the person has not set up (sign-in, a publish bucket, a connected agent) says so instead of pretending.
+
+### Redrob Cloud (Console)
+
+Redrob Cloud is optional: every feature works on this computer signed out, and signing in only adds sharing. Console serves sign-in (`/design/me`, device keys), shared files with members, roles, invites and view links, sealed snapshots and versions on presigned S3 links, sealed comments, and relay tickets (redrob-console `apps/api/src/design`, `apps/relay`, `infra/`). Workspace memory, watches, workspace libraries and the feeds are contract-only for now; their services fall back to the file, the cache or bundled fixtures when Console answers 404. The client lives in `src/app/integrations/console/`:
+
+- `contract/` holds zod schemas and a route table, which are the API contract. `openapi.json` is generated from them; regenerate it with `UPDATE_CONSOLE_OPENAPI=1 bun test tests/engine/app/console/contract.test.ts`.
+- `client.ts` validates every response against its schema and maps failures to `ConsoleError` kinds.
+- `session.ts` handles sign-in with the device flow. The token sits at `credentialRef('console', 'session-token')`, apart from model keys.
+- `cache.ts` keeps Console answers offline.
+- `document.ts` sends Console a SHA-256 of the document key, never a file path; only Ship watch still uses it. Shared files are keyed by their cloud file id (`threadKeyFor` returns `cloud:<fileId>`).
+
+Features that use it live in their own domains:
+
+- `memory/workspace.ts`
+- `ship/watch/`
+- `document/history/` for versions, with their own IndexedDB
+- `comments/`, local-first, with their own IndexedDB
+- `cloud/`: `crypto/` (per-file AES-GCM content keys, ECIES key wrapping per device, the device key pair in IndexedDB) and `files/` (sharing, members, view links, sealed snapshots on presigned links)
+- `collab/transport/relay/`, a ticketed WebSocket with every payload sealed to the file; there is no peer-to-peer fallback
+- `libraries/catalog/console.ts`
+
+Conventions:
+
+- Local data comes first, and sync merges by id with the later edit winning.
+- Everything a shared file holds at Console (name, snapshot, versions, comments, live frames) is sealed with its content key first (`src/app/cloud/crypto`), with associated data naming the file, epoch and purpose. Never send a shared file's content to Console unsealed.
+- Revisioned writes use `If-Match` or `If-None-Match: *`.
+- Ids are chosen on the client so retries stay idempotent.
+- Console never proxies model keys.
+
+`tests/helpers/console/server.ts` (Hono) and `relay.ts` (a Bun WebSocket server) are the mock Console. The mock is the acceptance oracle for the Console team.
+
+Shared agent UI (`Composer`, `Changes`, `Finding`, `AnswerReceipt`, `AgentTimeline`, `MemoryCard`, `PlanQuestions`) is store-free under `src/components/ui/agent/`. Its props contracts are in `types.ts`, after the design system's `index.d.ts`. App types should alias those contracts rather than repeat their shapes, because `test:type-shapes` rejects duplicates.
+
 ### Settings and credentials
 
 Credential persistence lives under `src/app/settings/credentials/`. Settings components receive `CredentialManager` and may inspect status, replace, or clear credentials; runtime adapters receive `CredentialResolver`. Components must not read saved secrets or keep them in long-lived reactive refs. Non-secret provider preferences remain in normal settings storage.
@@ -66,19 +119,41 @@ App dialogs compose the Reka-backed components under `src/components/ui/dialog/`
 - `bun run format` — format and sort imports.
 - `bun run test:unit` / `bun run test` — engine/unit and Playwright suites.
 - `bun run tauri dev` — desktop app with hot reload.
-- `bun redrob-design --help` — current CLI command list.
+- `bun redrob-design --help` lists the current CLI commands. Run `bun run build:packages` first; on a clean tree the CLI exits 1 with `Cannot find module '@redrob-design/core/color'`.
 
 ## Git worktrees and development servers
 
 Prefer `dev:portless`, especially in worktrees. It assigns branch-specific app and `mcp.redrob-design` sibling URLs with isolated runtime discovery. Use fixed-port `dev` only for Playwright, Tauri, and Dev Container flows.
 
+## Branches
+
+`develop` is the default branch and the base of every pull request. `main` is released state and moves only by merging `develop` into it. Release tags are cut from `main`. This repository was single-trunk on `main` until 2026-09-17, so treat any older instruction that assumes work lands on `main` as stale.
+
+A hotfix branches from `main`, merges into `main`, releases, and then `main` is merged back into `develop`. Do not skip that back-merge. The sibling repository redrob-code spent a month with a lockfile its own default branch could not install from because the back-merge was missed.
+
+Both `develop` and `main` are protected: pull requests only, force pushes and deletions blocked, 0 required reviews, admin enforcement off. **No status check is required**, and that is a decision rather than an omission: every candidate here either cannot report on a pull request or would stall an ordinary one. `fixture-heavy-unit-tests` was required for about an hour and had to be removed, because it can never report (see below) and a pull request waiting on a check that never runs is blocked forever. `ci.yml` can report, but it carries `paths-ignore` for `*.md`, `packages/docs/**` and `openspec/**`, so requiring it would leave every documentation-only pull request permanently pending. Read the checks yourself before merging.
+
+Two trigger gaps are open right now and a pull request based on `develop` will hit them:
+
+- `heavy-tests.yml` triggers only on `workflow_dispatch` and a nightly `schedule` (`17 3 * * *`). It never runs on `pull_request`, which is why `fixture-heavy-unit-tests` cannot be a required check. Dispatch it by hand when a change touches the fixture-bound paths.
+- `ci.yml`, `preview.yml` and `native-contracts-image.yml` filtered their triggers to `branches: [main, master]`. `develop` was absent from all three, so after `develop` became the default no CI ran on a pull request at all. This change adds `develop` to each filter. `master` is still listed and still does not exist in this repository; it is left alone as a separate cleanup rather than mixed into this one.
+
+Working branches are `<type>/<short-slug>`, and the type is one of `feat`, `fix`, `chore`, `docs`, `test`, `refactor`, `perf`, `sync` or `hotfix`. The first seven come from the branch-flow section of `CONTRIBUTING.ko.md`, `sync` from the `sync/upstream-<date>` convention recorded there, and `hotfix` from the hotfix flow described above. `.github/workflows/gitflow.yml` now checks this on every pull request, because a rule nothing checks is only a preference: branches had been appearing under a `kiro/` prefix no document here defines. A branch name says what the change is, not what made it. The same workflow checks after every push to `main` that `main` contains no commit `develop` is missing, so a skipped back-merge is reported instead of being discovered a month later.
+
 ## Releases & CI
 
-For releases, update versions in the root and publishable package manifests plus `desktop/tauri.conf.json` and `desktop/Cargo.toml`; move `Unreleased` into `## x.y.z — YYYY-MM-DD`; commit `Release vX.Y.Z`; then tag and push `vX.Y.Z`.
+For releases, update versions in the root and publishable package manifests plus `desktop/tauri.conf.json` and `desktop/Cargo.toml`; move `Unreleased` into a `## x.y.z (YYYY-MM-DD)` heading; commit `Release vX.Y.Z`; then tag and push `vX.Y.Z` from `main`.
 
 `.github/workflows/build.yml` is the source of truth: `v*` tags build signed desktop artifacts, create a draft release from the exact changelog section, upload updater files, and publish the package set defined there and in `tools/release-packages/src/publish-dirs.ts`. Publishing uses prepared, validated npm tarballs—do not publish package directories manually. Ensure Tauri and Apple signing/notarization secrets are configured. Verify the draft title/body and artifacts, then publish it; `homebrew.yml` updates the cask on publication.
 
-App/docs production workflows run on `v*` tags or `workflow_dispatch`, not ordinary `master` pushes. `ci.yml` and `heavy-tests.yml` define validation gates.
+App/docs production workflows (`app.yml`, `docs.yml`) run on `v*` tags or `workflow_dispatch`, not on ordinary branch pushes. `ci.yml` is the pull request gate (fork boundary, source/package/repository quality, Storybook, native-test contracts, and seven sharded engine test groups) and `heavy-tests.yml` holds the fixture-heavy suite; see Branches above for the trigger filters that currently keep both off `develop` pull requests.
+
+`check:audit` fails the Repository hygiene job on any critical advisory, and the later steps of that job (secret scan, tooling tests, duplicate detection) do not run after it fails, so a red audit also hides a leaked key. Two advisories are waived with `--ignore` because no release in range fixes them; remove each waiver as soon as its condition clears:
+
+- `GHSA-q9v2-7m5w-4693` (expr-eval, code execution through `toJSFunction()`). No patched release exists. `packages/core/src/tools/calc.ts` only calls `Parser.evaluate()`, never `toJSFunction()`, so the vulnerable path is not reachable here. Drop the waiver when expr-eval is replaced or a fixed release appears.
+- `GHSA-5gmw-xhrv-c9v3`, `GHSA-85c8-ppgw-ccpr` (tinypool, pulled in only by the `oxfmt` formatter). `oxfmt` 0.35 pins tinypool 2.1.0; the first `oxfmt` on a fixed tinypool is 0.67. Drop both waivers when `oxfmt` moves past 0.67, which is a formatter upgrade with its own reformat diff.
+
+`proxy-addr` is pinned to 2.0.8 through `overrides` for the same reason; remove that pin once `express` requires 2.0.8 or later on its own.
 
 ## Documentation
 
@@ -112,7 +187,7 @@ Use Conventional Commits (`feat`, `fix`, `refactor`, `perf`, `docs`, `test`, `bu
 - Harness agents live in the optional `@redrob-design/harness` Node companion. Keep it backend-neutral, persist only opaque non-secret resume state, expose the bounded JSONL protocol, and never bundle a JavaScript runtime into Tauri. Pi's in-memory `just-bash` cannot recover across process restarts.
 - ACP transport lives under `src/app/ai/acp/**`; provider definitions in `packages/core/src/constants.ts`; profiles in `src/app/ai/models/**`. Keep provider connections, reusable profiles, and role assignments separate, and resolve credentials lazily.
 - ACP process changes require checking `desktop/capabilities/**`.
-- Collaboration lives under `src/app/collab/**` and uses Trystero, Yjs, and awareness; preserve crypto-safe room IDs and peer cleanup.
+- Collaboration lives under `src/app/collab/**` and uses Yjs and awareness over the Redrob Cloud relay only. A session follows the active tab's shared file (`useCollab` watches `activeCloudFile`), starts from the snapshot's own Yjs bytes, and seals every frame with the file key; editors keep the snapshot saved (`snapshots.ts`, compare-and-swap with merge) and hand the key to new devices. Viewers and commenters send only awareness and `sync-step1`, which is also all the relay forwards from them. Preserve peer cleanup.
 
 ## Code conventions
 
@@ -162,6 +237,7 @@ Keep responsibilities distinct: engine tests cover state contracts, Playwright b
 ## Rendering
 
 - Canvas is CanvasKit (Skia WASM) on a WebGL surface, not DOM
+- Canvas overlay colours come from design tokens: `src/app.css` publishes `--color-canvas-*` and `--color-ruler-*`, `readCanvasTheme()` in `src/app/shell/theme.ts` resolves them into `EditorState.canvasTheme`/`rulerTheme`, and renderers read them through `canvasThemeColor()` (`packages/core/src/canvas/renderer/canvas-theme.ts`). Core constants hold the design system's light values as the headless fallback; never hardcode an overlay colour at a call site.
 - `renderVersion` vs `sceneVersion`: `renderVersion` = canvas repaint (pan/zoom/hover); `sceneVersion` = scene graph mutations. UI that only cares about graph data should avoid watching repaint-only state; use editor events for incremental surfaces such as the layer tree.
 - `requestRender()` bumps both counters; `requestRepaint()` bumps only `renderVersion`
 - `renderNow()` is only for surface recreation and font loading (need immediate draw)
@@ -182,7 +258,7 @@ Keep responsibilities distinct: engine tests cover state contracts, Playwright b
 
 ## Components & instances
 
-- Component types use `#9747ff`.
+- Component types use the Redrob Design product colour: `--product-design` (`#c162f4`, core `COMPONENT_COLOR`) on the canvas, and the `component` utility in UI, which takes an AA-safe step of the same ramp per theme.
 - Instance children map to component children through `componentId`; runtime overrides use structured `InstanceOverrideState` (`self` and `descendants` maps).
 - Component edits must propagate through editor/component sync—never hand-copy properties in app UI. Use Scene Graph copy helpers for nested values.
 
@@ -201,12 +277,20 @@ Keep responsibilities distinct: engine tests cover state contracts, Playwright b
 - Prefer accessible role/name, label, then text in tests. Use scoped `data-slot` anatomy or semantic attributes (`data-property`, `data-command`, `data-node-id`) when needed; reserve `data-test-id` for integration boundaries and never add test-hook props.
 - Use Reka UI primitives and typed Tailwind Variants themes under `src/theme/**`; merge per-instance `ui` slot overrides, expose `class` for single-root components, and do not add one-off class props. Use `UI` casing in type names.
 - Bind visual state through semantic `data-*` attributes; Steiger rejects template-time `use*UI()`, visual-state utility branches, and raw SVG app icons.
+- The visual language is the Redrob Group Design System 2026 (`@redrob-labs/ui`, pinned exactly, CSS layer only). `@redrob-design/brand/tokens.css` re-exports its tokens and fonts; do not use its React components, `styles.css` `rr-*` classes, or `preflight.css`. `src/app.css` maps the app's semantic Tailwind names (`bg-panel`, `text-surface`, `text-muted`, `border-border`, `bg-accent`, `text-on-accent`, `bg-material`, `bg-ai`, `text-error`...) onto design-system roles with `@theme inline static`, and pins Tailwind's colliding `--radius-*`, `--shadow-*`, `--font-sans` and `--font-mono` to the system values. Add a semantic token there rather than reaching for a palette class: Steiger's `no-raw-palette-classes` rejects Tailwind palette colours and arbitrary colour values in app UI, and the token contract test rejects `var()`s and colour utilities that name an undeclared token. Use `ink-light`/`ink-dark` only for marks drawn on user- or peer-chosen colours.
+- Light is the default theme for installs with no saved choice; the design system switches on `data-theme`, which `src/app/shell/theme.ts` and the inline boot script in `index.html` set together.
 - Storybook is the internal state workshop; VitePress is canonical public SDK documentation. Reuse colocated demos, derive API tables from source/JSDoc, and keep examples valid against public exports.
 - Prefer models/events/props over imperative slot actions except for explicitly renderless action primitives. Use VueUse for DOM refs/focus.
 - App wrappers around SDK primitives use shared UI helpers rather than scattered raw classes.
 - Commands use `packages/vue/src/editor/commands/registry.ts` for shortcuts, bindings, and menu IDs. Store portable tokens (`MOD+D`) and format them at render time; labels/translations never contain shortcuts.
 - i18n uses narrow product-domain catalogs under `packages/vue/src/i18n/messages/` with matching locale files. Inspect existing domains instead of adding generic UI/component namespaces; prefer narrow `use*Messages()` composables over aggregate `useI18n()`.
-- `check:i18n` enforces structure, placeholder parity, and reviewed translation baselines. Remove stale baseline identities when fixing existing debt.
+- `check:i18n` enforces:
+  - structure;
+  - placeholder parity;
+  - reviewed translation baselines;
+  - Redrob copy's short-dash rule. Em dashes, en dashes, horizontal bars and minus signs fail in English defaults and every locale.
+
+  Remove stale baseline identities when you fix existing debt.
 - Canvas menu structure lives in `packages/vue/src/editor/menu-model/canvas.ts`; `CanvasMenu.vue` renders it.
 - Browser/native menus share `src/app/shell/menu/schema.ts`; handle IDs in `use.ts` or editor commands, and regenerate `desktop/generated/menu.json` with `generate:tauri-menu`.
 - Use Tailwind 4 and `tw-animate-css`; no static inline styling or component `<style>` blocks. Dynamic `:style` bindings are allowed for runtime geometry/CSS variables.
@@ -221,7 +305,7 @@ Keep responsibilities distinct: engine tests cover state contracts, Playwright b
 - File System Access APIs are browser APIs, not Tauri-only. Keep Safari download fallback and defer `revokeObjectURL`.
 - Detect desktop with `IS_TAURI`, never ad-hoc `__TAURI_INTERNALS__` checks.
 - Browser FIG export uses fflate/`@redrob-design/fig`; Tauri uses `build_fig_file`.
-- Changes to `.fig` behavior require round-trip validation in Figma. Fixtures under `tests/fixtures/*.fig` use Git LFS; use normal `git push` when they change.
+- Changes to `.fig` behavior require round-trip validation in Figma. `.gitattributes` tracks `tests/fixtures/*.fig`, `tests/fixtures/fonts/*.ttf`, and `packages/core/vendor/canvaskit-webgpu/*.wasm` with Git LFS; use normal `git push` when they change.
 
 ## Tauri
 

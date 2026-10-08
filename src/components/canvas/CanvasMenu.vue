@@ -28,6 +28,7 @@ import {
 import { computed, type Component } from 'vue'
 import type { EditorCommandId } from '@redrob-design/vue'
 
+import { askRedrob } from '@/app/ai/chat/ask'
 import { useEditorStore } from '@/app/editor/active-store'
 import { appMenuShortcutLabel } from '@/app/shell/menu/shortcut'
 import { createCanvasMenuActions } from '@/app/editor/canvas/menu/actions'
@@ -41,7 +42,7 @@ const store = useEditorStore()
 const { editor, selectedIds, hasSelection } = useSelectionState()
 const { getCommand } = useEditorCommands()
 const { canvasMenu } = useMenuModel()
-const { menu: t } = useI18n()
+const { menu: t, panels } = useI18n()
 
 const canvasMenuActions = createCanvasMenuActions(store, selectedIds)
 const { execCommand } = canvasMenuActions
@@ -56,8 +57,11 @@ function removeSelectedGuide() {
   store.setSelectedGuide(null)
 }
 
+// A layer's menu can be taller than the window: Reka keeps it on screen, and the
+// available height lets it scroll instead of running off the bottom.
 const menuCls = useMenuUI({
-  content: 'min-w-56 shadow-[0_8px_30px_rgb(0_0_0/0.4)] animate-in fade-in zoom-in-95',
+  content:
+    'min-w-56 max-h-(--reka-context-menu-content-available-height) overflow-y-auto shadow-md animate-in fade-in zoom-in-95',
   separator: 'my-1'
 })
 const componentMenu = menu({ tone: 'component' })
@@ -91,13 +95,23 @@ function contextCommandIcon(id: EditorCommandId | undefined): Component | undefi
 </script>
 
 <template>
-  <ContextMenuContent :class="cls.menu" :side-offset="2" align="start">
+  <ContextMenuContent :class="cls.menu" :side-offset="2" :collision-padding="8" align="start">
     <template v-if="selectedGuide">
       <ContextMenuItem data-property="guide" :class="cls.item" @select="removeSelectedGuide">
         <span>{{ t.removeGuide }}</span>
       </ContextMenuItem>
     </template>
     <template v-else>
+      <ContextMenuItem data-test-id="context-ask-redrob" :class="cls.item" @select="askRedrob">
+        <span class="flex min-w-0 flex-1 items-center gap-2">
+          <icon-lucide-sparkles class="size-3.5 shrink-0 text-accent" />
+          <span class="truncate">{{
+            hasSelection ? panels.askRedrobAboutThis : panels.askRedrob
+          }}</span>
+        </span>
+        <AppShortcutText>{{ formatShortcut('MOD+J') }}</AppShortcutText>
+      </ContextMenuItem>
+      <ContextMenuSeparator :class="cls.sep" />
       <ContextMenuItem
         data-test-id="context-copy"
         :class="cls.item"
@@ -161,7 +175,7 @@ function contextCommandIcon(id: EditorCommandId | undefined): Component | undefi
             <IconChevronRight class="size-3.5 text-muted" />
           </ContextMenuSubTrigger>
           <ContextMenuPortal>
-            <ContextMenuSubContent :class="cls.submenu">
+            <ContextMenuSubContent :class="cls.submenu" :collision-padding="8">
               <ContextMenuItem
                 v-for="(sub, j) in item.sub"
                 :key="j"

@@ -15,5 +15,11 @@
   "bucket": "Zasobnik",
   "region": "Region",
   "accessKeyID": "Identyfikator klucza dostępu",
-  "secretAccessKey": "Tajny klucz dostępu"
+  "secretAccessKey": "Tajny klucz dostępu",
+  "publishHeading": "Strona publikacji",
+  "publishDescription": "Publikowanie wysyła gotowe strony do tego bucketu, osobno od miejsca, gdzie synchronizują się twoje pliki. Udostępnij bucket publicznie u dostawcy; Redrob nigdy nie zmienia, kto może go czytać.",
+  "publicSiteURL": "Publiczny adres strony",
+  "publicSiteURLHint": "Adres, pod którym ten bucket jest serwowany, na przykład https://site.example.com.",
+  "siteURLNotHttps": "Użyj adresu https.",
+  "siteURLInvalid": "Wpisz pełny adres WWW bez zapytania i części #."
 }

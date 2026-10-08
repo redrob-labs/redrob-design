@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
+import { resolvePageColor } from '@redrob-design/core/canvas'
 import { useI18n } from '@redrob-design/vue'
 
 import ColorPicker from '@/components/ColorPicker/ColorPicker.vue'
@@ -13,7 +14,8 @@ import { useEditorStore } from '@/app/editor/active-store'
 import type { Color, Fill } from '@redrob-design/scene-graph'
 
 const editor = useEditorStore()
-const pageColor = computed(() => editor.state.pageColor)
+// A page with no colour of its own shows the theme's; picking one makes it the page's own.
+const pageColor = computed(() => resolvePageColor(editor.state.pageColor, editor.state.canvasTheme))
 const pageFill = computed<Fill>(() => ({
   type: 'SOLID',
   color: pageColor.value,

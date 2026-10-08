@@ -7,26 +7,36 @@
     <link rel="icon" type="image/png" sizes="128x128" href="/favicon-128.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-    <meta name="theme-color" content="#1e1e1e" />
+    <meta name="theme-color" content="#f8f9fb" />
     <title>Redrob Design</title>
-    <style>
-      :root {
-        --loader-bg: #1e1e1e;
-        --loader-fg: 255, 255, 255;
+    <script id="theme-boot">
+      // Mirrors resolveAppTheme() in src/app/shell/theme.ts so the splash paints in the saved theme
+      // before the app bundle loads. Light is the default for installs with no saved choice.
+      try {
+        var stored = localStorage.getItem('redrob-design:theme')
+        var setting = stored === 'dark' || stored === 'light' || stored === 'auto' ? stored : 'light'
+        var resolved =
+          setting === 'auto'
+            ? matchMedia('(prefers-color-scheme: dark)').matches
+              ? 'dark'
+              : 'light'
+            : setting
+        document.documentElement.dataset.theme = resolved
+        document.documentElement.style.colorScheme = resolved
+      } catch (error) {
+        document.documentElement.dataset.theme = 'light'
       }
-      @media (prefers-color-scheme: light) {
-        :root {
-          --loader-bg: #f3f4f6;
-          --loader-fg: 32, 33, 36;
-        }
+    </script>
+    <style>
+      /* Boot splash, before app.css loads: Redrob DS surface-raised and ink-primary per theme. */
+      :root,
+      html[data-theme='light'] {
+        --loader-bg: #f8f9fb;
+        --loader-fg: 10, 11, 12;
       }
       html[data-theme='dark'] {
-        --loader-bg: #1e1e1e;
-        --loader-fg: 255, 255, 255;
-      }
-      html[data-theme='light'] {
-        --loader-bg: #f3f4f6;
-        --loader-fg: 32, 33, 36;
+        --loader-bg: #141719;
+        --loader-fg: 248, 249, 251;
       }
       body { margin: 0; background: var(--loader-bg); }
       #boot-splash {

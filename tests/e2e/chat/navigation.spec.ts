@@ -2,9 +2,9 @@ import { expect, test } from '#tests/helpers/chat/fixture'
 
 test('⌘J switches between Design and AI', async ({ chat }) => {
   await chat.designTab.waitFor()
-  await chat.page.keyboard.press('Meta+j')
+  await chat.page.keyboard.press('ControlOrMeta+j')
   await expect(chat.chatTab).toHaveAttribute('data-state', 'active')
-  await chat.page.keyboard.press('Meta+j')
+  await chat.page.keyboard.press('ControlOrMeta+j')
   await expect(chat.designTab).toHaveAttribute('data-state', 'active')
 })
 
@@ -29,7 +29,7 @@ test('saving an API key in Settings opens the chat interface', async ({ chat }) 
   await chat.page.locator('[data-model-id]').first().click()
   await chat.page.getByTestId('settings-model-provider').click()
   await chat.page.getByRole('option', { name: 'OpenRouter' }).click()
-  await chat.page.getByLabel('Name').fill('Claude Sonnet')
+  await chat.page.getByLabel('Name', { exact: true }).fill('Claude Sonnet')
   await chat.apiKeyInput.fill('sk-or-test-key-12345')
   await chat.page.getByRole('button', { name: 'Save model' }).click()
   await chat.page.getByTestId('app-settings-done').click()

@@ -7,6 +7,7 @@ import {
   noDynamicTailwindStateClasses,
   noVueTemplateUIHooksOrSVG
 } from './dynamic-tailwind-classes.ts'
+import { noRawPaletteClasses } from './palette-classes.ts'
 import {
   collectFolders,
   createFileRule,
@@ -520,6 +521,7 @@ export const redrobDesignArchitecturePlugin = {
     noProductionTestIdsInSharedLayers,
     noDynamicTailwindStateClasses,
     noVueTemplateUIHooksOrSVG,
+    noRawPaletteClasses,
     noNativeTitleAttributesInVue,
     noShortcutTextInLabels,
     noHardcodedMacOSShortcutGlyphs,

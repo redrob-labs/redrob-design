@@ -3,7 +3,7 @@ import { expect, test, useEditorSetup } from '#tests/e2e/fixtures'
 const editor = useEditorSetup()
 
 function commandPaletteShortcut() {
-  return process.platform === 'darwin' ? 'Meta+KeyK' : 'Control+KeyK'
+  return process.platform === 'darwin' ? 'ControlOrMeta+KeyK' : 'Control+KeyK'
 }
 
 test('command palette opens, searches, and closes', async () => {

@@ -1,3 +1,9 @@
+/*
+ * Redrob Group Design System 2026 tokens (primitives, both themes, fonts). Imported first so every
+ * later rule can read them. The system switches light and dark on `[data-theme]`, which
+ * `src/app/shell/theme.ts` sets on <html>, so this file declares no theme override of its own.
+ */
+@import '@redrob-design/brand/tokens.css';
 @import 'tailwindcss';
 @import 'tw-animate-css';
 @import 'vue-stream-markdown/index.css' layer(components);
@@ -13,7 +19,7 @@
 
 @utility scrollbar-thin {
   scrollbar-width: thin;
-  scrollbar-color: var(--color-border) transparent;
+  scrollbar-color: var(--border-subtle) transparent;
   &::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -22,90 +28,196 @@
     background: transparent;
   }
   &::-webkit-scrollbar-thumb {
-    background: var(--color-border);
-    border-radius: 3px;
+    background: var(--border-subtle);
+    border-radius: var(--radius-full);
   }
   &::-webkit-scrollbar-thumb:hover {
-    background: var(--color-muted);
+    background: var(--border-strong);
   }
 }
 
-@theme {
-  --color-panel: #2a2a2a;
-  --color-panel-secondary: #242424;
-  --color-panel-field: #383838;
-  --color-panel-field-hover: #404040;
-  --color-panel-focus: #3b82f6;
-  --color-panel-selected: #2f6fdd;
-  --color-panel-selected-muted: #3d4450;
-  --color-canvas: #1e1e1e;
-  --color-border: #3a3a3a;
-  --color-hover: #353535;
-  --color-accent: #3b82f6;
-  --color-surface: #f0f0f0;
-  --color-muted: #888888;
-  --color-input: #1e1e1e;
-  --color-component: #9747ff;
-  --color-warning-bg: rgb(245 158 11 / 0.1);
-  --color-warning-border: rgb(245 158 11 / 0.3);
-  --color-warning-text: #fde68a;
-  --color-warning-action: #fcd34d;
-  --color-success: #4ade80;
-  --color-error: #f87171;
-  --color-error-bg: rgb(248 113 113 / 0.1);
-  --color-error-border: rgb(248 113 113 / 0.4);
-  --color-success-bg: #16a34a;
-  --color-success-bg-hover: #15803d;
-  --color-code-tag: #7dd3fc;
-  --color-code-attribute: #c4b5fd;
-  --color-code-string: #86efac;
-  --color-code-number: #fca5a5;
-  --color-code-punctuation: #888888;
-  --color-checkerboard: #3a3a3a;
-  --color-checkerboard-muted: #4a4a4a;
-  --color-ruler-bg: rgb(36, 36, 36);
-  --color-ruler-tick: rgb(102, 102, 102);
-  --color-ruler-text: rgb(140, 140, 140);
-  --color-ruler-label: rgb(255, 255, 255);
+/*
+ * App-only themed values. Each is a mix of, or a choice between, design-system tokens; none names a
+ * colour of its own. Where both themes can share one expression it lives in `@theme` below instead.
+ */
+:root,
+[data-theme='light'] {
+  --rd-code-tag: var(--accent-sky-4);
+  --rd-code-attribute: var(--accent-violet-4);
+  --rd-code-string: var(--accent-green-4);
+  --rd-code-number: var(--accent-red-4);
+  --rd-warning-text: var(--accent-orange-5);
+  --rd-warning-action: var(--accent-orange-4);
+  /* The product mark (step 6) is 3.3:1 on white, too light for 11px component labels; step 7 is 6:1. */
+  --rd-component: var(--product-design-7);
 }
 
-html[data-theme='light'] {
-  --color-panel: #ffffff;
-  --color-panel-secondary: #f7f8fa;
-  --color-panel-field: #f0f1f3;
-  --color-panel-field-hover: #e4e7ea;
-  --color-panel-focus: #2563eb;
-  --color-panel-selected: #2563eb;
-  --color-panel-selected-muted: #e5e7eb;
-  --color-canvas: #f3f4f6;
-  --color-border: #d8dce3;
-  --color-hover: #eef1f5;
-  --color-accent: #2563eb;
-  --color-surface: #1f2328;
-  --color-muted: #6b7280;
-  --color-input: #ffffff;
-  --color-component: #7c3aed;
-  --color-warning-bg: rgb(245 158 11 / 0.14);
-  --color-warning-border: rgb(245 158 11 / 0.32);
-  --color-warning-text: #92400e;
-  --color-warning-action: #78350f;
-  --color-success: #15803d;
-  --color-error: #b91c1c;
-  --color-error-bg: rgb(185 28 28 / 0.08);
-  --color-error-border: rgb(185 28 28 / 0.28);
-  --color-success-bg: #16a34a;
-  --color-success-bg-hover: #15803d;
-  --color-code-tag: #0369a1;
-  --color-code-attribute: #6d28d9;
-  --color-code-string: #15803d;
-  --color-code-number: #b91c1c;
-  --color-code-punctuation: #64748b;
-  --color-checkerboard: #d1d5db;
-  --color-checkerboard-muted: #e5e7eb;
-  --color-ruler-bg: rgb(250, 250, 251);
-  --color-ruler-tick: rgb(163, 171, 182);
-  --color-ruler-text: rgb(90, 99, 112);
-  --color-ruler-label: rgb(255, 255, 255);
+[data-theme='dark'] {
+  --rd-code-tag: var(--accent-sky-3);
+  --rd-code-attribute: var(--accent-violet-2);
+  --rd-code-string: var(--accent-green-3);
+  --rd-code-number: var(--accent-red-2);
+  --rd-warning-text: var(--accent-orange-2);
+  --rd-warning-action: var(--accent-orange-3);
+  --rd-component: var(--product-design-5);
+}
+
+/*
+ * The canvas is painted by CanvasKit, not CSS, so it cannot read a token. `src/app/shell/theme.ts`
+ * reads these with getComputedStyle and hands the resolved colours to the renderer. They are plain
+ * custom properties rather than theme variables because no utility class uses them.
+ */
+:root {
+  --color-ruler-bg: var(--surface-raised);
+  --color-ruler-tick: var(--border-strong);
+  --color-ruler-text: var(--ink-muted);
+  --color-ruler-label: var(--ink-on-brand);
+  --color-canvas-selection: var(--action-primary);
+  --color-canvas-component: var(--product-design);
+  --color-canvas-snap: var(--accent-pink-3);
+  --color-canvas-measurement: var(--accent-orange-3);
+  --color-canvas-layout-padding: var(--accent-sky-3);
+  --color-canvas-layout-gap: var(--accent-pink-3);
+  --color-canvas-comment-pin: var(--action-primary);
+}
+
+/*
+ * The canvas page behind the layers, for pages with no colour of their own. Light is the `.fig` page
+ * default (#f5f5f5, core's CANVAS_BG_COLOR), so a file looks the same here and in Figma: 4% ink on
+ * the light page. Dark is the sunken surface, one step above the panels, so white frames stand out.
+ */
+/* Registered as a colour so getComputedStyle hands theme.ts the mix already resolved to rgb(). */
+@property --color-canvas-page {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: transparent;
+}
+
+:root,
+[data-theme='light'] {
+  --color-canvas-page: color-mix(in srgb, var(--surface-base) 96%, var(--ink-primary));
+}
+
+[data-theme='dark'] {
+  --color-canvas-page: var(--surface-sunken);
+}
+
+/*
+ * The app's semantic Tailwind names, pointed at the design system. `inline` makes each utility carry
+ * the `var(--surface-*)` reference itself, so a subtree with its own `data-theme` (a Storybook story,
+ * a docs demo) resolves against its own theme instead of the root's. `static` still emits every
+ * variable, because components and CodeMirror read `var(--color-*)` directly.
+ *
+ * `--color-surface` is the app's TEXT colour (`text-surface`), not a background. The name predates
+ * the design system and is kept so this change does not touch every component; it maps to ink.
+ */
+/* Floating surfaces drop their translucent material when the user asks for less transparency. */
+@custom-variant reduce-transparency (@media (prefers-reduced-transparency: reduce));
+
+@theme inline static {
+  /* Surfaces */
+  --color-panel: var(--surface-base);
+  --color-panel-secondary: var(--surface-raised);
+  --color-panel-field: var(--surface-sunken);
+  --color-panel-field-hover: color-mix(in srgb, var(--ink-primary) 6%, var(--surface-sunken));
+  --color-panel-focus: var(--focus-ring);
+  --color-panel-selected: var(--action-primary);
+  --color-panel-selected-muted: var(--surface-brand-subtle);
+  --color-canvas: var(--surface-raised);
+  --color-input: var(--surface-base);
+  --color-hover: color-mix(in srgb, var(--ink-primary) 6%, var(--surface-base));
+  --color-material: var(--surface-material);
+  --color-scrim: var(--overlay-scrim);
+  --color-ai: var(--surface-ai);
+  --color-ai-border: var(--border-ai);
+
+  /* Edges */
+  --color-border: var(--border-subtle);
+  --color-border-strong: var(--border-strong);
+
+  /* Ink */
+  --color-surface: var(--ink-primary);
+  --color-muted: var(--ink-secondary);
+  --color-subtle: var(--ink-muted);
+  --color-brand-ink: var(--ink-brand);
+  --color-on-accent: var(--ink-on-brand);
+  /*
+   * Ink that does not follow the theme, for marks drawn on a colour the user or a peer chose rather
+   * than on a surface: colour-picker handles, avatar initials, canvas label text.
+   */
+  --color-ink-light: var(--redrob-white);
+  --color-ink-dark: var(--redrob-black);
+
+  /* Action */
+  --color-accent: var(--action-primary);
+  --color-accent-hover: var(--action-primary-hover);
+
+  /*
+   * Product identity: Redrob Design's own colour (--product-design) for components and the shell
+   * wash. UI text and icons take a step of the same ramp that clears 4.5:1 in each theme; the canvas
+   * draws the mark itself.
+   */
+  --color-component: var(--rd-component);
+  --color-product-wash: var(--product-design-wash);
+  --color-product-fill: var(--product-design-fill);
+  --color-product-line: var(--product-design-line);
+
+  /* Status */
+  --color-info: var(--status-info);
+  --color-success: var(--status-success);
+  --color-success-bg: var(--accent-green-4);
+  --color-success-bg-hover: var(--accent-green-5);
+  --color-warning: var(--status-warning);
+  --color-warning-bg: color-mix(in srgb, var(--status-warning) 12%, transparent);
+  --color-warning-border: color-mix(in srgb, var(--status-warning) 35%, transparent);
+  --color-warning-text: var(--rd-warning-text);
+  --color-warning-action: var(--rd-warning-action);
+  --color-error: var(--status-danger);
+  /* The design system calls this role danger; components use both names. */
+  --color-danger: var(--status-danger);
+  --color-error-bg: color-mix(in srgb, var(--status-danger) 10%, transparent);
+  --color-error-border: color-mix(in srgb, var(--status-danger) 40%, transparent);
+
+  /* Code syntax */
+  --color-code-tag: var(--rd-code-tag);
+  --color-code-attribute: var(--rd-code-attribute);
+  --color-code-string: var(--rd-code-string);
+  --color-code-number: var(--rd-code-number);
+  --color-code-punctuation: var(--ink-muted);
+
+  /* Transparency checkerboard */
+  --color-checkerboard: color-mix(in srgb, var(--ink-primary) 12%, var(--surface-base));
+  --color-checkerboard-muted: color-mix(in srgb, var(--ink-primary) 6%, var(--surface-base));
+
+  /*
+   * Shape, depth, type and motion. The design system declares `--radius-*`, `--shadow-sm|md|lg`,
+   * `--font-sans` and `--font-mono` under the same names as Tailwind's own theme variables, and its
+   * unlayered declarations would silently beat Tailwind's layered ones. Pointing each name at itself
+   * makes that outcome explicit: the utility reads the design-system value, and Tailwind's layered
+   * copy always loses the cascade to it, so the reference never cycles.
+   */
+  --radius-xs: var(--radius-xs);
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+  --radius-2xl: var(--radius-2xl);
+  --radius-full: var(--radius-full);
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+
+  --ease-in: var(--easing-exit);
+  --ease-out: var(--easing-entrance);
+  --ease-in-out: var(--easing-standard);
+  --ease-standard: var(--easing-standard);
+  --ease-entrance: var(--easing-entrance);
+  --ease-exit: var(--easing-exit);
+  --ease-settle: var(--easing-settle);
+  --default-transition-duration: var(--duration-fast);
+  --default-transition-timing-function: var(--easing-standard);
 }
 
 html,
@@ -116,17 +228,49 @@ body,
   overflow: hidden;
 }
 
+/* Editor density: the design system's `body-sm` (13px/20px) rather than its 15px reading size. */
 body {
-  font-family:
-    Inter,
-    system-ui,
-    -apple-system,
-    sans-serif;
+  font-family: var(--font-sans);
   font-size: 13px;
-  color: var(--color-surface);
-  background: var(--color-canvas);
+  line-height: 20px;
+  color: var(--ink-primary);
+  background: var(--surface-raised);
   user-select: none;
   -webkit-user-select: none;
+}
+
+/* Korean copy leads with Wanted Sans, scoped by language so a quoted passage still gets its face. */
+:lang(ko) body,
+:lang(ja) body {
+  font-family: var(--font-sans-kr);
+}
+
+/*
+ * One visible keyboard focus indicator. It is unlayered, so it beats Tailwind utilities, `outline-none`
+ * included, and every focusable control keeps a visible ring.
+ */
+:where(button, a, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring);
+  outline-offset: var(--focus-ring-width);
+}
+
+/*
+ * A wrapper that draws the focus ring for the field inside it says so with
+ * `data-focus-ring="within"`; the field then skips its own, so focus shows once.
+ */
+:where([data-focus-ring='within']) :where(input, textarea):focus-visible {
+  outline: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 input[type='number'] {

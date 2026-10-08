@@ -12,6 +12,8 @@
   "saveAs": "Salva con nome…",
   "exportSelection": "Esporta selezione…",
   "autosave": "Salvataggio automatico su file",
+  "versionHistory": "Cronologia versioni…",
+  "comments": "Commenti…",
   "copy": "Copia",
   "paste": "Incolla",
   "zoomIn": "Ingrandisci",
@@ -70,5 +72,9 @@
   "exportSelectionAsPNG": "Esporta selezione come PNG",
   "exportSelectionAsSVG": "Esporta selezione come SVG",
   "exportSelectionAsPPTX": "Esporta selezione come PPTX",
-  "exportSelectionAsFig": "Esporta selezione come .fig"
+  "exportSelectionAsFig": "Esporta selezione come .fig",
+  "help": "Aiuto",
+  "mainMenu": "Menu principale",
+  "backToHome": "Torna alla home",
+  "searchCommands": "Cerca comandi…"
 }

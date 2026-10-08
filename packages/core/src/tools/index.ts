@@ -9,6 +9,10 @@ export type {
 export { ALL_TOOLS, CORE_TOOLS, EXTENDED_TOOLS } from './registry'
 export const CODEGEN_PROMPT: string = codegenPrompt
 export { exportImage } from './vector'
+export { MAX_DIRECTIONS, MAX_PLAN_QUESTIONS, parseDirections, parsePlanQuestions } from './plan'
+export type { DirectionSpec, PlanQuestion } from './plan'
+export { textLayers } from './language'
+export type { LanguageVersionText } from './language'
 export {
   defineTool,
   nodeToResult,

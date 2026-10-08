@@ -202,7 +202,7 @@ function resizeHandleClass(resizing: boolean) {
                   <DropdownMenuSeparator class="mx-1.5 my-1 h-px bg-border" />
                   <DropdownMenuItem
                     :class="menuCls.item"
-                    class="text-red-500"
+                    class="text-error"
                     data-test-id="variables-delete-collection"
                     @select="ctx.removeCollection(ctx.activeCollectionId.value)"
                   >
@@ -311,7 +311,7 @@ function resizeHandleClass(resizing: boolean) {
                             </ContextMenuItem>
                             <ContextMenuSeparator :class="menuCls.separator" />
                             <ContextMenuItem
-                              :class="[menuCls.item, 'text-red-500']"
+                              :class="[menuCls.item, 'text-error']"
                               :disabled="col.modes.length <= 1"
                               @select="ctx.removeMode(modeId(header.column.id))"
                             >

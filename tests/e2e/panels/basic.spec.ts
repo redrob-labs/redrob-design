@@ -48,7 +48,7 @@ test('panel width persists after page reload', async () => {
 })
 
 test('Cmd+Backslash hides panels', async () => {
-  await editor.page.keyboard.press('Meta+\\')
+  await editor.page.keyboard.press('ControlOrMeta+\\')
   await editor.canvas.waitForRender()
 
   await expect(editor.page.getByTestId('layers-panel')).not.toBeVisible()
@@ -56,7 +56,7 @@ test('Cmd+Backslash hides panels', async () => {
 })
 
 test('Cmd+Backslash shows panels again', async () => {
-  await editor.page.keyboard.press('Meta+\\')
+  await editor.page.keyboard.press('ControlOrMeta+\\')
   await editor.canvas.waitForRender()
 
   await expect(editor.page.getByTestId('layers-panel')).toBeVisible()

@@ -34,7 +34,7 @@ const emit = defineEmits<{
         :data-label-kind="edit.kind"
         :data-foreground="presentation.foreground"
         :style="{ backgroundColor: colorToCSS(presentation.background) }"
-        class="z-50 h-6 rounded-[5px] text-black shadow-sm ring-1 ring-accent data-[foreground=light]:text-white"
+        class="z-50 h-6 rounded-[5px] text-ink-dark shadow-sm ring-1 ring-accent data-[foreground=light]:text-ink-light"
         @open-auto-focus.prevent
         @escape-key-down.prevent="emit('cancel')"
         @pointer-down-outside="emit('commit')"

@@ -3,7 +3,13 @@ import { useClipboard, useDebounceFn } from '@vueuse/core'
 import { computed, defineAsyncComponent, onBeforeUnmount, ref, shallowRef, watch } from 'vue'
 import { tv } from 'tailwind-variants'
 
-import { JSX_REFERENCE, selectionToJSX } from '@redrob-design/core/design-jsx'
+import {
+  JSX_REFERENCE,
+  exportDTCG,
+  exportTokensCSS,
+  selectionToJSX
+} from '@redrob-design/core/design-jsx'
+import { downloadBlob } from '@/app/document/io/browser'
 import { useI18n, useSceneComputed } from '@redrob-design/vue'
 
 import {
@@ -35,6 +41,17 @@ const editorActive = computed(() => active)
 const { code, common } = useI18n()
 const { copy, copied } = useClipboard({ copiedDuring: 2000 })
 const { copy: copyReference, copied: copiedReference } = useClipboard({ copiedDuring: 2000 })
+const { copy: copyTokens, copied: copiedTokens } = useClipboard({ copiedDuring: 2000 })
+const hasTokens = useSceneComputed(() => {
+  void store.state.sceneVersion
+  return store.graph.variables.size > 0
+})
+
+/** The document's variables as a DTCG token file, for code and other tools. */
+function downloadTokens(): void {
+  const json = JSON.stringify(exportDTCG(store.graph), null, 2)
+  downloadBlob(new TextEncoder().encode(`${json}\n`), 'tokens.json', 'application/json')
+}
 const source = ref<CodeSource>('design-jsx')
 const draft = ref('')
 const baseline = ref('')
@@ -228,6 +245,34 @@ watch(
         :ui="{ trigger: 'h-7 min-w-0 flex-1 text-[11px]' }"
         @update:model-value="changeSource"
       />
+      <Tip :label="hasTokens ? code.downloadTokens : code.noTokens">
+        <AppButton
+          color="neutral"
+          variant="ghost"
+          size="xs"
+          shape="square"
+          :disabled="!hasTokens"
+          :aria-label="code.downloadTokens"
+          data-test-id="code-panel-download-tokens"
+          @click="downloadTokens"
+        >
+          <icon-lucide-file-json class="size-3" />
+        </AppButton>
+      </Tip>
+      <Tip v-if="source === 'tailwind-jsx' && hasTokens" :label="code.copyTokensCSS">
+        <AppButton
+          color="neutral"
+          variant="ghost"
+          size="xs"
+          shape="square"
+          :aria-label="code.copyTokensCSS"
+          data-test-id="code-panel-copy-tokens-css"
+          @click="copyTokens(exportTokensCSS(store.graph))"
+        >
+          <icon-lucide-check v-if="copiedTokens" class="size-3 text-success" />
+          <icon-lucide-braces v-else class="size-3" />
+        </AppButton>
+      </Tip>
       <Tip v-if="source !== 'html-css'" :label="code.copyJSXReference">
         <AppButton
           color="neutral"

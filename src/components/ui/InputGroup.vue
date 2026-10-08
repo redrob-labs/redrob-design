@@ -26,6 +26,7 @@ const cls = computed(() => inputGroup({ size, disabled }))
 <template>
   <div
     data-slot="input-group"
+    data-focus-ring="within"
     :data-size="size"
     :data-disabled="disabled || undefined"
     :class="cls.root({ class: ui?.root })"

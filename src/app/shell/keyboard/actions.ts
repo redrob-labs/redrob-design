@@ -3,6 +3,7 @@ import type { Ref } from 'vue'
 import { opacityFromBuffer } from '@redrob-design/core/editor'
 import type { useEditorCommands, useViewportKind } from '@redrob-design/vue'
 
+import { askRedrob } from '@/app/ai/chat/ask'
 import type { EditorStore } from '@/app/editor/active-store'
 
 type KeyboardActionsOptions = {
@@ -92,8 +93,10 @@ export function createKeyboardActions({
       if (store.state.mobileDrawerSnap === 'closed') {
         store.state.mobileDrawerSnap = 'half'
       }
+    } else if (activeTab.value === 'ai') {
+      activeTab.value = 'design'
     } else {
-      activeTab.value = activeTab.value === 'ai' ? 'design' : 'ai'
+      askRedrob()
     }
   }
 

@@ -8,23 +8,24 @@
  *
  * That file is the collection's own format, validated by the app's own
  * `validateDesignMd`, and offered to users as `scaffold({kind: "redrob-brand"})`.
- * It is not a second copy of the brand: its HEX values are the ones on merged main
- * in `packages/ui/src/tokens.css`, and `brand-tokens.test.ts` fails if the two ever
+ * It is not a second copy of the brand: its HEX values are the ones the Redrob
+ * Group Design System 2026 publishes in `@redrob-labs/ui` (`tokens.json` resolves
+ * every chain per theme), and `brand-tokens.test.ts` fails if the two ever
  * disagree.
  *
  * This module turns that resource into CSS custom properties so a deck can *use*
  * the resource rather than transcribe its colours. The mapping is mechanical, not
- * a lookup table: the resource's colour keys are the custom-property names minus
- * the leading dashes.
+ * a lookup table: the resource's colour keys are the design system's
+ * custom-property names minus the leading dashes, and `dark-` marks the dark theme.
  *
- *   rr-blue-6              -> :root  { --rr-blue-6: #2b52ff }
- *   color-accent           -> :root  { --color-accent: var(--rr-blue-6) }
- *   dark-color-accent      -> .dark  { --color-accent: var(--rr-blue-5) }
+ *   blue-6                   -> :root               { --blue-6: #2b52ff }
+ *   action-primary-hover     -> :root               { --action-primary-hover: var(--blue-7) }
+ *   dark-action-primary-hover -> [data-theme="dark"] { --action-primary-hover: var(--blue-5) }
  *
- * A semantic role is emitted as `var(--rr-*)` whenever its value is exactly one of
- * the primitives, which keeps the two-layer shape of `tokens.css` intact in the
- * output: primitives hold HEX, roles point at primitives, and nothing else names a
- * colour.
+ * A semantic role is emitted as `var(--primitive)` whenever its value is exactly
+ * one of the primitives, which keeps the two-layer shape of the design system
+ * intact in the output: primitives hold HEX, roles point at primitives, and a
+ * role holds HEX only where the system itself corrects a value (`ink-muted`).
  */
 
 import { readFile } from 'node:fs/promises'
@@ -42,18 +43,13 @@ export const REDROB_BRAND_RESOURCE_PATH = 'scaffolds/design-systems/redrob-brand
 /** Path of the built-in scaffold resources root, relative to the repo root. */
 export const SCAFFOLD_RESOURCES_ROOT = 'public/resources'
 
-const PRIMITIVE_PREFIX = 'rr-'
-const SEMANTIC_PREFIX = 'color-'
-const DARK_PREFIX = 'dark-color-'
-
-/**
- * Roles the dark theme deliberately does not re-point. `tokens.css` draws both of
- * these as a `color-mix` of Gray 8 and Gray 9 on dark, because the scale has
- * nothing between them; a mix is not a brand HEX, and inventing one here would
- * make this resource disagree with main. A dark surface therefore names
- * `--color-surface-muted`, which is a real primitive in both themes.
- */
-const LIGHT_ONLY_ROLES = new Set(['color-surface', 'color-border-subtle'])
+/** Theme-independent brand primitives: Redrob Black/White, the blue and gray scales, accents. */
+const PRIMITIVE_PATTERN = /^(?:redrob-(?:black|white)|blue-\d+|gray-\d+|accent-[a-z]+-\d+)$/
+/** Semantic role families the design system re-points per theme. */
+const SEMANTIC_PATTERN = /^(?:surface|border|ink|action|focus|status)-[a-z-]+$/
+const DARK_PREFIX = 'dark-'
+/** The design system's dark selector, which is also the one the app sets on `<html>`. */
+const DARK_SELECTOR = '[data-theme="dark"]'
 
 /** Marks the generated token block inside a deck source. */
 export const TOKEN_BLOCK_OPEN = '/* redrob-brand:begin */'
@@ -156,18 +152,17 @@ export function resolveRedrobBrandTokens(raw: string): RedrobBrandTokens {
   for (const [key, value] of Object.entries(colors)) {
     if (typeof value !== 'string') continue
     const hex = value.toLowerCase()
-    if (key.startsWith(DARK_PREFIX)) dark[key.slice('dark-'.length)] = hex
-    else if (key.startsWith(SEMANTIC_PREFIX)) light[key] = hex
-    else if (key.startsWith(PRIMITIVE_PREFIX)) primitives[key] = hex
+    const darkRole = key.startsWith(DARK_PREFIX) ? key.slice(DARK_PREFIX.length) : undefined
+    if (darkRole !== undefined && SEMANTIC_PATTERN.test(darkRole)) dark[darkRole] = hex
+    else if (SEMANTIC_PATTERN.test(key)) light[key] = hex
+    else if (PRIMITIVE_PATTERN.test(key)) primitives[key] = hex
     else throw new Error(`redrob-brand colors.${key} is neither a primitive nor a semantic role`)
   }
   if (Object.keys(primitives).length === 0) {
-    throw new Error('redrob-brand token resource declares no rr-* primitives')
+    throw new Error('redrob-brand token resource declares no primitives')
   }
 
-  const missingInDark = Object.keys(light).filter(
-    (role) => dark[role] === undefined && !LIGHT_ONLY_ROLES.has(role)
-  )
+  const missingInDark = Object.keys(light).filter((role) => dark[role] === undefined)
   if (missingInDark.length > 0) {
     throw new Error(`redrob-brand dark theme does not re-point: ${missingInDark.join(', ')}`)
   }
@@ -268,7 +263,7 @@ export function renderBrandTokenCss(tokens: RedrobBrandTokens): string {
     '}',
     '',
     '/* Semantic roles, dark. Same roles re-pointed, no new primitive. */',
-    '.dark {'
+    `${DARK_SELECTOR} {`
   )
   for (const [role, hex] of Object.entries(tokens.dark)) {
     lines.push(`  --${role}: ${semanticValue(tokens, hex)};`)

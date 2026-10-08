@@ -1,0 +1,17 @@
+{
+  "heading": "Redrob Cloud",
+  "description": "Facoltativo. Accedi per condividere file con le persone che inviti, cifrati end-to-end, con commenti e versioni. I tuoi file e le chiavi AI restano dove sono.",
+  "signedOut": "Non hai effettuato l'accesso. Tutto funziona su questo computer senza account.",
+  "signIn": "Accedi con Redrob Console",
+  "signingIn": "In attesa che approvi questo codice in Redrob Console.",
+  "openConsole": "Apri Redrob Console",
+  "cancel": "Annulla",
+  "signedInAs": "Accesso effettuato come {name}.",
+  "workspace": "Spazio di lavoro",
+  "noWorkspace": "Questo account non è ancora in uno spazio di lavoro.",
+  "signOut": "Esci",
+  "unreachable": "Redrob Console non è raggiungibile. Le funzioni cloud aspettano una risposta.",
+  "denied": "L'accesso non è stato approvato.",
+  "expired": "Il codice è scaduto prima dell'approvazione. Riprova.",
+  "role": "{role} in questo spazio di lavoro"
+}

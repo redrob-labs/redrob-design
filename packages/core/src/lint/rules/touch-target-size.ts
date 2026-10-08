@@ -33,7 +33,8 @@ export default defineRule({
     context.report({
       node,
       message: `Touch target too small: ${node.width}×${node.height}px`,
-      suggest: 'Resize to at least 44×44px or add padding'
+      suggest: 'Resize to at least 44×44px or add padding',
+      fix: { set: { width: Math.max(44, node.width), height: Math.max(44, node.height) } }
     })
   }
 })

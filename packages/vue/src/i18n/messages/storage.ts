@@ -17,7 +17,14 @@ export const storageMessageDefaults = {
   bucket: 'Bucket',
   region: 'Region',
   accessKeyID: 'Access key ID',
-  secretAccessKey: 'Secret access key'
+  secretAccessKey: 'Secret access key',
+  publishHeading: 'Publish site',
+  publishDescription:
+    'Publish uploads shipped pages to this bucket, kept apart from where your files sync. Make the bucket public with your provider; Redrob never changes who can read it.',
+  publicSiteURL: 'Public site URL',
+  publicSiteURLHint: 'Where this bucket is served, for example https://site.example.com.',
+  siteURLNotHttps: 'Use an https address.',
+  siteURLInvalid: 'Enter a full web address with no query or # part.'
 } as const
 
 export const storageMessages = i18n('storage', storageMessageDefaults)

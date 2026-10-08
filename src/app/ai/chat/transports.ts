@@ -13,6 +13,20 @@ import { buildReasoningProviderOptions, type AIProviderOptions } from '@/app/ai/
 import SYSTEM_PROMPT from '@/app/ai/chat/system-prompt.md?raw'
 import { createAIModelRuntime, resolveModelConnectionAPIKey } from '@/app/ai/models'
 import { MAX_AGENT_STEPS, createAITools, recordStep, resetRunSteps } from '@/app/ai/tools'
+import { beginChangeTurn, finishChangeTurn } from '@/app/assistant/changes/store'
+import { protectedPrompt } from '@/app/assistant/privacy/prompt'
+import { privacyVaultFor, rememberThreadPrivacy } from '@/app/assistant/privacy/store'
+import { protectTools } from '@/app/assistant/privacy/tools'
+import { loadThread, saveThread, saveThreadNow, threadKeyFor } from '@/app/assistant/thread/store'
+import { userTexts } from '@/app/assistant/thread/text'
+import { emitAnswerFinished } from '@/app/assistant/turn/finished'
+import { turnContext, turnInstructions } from '@/app/assistant/turn/instructions'
+import {
+  beginTurn,
+  finishTurn,
+  recordKeptPrivate,
+  recordTurnStep
+} from '@/app/assistant/turn/session'
 import {
   recordChatCompleted,
   recordChatFailed,
@@ -61,7 +75,7 @@ function mergeProviderOptions(
   return { ...cacheOptions, ...reasoningOptions }
 }
 
-export async function createACPTransport(providerID: AIProviderID) {
+export async function createACPTransport(providerID: AIProviderID, turnContextFor?: () => string) {
   const agentId = providerID.replace('acp:', '') as ACPAgentID
   const agentDef = ACP_AGENTS.find((a) => a.id === agentId)
   if (!agentDef) throw new Error(`Unknown ACP agent: ${agentId}`)
@@ -70,7 +84,12 @@ export async function createACPTransport(providerID: AIProviderID) {
   const { homeDir } = await import('@tauri-apps/api/path')
   const { designCustomModelID, designModelID } = await import('@/app/ai/models')
   const modelId = designCustomModelID.value.trim() || designModelID.value.trim()
-  return new ACPChatTransport({ agentDef, cwd: await homeDir(), modelId })
+  return new ACPChatTransport({
+    agentDef,
+    cwd: await homeDir(),
+    modelId,
+    turnContext: turnContextFor
+  })
 }
 
 export function createToolLoopTransport({
@@ -82,7 +101,7 @@ export function createToolLoopTransport({
   reasoningEffort,
   onError
 }: ToolLoopTransportOptions) {
-  const tools = createAITools(store)
+  const tools = protectTools(createAITools(store), () => privacyVaultFor(store))
   const cacheProviderOptions = supportsAnthropicCaching(providerID, effectiveModelID)
     ? ANTHROPIC_CACHE_CONTROL
     : undefined
@@ -100,14 +119,24 @@ export function createToolLoopTransport({
     providerOptions,
     prepareCall: (options) => {
       resetRunSteps(store)
+      beginTurn(store)
+      beginChangeTurn(store)
       return {
         ...options,
+        ...protectedPrompt(store, options, (count) => recordKeptPrivate(store, count)),
+        instructions: turnInstructions(store, SYSTEM_PROMPT),
         maxOutputTokens,
         providerOptions
       }
     },
     onStepFinish: ({ usage }) => {
       recordStep(store)
+      recordTurnStep(store, {
+        provider: providerID,
+        model: effectiveModelID,
+        inputTokens: usage.inputTokens ?? null,
+        outputTokens: usage.outputTokens ?? null
+      })
       recordModelStepCompleted({
         provider: providerID,
         model: effectiveModelID,
@@ -139,7 +168,7 @@ export function createChatSessionManager({
   const failure = ref<AIChatFailure | null>(null)
   let transportDirty = false
   let currentChatStore: EditorStore | null = null
-  let currentChatMessages = new WeakMap<EditorStore, UIMessage[]>()
+  const currentChatMessages = new WeakMap<EditorStore, UIMessage[]>()
   let chat: Chat<UIMessage> | null = null
   let acpTransportInstance: { destroy(): Promise<void> } | null = null
   let harnessTransportInstance: { destroy(): Promise<void> } | null = null
@@ -151,11 +180,15 @@ export function createChatSessionManager({
   }
 
   function handleChatFinish({
+    message,
+    messages,
     finishReason,
     isAbort,
     isDisconnect,
     isError
   }: {
+    message?: UIMessage
+    messages?: UIMessage[]
     finishReason?: FinishReason
     isAbort: boolean
     isDisconnect: boolean
@@ -164,6 +197,14 @@ export function createChatSessionManager({
     if (!isAbort && !isDisconnect && !isError) {
       recordChatCompleted({ finishReason: finishReason ?? null })
     }
+    const store = currentChatStore
+    if (!store) return
+    finishTurn(store, isError ? undefined : message)
+    finishChangeTurn(store, message?.role === 'assistant' ? message.id : undefined)
+    if (messages) saveThread(threadKeyFor(store), messages)
+    if (!isAbort && !isDisconnect && !isError && message?.role === 'assistant') {
+      emitAnswerFinished({ store, message, messages: messages ?? [message] })
+    }
   }
 
   function clearFailure(): void {
@@ -171,10 +212,11 @@ export function createChatSessionManager({
     failure.value = null
   }
 
+  /** Settings changed: rebuild the transport next time, but keep every thread. */
   function markTransportDirty() {
+    if (currentChatStore && chat) currentChatMessages.set(currentChatStore, chat.messages)
     transportDirty = true
     currentChatStore = null
-    currentChatMessages = new WeakMap()
   }
 
   async function destroyAgentTransports(): Promise<void> {
@@ -189,14 +231,14 @@ export function createChatSessionManager({
     if (errors.length) throw new AggregateError(errors, 'Agent transport teardown failed')
   }
 
-  async function createActiveACPTransport() {
+  async function createActiveACPTransport(store: EditorStore) {
     await destroyAgentTransports()
-    const transport = await createACPTransport(providerID.value)
+    const transport = await createACPTransport(providerID.value, () => turnContext(store))
     acpTransportInstance = transport
     return transport as ChatTransport<UIMessage>
   }
 
-  async function createActiveHarnessTransport() {
+  async function createActiveHarnessTransport(store: EditorStore) {
     await destroyAgentTransports()
     const runtime = await createAIModelRuntime('design')
     if (runtime?.kind !== 'harness') throw new Error('The Design agent is not configured for Pi')
@@ -219,7 +261,8 @@ export function createChatSessionManager({
         instructions: SYSTEM_PROMPT,
         mcpServers: await buildPiMCPServers()
       },
-      { REDROB_DESIGN_HARNESS_API_KEY: apiKey }
+      { REDROB_DESIGN_HARNESS_API_KEY: apiKey },
+      () => turnContext(store)
     )
     harnessTransportInstance = transport
     return transport as ChatTransport<UIMessage>
@@ -259,10 +302,14 @@ export function createChatSessionManager({
     }
 
     if (!chat || transportDirty || currentChatStore !== store) {
-      const messages = currentChatMessages.get(store)
+      if (currentChatStore && chat && currentChatStore !== store) {
+        saveThread(threadKeyFor(currentChatStore), chat.messages)
+      }
+      const messages = currentChatMessages.get(store) ?? (await loadThread(threadKeyFor(store)))
+      rememberThreadPrivacy(store, userTexts(messages))
       let transport: ChatTransport<UIMessage>
-      if (isACPProvider.value) transport = await createActiveACPTransport()
-      else if (isHarnessProvider.value) transport = await createActiveHarnessTransport()
+      if (isACPProvider.value) transport = await createActiveACPTransport(store)
+      else if (isHarnessProvider.value) transport = await createActiveHarnessTransport(store)
       else transport = await createTransport(store)
       chat = new Chat<UIMessage>({
         transport,
@@ -284,7 +331,10 @@ export function createChatSessionManager({
   }
 
   async function resetChat() {
-    if (currentChatStore) currentChatMessages.delete(currentChatStore)
+    if (currentChatStore) {
+      currentChatMessages.delete(currentChatStore)
+      await saveThreadNow(threadKeyFor(currentChatStore), [])
+    }
     await destroyAgentTransports()
     failure.value = null
     chat = null

@@ -183,7 +183,7 @@ onMounted(() => {
         <span v-else />
         <button
           type="button"
-          class="rounded bg-accent px-2.5 py-1.5 text-[11px] font-medium text-white hover:bg-accent/90"
+          class="rounded bg-accent px-2.5 py-1.5 text-[11px] font-medium text-on-accent hover:bg-accent-hover"
           @click="save"
         >
           {{ common.save }}

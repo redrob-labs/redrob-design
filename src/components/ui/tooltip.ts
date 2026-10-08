@@ -2,8 +2,7 @@ import { tv } from 'tailwind-variants'
 
 export const tooltip = tv({
   slots: {
-    content:
-      'z-50 rounded-md bg-panel px-2 py-1 text-[11px] text-surface shadow-[0_8px_30px_rgb(0_0_0/0.4)]'
+    content: 'z-50 rounded-sm bg-surface px-2 py-1 text-[11px] font-medium text-panel shadow-md'
   }
 })
 

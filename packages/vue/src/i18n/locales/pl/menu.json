@@ -12,6 +12,8 @@
   "saveAs": "Zapisz jako…",
   "exportSelection": "Eksportuj zaznaczenie…",
   "autosave": "Automatyczny zapis do pliku",
+  "versionHistory": "Historia wersji…",
+  "comments": "Komentarze…",
   "copy": "Kopiuj",
   "paste": "Wklej",
   "zoomIn": "Powiększ",
@@ -70,5 +72,9 @@
   "exportSelectionAsPNG": "Eksportuj zaznaczenie jako PNG",
   "exportSelectionAsSVG": "Eksportuj zaznaczenie jako SVG",
   "exportSelectionAsPPTX": "Eksportuj zaznaczenie jako PPTX",
-  "exportSelectionAsFig": "Eksportuj zaznaczenie jako .fig"
+  "exportSelectionAsFig": "Eksportuj zaznaczenie jako .fig",
+  "help": "Pomoc",
+  "mainMenu": "Menu główne",
+  "backToHome": "Wróć do strony głównej",
+  "searchCommands": "Szukaj poleceń…"
 }

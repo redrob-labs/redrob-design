@@ -220,5 +220,19 @@ export function createMCPSessionManager({
     await Promise.allSettled([...closing, ...all.map(scheduleClose)])
   }
 
-  return { clear, deleteSession, getExistingTransport, notifyToolsChanged, resolveTransport, touch }
+  /** Live MCP client sessions, after dropping expired ones; the app shows whether an agent is connected. */
+  function count(): number {
+    cleanupExpired()
+    return sessions.size
+  }
+
+  return {
+    clear,
+    count,
+    deleteSession,
+    getExistingTransport,
+    notifyToolsChanged,
+    resolveTransport,
+    touch
+  }
 }

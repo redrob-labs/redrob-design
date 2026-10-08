@@ -9,9 +9,9 @@ import {
   toolsToAI
 } from '@redrob-design/core/tools'
 import type { StepBudget, ToolLogEntry } from '@redrob-design/core/tools'
-import type { SceneNode } from '@redrob-design/scene-graph'
 
 import { makeFigmaFromStore } from '@/app/automation/bridge/figma-factory'
+import { assertCanEdit } from '@/app/cloud/files/permissions'
 import { getActiveEditorStore } from '@/app/editor/active-store'
 import type { EditorStore } from '@/app/editor/active-store'
 import { ensureGraphFonts } from '@/app/editor/fonts'
@@ -69,7 +69,6 @@ export function clearToolLogEntries(store?: EditorStore): void {
 }
 
 export function createAITools(store: EditorStore) {
-  let beforeSnapshot: Map<string, SceneNode> | null = null
   const runState = getRunState(store)
   const libraryService = useLibraryService()
   libraryService.bindEditor(store)
@@ -85,7 +84,8 @@ export function createAITools(store: EditorStore) {
     {
       getFigma: () => makeFigmaFromStore(store),
       executeTool: async (def, figma, args) => {
-        if (def.mutates) beforeSnapshot = store.snapshotPage()
+        // A shared file opened read-only: Redrob explains instead of changing what nobody saves.
+        if (def.mutates) assertCanEdit(store)
         return def.mutates
           ? store.runMutationWithLayout(
               () => def.execute(figma, args),
@@ -97,20 +97,10 @@ export function createAITools(store: EditorStore) {
             )
           : def.execute(figma, args)
       },
-      onAfterExecute: async (def) => {
-        if (def.mutates) {
-          store.requestRender()
-          if (beforeSnapshot) {
-            const before = beforeSnapshot
-            const after = store.snapshotPage()
-            store.pushUndoEntry({
-              label: `AI: ${def.name}`,
-              forward: () => store.restorePageFromSnapshot(after),
-              inverse: () => store.restorePageFromSnapshot(before)
-            })
-            beforeSnapshot = null
-          }
-        }
+      // Undo is one step per answer, recorded when the turn finishes
+      // (`finishChangeTurn`), not one per tool call.
+      onAfterExecute: (def) => {
+        if (def.mutates) store.requestRender()
       },
       onFlashNodes: (nodeIds) => {
         store.renderer?.aiClearActive()

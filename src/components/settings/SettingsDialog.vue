@@ -1,14 +1,31 @@
 <script setup lang="ts">
 import { DialogClose } from 'reka-ui'
-import { computed } from 'vue'
+import { computed, nextTick, useTemplateRef, watch } from 'vue'
+import type { Component } from 'vue'
+import { tv } from 'tailwind-variants'
 import { useI18n } from '@redrob-design/vue'
 import { IS_TAURI } from '@redrob-design/core/constants'
 
+import IconActivity from '~icons/lucide/activity'
+import IconChart from '~icons/lucide/chart-no-axes-column'
+import IconCloud from '~icons/lucide/cloud'
+import IconCloudCog from '~icons/lucide/cloud-cog'
+import IconPlug from '~icons/lucide/plug'
+import IconSliders from '~icons/lucide/sliders-horizontal'
+
 import { useAIChat } from '@/app/ai/chat/use'
 import { appCredentialServices } from '@/app/settings/credentials/app'
-import { settingsDialogOpen, settingsDialogSection } from '@/app/settings/dialog'
+import {
+  SETTINGS_NAVIGATION,
+  type SettingsSection,
+  settingsDialogFocus,
+  settingsDialogOpen,
+  settingsDialogSection
+} from '@/app/settings/dialog'
+import CloudSettingsPanel from '@/components/settings/cloud/CloudSettingsPanel.vue'
 import DiagnosticsSettingsPanel from '@/components/settings/diagnostics/DiagnosticsSettingsPanel.vue'
 import GeneralSettingsPanel from '@/components/settings/general/GeneralSettingsPanel.vue'
+import SettingsGroup from '@/components/settings/layout/SettingsGroup.vue'
 import MCPConnectionsSection from '@/components/settings/mcp/MCPConnectionsSection.vue'
 import MCPSettingsPanel from '@/components/settings/mcp/MCPSettingsPanel.vue'
 import ModelsPanel from '@/components/settings/models/ModelsPanel.vue'
@@ -16,11 +33,16 @@ import StockPhotoKeysSection from '@/components/settings/provider/StockPhotoKeys
 import UsageSettingsPanel from '@/components/settings/usage/UsageSettingsPanel.vue'
 import StorageSettingsPanel from '@/components/settings/storage/StorageSettingsPanel.vue'
 import VectorizeSettingsSection from '@/components/settings/vectorize/VectorizeSettingsSection.vue'
+import AppButton from '@/components/ui/AppButton.vue'
 import AppSwitch from '@/components/ui/AppSwitch.vue'
 import { AppDialogFooter, AppDialogHeader, AppDialogRoot } from '@/components/ui/dialog'
+import settingsDialogTheme from '@/theme/settings-dialog'
 
 const { credentials, settings, common } = useI18n()
 const { browserCredentialsRemembered, setRememberCredentials } = useAIChat()
+const styles = tv(settingsDialogTheme)()
+const body = useTemplateRef<HTMLElement>('body')
+
 function onOpenChange(open: boolean): void {
   settingsDialogOpen.value = open
 }
@@ -41,162 +63,151 @@ const credentialBackendLabel = computed(() => {
   return credentials.value.backendMemory
 })
 
-const navigationClass =
-  'flex w-full items-center gap-2 rounded px-2 py-1.5 text-left text-xs text-muted transition-colors hover:bg-hover hover:text-surface data-[state=active]:bg-hover data-[state=active]:text-surface'
+const SECTION_ICONS: Record<SettingsSection, Component> = {
+  general: IconSliders,
+  mcp: IconPlug,
+  storage: IconCloud,
+  cloud: IconCloudCog,
+  usage: IconChart,
+  diagnostics: IconActivity
+}
+
+const sectionLabels = computed<Record<SettingsSection, string>>(() => ({
+  general: settings.value.general,
+  mcp: settings.value.sectionAgentsAndMCP,
+  storage: settings.value.sectionStorage,
+  cloud: settings.value.sectionCloud,
+  usage: settings.value.usage,
+  diagnostics: settings.value.diagnostics
+}))
+
+const groupLabels = computed(() => ({
+  preferences: settings.value.navPreferences,
+  connections: settings.value.navConnections,
+  account: settings.value.navAccount
+}))
+
+function selectSection(section: SettingsSection): void {
+  settingsDialogSection.value = section
+  settingsDialogFocus.value = null
+}
+
+watch(
+  [settingsDialogOpen, settingsDialogSection, settingsDialogFocus],
+  async ([open, , focus]) => {
+    if (!open || !focus) return
+    await nextTick()
+    body.value
+      ?.querySelector(`[data-settings-focus="${focus}"]`)
+      ?.scrollIntoView({ block: 'start' })
+  },
+  { flush: 'post' }
+)
 </script>
 
 <template>
   <AppDialogRoot
     :open="settingsDialogOpen"
-    size="lg"
-    height="tall"
+    size="wide"
+    height="full"
     data-test-id="app-settings-dialog"
     @update:open="onOpenChange"
   >
     <AppDialogHeader
       :heading="settings.title"
-      :description="settings.description"
       :close-label="common.close"
+      :ui="{ header: styles.header() }"
     />
 
     <div class="flex min-h-0 flex-1">
-      <nav class="w-40 shrink-0 border-r border-border p-2" :aria-label="settings.title">
-        <button
-          type="button"
-          :class="navigationClass"
-          :data-state="settingsDialogSection === 'general' ? 'active' : 'inactive'"
-          data-test-id="settings-section-general"
-          @click="settingsDialogSection = 'general'"
-        >
-          <icon-lucide-settings class="size-3.5" />
-          {{ settings.general }}
-        </button>
-        <button
-          type="button"
-          :class="navigationClass"
-          :data-state="settingsDialogSection === 'ai' ? 'active' : 'inactive'"
-          data-test-id="settings-section-ai"
-          @click="settingsDialogSection = 'ai'"
-        >
-          <icon-lucide-sparkles class="size-3.5" />
-          {{ settings.aiAndAgents }}
-        </button>
-        <button
-          type="button"
-          :class="navigationClass"
-          :data-state="settingsDialogSection === 'usage' ? 'active' : 'inactive'"
-          data-test-id="settings-section-usage"
-          @click="settingsDialogSection = 'usage'"
-        >
-          <icon-lucide-chart-no-axes-combined class="size-3.5" />
-          {{ settings.usage }}
-        </button>
-        <button
-          type="button"
-          :class="navigationClass"
-          :data-state="settingsDialogSection === 'diagnostics' ? 'active' : 'inactive'"
-          data-test-id="settings-section-diagnostics"
-          @click="settingsDialogSection = 'diagnostics'"
-        >
-          <icon-lucide-activity class="size-3.5" />
-          {{ settings.diagnostics }}
-        </button>
-
-        <button
-          type="button"
-          :class="navigationClass"
-          :data-state="settingsDialogSection === 'mcp' ? 'active' : 'inactive'"
-          data-test-id="settings-section-mcp"
-          @click="settingsDialogSection = 'mcp'"
-        >
-          <icon-lucide-plug class="size-3.5" />
-          {{ settings.automation }}
-        </button>
-        <button
-          type="button"
-          :class="navigationClass"
-          :data-state="settingsDialogSection === 'media' ? 'active' : 'inactive'"
-          data-test-id="settings-section-media"
-          @click="settingsDialogSection = 'media'"
-        >
-          <icon-lucide-image class="size-3.5" />
-          {{ settings.media }}
-        </button>
-        <button
-          type="button"
-          :class="navigationClass"
-          :data-state="settingsDialogSection === 'storage' ? 'active' : 'inactive'"
-          data-test-id="settings-section-storage"
-          @click="settingsDialogSection = 'storage'"
-        >
-          <icon-lucide-cloud class="size-3.5" />
-          {{ settings.storage }}
-        </button>
+      <nav :class="styles.nav()" :aria-label="settings.title">
+        <div v-for="group in SETTINGS_NAVIGATION" :key="group.id" :class="styles.navGroup()">
+          <p :class="styles.navHeading()">{{ groupLabels[group.id] }}</p>
+          <button
+            v-for="section in group.sections"
+            :key="section"
+            type="button"
+            :class="styles.navItem()"
+            :data-state="settingsDialogSection === section ? 'active' : 'inactive'"
+            :aria-current="settingsDialogSection === section ? 'page' : undefined"
+            :data-test-id="`settings-section-${section}`"
+            @click="selectSection(section)"
+          >
+            <component :is="SECTION_ICONS[section]" :class="styles.navIcon()" />
+            {{ sectionLabels[section] }}
+          </button>
+        </div>
       </nav>
 
-      <div class="min-h-0 flex-1 overflow-y-auto p-4">
+      <div ref="body" :class="styles.body()">
         <GeneralSettingsPanel v-if="settingsDialogSection === 'general'" />
 
         <section
-          v-else-if="settingsDialogSection === 'ai'"
-          class="flex h-full flex-col"
-          data-test-id="settings-ai-panel"
-        >
-          <ModelsPanel />
-        </section>
-
-        <UsageSettingsPanel v-else-if="settingsDialogSection === 'usage'" />
-
-        <DiagnosticsSettingsPanel v-else-if="settingsDialogSection === 'diagnostics'" />
-
-        <section
           v-else-if="settingsDialogSection === 'mcp'"
-          class="flex flex-col"
+          class="flex flex-col gap-4"
           data-test-id="settings-mcp-panel"
         >
           <MCPSettingsPanel />
           <MCPConnectionsSection />
+          <div data-settings-focus="models" data-test-id="settings-ai-panel">
+            <SettingsGroup
+              :heading="settings.modelsAndKeys"
+              :description="settings.modelsAndKeysDescription"
+            >
+              <ModelsPanel />
+            </SettingsGroup>
+          </div>
         </section>
 
         <section
-          v-else-if="settingsDialogSection === 'media'"
-          class="flex flex-col gap-2.5"
-          data-test-id="settings-media-panel"
+          v-else-if="settingsDialogSection === 'storage'"
+          class="flex flex-col gap-4"
+          data-test-id="settings-storage-section"
         >
-          <h3 class="text-xs font-semibold text-surface">{{ settings.media }}</h3>
-          <StockPhotoKeysSection />
-          <VectorizeSettingsSection />
+          <StorageSettingsPanel />
+          <div data-settings-focus="image-services" data-test-id="settings-media-panel">
+            <SettingsGroup
+              :heading="settings.imageServices"
+              :description="settings.imageServicesDescription"
+            >
+              <div class="flex flex-col gap-2.5 py-3">
+                <StockPhotoKeysSection />
+                <VectorizeSettingsSection />
+              </div>
+            </SettingsGroup>
+          </div>
         </section>
 
-        <StorageSettingsPanel v-else />
+        <CloudSettingsPanel v-else-if="settingsDialogSection === 'cloud'" />
+
+        <UsageSettingsPanel v-else-if="settingsDialogSection === 'usage'" />
+
+        <DiagnosticsSettingsPanel v-else />
       </div>
     </div>
 
-    <AppDialogFooter :ui="{ footer: 'justify-between' }">
-      <div class="mr-auto flex items-center gap-2">
-        <AppSwitch
-          v-if="!IS_TAURI"
-          v-model="rememberCredentials"
-          :label="credentials.remember"
-          data-test-id="settings-remember-credentials"
-        />
-        <div>
-          <p v-if="!IS_TAURI" class="text-[10px] text-surface">
-            {{ credentials.remember }}
-          </p>
-          <p class="text-[10px] text-muted" data-test-id="settings-credential-backend">
-            {{ credentials.storage({ backend: credentialBackendLabel }) }}
-          </p>
-        </div>
+    <AppDialogFooter :ui="{ footer: styles.footer() }">
+      <div class="mr-auto flex items-center gap-3">
+        <label v-if="!IS_TAURI" class="flex cursor-pointer items-center gap-2 text-xs text-surface">
+          <AppSwitch
+            v-model="rememberCredentials"
+            :label="credentials.remember"
+            data-test-id="settings-remember-credentials"
+          />
+          <span>{{ credentials.remember }}</span>
+        </label>
+        <p class="flex items-center gap-1.5 text-xs text-muted">
+          <icon-lucide-circle-check class="size-3.5 shrink-0" />
+          <span>{{ settings.changesApplyNow }}</span>
+          <span data-test-id="settings-credential-backend">{{
+            credentials.storage({ backend: credentialBackendLabel })
+          }}</span>
+        </p>
       </div>
       <DialogClose as-child>
-        <button
-          type="button"
-          class="rounded bg-accent px-3 py-1.5 text-[11px] font-medium text-white hover:bg-accent/90"
-          data-test-id="app-settings-done"
-        >
-          {{ common.done }}
-        </button>
+        <AppButton variant="outline" size="md" data-test-id="app-settings-done">
+          {{ common.close }}
+        </AppButton>
       </DialogClose>
     </AppDialogFooter>
   </AppDialogRoot>

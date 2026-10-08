@@ -143,7 +143,7 @@ test('batches compatible mixed selection and undo', async () => {
   expect(await instanceState(instanceId)).toMatchObject({ badgeVisible: true })
   expect(await instanceState(secondId)).toMatchObject({ badgeVisible: true })
 
-  await canvas.pressKey('Meta+z')
+  await canvas.pressKey('ControlOrMeta+z')
   await canvas.waitForRender()
   expect(await instanceState(instanceId)).toMatchObject({ badgeVisible: false })
   expect(await instanceState(secondId)).toMatchObject({ badgeVisible: true })

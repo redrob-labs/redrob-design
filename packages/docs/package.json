@@ -1,8 +1,8 @@
 {
   "name": "@redrob-design/docs",
   "version": "0.1.0",
-  "license": "MIT",
   "private": true,
+  "license": "MIT",
   "type": "module",
   "imports": {
     "#docs/*": "./.vitepress/*"
@@ -14,6 +14,10 @@
     "check": "bun ../../tools/docs/src/check.ts",
     "preview": "vitepress preview"
   },
+  "dependencies": {
+    "@iconify/vue": "^5.0.1",
+    "@redrob-design/brand": "workspace:*"
+  },
   "devDependencies": {
     "@shikijs/vitepress-twoslash": "^4.4.3",
     "@tailwindcss/vite": "^4.3.3",
@@ -21,8 +25,5 @@
     "vitepress-plugin-llms": "1.12.2",
     "vue": "^3.5.41",
     "vue-component-meta": "^3.3.10"
-  },
-  "dependencies": {
-    "@iconify/vue": "^5.0.1"
   }
 }

@@ -5,8 +5,8 @@ import { computeAbsoluteBounds } from '@redrob-design/scene-graph/geometry'
 
 import { getGuideScreenSegment } from '#core/canvas/guides/geometry'
 import type { GuideOverlayState, GuideSelection } from '#core/canvas/guides/types'
+import { canvasThemeColor } from '#core/canvas/renderer/canvas-theme'
 import {
-  MEASUREMENT_COLOR,
   RULER_SIZE,
   RULER_BADGE_HEIGHT,
   RULER_BADGE_PADDING,
@@ -226,7 +226,8 @@ function drawGuideRulerLabel(
   screenPosition: number
 ): void {
   const label = String(Math.round(position * 100) / 100)
-  r.auxFill.setColor(r.ck.Color4f(MEASUREMENT_COLOR.r, MEASUREMENT_COLOR.g, MEASUREMENT_COLOR.b, 1))
+  const measurement = canvasThemeColor(r.canvasTheme, 'measurement')
+  r.auxFill.setColor(r.ck.Color4f(measurement.r, measurement.g, measurement.b, 1))
   if (axis === 'x') {
     const widths = font.getGlyphWidths(font.getGlyphIDs(label))
     const textWidth = widths.reduce((sum, width) => sum + width, 0)

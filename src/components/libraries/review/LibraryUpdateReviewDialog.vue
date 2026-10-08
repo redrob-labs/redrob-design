@@ -274,7 +274,7 @@ watch([request, currentInstanceId], () => void loadPreview(), { immediate: true 
         </button>
         <button
           type="button"
-          class="rounded bg-accent px-3 py-1.5 text-xs text-white"
+          class="rounded bg-accent px-3 py-1.5 text-xs text-on-accent"
           :disabled="applying"
           @click="updateAll"
         >

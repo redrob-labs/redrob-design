@@ -62,7 +62,7 @@ type AssetGroup = {
 const editor = useEditorStore()
 const libraryService = useLibraryService()
 const remoteAssets = libraryService.enabledAssets
-const { panels, commands } = useI18n()
+const { panels, commands, common } = useI18n()
 const query = ref('')
 const assetView = ref<AssetView>('grid')
 const detailsOpen = ref(false)
@@ -330,7 +330,8 @@ async function insertSelectedAsset() {
         data-test-id="assets-search"
         size="sm"
         class="min-w-0 flex-1"
-        :placeholder="panels.searchLocalComponents"
+        :placeholder="common.search"
+        :aria-label="panels.searchLocalComponents"
       />
       <AppButton
         v-bind="insertButton"
@@ -341,7 +342,7 @@ async function insertSelectedAsset() {
         <icon-lucide-library class="size-3.5" />
         <span
           v-if="libraryUpdateCount > 0"
-          class="absolute top-0.5 right-0.5 min-w-2.5 rounded-full bg-accent px-0.5 text-center text-[8px] leading-2.5 text-white"
+          class="absolute top-0.5 right-0.5 min-w-2.5 rounded-full bg-accent px-0.5 text-center text-[8px] leading-2.5 text-on-accent"
         >
           {{ libraryUpdateCount }}
         </span>
@@ -523,6 +524,7 @@ async function insertSelectedAsset() {
           </div>
         </div>
         <DialogClose
+          :aria-label="common.close"
           data-test-id="asset-details-close"
           class="flex size-7 cursor-pointer items-center justify-center rounded border-none bg-transparent text-muted hover:bg-hover hover:text-surface"
         >

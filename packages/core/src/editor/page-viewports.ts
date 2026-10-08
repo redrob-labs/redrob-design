@@ -1,14 +1,17 @@
 import type { Color } from '@redrob-design/scene-graph/primitives'
 
-import { CANVAS_BG_COLOR } from '#core/constants'
-
 import type { EditorContext } from './types'
 
 interface PageViewport {
   panX: number
   panY: number
   zoom: number
-  pageColor: Color
+  /** The page's own colour, or `null` when it follows the theme. */
+  pageColor: Color | null
+}
+
+function copyPageColor(color: Color | null): Color | null {
+  return color ? { ...color } : null
 }
 
 export function createPageViewportStore(ctx: EditorContext) {
@@ -19,7 +22,7 @@ export function createPageViewportStore(ctx: EditorContext) {
       panX: ctx.state.panX,
       panY: ctx.state.panY,
       zoom: ctx.state.zoom,
-      pageColor: { ...ctx.state.pageColor }
+      pageColor: copyPageColor(ctx.state.pageColor)
     })
   }
 
@@ -29,14 +32,14 @@ export function createPageViewportStore(ctx: EditorContext) {
       ctx.state.panX = viewport.panX
       ctx.state.panY = viewport.panY
       ctx.state.zoom = viewport.zoom
-      ctx.state.pageColor = { ...viewport.pageColor }
+      ctx.state.pageColor = copyPageColor(viewport.pageColor)
       return
     }
 
     ctx.state.panX = 0
     ctx.state.panY = 0
     ctx.state.zoom = 1
-    ctx.state.pageColor = { ...CANVAS_BG_COLOR }
+    ctx.state.pageColor = null
   }
 
   function deletePageViewport(pageId: string) {

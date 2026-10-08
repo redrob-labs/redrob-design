@@ -6,7 +6,17 @@ import { locale, setLocale, AVAILABLE_LOCALES, LOCALE_LABELS } from '#vue/i18n/l
 import type { Locale } from '#vue/i18n/locale'
 import {
   aiMessages,
+  shipMessages,
+  planMessages,
+  reviewMessages,
+  threadMessages,
+  homeMessages,
+  composerMessages,
   automationMessages,
+  cloudMessages,
+  sharingMessages,
+  historyMessages,
+  commentsMessages,
   codeMessages,
   collaborationMessages,
   commandMessages,
@@ -36,7 +46,17 @@ export function useI18nNamespace<MessagesStore extends Store>(messages: Messages
 }
 
 export const useAIMessages = () => useI18nNamespace(aiMessages)
+export const useShipMessages = () => useI18nNamespace(shipMessages)
+export const usePlanMessages = () => useI18nNamespace(planMessages)
+export const useReviewMessages = () => useI18nNamespace(reviewMessages)
+export const useThreadMessages = () => useI18nNamespace(threadMessages)
+export const useHomeMessages = () => useI18nNamespace(homeMessages)
+export const useComposerMessages = () => useI18nNamespace(composerMessages)
 export const useAutomationMessages = () => useI18nNamespace(automationMessages)
+export const useCloudMessages = () => useI18nNamespace(cloudMessages)
+export const useSharingMessages = () => useI18nNamespace(sharingMessages)
+export const useHistoryMessages = () => useI18nNamespace(historyMessages)
+export const useCommentsMessages = () => useI18nNamespace(commentsMessages)
 export const useCodeMessages = () => useI18nNamespace(codeMessages)
 export const useCollaborationMessages = () => useI18nNamespace(collaborationMessages)
 export const useCommandMessages = () => useI18nNamespace(commandMessages)
@@ -64,7 +84,17 @@ export const useVariableTypeMessages = () => useI18nNamespace(variableTypeMessag
 export function useI18n() {
   return {
     ai: useAIMessages(),
+    ship: useShipMessages(),
+    plan: usePlanMessages(),
+    review: useReviewMessages(),
+    thread: useThreadMessages(),
+    home: useHomeMessages(),
+    composer: useComposerMessages(),
     automation: useAutomationMessages(),
+    cloud: useCloudMessages(),
+    sharing: useSharingMessages(),
+    history: useHistoryMessages(),
+    comments: useCommentsMessages(),
     code: useCodeMessages(),
     collaboration: useCollaborationMessages(),
     commands: useCommandMessages(),

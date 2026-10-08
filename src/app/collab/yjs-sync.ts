@@ -250,7 +250,13 @@ export function createYjsGraphSync({
     const pages = store.graph.getPages()
     if (pages.some((page) => page.id === store.state.currentPageId)) return
     if (pages.length === 0) return
-    void store.switchPage(pages[0].id)
+    // Many nodes can arrive at once, each asking for the page; a later ask supersedes an earlier
+    // one, and the superseded switch rejects with AbortError, which is not a failure.
+    store.switchPage(pages[0].id).catch((error: unknown) => {
+      if (!(error instanceof DOMException && error.name === 'AbortError')) {
+        logCollabSyncError('Failed to show the first page', error)
+      }
+    })
   }
 
   return { syncNodeToYjs, syncAllNodesToYjs, applyYjsToGraph }

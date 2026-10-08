@@ -1,17 +1,23 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { type Locale, useI18n } from '@redrob-design/vue'
+import { type Locale, shortcutPlatform, useI18n } from '@redrob-design/vue'
 
+import { useEditorStore } from '@/app/editor/active-store'
 import { recoveryEnabled, setRecoveryEnabled } from '@/app/document/recovery/preferences'
 import { setSnappingPreference } from '@/app/settings/preferences/apply'
 import { appPreferences } from '@/app/settings/preferences/store'
+import { type AppTheme, useAppTheme } from '@/app/shell/theme'
 import AppSelect from '@/components/ui/AppSelect.vue'
 import AppSwitch from '@/components/ui/AppSwitch.vue'
+import SegmentedControl from '@/components/ui/SegmentedControl.vue'
 import RenderingSettingsSection from '@/components/settings/general/RenderingSettingsSection.vue'
 import SettingsGroup from '@/components/settings/layout/SettingsGroup.vue'
+import SettingsRow from '@/components/settings/layout/SettingsRow.vue'
 import SettingsSectionHeader from '@/components/settings/layout/SettingsSectionHeader.vue'
 
-const { availableLocales, locale, localeLabels, menu, recovery, setLocale, settings } = useI18n()
+const { availableLocales, locale, localeLabels, setLocale, settings } = useI18n()
+const store = useEditorStore()
+const { theme, setTheme } = useAppTheme()
 
 const language = computed<Locale>({
   get: () => locale.value,
@@ -22,6 +28,30 @@ const languageOptions = availableLocales.map((value) => ({
   value,
   label: localeLabels[value]
 }))
+
+const themeOptions = computed(() => [
+  { value: 'auto', label: settings.value.themeSystem },
+  { value: 'light', label: settings.value.themeLight },
+  { value: 'dark', label: settings.value.themeDark }
+])
+
+function isAppTheme(value: string): value is AppTheme {
+  return value === 'auto' || value === 'light' || value === 'dark'
+}
+
+const themeModel = computed({
+  get: () => theme.value,
+  set: (value: string) => {
+    if (isAppTheme(value)) setTheme(value)
+  }
+})
+
+const autosave = computed({
+  get: () => store.state.autosaveEnabled,
+  set: (enabled: boolean) => {
+    store.state.autosaveEnabled = enabled
+  }
+})
 
 const preserveUnsavedWork = computed({
   get: () => recoveryEnabled.value,
@@ -42,94 +72,91 @@ const snapToPixelGrid = computed({
   get: () => appPreferences.value.editing.snapping.pixelGrid,
   set: (enabled: boolean) => setSnappingPreference('pixelGrid', enabled)
 })
+
+const themeControlUI = { root: 'rounded-md p-1', item: 'h-7 flex-none px-3 text-xs' }
+
+const snappingModifier = shortcutPlatform() === 'mac' ? 'Control' : 'Ctrl'
 </script>
 
 <template>
   <section class="flex flex-col gap-4" data-test-id="settings-general-panel">
-    <div>
-      <h3 class="text-xs font-semibold text-surface">{{ menu.language }}</h3>
-      <p class="mt-1 text-[11px] text-muted">{{ settings.languageDescription }}</p>
-    </div>
+    <SettingsSectionHeader>{{ settings.general }}</SettingsSectionHeader>
 
-    <div class="flex flex-col rounded border border-border">
-      <label class="flex items-center justify-between gap-4 px-3 py-2.5">
-        <span class="text-xs text-surface">{{ menu.language }}</span>
+    <SettingsGroup :heading="settings.appearance">
+      <SettingsRow :heading="settings.theme" :description="settings.themeDescription">
+        <SegmentedControl
+          v-model="themeModel"
+          :options="themeOptions"
+          :label="settings.theme"
+          :ui="themeControlUI"
+          data-test-id="settings-theme"
+        />
+      </SettingsRow>
+      <SettingsRow
+        :heading="settings.language"
+        :description="settings.interfaceLanguageDescription"
+      >
         <AppSelect
           v-model="language"
-          :label="menu.language"
+          :label="settings.language"
           :options="languageOptions"
-          class="w-44"
+          class="w-50"
           data-test-id="settings-language"
         />
-      </label>
-    </div>
-
-    <SettingsSectionHeader>
-      {{ recovery.settingsTitle }}
-      <template #description>{{ recovery.settingsDescription }}</template>
-    </SettingsSectionHeader>
-
-    <SettingsGroup>
-      <label class="flex items-center justify-between gap-4 px-3 py-2.5">
-        <span>
-          <span class="block text-xs text-surface">{{ recovery.preserveUnsavedWork }}</span>
-          <span class="block text-[10px] text-muted">{{
-            recovery.preserveUnsavedWorkDescription
-          }}</span>
-        </span>
-        <AppSwitch
-          v-model="preserveUnsavedWork"
-          :label="recovery.preserveUnsavedWork"
-          data-test-id="settings-recovery-enabled"
-        />
-      </label>
+      </SettingsRow>
     </SettingsGroup>
 
-    <SettingsSectionHeader>
-      {{ settings.editing }}
-      <template #description>{{ settings.snappingDescription }}</template>
-    </SettingsSectionHeader>
-
-    <SettingsGroup>
-      <label class="flex items-center justify-between gap-4 px-3 py-2.5">
-        <span>
-          <span class="block text-xs text-surface">{{ settings.snapToGeometry }}</span>
-          <span class="block text-[10px] text-muted">{{ settings.snapToGeometryDescription }}</span>
-        </span>
+    <SettingsGroup :heading="settings.files">
+      <SettingsRow :heading="settings.autosave" :description="settings.autosaveDescription">
+        <AppSwitch v-model="autosave" :label="settings.autosave" data-test-id="settings-autosave" />
+      </SettingsRow>
+      <SettingsRow
+        :heading="settings.keepUnsavedWorkSafe"
+        :description="settings.keepUnsavedWorkSafeDescription"
+      >
         <AppSwitch
-          v-model="snapToGeometry"
-          :label="settings.snapToGeometry"
-          data-test-id="settings-snap-geometry"
+          v-model="preserveUnsavedWork"
+          :label="settings.keepUnsavedWorkSafe"
+          data-test-id="settings-recovery-enabled"
         />
-      </label>
-      <label class="flex items-center justify-between gap-4 px-3 py-2.5">
-        <span>
-          <span class="block text-xs text-surface">{{ settings.snapToObjects }}</span>
-          <span class="block text-[10px] text-muted">{{ settings.snapToObjectsDescription }}</span>
-        </span>
+      </SettingsRow>
+    </SettingsGroup>
+
+    <SettingsGroup
+      :heading="settings.canvas"
+      :description="settings.canvasSnappingHint({ key: snappingModifier })"
+    >
+      <SettingsRow
+        :heading="settings.snapToOtherLayers"
+        :description="settings.snapToOtherLayersDescription"
+      >
         <AppSwitch
           v-model="snapToObjects"
-          :label="settings.snapToObjects"
+          :label="settings.snapToOtherLayers"
           data-test-id="settings-snap-objects"
         />
-      </label>
-      <label class="flex items-center justify-between gap-4 px-3 py-2.5">
-        <span>
-          <span class="block text-xs text-surface">{{ settings.snapToPixelGrid }}</span>
-          <span class="block text-[10px] text-muted">{{
-            settings.snapToPixelGridDescription
-          }}</span>
-        </span>
+      </SettingsRow>
+      <SettingsRow
+        :heading="settings.snapToPixelGrid"
+        :description="settings.snapToPixelGridShortDescription"
+      >
         <AppSwitch
           v-model="snapToPixelGrid"
           :label="settings.snapToPixelGrid"
           data-test-id="settings-snap-pixel-grid"
         />
-      </label>
+      </SettingsRow>
+      <SettingsRow
+        :heading="settings.snapToGeometry"
+        :description="settings.snapToPointsDescription"
+      >
+        <AppSwitch
+          v-model="snapToGeometry"
+          :label="settings.snapToGeometry"
+          data-test-id="settings-snap-geometry"
+        />
+      </SettingsRow>
+      <RenderingSettingsSection />
     </SettingsGroup>
-
-    <p class="text-[10px] text-muted">{{ settings.temporaryDisableSnappingHint }}</p>
-
-    <RenderingSettingsSection />
   </section>
 </template>

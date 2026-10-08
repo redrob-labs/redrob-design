@@ -4,6 +4,7 @@ import type { SceneGraph, SceneNode } from '@redrob-design/scene-graph'
 import type { Color } from '@redrob-design/scene-graph/primitives'
 
 import type { RenderOverlays, SkiaRenderer } from '#core/canvas/renderer'
+import { canvasThemeColorAt } from '#core/canvas/renderer/canvas-theme'
 import {
   AUTO_LAYOUT_HOVER_BLUE,
   AUTO_LAYOUT_HOVER_BLUE_FILL,
@@ -173,7 +174,7 @@ function drawBaselineTicks(r: SkiaRenderer, canvas: Canvas, graph: SceneGraph, n
   const xCenter = (abs.x + node.width / 2) * r.zoom + r.panX
   const yCenter = (abs.y + node.height / 2) * r.zoom + r.panY
 
-  setStroke(r, AUTO_LAYOUT_HOVER_BLUE)
+  setStroke(r, layoutColor(r, 'layoutPadding', AUTO_LAYOUT_HOVER_BLUE.a))
   if (node.paddingTop > 0) {
     drawHorizontalTick(r, canvas, xCenter, (abs.y + node.paddingTop / 2) * r.zoom + r.panY)
   }
@@ -197,7 +198,7 @@ function drawBaselineTicks(r: SkiaRenderer, canvas: Canvas, graph: SceneGraph, n
     )
   }
 
-  setStroke(r, AUTO_LAYOUT_HOVER_MAGENTA)
+  setStroke(r, layoutColor(r, 'layoutGap', AUTO_LAYOUT_HOVER_MAGENTA.a))
   for (const rect of gapRects(node, graph)) {
     const [x, y, width, height] = rect
     if (node.layoutMode === 'HORIZONTAL') {
@@ -217,7 +218,13 @@ function drawSpacingHover(
 ) {
   const rects = gapRects(node, graph)
   for (const rect of rects) {
-    drawStripedRect(r, canvas, rect, AUTO_LAYOUT_HOVER_MAGENTA, AUTO_LAYOUT_HOVER_MAGENTA_FILL)
+    drawStripedRect(
+      r,
+      canvas,
+      rect,
+      layoutColor(r, 'layoutGap', AUTO_LAYOUT_HOVER_MAGENTA.a),
+      layoutColor(r, 'layoutGap', AUTO_LAYOUT_HOVER_MAGENTA_FILL.a)
+    )
   }
   if (!showValue || rects.length === 0) return
   const [x, y, width, height] = rects[0]
@@ -240,7 +247,13 @@ function drawPaddingHover(
 ) {
   const rect = paddingRect(node, graph, hover.side)
   if (!rect) return
-  drawStripedRect(r, canvas, rect, AUTO_LAYOUT_HOVER_BLUE, AUTO_LAYOUT_HOVER_BLUE_FILL)
+  drawStripedRect(
+    r,
+    canvas,
+    rect,
+    layoutColor(r, 'layoutPadding', AUTO_LAYOUT_HOVER_BLUE.a),
+    layoutColor(r, 'layoutPadding', AUTO_LAYOUT_HOVER_BLUE_FILL.a)
+  )
   if (!showValue) return
   const [x, y, width, height] = rect
   const value = hover.side === 'left' || hover.side === 'right' ? width : height
@@ -292,4 +305,8 @@ export function drawAutoLayoutHover(
     drawPaddingHover(r, canvas, graph, node, hover, hover.kind === 'padding-value')
   }
   drawBaselineTicks(r, canvas, graph, node)
+}
+
+function layoutColor(r: SkiaRenderer, key: 'layoutPadding' | 'layoutGap', alpha: number): Color {
+  return canvasThemeColorAt(r.canvasTheme, key, alpha)
 }

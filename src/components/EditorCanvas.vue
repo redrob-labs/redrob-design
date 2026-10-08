@@ -26,6 +26,11 @@ import { useEditorStore } from '@/app/editor/active-store'
 import { appRuntimeConfig } from '@/app/runtime/config'
 import { useCanvasCollaborationAwareness } from '@/app/editor/canvas/collaboration-awareness'
 import { createCanvasContextSelection } from '@/app/editor/canvas/context-selection'
+import { useDescribePointing } from '@/app/editor/canvas/describe-pointing'
+import { useCommentPlacement } from '@/app/editor/canvas/comment-placement'
+import { commentMode } from '@/app/comments/service'
+import CommentPlacingHint from '@/components/comments/CommentPlacingHint.vue'
+import CommentThreadPopover from '@/components/comments/CommentThreadPopover.vue'
 import IconLucidePanelBottom from '~icons/lucide/panel-bottom'
 import IconLucidePanelLeft from '~icons/lucide/panel-left'
 import IconLucidePanelRight from '~icons/lucide/panel-right'
@@ -107,7 +112,8 @@ const {
   hitTestFrameTitle,
   updatePaneCursor,
   activatePane,
-  () => isActivePane.value
+  // Placing a comment takes the click; nothing selects or edits meanwhile.
+  () => isActivePane.value && !commentMode.value
 )
 
 watch(isActivePane, (active) => {
@@ -115,7 +121,13 @@ watch(isActivePane, (active) => {
 })
 onUnmounted(cleanupInteractions)
 
-useTextEdit(canvasRef, store, { isEnabled: () => isActivePane.value })
+useTextEdit(canvasRef, store, { isEnabled: () => isActivePane.value && !store.state.viewOnly })
+useDescribePointing(canvasRef, store)
+const { documentKey: commentDocumentKey, anchor: commentAnchor } = useCommentPlacement(
+  canvasRef,
+  store
+)
+const commentReference = useCanvasVirtualReference(canvasRef, store, commentAnchor)
 const { isDraggingOver } = useCanvasDrop(canvasRef, store, activatePane)
 
 const paddingSideIcons = {
@@ -159,12 +171,20 @@ const paddingEditorIcon = computed(() => {
   return edit ? paddingSideIcons[edit.side] : IconLucidePanelTop
 })
 
-const cursor = computed(() => toolCursor(store.state.activeTool, cursorOverride.value))
+const cursor = computed(() => {
+  if (commentMode.value) return 'crosshair'
+  if (store.state.viewOnly) return store.state.hoveredNodeId ? 'pointer' : 'grab'
+  return toolCursor(store.state.activeTool, cursorOverride.value)
+})
 </script>
 
 <template>
   <ContextMenuRoot :modal="false">
-    <ContextMenuTrigger as-child @contextmenu.capture="selectAtContextPoint">
+    <ContextMenuTrigger
+      as-child
+      :disabled="store.state.viewOnly"
+      @contextmenu.capture="selectAtContextPoint"
+    >
       <div
         data-test-id="canvas-area"
         :data-pane-id="paneId"
@@ -245,6 +265,10 @@ const cursor = computed(() => toolCursor(store.state.activeTool, cursorOverride.
             </PopoverContent>
           </PopoverPortal>
         </PopoverRoot>
+        <template v-if="isActivePane">
+          <CommentPlacingHint />
+          <CommentThreadPopover :document-key="commentDocumentKey" :reference="commentReference" />
+        </template>
         <PreparationOverlay
           v-if="store.state.preparation && store.state.preparation.kind !== 'font-retry'"
           :preparation="store.state.preparation"

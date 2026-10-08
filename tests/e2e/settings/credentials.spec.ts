@@ -1,26 +1,28 @@
 import { expect, test } from '@playwright/test'
 
 import { CanvasHelper } from '#tests/helpers/canvas'
+import { openSettingsFromMenu } from '#tests/helpers/menu'
 
 test('storage settings keep secrets behind the credential manager', async ({ page }) => {
   await page.goto('/?test')
   const canvas = new CanvasHelper(page)
   await canvas.waitForInit()
 
-  await page.getByTestId('app-settings-trigger').click()
+  await openSettingsFromMenu(page)
   await page.getByTestId('settings-section-storage').click()
-  await page.getByLabel('Endpoint').fill('https://s3.example.com')
-  await page.getByLabel('Bucket').fill('designs')
+  const storageProfile = page.locator('[data-storage-profile="default"]')
+  await storageProfile.getByLabel('Endpoint').fill('https://s3.example.com')
+  await storageProfile.getByLabel('Bucket').fill('designs')
   await expect(page.getByRole('button', { name: 'Copy CORS JSON' })).toBeHidden()
 
-  const secretField = page.locator('[data-credential="secret-access-key"]')
+  const secretField = storageProfile.locator('[data-credential="secret-access-key"]')
   await secretField.locator('input').fill('storage-secret')
   await secretField.getByRole('button', { name: 'Save' }).click()
   await expect(secretField.locator('input')).toHaveValue('')
   await expect(secretField.locator('input')).toHaveAttribute('placeholder', /Key saved/)
 
   await page.getByTestId('app-settings-done').click()
-  await page.getByTestId('app-settings-trigger').click()
+  await openSettingsFromMenu(page)
   await page.getByTestId('settings-section-storage').click()
   await expect(secretField.locator('input')).toHaveValue('')
   await secretField.getByRole('button', { name: 'Clear' }).click()
@@ -28,9 +30,9 @@ test('storage settings keep secrets behind the credential manager', async ({ pag
 
   await page.reload()
   await canvas.waitForInit()
-  await page.getByTestId('app-settings-trigger').click()
+  await openSettingsFromMenu(page)
   await page.getByTestId('settings-section-storage').click()
-  await expect(page.getByLabel('Endpoint')).toHaveValue('https://s3.example.com')
+  await expect(storageProfile.getByLabel('Endpoint')).toHaveValue('https://s3.example.com')
   await expect(secretField.locator('input')).not.toHaveAttribute('placeholder', /Key saved/)
 })
 
@@ -39,7 +41,7 @@ test('MCP connections keep bearer tokens out of ordinary settings', async ({ pag
   const canvas = new CanvasHelper(page)
   await canvas.waitForInit()
 
-  await page.getByTestId('app-settings-trigger').click()
+  await openSettingsFromMenu(page)
   await page.getByTestId('settings-section-mcp').click()
   const section = page.locator('[data-mcp-connections]')
   await section.getByRole('button', { name: 'Add connection' }).click()
@@ -61,7 +63,7 @@ test('MCP connections keep bearer tokens out of ordinary settings', async ({ pag
   await page.getByTestId('app-settings-done').click()
   await page.reload()
   await canvas.waitForInit()
-  await page.getByTestId('app-settings-trigger').click()
+  await openSettingsFromMenu(page)
   await page.getByTestId('settings-section-mcp').click()
   await expect(section).toContainText('https://example.com/mcp')
   await expect(section).toContainText('Enabled')
@@ -79,7 +81,7 @@ test('MCP automation settings filter and persist tool availability', async ({ pa
   const canvas = new CanvasHelper(page)
   await canvas.waitForInit()
 
-  await page.getByTestId('app-settings-trigger').click()
+  await openSettingsFromMenu(page)
   await page.getByTestId('settings-section-mcp').click()
 
   const authentication = page.getByTestId('settings-mcp-authentication')
@@ -87,7 +89,7 @@ test('MCP automation settings filter and persist tool availability', async ({ pa
   await authentication.click()
   await page.reload()
   await canvas.waitForInit()
-  await page.getByTestId('app-settings-trigger').click()
+  await openSettingsFromMenu(page)
   await page.getByTestId('settings-section-mcp').click()
   await expect(authentication).toHaveAttribute('data-state', 'unchecked')
   await authentication.click()
@@ -101,7 +103,7 @@ test('MCP automation settings filter and persist tool availability', async ({ pa
   await page.getByTestId('settings-mcp-tool-create_shape').click()
   await page.reload()
   await canvas.waitForInit()
-  await page.getByTestId('app-settings-trigger').click()
+  await openSettingsFromMenu(page)
   await page.getByTestId('settings-section-mcp').click()
   await expect(page.getByTestId('settings-mcp-tool-create_shape')).toHaveAttribute(
     'data-state',
@@ -120,9 +122,9 @@ test('model library keeps reusable profiles and role assignments', async ({ page
   const canvas = new CanvasHelper(page)
   await canvas.waitForInit()
 
-  await page.getByTestId('app-settings-trigger').click()
+  await openSettingsFromMenu(page)
   await page.getByTestId('settings-add-model').click()
-  await page.getByLabel('Name').fill('Fast model')
+  await page.getByLabel('Name', { exact: true }).fill('Fast model')
   await page.getByTestId('settings-model-provider').click()
   await page.getByRole('option', { name: 'Google AI' }).click()
   await page.getByLabel('Model ID').click()
@@ -130,7 +132,7 @@ test('model library keeps reusable profiles and role assignments', async ({ page
   await page.getByRole('button', { name: 'Save model' }).click()
 
   await page.getByTestId('settings-add-model').click()
-  await page.getByLabel('Name').fill('Vision model')
+  await page.getByLabel('Name', { exact: true }).fill('Vision model')
   await page.getByTestId('settings-model-provider').click()
   await page.getByRole('option', { name: 'OpenRouter' }).click()
   await page.getByLabel('Model ID').first().click()
@@ -146,7 +148,7 @@ test('model library keeps reusable profiles and role assignments', async ({ page
 
   await page.reload()
   await canvas.waitForInit()
-  await page.getByTestId('app-settings-trigger').click()
+  await openSettingsFromMenu(page)
   await expect(page.getByTestId('settings-model-list')).toContainText('Fast model')
   await expect(page.getByTestId('settings-model-list')).toContainText('Vision model')
   await expect(page.getByTestId('settings-model-assignment-fast')).toContainText('Fast model')
@@ -158,7 +160,7 @@ test('remembered browser credentials survive reload and clear centrally', async 
   const canvas = new CanvasHelper(page)
   await canvas.waitForInit()
 
-  await page.getByRole('tab', { name: 'AI' }).click()
+  await page.getByRole('tab', { name: 'Redrob' }).click()
   await page.getByTestId('provider-setup-open-settings').click()
 
   const remember = page.getByTestId('settings-remember-credentials')
@@ -170,18 +172,18 @@ test('remembered browser credentials survive reload and clear centrally', async 
   await page.locator('[data-model-id]').first().click()
   await page.getByTestId('settings-model-provider').click()
   await page.getByRole('option', { name: 'OpenRouter' }).click()
-  await page.getByLabel('Name').fill('Claude Sonnet')
+  await page.getByLabel('Name', { exact: true }).fill('Claude Sonnet')
   await page.getByTestId('provider-settings-api-key').fill('sk-or-remembered-test-key')
   await page.getByRole('button', { name: 'Save model' }).click()
   await page.getByTestId('app-settings-done').click()
-  await expect(page.getByTestId('chat-input')).toBeVisible()
+  await expect(page.getByRole('textbox', { name: 'Describe a change' })).toBeVisible()
 
   await page.reload()
   await canvas.waitForInit()
-  await page.getByRole('tab', { name: 'AI' }).click()
-  await expect(page.getByTestId('chat-input')).toBeVisible()
+  await page.getByRole('tab', { name: 'Redrob' }).click()
+  await expect(page.getByRole('textbox', { name: 'Describe a change' })).toBeVisible()
 
-  await page.getByTestId('app-settings-trigger').click()
+  await openSettingsFromMenu(page)
   await page.locator('[data-model-id]').first().click()
   await page.getByTestId('provider-settings-clear-key').click()
   await page.getByRole('button', { name: 'Back' }).click()
@@ -190,6 +192,40 @@ test('remembered browser credentials survive reload and clear centrally', async 
 
   await page.reload()
   await canvas.waitForInit()
-  await page.getByRole('tab', { name: 'AI' }).click()
+  await page.getByRole('tab', { name: 'Redrob' }).click()
   await expect(page.getByTestId('provider-setup-open-settings')).toBeVisible()
+})
+
+test('the publish site keeps its own bucket and checks its public address', async ({ page }) => {
+  await page.goto('/?test')
+  const canvas = new CanvasHelper(page)
+  await canvas.waitForInit()
+
+  await openSettingsFromMenu(page)
+  await page.getByTestId('settings-section-storage').click()
+  const storageProfile = page.locator('[data-storage-profile="default"]')
+  const publishProfile = page.locator('[data-storage-profile="publish"]')
+  await storageProfile.getByLabel('Bucket').fill('designs')
+  await storageProfile.getByLabel('Bucket').blur()
+  await publishProfile.getByLabel('Bucket').fill('site')
+  await publishProfile.getByLabel('Bucket').blur()
+
+  const siteURL = page.getByTestId('settings-publish-site').getByLabel('Public site URL')
+  await siteURL.fill('http://site.example.com')
+  await siteURL.blur()
+  await expect(page.getByTestId('settings-publish-site').getByRole('alert')).toContainText(
+    'Use an https address.'
+  )
+  await siteURL.fill('https://site.example.com/')
+  await siteURL.blur()
+  await expect(page.getByTestId('settings-publish-site').getByRole('alert')).toHaveCount(0)
+
+  await page.getByTestId('app-settings-done').click()
+  await page.reload()
+  await canvas.waitForInit()
+  await openSettingsFromMenu(page)
+  await page.getByTestId('settings-section-storage').click()
+  await expect(storageProfile.getByLabel('Bucket')).toHaveValue('designs')
+  await expect(publishProfile.getByLabel('Bucket')).toHaveValue('site')
+  await expect(siteURL).toHaveValue('https://site.example.com')
 })
