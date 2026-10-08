@@ -229,8 +229,19 @@ function serializeTextProps(
   if (!node.source.id || autoResize !== 'NONE' || 'textAutoResize' in rawNodeFields) {
     nc.textAutoResize = autoResize
   }
-  nc.textAlignHorizontal = node.textAlignHorizontal
-  nc.textAlignVertical = node.textAlignVertical
+  // Kiwi omits defaults (LEFT / TOP). Mirror textAutoResize: write them back
+  // only when the node was authored here, is non-default, or the imported raw
+  // fields carried them -- otherwise the round trip grows fields the source lacked.
+  if (
+    !node.source.id ||
+    node.textAlignHorizontal !== 'LEFT' ||
+    'textAlignHorizontal' in rawNodeFields
+  ) {
+    nc.textAlignHorizontal = node.textAlignHorizontal
+  }
+  if (!node.source.id || node.textAlignVertical !== 'TOP' || 'textAlignVertical' in rawNodeFields) {
+    nc.textAlignVertical = node.textAlignVertical
+  }
   nc.textUserLayoutVersion = 4
   nc.textExplicitLayoutVersion = 1
   nc.textBidiVersion = 1

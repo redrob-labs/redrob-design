@@ -158,7 +158,17 @@ describe('text measurement', () => {
       expect(description.width).toBe(878)
       expect(description.height).toBe(60)
 
-      await store.switchPage(store.graph.getPages()[0].id)
+      // No EditorCanvas is mounted here, so stand in for its presentation
+      // acknowledgement -- otherwise switchPage waits 10s for a frame and fails.
+      const stopAcknowledging = store.onPreparationEvent('preparation:updated', (preparation) => {
+        if (preparation.phase !== 'preparing-render') return
+        store.preparationController.acknowledgePresentation(store.state.sceneVersion)
+      })
+      try {
+        await store.switchPage(store.graph.getPages()[0].id)
+      } finally {
+        stopAcknowledging()
+      }
 
       expect(store.graph.getNode(title.id)?.width).toBe(444)
       expect(store.graph.getNode(title.id)?.height).toBe(73)
