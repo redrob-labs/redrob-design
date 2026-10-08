@@ -4,7 +4,7 @@
 
 ### Added
 
-- Label each Redrob Auto request with its Model Guide profession and task on this device, so Console routes it to the best-ranked model for that work, and show the Model Guide from the Redrob model profile.
+- Label each Redrob Auto request with its Model Guide profession and task on this device, so Console routes it to the best-ranked model for that work, and show the Model Guide from the Redrob model profile. The labeller's model downloads after launch when a Redrob connection exists; until then requests route as before.
 - Add a searchable command palette for editor and application actions.
 - Render triangle and line arrow stroke caps on lines and open vector paths, and choose them from the stroke cap picker.
 - Expose component properties and instance-swap targets through the Figma API and automation.
