@@ -73,14 +73,28 @@ async function upgrade(fetchImpl: FetchFunction): Promise<void> {
   labeller = new RouteLabeller(LEXICON, PROTOTYPES, encoder)
 }
 
-/** The label for one request's text. Starts the model fetch the first time; never throws. */
+function startUpgrade(fetchImpl: FetchFunction): Promise<void> {
+  upgrading ??= upgrade(fetchImpl).catch((error: unknown) => {
+    console.warn('[route-labeller] labelling by words alone:', error)
+  })
+  return upgrading
+}
+
+/**
+ * Starts fetching the model at launch rather than on the first request. Until it has arrived, a
+ * request is labelled by words alone, which Console routes on its legacy table rather than the
+ * ModelGuide - so the sooner the model is here, the sooner Auto routes on the guide.
+ */
+export function prefetchRouteModel(fetchImpl: FetchFunction): void {
+  void startUpgrade(fetchImpl)
+}
+
+/** The label for one request's text. Starts the model fetch if launch did not; never throws. */
 export async function labelRoute(
   text: string,
   fetchImpl: FetchFunction
 ): Promise<RouteLabel | null> {
-  upgrading ??= upgrade(fetchImpl).catch((error: unknown) => {
-    console.warn('[route-labeller] labelling by words alone:', error)
-  })
+  void startUpgrade(fetchImpl)
   try {
     return await labeller.label(text)
   } catch {
