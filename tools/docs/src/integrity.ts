@@ -1,7 +1,6 @@
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { dirname, extname, join, normalize, relative, resolve, sep } from 'node:path'
 
-import { parse as parseCloudflareRedirects } from 'cloudflare-redirect-parser'
 import { franc } from 'franc'
 import type { Definition, Link, Root } from 'mdast'
 import { fromMarkdown } from 'mdast-util-from-markdown'
@@ -10,7 +9,6 @@ import { visit } from 'unist-util-visit'
 export interface DocsIntegrityOptions {
   docsRoot: string
   localePrefixes: readonly string[]
-  redirectsPath: string
   sidebarLinks: readonly string[]
 }
 
@@ -38,7 +36,6 @@ const MEDIA_EXTENSIONS = new Set([
   '.txt',
   '.webp'
 ])
-const REDIRECT_STATUSES = new Set([301, 302, 303, 307, 308])
 const LOCALE_LANGUAGE_CODES: Record<string, string> = {
   de: 'deu',
   es: 'spa',
@@ -97,39 +94,6 @@ function validateMarkdownLinks(docsRoot: string, markdownFiles: string[]): strin
       if (MEDIA_EXTENSIONS.has(extname(path)) || fileCandidates(path).some(existsSync)) continue
 
       errors.push(`${relative(docsRoot, file)} links to missing target '${target}'.`)
-    }
-  }
-
-  return errors
-}
-
-function validateRedirects(docsRoot: string, redirectsPath: string): string[] {
-  if (!existsSync(redirectsPath)) return [`Missing redirects file '${redirectsPath}'.`]
-
-  const errors: string[] = []
-  const source = readFileSync(redirectsPath, 'utf8')
-  const redirects = parseCloudflareRedirects(source)
-  const seenSources = new Set<string>()
-
-  for (const redirect of redirects) {
-    const status = redirect.status ?? 302
-    if (seenSources.has(redirect.from)) {
-      errors.push(`Redirect '${redirect.from}' is duplicated.`)
-    }
-    seenSources.add(redirect.from)
-
-    if (!REDIRECT_STATUSES.has(status)) {
-      errors.push(`Redirect '${redirect.from}' has unsupported status '${status}'.`)
-    }
-    if (!redirect.from.startsWith('/') || !redirect.to.startsWith('/')) {
-      errors.push(`Redirect '${redirect.from}' must use root-relative paths.`)
-      continue
-    }
-    if (routeExists(docsRoot, redirect.from)) {
-      errors.push(`Redirect source '${redirect.from}' still has a page and would shadow it.`)
-    }
-    if (!routeExists(docsRoot, redirect.to)) {
-      errors.push(`Redirect '${redirect.from}' targets missing page '${redirect.to}'.`)
     }
   }
 
@@ -258,7 +222,6 @@ export function checkDocsIntegrity(options: DocsIntegrityOptions): DocsIntegrity
   const errors = [
     ...validateMarkdownLinks(docsRoot, markdownFiles),
     ...validateSidebarLinks(docsRoot, options.sidebarLinks),
-    ...validateRedirects(docsRoot, options.redirectsPath),
     ...placeholderErrors,
     ...suspectErrors
   ].sort()

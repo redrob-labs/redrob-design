@@ -57,9 +57,6 @@ packages/docs/.vitepress/dist/
 docs/.vitepress/cache/
 docs/.vitepress/dist/
 
-# Cloudflare/Wrangler local state
-.wrangler/
-packages/collab/.wrangler/
 
 # External/generated dependency checkouts
 packages/core/vendor/canvaskit-webgpu/

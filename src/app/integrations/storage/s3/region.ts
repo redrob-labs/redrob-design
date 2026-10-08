@@ -31,11 +31,6 @@ export function inferS3Region(endpoint: string, fallback = 'us-east-1'): string 
   const awsVirtual = host.match(/\.s3[.-]([a-z0-9-]+)\.amazonaws\.com$/)
   if (awsVirtual?.[1] && awsVirtual[1] !== 'dualstack') return awsVirtual[1]
 
-  // Cloudflare R2
-  if (host.endsWith('.r2.cloudflarestorage.com') || host === 'r2.cloudflarestorage.com') {
-    return 'auto'
-  }
-
   // MinIO / custom: no region in host — SigV4 still wants a string.
   return fallback
 }

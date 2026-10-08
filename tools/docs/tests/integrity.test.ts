@@ -7,7 +7,6 @@ import { checkDocsIntegrity } from '../src/integrity'
 
 async function fixture() {
   const docsRoot = await mkdtemp(join(tmpdir(), 'redrob-design-docs-integrity-'))
-  await mkdir(join(docsRoot, 'public'), { recursive: true })
   return docsRoot
 }
 
@@ -20,19 +19,17 @@ function check(docsRoot: string, sidebarLinks: string[] = []) {
   return checkDocsIntegrity({
     docsRoot,
     localePrefixes: ['ru'],
-    redirectsPath: join(docsRoot, 'public/_redirects'),
     sidebarLinks
   })
 }
 
 describe('checkDocsIntegrity', () => {
-  test('accepts valid Markdown, sidebars, redirects, and incomplete locales', async () => {
+  test('accepts valid Markdown, sidebars, and incomplete locales', async () => {
     const docsRoot = await fixture()
     await write(join(docsRoot, 'index.md'), '[Page](/page)')
     await write(join(docsRoot, 'page.md'))
     await write(join(docsRoot, 'ru/index.md'))
     await write(join(docsRoot, 'legacy.md'))
-    await writeFile(join(docsRoot, 'public/_redirects'), '/old /page 301\n', 'utf8')
 
     const result = check(docsRoot, ['/page'])
 
@@ -48,12 +45,10 @@ describe('checkDocsIntegrity', () => {
     await write(join(docsRoot, 'page.md'), '# Canonical page')
     await write(join(docsRoot, 'ru/page.md'), '# English placeholder')
     await write(join(docsRoot, 'fr/page.md'), '# English placeholder')
-    await writeFile(join(docsRoot, 'public/_redirects'), '', 'utf8')
 
     const result = checkDocsIntegrity({
       docsRoot,
       localePrefixes: ['ru', 'fr'],
-      redirectsPath: join(docsRoot, 'public/_redirects'),
       sidebarLinks: []
     })
 
@@ -76,7 +71,6 @@ describe('checkDocsIntegrity', () => {
       `# Русский\n\n${'Это русская документация. '.repeat(80)}`
     )
     await write(join(docsRoot, 'ru/page.md'), english)
-    await writeFile(join(docsRoot, 'public/_redirects'), '', 'utf8')
 
     const result = check(docsRoot)
 
@@ -101,7 +95,6 @@ describe('checkDocsIntegrity', () => {
     ].join('\n')
     await write(join(docsRoot, 'index.md'), markdown)
     await write(join(docsRoot, 'page.md'))
-    await writeFile(join(docsRoot, 'public/_redirects'), '/old /page 301\n', 'utf8')
 
     expect(check(docsRoot).errors).toEqual([])
   })
@@ -109,30 +102,10 @@ describe('checkDocsIntegrity', () => {
   test('reports missing Markdown and sidebar targets', async () => {
     const docsRoot = await fixture()
     await write(join(docsRoot, 'index.md'), '[Missing](./missing)')
-    await writeFile(join(docsRoot, 'public/_redirects'), '', 'utf8')
 
     expect(check(docsRoot, ['/also-missing']).errors).toEqual([
       "Sidebar links to missing page '/also-missing'.",
       "index.md links to missing target './missing'."
-    ])
-  })
-
-  test('reports invalid, duplicate, shadowing, and missing redirect targets', async () => {
-    const docsRoot = await fixture()
-    await write(join(docsRoot, 'old.md'))
-    await write(join(docsRoot, 'index.md'))
-    await writeFile(
-      join(docsRoot, 'public/_redirects'),
-      ['/old /missing 301', '/old / 302', '/bad / 999'].join('\n'),
-      'utf8'
-    )
-
-    expect(check(docsRoot).errors).toEqual([
-      "Redirect '/bad' has unsupported status '999'.",
-      "Redirect '/old' is duplicated.",
-      "Redirect '/old' targets missing page '/missing'.",
-      "Redirect source '/old' still has a page and would shadow it.",
-      "Redirect source '/old' still has a page and would shadow it."
     ])
   })
 })

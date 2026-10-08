@@ -75,7 +75,6 @@ const docsRoot = resolve(repoRoot, 'packages/docs')
 const result = checkDocsIntegrity({
   docsRoot,
   localePrefixes: localeConfigs.slice(1).map(({ prefix }) => prefix.slice(1)),
-  redirectsPath: resolve(docsRoot, 'public/_redirects'),
   sidebarLinks: localeConfigs.flatMap(localeSidebarLinks)
 })
 

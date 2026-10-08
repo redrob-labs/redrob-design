@@ -60,7 +60,6 @@ de:settings.themeSystem
 de:storage.bucket
 de:storage.providerAmazonS3
 de:storage.providerBackblaze
-de:storage.providerR2
 de:storage.region
 de:thread.propLayout
 de:thread.propName
@@ -115,7 +114,6 @@ es:ship.reactTokens
 es:storage.bucket
 es:storage.providerAmazonS3
 es:storage.providerBackblaze
-es:storage.providerR2
 es:thread.threadRegion
 es:variableTypes.color
 fr:ai.completions
@@ -187,7 +185,6 @@ fr:settings.sectionCloud
 fr:storage.bucket
 fr:storage.providerAmazonS3
 fr:storage.providerBackblaze
-fr:storage.providerR2
 fr:thread.canvasRegion
 fr:thread.modeLabel
 fr:thread.propPosition
@@ -238,7 +235,6 @@ it:storage.bucket
 it:storage.endpoint
 it:storage.providerAmazonS3
 it:storage.providerBackblaze
-it:storage.providerR2
 it:thread.propLayout
 it:thread.threadRegion
 ja:ai.connectRedrob
@@ -264,7 +260,6 @@ ja:panels.framePresetCategoryFigmaCommunity
 ja:settings.sectionCloud
 ja:storage.providerAmazonS3
 ja:storage.providerBackblaze
-ja:storage.providerR2
 ko:cloud.heading
 ko:code.sourceTailwindJSX
 ko:composer.auto
@@ -310,7 +305,6 @@ pl:settings.media
 pl:settings.sectionCloud
 pl:storage.providerAmazonS3
 pl:storage.providerBackblaze
-pl:storage.providerR2
 pl:storage.region
 pl:thread.threadRegion
 ru:ai.completions
@@ -339,7 +333,6 @@ ru:plan.memoryHeading
 ru:settings.sectionCloud
 ru:storage.providerAmazonS3
 ru:storage.providerBackblaze
-ru:storage.providerR2
 ru:thread.threadRegion
 zh-cn:ai.completions
 zh-cn:ai.connectRedrob
@@ -367,4 +360,3 @@ zh-cn:panels.maskTypeAlpha
 zh-cn:settings.sectionCloud
 zh-cn:storage.providerAmazonS3
 zh-cn:storage.providerBackblaze
-zh-cn:storage.providerR2
