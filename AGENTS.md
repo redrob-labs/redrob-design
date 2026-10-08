@@ -96,6 +96,13 @@ For releases, update versions in the root and publishable package manifests plus
 
 App/docs production workflows (`app.yml`, `docs.yml`) run on `v*` tags or `workflow_dispatch`, not on ordinary branch pushes. `ci.yml` is the pull request gate (fork boundary, source/package/repository quality, Storybook, native-test contracts, and seven sharded engine test groups) and `heavy-tests.yml` holds the fixture-heavy suite; see Branches above for the trigger filters that currently keep both off `develop` pull requests.
 
+`check:audit` fails the Repository hygiene job on any critical advisory, and the later steps of that job (secret scan, tooling tests, duplicate detection) do not run after it fails, so a red audit also hides a leaked key. Two advisories are waived with `--ignore` because no release in range fixes them; remove each waiver as soon as its condition clears:
+
+- `GHSA-q9v2-7m5w-4693` (expr-eval, code execution through `toJSFunction()`). No patched release exists. `packages/core/src/tools/calc.ts` only calls `Parser.evaluate()`, never `toJSFunction()`, so the vulnerable path is not reachable here. Drop the waiver when expr-eval is replaced or a fixed release appears.
+- `GHSA-5gmw-xhrv-c9v3`, `GHSA-85c8-ppgw-ccpr` (tinypool, pulled in only by the `oxfmt` formatter). `oxfmt` 0.35 pins tinypool 2.1.0; the first `oxfmt` on a fixed tinypool is 0.67. Drop both waivers when `oxfmt` moves past 0.67, which is a formatter upgrade with its own reformat diff.
+
+`proxy-addr` is pinned to 2.0.8 through `overrides` for the same reason; remove that pin once `express` requires 2.0.8 or later on its own.
+
 ## Documentation
 
 - `CHANGELOG.md` — curated user-facing changes by version; `Unreleased` stays first.
