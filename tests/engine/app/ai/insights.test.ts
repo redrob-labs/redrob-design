@@ -62,6 +62,7 @@ describe('design insights labels', () => {
     const l = label([msg(), change, answer])
     expect(l).toMatchObject({
       toolKey: 'design',
+      familyKey: 'design',
       labelerId: LABELER_ID,
       startedAt: '2026-10-06T01:02:03Z'
     })

@@ -9,7 +9,7 @@
  */
 
 export const LABELER_ID = 'design-structural'
-export const LABELER_VERSION = '1'
+export const LABELER_VERSION = '2'
 
 /** A session ends after this long with nothing happening, the window Cowork and Office use. */
 export const SESSION_QUIET_MS = 15 * 60_000
@@ -48,6 +48,8 @@ export type LabeledSession = {
   externalId: string
   startedAt: string
   toolKey: 'design'
+  /** Every Design session works on a canvas: the family is the app's, not read from the chat. */
+  familyKey: 'design'
   mode: number
   producedOutput: boolean
   brief: boolean
@@ -143,6 +145,7 @@ export function labelSession(t: SessionTally): LabeledSession {
     externalId: t.sessionId,
     startedAt: new Date(t.startedAt).toISOString().replace(/\.\d+Z$/, 'Z'),
     toolKey: 'design',
+    familyKey: 'design',
     mode,
     producedOutput: t.changes > 0,
     // Needs the work classifier, which reads the first message on this machine.
