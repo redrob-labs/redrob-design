@@ -10,16 +10,28 @@ import {
   createOpenAICompatibleAdapter
 } from '@/app/ai/providers/compatible'
 import type { ModelProviderAdapter } from '@/app/ai/providers/types'
+import { labellingFetch } from '@/app/ai/route-labels'
+
+const redrobAdapter = createOpenAICompatibleAdapter({
+  baseURL: (config) => config.customBaseURL.trim() || REDROB_CONSOLE_API_BASE,
+  mode: 'chat'
+})
 
 type DirectProviderID = Exclude<AIProviderID, `acp:${string}` | `harness:${string}`>
 
 const MODEL_PROVIDER_ADAPTERS = {
   // Console is OpenAI-compatible on chat/completions. A key issued for a self-hosted
   // Console arrives with its own base URL, so an explicit one wins over the default.
-  redrob: createOpenAICompatibleAdapter({
-    baseURL: (config) => config.customBaseURL.trim() || REDROB_CONSOLE_API_BASE,
-    mode: 'chat'
-  }),
+  // Every `auto` request also carries its ModelGuide profession and task, labelled in this window
+  // (route-labels.ts); Console routes Redrob Auto on them.
+  redrob: {
+    create(config, runtime) {
+      return redrobAdapter.create(config, {
+        ...runtime,
+        fetch: labellingFetch(runtime.fetch ?? ((input, init) => fetch(input, init)))
+      })
+    }
+  },
   openrouter: {
     create(config, runtime) {
       const provider = createOpenRouter({
