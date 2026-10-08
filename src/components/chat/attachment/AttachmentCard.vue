@@ -28,17 +28,17 @@ const dimensions = computed(
   <button
     type="button"
     :aria-label="ai.viewAttachment({ name: attachment.name })"
-    class="group block overflow-hidden rounded-lg border border-white/25 bg-black/15 text-left shadow-xs transition-colors hover:border-white/50 focus-visible:border-white/60 focus-visible:outline-2 focus-visible:outline-white"
+    class="group block overflow-hidden rounded-lg border border-on-accent/25 bg-ink-dark/15 text-left shadow-xs transition-colors hover:border-on-accent/50 focus-visible:border-on-accent/60 focus-visible:outline-2 focus-visible:outline-on-accent"
     @click="viewerOpen = true"
   >
     <img
       v-if="previewURL"
       :src="previewURL"
       :alt="attachment.name"
-      class="h-20 w-28 border-b border-white/15 bg-black/10 object-contain"
+      class="h-20 w-28 border-b border-on-accent/15 bg-ink-dark/10 object-contain"
     />
     <span
-      class="block max-w-28 truncate px-1.5 py-1 text-[9px] leading-tight text-white/85 group-hover:text-white"
+      class="block max-w-28 truncate px-1.5 py-1 text-[9px] leading-tight text-on-accent/85 group-hover:text-on-accent"
     >
       {{ attachment.name }}
     </span>

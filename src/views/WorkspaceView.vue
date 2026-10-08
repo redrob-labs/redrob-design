@@ -9,6 +9,7 @@ import { appRuntimeConfig } from '@/app/runtime/config'
 import { startMCPRuntime, stopMCPRuntime } from '@/app/automation/mcp/runtime'
 import { COLLAB_KEY, useCollab } from '@/app/collab/use'
 import { createDemoShapes } from '@/app/demo/document'
+import { commandPaletteOpen } from '@/app/shell/command-palette'
 import { useKeyboard } from '@/app/shell/keyboard/use'
 import { openFileFromPath, useEditorMenu } from '@/app/shell/menu/use'
 import {
@@ -24,11 +25,15 @@ import FontStatusBanner from '@/components/font-status/FontStatusBanner.vue'
 import CommandPalette from '@/components/commands/CommandPalette.vue'
 import SafariBanner from '@/components/SafariBanner.vue'
 import TabBar from '@/components/TabBar.vue'
+import ModeSwitch from '@/components/editor/describe/ModeSwitch.vue'
+import DesignMemoryDrawer from '@/components/memory/DesignMemoryDrawer.vue'
+import { demoMode } from '@/app/runtime/demo'
 import RenameSelectionDialog from '@/components/selection/RenameSelectionDialog.vue'
 import EditorWorkspace from '@/components/editor/EditorWorkspace.vue'
 import HomeWorkspace from '@/components/home/HomeWorkspace.vue'
 
 const route = useRoute()
+demoMode.value = route.meta.demo === true
 const createdInitialTab = tabCount() === 0
 const shouldCreateHome =
   route.path === '/' &&
@@ -101,8 +106,13 @@ onUnmounted(() => {
     <SafariBanner />
     <FontStatusBanner />
     <RenameSelectionDialog />
-    <CommandPalette />
-    <TabBar />
+    <DesignMemoryDrawer />
+    <CommandPalette v-model:open="commandPaletteOpen" />
+    <TabBar>
+      <template #end>
+        <ModeSwitch v-if="activeTab && activeTab.kind !== 'home'" />
+      </template>
+    </TabBar>
     <HomeWorkspace v-show="activeTab?.kind === 'home'" @new-document="createDocumentInCurrentTab" />
     <EditorWorkspace v-if="activeTab?.kind !== 'home'" />
   </div>

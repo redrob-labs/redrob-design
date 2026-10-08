@@ -1,9 +1,6 @@
-import { decodeBase64, encodeBase64 } from '@redrob-design/core/bytes'
 import {
   createLibraryRevision,
-  deserializeLibraryRevision,
   MAX_LIBRARY_REVISION_BYTES,
-  serializeLibraryRevision,
   validateLibraryRevision
 } from '@redrob-design/core/library'
 import type {
@@ -11,11 +8,12 @@ import type {
   LibraryCatalog,
   LibrarySummary,
   PublishLibraryInput,
-  SerializedComponentLibraryRevision,
   StoredLibraryLatestManifest
 } from '@redrob-design/core/library'
 
 import type { LibraryObjectStore } from '@/app/integrations/storage'
+
+import { decodeRevision, encodeRevision } from './codec'
 
 const PREFIX = 'redrob-design/libraries'
 const textDecoder = new TextDecoder()
@@ -27,95 +25,6 @@ function latestKey(libraryId: string): string {
 
 function revisionKey(libraryId: string, revisionId: string): string {
   return `${PREFIX}/${libraryId}/revisions/${revisionId}.json`
-}
-
-const MAP_TAG = 'redrobdesign/map'
-
-interface EncodedMap {
-  $redrobDesignType: typeof MAP_TAG
-  entries: unknown[]
-}
-
-function isEncodedMap(value: object): value is EncodedMap {
-  return (
-    '$redrobDesignType' in value &&
-    value.$redrobDesignType === MAP_TAG &&
-    'entries' in value &&
-    Array.isArray(value.entries)
-  )
-}
-
-function isMap(value: unknown): value is Map<unknown, unknown> {
-  return value instanceof Map
-}
-
-function isMarkerShapedObject(value: object): boolean {
-  return '$redrobDesignType' in value
-}
-
-function encodeValue(value: unknown): unknown {
-  if (isMap(value)) {
-    return {
-      $redrobDesignType: MAP_TAG,
-      entries: [...value].map(([key, entry]) => [encodeValue(key), encodeValue(entry)])
-    }
-  }
-  if (value instanceof Uint8Array) return { $bytes: encodeBase64(value) }
-  if (Array.isArray(value)) return value.map(encodeValue)
-  if (value && typeof value === 'object') {
-    const encoded = Object.fromEntries(
-      Object.entries(value).map(([key, entry]) => [key, encodeValue(entry)])
-    )
-    return isMarkerShapedObject(value)
-      ? { $redrobDesignType: 'redrobdesign/object', value: encoded }
-      : encoded
-  }
-  return value
-}
-
-function decodeValue(value: unknown): unknown {
-  if (Array.isArray(value)) return value.map(decodeValue)
-  if (value && typeof value === 'object') {
-    if (
-      '$redrobDesignType' in value &&
-      value.$redrobDesignType === 'redrobdesign/object' &&
-      'value' in value &&
-      value.value &&
-      typeof value.value === 'object' &&
-      !Array.isArray(value.value)
-    ) {
-      return Object.fromEntries(
-        Object.entries(value.value).map(([key, entry]) => [key, decodeValue(entry)])
-      )
-    }
-    if (isEncodedMap(value)) {
-      return new Map(
-        value.entries.flatMap((entry) =>
-          Array.isArray(entry) && entry.length === 2
-            ? [[decodeValue(entry[0]), decodeValue(entry[1])] as const]
-            : []
-        )
-      )
-    }
-    if ('$bytes' in value && typeof (value as { $bytes?: unknown }).$bytes === 'string') {
-      return decodeBase64((value as { $bytes: string }).$bytes)
-    }
-    return Object.fromEntries(
-      Object.entries(value).map(([key, entry]) => [key, decodeValue(entry)])
-    )
-  }
-  return value
-}
-
-function encodeRevision(revision: ComponentLibraryRevision): Uint8Array {
-  return textEncoder.encode(JSON.stringify(encodeValue(serializeLibraryRevision(revision))))
-}
-
-function decodeRevision(bytes: Uint8Array): ComponentLibraryRevision {
-  const parsed = decodeValue(
-    JSON.parse(textDecoder.decode(bytes))
-  ) as SerializedComponentLibraryRevision
-  return deserializeLibraryRevision(parsed)
 }
 
 function decodeLatest(bytes: Uint8Array): StoredLibraryLatestManifest {

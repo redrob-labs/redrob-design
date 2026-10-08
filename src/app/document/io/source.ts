@@ -115,6 +115,22 @@ export function createDocumentSourceActions({
     }
   }
 
+  /**
+   * Makes the document a Redrob Cloud file. Like a storage binding, it has no path on this
+   * computer; unlike one, Redrob Cloud keeps it, so local autosave stays off.
+   */
+  function setCloudDocumentSource(cloudFileId: string, documentName: string) {
+    stopWatchingFile()
+    setFileHandle(null)
+    setFilePath(null)
+    setDownloadName(`${documentName}.fig`)
+    setSourceIdentity({ handle: null, path: null, cloudFileId })
+    setStorageBinding(null)
+    state.documentName = documentName
+    state.autosaveEnabled = false
+    setSavedVersion(state.sceneVersion)
+  }
+
   function setStorageDocumentSource(binding: StorageDocumentBinding, documentName: string) {
     stopWatchingFile()
     setFileHandle(null)
@@ -151,6 +167,7 @@ export function createDocumentSourceActions({
   return {
     setDocumentSource,
     setStorageDocumentSource,
+    setCloudDocumentSource,
     setPlannedFilePath,
     startWatchingCurrentFile,
     disposeDocumentIO,

@@ -14,6 +14,7 @@ const {
   showClose = true,
   size = 'md',
   height = 'auto',
+  placement = 'center',
   ui
 } = defineProps<{
   heading?: string
@@ -22,6 +23,7 @@ const {
   showClose?: boolean
   size?: DialogVariants['size']
   height?: DialogVariants['height']
+  placement?: DialogVariants['placement']
   ui?: DialogUI
 }>()
 
@@ -35,7 +37,14 @@ const hasHeader = computed(() =>
 </script>
 
 <template>
-  <AppDialogRoot v-bind="attrs" v-model:open="open" :size="size" :height="height" :ui="ui">
+  <AppDialogRoot
+    v-bind="attrs"
+    v-model:open="open"
+    :size="size"
+    :height="height"
+    :placement="placement"
+    :ui="ui"
+  >
     <slot v-if="slots.header" name="header" />
     <AppDialogHeader
       v-else-if="hasHeader"

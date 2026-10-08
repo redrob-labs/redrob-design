@@ -207,7 +207,7 @@ export async function putObject(
   body: Uint8Array | string,
   contentType: string,
   onUploadProgress?: (progress: UploadProgress) => void,
-  options?: LibraryObjectWriteOptions
+  options?: LibraryObjectWriteOptions & { cacheControl?: string }
 ): Promise<void> {
   const bytes = typeof body === 'string' ? new TextEncoder().encode(body) : body
   // Exact ArrayBuffer so fetch/UA can set Content-Length (required by B2 for large PUTs).
@@ -218,6 +218,7 @@ export async function putObject(
   const headers: Record<string, string> = { 'Content-Type': contentType }
   if (options?.ifMatch) headers['If-Match'] = options.ifMatch
   if (options?.ifNoneMatch) headers['If-None-Match'] = options.ifNoneMatch
+  if (options?.cacheControl) headers['Cache-Control'] = options.cacheControl
   const res = await s3Request(
     config,
     objectURL(config, key),

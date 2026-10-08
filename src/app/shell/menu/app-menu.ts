@@ -18,7 +18,9 @@ import IconZoomOut from '~icons/lucide/zoom-out'
 import type { CommandPaletteGroup, CommandPaletteItem, MenuEntry } from '@redrob-design/vue'
 import { shortcutPlatform, useEditorCommands, useI18n } from '@redrob-design/vue'
 
+import { openComments } from '@/app/comments/service'
 import { runImportDesignTokens } from '@/app/design-system'
+import { openVersionHistory } from '@/app/document/history/service'
 import { useEditorStore } from '@/app/editor/active-store'
 import { designTokensMessages } from '@/app/i18n/design-tokens'
 import { openSettingsDialog } from '@/app/settings/dialog'
@@ -39,6 +41,8 @@ import { useAppTheme } from '@/app/shell/theme'
 import { closeTab, activeTab } from '@/app/tabs'
 
 export interface AppMenuGroup {
+  /** Stable lowercase id from the schema, independent of the interface language. */
+  id: string
   label: string
   paletteIcon?: Component
   items: MenuEntry[]
@@ -99,6 +103,8 @@ export function useAppMenu() {
     'save-as': 'saveAs',
     'export-selection': 'exportSelection',
     autosave: 'autosave',
+    'version-history': 'versionHistory',
+    comments: 'comments',
     close: 'closeTab',
     copy: 'copy',
     cut: 'cut',
@@ -164,6 +170,8 @@ export function useAppMenu() {
       if (activeTab.value) void closeTab(activeTab.value.id)
     },
     settings: openSettingsDialog,
+    'version-history': openVersionHistory,
+    comments: openComments,
     'export-png': () => exportSelection('png'),
     'export-svg': () => exportSelection('svg'),
     'export-pptx': () => exportSelection('pptx'),
@@ -316,6 +324,7 @@ export function useAppMenu() {
   function buildGroup(group: AppMenuGroupSchema): AppMenuGroup | null {
     if (!isVisible(group)) return null
     return {
+      id: group.label.toLowerCase(),
       label: groupLabel(group),
       paletteIcon: group.paletteIcon ? APP_MENU_ICONS[group.paletteIcon] : undefined,
       items: group.items.map(buildEntry).filter((item): item is MenuEntry => item !== null)

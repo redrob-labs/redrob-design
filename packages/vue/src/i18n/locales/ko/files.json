@@ -23,5 +23,6 @@
   "saveAsPrompt": "다른 이름으로 저장:",
   "browserFileAPINotSupported": "이 브라우저는 로컬 파일 API를 지원하지 않습니다. 파일은 제자리에 저장되지 않고 다운로드됩니다.",
   "useChrome": "Chrome 사용",
-  "orEdgeForFullSupport": "또는 Edge를 사용하면 완전히 지원됩니다."
+  "orEdgeForFullSupport": "또는 Edge를 사용하면 완전히 지원됩니다.",
+  "homeTab": "홈"
 }

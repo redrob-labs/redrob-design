@@ -7,6 +7,8 @@ import { getACPDebugText, clearACPDebugLog, hasACPDebugEntries } from '@/app/ai/
 import { copyChatLog } from '@/app/ai/debug'
 import { clearVisibleMessageText } from '@/app/ai/chat/presentation'
 import { useChatSubmission } from '@/app/ai/chat/submission/use'
+import { takePendingBrief } from '@/app/home/brief'
+import { forgetChangeSets } from '@/app/assistant/changes/store'
 import { clearMessageAttachments } from '@/app/ai/attachment/presentation/store'
 import { clearToolLogEntries, didHitStepLimit } from '@/app/ai/tools'
 import { activeTab } from '@/app/tabs'
@@ -20,7 +22,15 @@ import ProviderSetup from '@/components/chat/ProviderSetup.vue'
 import { useAIChat } from '@/app/ai/chat/use'
 import { toast } from '@/app/shell/ui'
 import { openSettingsDialog } from '@/app/settings/dialog'
-import { useI18n } from '@redrob-design/vue'
+import { useI18n, useShipMessages, useThreadMessages, vTestId } from '@redrob-design/vue'
+import { turnSteps } from '@/components/chat/timeline/steps'
+import { useOpeningReview } from '@/components/chat/review/useOpeningReview'
+import { useCrossCheck } from '@/components/chat/cross-check/useCrossCheck'
+import { useWatchUpdates } from '@/components/chat/ship/useWatchUpdates'
+import { provideChatPost, provideChatSend } from '@/components/chat/submit'
+import { saveThread, threadKeyFor } from '@/app/assistant/thread/store'
+import { hasShipMessage, shipMessage, shipRequest } from '@/app/ship/ship'
+import AgentTimeline from '@/components/ui/agent/AgentTimeline.vue'
 
 import { useNotificationMessages } from '@/app/i18n/notifications'
 
@@ -33,9 +43,12 @@ const IS_DEV = import.meta.env.DEV
 const { isConfigured, ensureChat, resetChat, chatFailure, clearChatFailure } = useAIChat()
 const { copy } = useClipboard()
 const { ai } = useI18n()
+const thread = useThreadMessages()
+const shipWords = useShipMessages()
 const notifications = useNotificationMessages()
 
 const chat = shallowRef<Chat<UIMessage> | null>(null)
+useOpeningReview(chat)
 const submission = useChatSubmission({
   chat,
   ensureChat,
@@ -50,9 +63,50 @@ const submission = useChatSubmission({
   openModelSettings: () => openSettingsDialog('ai')
 })
 
+// Cards in the thread (Plan's questions, directions) answer as the person.
+provideChatSend((text) => {
+  void submission.submit({ modelText: text, displayText: text, images: [], nodes: [] })
+})
+
+/** Adds a message Redrob posts without a model, and keeps it with the thread. */
+function postMessage(message: UIMessage): void {
+  const current = chat.value
+  if (!current) return
+  current.messages = [...current.messages, message]
+  saveThread(threadKeyFor(getActiveEditorStore()), current.messages)
+}
+provideChatPost(postMessage)
+useCrossCheck(postMessage)
+useWatchUpdates(postMessage, () => chat.value !== null)
+
+watch(shipRequest, () => {
+  const current = chat.value
+  if (!current) return
+  if (hasShipMessage(current.messages)) {
+    toast.info(shipWords.value.shipOpen)
+    return
+  }
+  const store = getActiveEditorStore()
+  postMessage(
+    shipMessage(store.graph, store.state.currentPageId, {
+      ready: shipWords.value.ready,
+      open: (count) => (count === 1 ? shipWords.value.openOne : shipWords.value.open({ count })),
+      empty: shipWords.value.empty
+    })
+  )
+})
+
+/** Sends the brief a new file was started with on Home, once the chat can take it. */
+function sendPendingBrief(): void {
+  if (!isConfigured.value || !chat.value) return
+  const brief = takePendingBrief(getActiveEditorStore())
+  if (brief) void submission.submit(brief)
+}
+
 void ensureChat()
   .then((c) => {
     if (c) chat.value = markRaw(c)
+    sendPendingBrief()
     return undefined
   })
   .catch((error: unknown) => {
@@ -115,6 +169,17 @@ const isThinking = computed(() => {
   return s === 'submitted'
 })
 
+const progressSteps = computed(() => {
+  const last = messages.value.at(-1)
+  const answer = last?.role === 'assistant' ? last : null
+  return turnSteps(answer, {
+    stepReading: thread.value.stepReading,
+    stepWorking: thread.value.stepWorking,
+    stepAnswering: thread.value.stepAnswering,
+    stepTool: (tool) => thread.value.stepTool({ tool })
+  })
+})
+
 const showContinue = computed(() => {
   if (status.value !== 'ready') return false
   if (messages.value.length === 0) return false
@@ -152,8 +217,15 @@ watch(
     clearVisibleMessageText()
     const nextChat = await ensureChat()
     chat.value = nextChat ? markRaw(nextChat) : null
+    sendPendingBrief()
   }
 )
+watch(isConfigured, async (configured) => {
+  if (!configured) return
+  const nextChat = await ensureChat()
+  chat.value = nextChat ? markRaw(nextChat) : null
+  sendPendingBrief()
+})
 
 function handleStop() {
   submission.stop()
@@ -181,6 +253,7 @@ function handleClearChat() {
     console.error('Chat reset error:', error)
   })
   clearToolLogEntries()
+  forgetChangeSets(getActiveEditorStore())
   clearACPDebugLog()
 }
 </script>
@@ -213,27 +286,12 @@ function handleClearChat() {
             />
 
             <!-- Thinking indicator: shown when AI is working but no visible activity -->
-            <div v-if="isThinking" data-test-id="chat-typing-indicator" class="flex gap-2">
-              <div
-                class="flex size-6 shrink-0 items-center justify-center rounded-full bg-muted/20 text-[10px] font-bold text-muted"
-              >
-                AI
-              </div>
-              <div class="flex items-center gap-1 py-2">
-                <span
-                  class="size-1.5 animate-bounce rounded-full bg-muted"
-                  style="animation-delay: 0ms"
-                />
-                <span
-                  class="size-1.5 animate-bounce rounded-full bg-muted"
-                  style="animation-delay: 150ms"
-                />
-                <span
-                  class="size-1.5 animate-bounce rounded-full bg-muted"
-                  style="animation-delay: 300ms"
-                />
-              </div>
-            </div>
+            <AgentTimeline
+              v-if="isThinking"
+              v-test-id="'chat-typing-indicator'"
+              :steps="progressSteps"
+              :label="thread.progressLabel"
+            />
 
             <!-- Continue button when step limit reached -->
             <div v-if="showContinue" class="flex justify-center py-2">
@@ -241,15 +299,15 @@ function handleClearChat() {
                 class="flex items-center gap-1.5 rounded-full bg-accent/10 px-4 py-1.5 text-xs font-medium text-accent transition-colors hover:bg-accent/20"
                 @click="
                   submission.submit({
-                    modelText: 'Continue where you left off',
-                    displayText: 'Continue where you left off',
+                    modelText: thread.continuePrompt,
+                    displayText: thread.continuePrompt,
                     images: [],
                     nodes: []
                   })
                 "
               >
                 <icon-lucide-play class="size-3" />
-                Continue
+                {{ thread.continue }}
               </button>
             </div>
 
@@ -268,7 +326,7 @@ function handleClearChat() {
       >
         <AppButton v-if="IS_DEV" color="neutral" variant="ghost" size="xs" @click="handleCopyDebug">
           <icon-lucide-clipboard-copy v-if="!debugCopied" class="size-3" />
-          <icon-lucide-check v-else class="size-3 text-green-400" />
+          <icon-lucide-check v-else class="size-3 text-success" />
           {{ debugCopied ? 'Copied' : 'Copy log' }}
         </AppButton>
         <AppButton
@@ -279,12 +337,12 @@ function handleClearChat() {
           @click="handleCopyACPLog"
         >
           <icon-lucide-bug v-if="!acpLogCopied" class="size-3" />
-          <icon-lucide-check v-else class="size-3 text-green-400" />
+          <icon-lucide-check v-else class="size-3 text-success" />
           {{ acpLogCopied ? 'Copied' : 'ACP log' }}
         </AppButton>
         <AppButton color="error" variant="ghost" size="xs" @click="handleClearChat">
           <icon-lucide-trash-2 class="size-3" />
-          Clear
+          {{ thread.clearThread }}
         </AppButton>
       </div>
 

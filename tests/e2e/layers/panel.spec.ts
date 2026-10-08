@@ -126,7 +126,7 @@ test('grouping updates layers', async () => {
   await editor.canvas.drawRect(800, 600, 60, 60)
   await editor.canvas.selectAll()
 
-  await editor.page.keyboard.press('Meta+g')
+  await editor.page.keyboard.press('ControlOrMeta+g')
   await editor.canvas.waitForRender()
 
   const tree = await getSceneTree()

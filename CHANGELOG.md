@@ -4,6 +4,7 @@
 
 ### Added
 
+- Share a file with the people you invite, from Share in the editor: Redrob Cloud keeps it end-to-end encrypted, each person gets a role (owner, can edit, can comment or can view), people from other workspaces can be invited by email, a view link opens it for reading with nothing else, and files shared with you are listed on Home and open from a pasted link.
 - Add a searchable command palette for editor and application actions.
 - Render triangle and line arrow stroke caps on lines and open vector paths, and choose them from the stroke cap picker.
 - Expose component properties and instance-swap targets through the Figma API and automation.
@@ -24,21 +25,57 @@
 - Author and manage multidimensional component variants and published component libraries, including revision previews, linked-instance updates, stable library identities, offline catalogs, storage-backed catalogs, and read-only library definitions. (#239)
 - Recover unsaved and pathless documents locally, with settings to disable recovery and remove retained snapshots. (#487, #574)
 - Inspect selected designs with a configured Vision model and attach images to AI chat with bounded analysis and previews. (#232, #471)
+- Start from one sentence on Home: "What are you making?" opens a new file with the brief as its first message, with suggestions, New presets for a phone app, website or social card, and a note on where files are kept.
+- Choose Plan or Run and Redrob Auto or a pinned model in the Redrob composer, and read Privacy, Memory and Cross-check in a status line under it.
+- Keep card, account and ID numbers, secret keys, contact details and names you list out of direct-model requests: rules on this computer swap them for placeholders at the Standard, High or Strict level you pick in the composer, the canvas still gets the real values, and each receipt counts what was kept private.
+- Publish a shipped page as a static site to your own S3-compatible bucket: set up a separate Publish site in Storage settings with its own bucket, keys and public address, so the bucket your files sync to stays private; Publish asks once before the page goes public, checks the address, says which typefaces fall back, and Unpublish takes it down.
+- Share component libraries through Redrob Cloud: publish one from a shared file, and everyone who can open that file can browse, enable and update it from Shared files in the library manager, end-to-end encrypted, with a publish refused instead of overwriting a newer one.
+- Edit a shared file live with the people it is shared with, through the Redrob Cloud relay: every change and cursor is encrypted on this computer before it leaves, sessions reconnect on their own after a drop, editors keep the file saved for whoever opens it next, and people who can only view or comment see changes without making them.
+- Comment on a file from File, Comments, in Describe or Edit: click where the comment goes, on a layer or the canvas, reply, resolve and delete threads, and numbered pins stay the same size at any zoom and follow their layer. Comments stay on this computer and, signed in to Redrob Cloud, sync with your workspace, the later of two edits winning.
+- Go back to an earlier version of a file from File, Version history: Redrob keeps one every 10 minutes while you edit, up to the last 30, plus every version you save by name, each with a preview; Restore puts one back as a single undo step after keeping your latest changes as a version. Signed in to Redrob Cloud, versions upload there too and versions saved on your other computers show up in the list.
+- Let shipped pages update themselves: signed in to Redrob Cloud, Ship watches the workspace's sources, and when a price, a piece of copy or a token changes there the open page proposes its own update in the thread with Keep it and Put it back, changes for a file that is not open wait until it is, and Stop watching ends it. Console only learns a hash of the file, never its path.
+- Read Design Memory from your Redrob Cloud workspace once signed in: its tokens, typefaces, rules and prices come first and the open file fills in the rest, the drawer names the workspace's sources, it keeps working offline from the last copy, and a workspace admin's Privacy level applies to every member.
+- Rank models in the composer from the live Redrob Leaderboard and price receipts from its published rates, kept for a day and used offline, with the built-in ranking as the fallback.
+- Sign in to Redrob Cloud, optionally, from Settings with a short code you approve in Redrob Console, and pick the workspace Cloud features read from; the session is kept in the system credential store, apart from your AI keys, and everything keeps working signed out.
+- Hand a shipped page to Claude Code: the page as React + Tailwind, `tokens.json`, a brief with what was asked and what is still open, and a preview. When Claude Code is connected over MCP it reads them through the new `get_handoff` tool, `redrob://handoff` resources and the `redrob_handoff` prompt; otherwise they are written into `.redrob/handoff/<page>/` in a repository you pick on desktop or downloaded as a zip in the browser, with the prompt to run copied.
+- Keep your own notes on how you like to work in Design Memory: they stay on this computer, every model reads them when Memory is set to All my work, and Download notes saves them all as JSON.
+- Cross-check answers on your Review model: Fact check lists what holds up and what does not, Challenge argues for and against the direction for up to three rounds and says what held up, the receipt names the checker, and the thread says when the checker is from the same company as the model that drew.
+- Ship a page from Describe: one message, with no AI and no cost, says what is still open and offers React + tokens, Export for Figma, Publish and Hand to Claude Code.
+- Generate React + Tailwind code that reads design tokens: values bound to variables become classes such as `bg-(--action-primary)`, and the Code panel downloads the file's variables as DTCG `tokens.json` or copies them as CSS variables.
+- Ask Redrob for a version of a screen in another language: it copies the frame beside the original, rewrites the copy as a native writer would, and Describe shows which languages the page ships in.
+- Plan with Design Memory: every answer reads the file's color tokens, typefaces, radii, components and the Design System's rules, a card in the thread opens it in full, Plan asks at most two tap-to-answer questions before drawing, and new pages start as four directions side by side to pick from.
+- Check a page against design-system rules for free when it opens in Describe: Redrob posts what it found, most serious first, with where each one is, and Fix or Fix all settles spacing, radius, text size, touch targets and subpixel values in one undo step. The CLI `lint` command gains a `design-system` preset.
+- Switch any file between Describe and Edit from the tab bar: Describe shows the canvas to look at and point at, with the Redrob thread beside it in a 340 to 720 pixel panel, and keeps hand edits and their shortcuts off; briefs from Home open in Describe.
+- Review what each Redrob answer changed on the page in plain words, then Keep it or Put it back; the whole answer is one undo step, the latest kept change has Undo, and the Redrob tab counts changes still waiting.
+- Keep each file's Redrob conversation across reloads and provider changes, follow Redrob's progress step by step while it works, and read a receipt under every answer with the model and who chose it, the price, what was kept private, and Fact check when it ran.
 - Pin selected layers as explicit AI chat context, show collapsible reasoning, copy individual responses, and grow the composer with multiline prompts. (#13)
 - Render streaming AI responses with the upstream Comark-based Markdown pipeline and optional Shiki code highlighting without the former project fork.
 
 ### Changed
 
+- Adopt the Redrob Group 2026 Design System across the editor, desktop app, and documentation: Pretendard typography, Redrob Blue actions, new surfaces, elevation, and controls, a Redrob Design product accent, and canvas selection, snapping, measurement, and ruler colours that follow the light and dark themes.
+- Start new installs in the light theme; a previously chosen theme is kept.
+- Open the main menu from the Redrob Design mark at the top-left of the window, trimmed to what the current screen can do, instead of a menu bar inside the layers panel.
 - Vertically center shaped section titles and allow renaming a section by double-clicking its canvas label.
 - Load supported online fonts before revealing imported pages, preserve substituted text during editing, and shape canvas labels with bundled Inter typography.
 - Upgrade CanvasKit to 0.41 and use immutable renderer paths through `PathBuilder`.
 - Upgrade direct model chat providers and transports to AI SDK 7 while retaining the local ACP execution path.
 - Localize file, clipboard, collaboration, chat, vectorization, storage, recovery, and component-library notifications in every supported language.
 - Move MCP connections into their own Settings destination instead of presenting them as part of model configuration.
+- Rename the AI panel to Redrob, add Ask Redrob to the tool bar and first in the canvas right-click menu, and focus its composer with Mod+J.
+- Group Settings into General, Agents and MCP, Storage, Usage and Diagnostics, with model providers and keys under Agents and MCP and stock photo and vectorize keys under Storage.
 - Pan horizontally with Shift+wheel while preserving native horizontal trackpad movement.
 
 ### Fixed
 
+- Paint the canvas page in the dark theme's colour until you give the page a colour of its own, as Settings describes; light keeps the `.fig` page default.
+- Load CanvasKit for headless rendering and CLI export on Windows, including from folders with spaces in their path.
+- Show one focus ring on the Home search field, the Redrob composer and grouped inputs instead of a ring around the field and a second one inside it.
+- Label the Settings switch that remembers credentials, keep "Not reported" usage figures on one line, fit the assets search placeholder, and use the singular in "Rename 1 layer" and Ship's "1 finding is still open".
+- Name the fill picker's tabs, selects and gradient stop buttons, the asset details close button, and the layer tree's expand toggles for screen readers.
+- Keep the canvas context menu inside the window on a selected layer, scrolling it when it is taller than the window.
+- Press focused buttons with Enter and Space again; the editor's Enter and space-hand shortcuts no longer take those keys from the control that has focus.
+- Translate the Redrob chat's Continue and Clear buttons in every interface language, and write credential and stock-photo hints without em dashes.
 - Propagate host `REDROB_KEY` into `REDROB_API_KEY` for Redrob Code ACP sessions, normalize empty or Design-only model ids to `redrob/auto`, and surface JSON-RPC auth failures as readable messages instead of `[object Object]`.
 - Start the desktop app again instead of aborting at launch when no in-app update feed is configured, and report updates as unavailable in those builds.
 - Open the desktop window when the app is launched from a terminal instead of leaving the process suspended before the window appears.
@@ -95,6 +132,7 @@
 
 ### Performance
 
+- Record each Redrob answer's changes from only the layers it touched, so finishing an answer on a large page takes a fraction of the time.
 - Scope automation and Figma API layout reconciliation to graph nodes and parent containers actually changed by each mutation.
 - Keep rapid trackpad zoom reversals and effect-heavy document navigation responsive by cancelling obsolete reconstruction and reusing safe raster snapshots.
 - Show the FIG page list from a lightweight Kiwi scan before materializing the full document.
@@ -106,6 +144,9 @@
 - Index Figma clipboard children once during import instead of rescanning every pasted node, keeping large flat pastes linear. (#500)
 - Reduce peak memory during `.fig` export by sharing immutable binary resources with the isolated export graph.
 
+### Security
+
+- Stop connecting collaborators peer-to-peer through public signalling and TURN servers: live collaboration only goes through the Redrob Cloud relay, which admits the people Console ticketed and cannot read what it forwards.
 
 ## 0.14.0 — 2026-08-10
 

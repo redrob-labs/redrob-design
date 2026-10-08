@@ -35,7 +35,7 @@ test('opens to the recent-files home and starts a new document', async ({ page }
 
   await expect(page.getByTestId('recent-files-home')).toBeVisible()
   await expect(page.getByTestId('tabbar-tab')).toHaveCount(2)
-  await expect(page.getByTestId('tabbar-tab').last()).toContainText('New tab')
+  await expect(page.getByTestId('tabbar-tab').last()).toContainText('Home')
   await expect(page.getByLabel('Search files…')).toBeFocused()
   await expect(page.getByTestId('tabbar-close')).toHaveCount(2)
 

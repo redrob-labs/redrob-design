@@ -22,6 +22,7 @@ export async function injectMockChatTransport(page: Page): Promise<void> {
         const unsafeMarkdown = normalized.includes('unsafe markdown')
         const multipleParts = normalized.includes('multiple parts')
         const reasoning = normalized.includes('reasoning')
+        const planQuestions = normalized.includes('plan questions')
 
         if (normalized.includes('expired key')) {
           return new ReadableStream({
@@ -39,6 +40,7 @@ export async function injectMockChatTransport(page: Page): Promise<void> {
           start(controller) {
             controller.enqueue({ type: 'start', messageId })
             if (tool) enqueueToolCall(controller, messageId)
+            if (planQuestions) enqueuePlanQuestions(controller, messageId)
             if (reasoning) enqueueReasoning(controller)
             if (multipleParts) {
               enqueueMultipleTextParts(controller)
@@ -87,6 +89,32 @@ export async function injectMockChatTransport(page: Page): Promise<void> {
       }
       controller.enqueue({ type: 'finish', finishReason: 'stop' })
       controller.close()
+    }
+
+    function enqueuePlanQuestions(
+      controller: ReadableStreamDefaultController,
+      messageId: string
+    ): void {
+      const toolCallId = `plan-${messageId}`
+      const input = {
+        questions: JSON.stringify([
+          { question: 'Who pays for it?', options: ['Teams of 5 to 50', 'Solo founders'] },
+          { question: 'What should they do first?', options: ['Start free', 'Book a demo'] }
+        ])
+      }
+      controller.enqueue({ type: 'tool-input-start', toolCallId, toolName: 'ask_plan_questions' })
+      controller.enqueue({
+        type: 'tool-input-available',
+        toolCallId,
+        toolName: 'ask_plan_questions',
+        input
+      })
+      controller.enqueue({
+        type: 'tool-output-available',
+        toolCallId,
+        toolName: 'ask_plan_questions',
+        output: { asked: 2, waiting: true }
+      })
     }
 
     function enqueueToolCall(controller: ReadableStreamDefaultController, messageId: string): void {

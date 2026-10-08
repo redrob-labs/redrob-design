@@ -44,7 +44,8 @@ If the Redrob Code engine is not installed, the app guides you through installin
 - **Image vectorization**: convert image layers into editable vector layers with Recraft or fal.ai
 - **Design-to-code export**: export selections as JSX/Tailwind, generate token outputs, and map designs into component-oriented code workflows
 - **Vue SDK for custom editors**: headless components and composables for embedding Redrob Design into other apps or building workflow-specific editing surfaces
-- **Real-time collaboration**: P2P via WebRTC, no server, no account. Cursors, presence, follow mode
+- **Real-time collaboration**: P2P via WebRTC, no server, no account. Cursors, presence, follow mode. Signed in to Redrob Cloud, sessions use its relay instead
+- **Optional Redrob Cloud**: sign in to share Design Memory, comments, version history and component libraries with a workspace; everything also works on this computer without an account, and AI keys stay yours
 - **Auto layout & CSS Grid**: flex and grid layout via Yoga WASM, with gap, padding, alignment, track sizing
 - **Compact desktop app**: Tauri v2 for macOS, Windows, Linux. Also runs in the browser as a PWA
 
@@ -221,7 +222,7 @@ Local clients discover the private Unix socket automatically and fall back to lo
 
 ## Collaboration
 
-Share a link to co-edit in real time. No server, no account: peers connect directly via WebRTC.
+Share a link to co-edit in real time. No server, no account: peers connect directly via WebRTC. When you are signed in to Redrob Cloud, sessions go through its relay, which works on networks that block peer-to-peer, and fall back to WebRTC when the relay cannot be reached.
 
 1. Click the share button in the top-right panel
 2. Share the generated link (`app.redrob.design/share/<room-id>`)

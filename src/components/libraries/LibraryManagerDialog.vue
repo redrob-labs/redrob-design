@@ -4,6 +4,7 @@ import { nextTick, watch } from 'vue'
 import { useI18n } from '@redrob-design/vue'
 
 import { useEditorStore } from '@/app/editor/active-store'
+import { signedIn } from '@/app/integrations/console'
 import { openLibraryReview, openPublishLibraryDialog, useLibraryService } from '@/app/libraries'
 import { useLibraryManager } from '@/components/libraries/useLibraryManager'
 import AppPlaceholder from '@/components/ui/AppPlaceholder.vue'
@@ -89,7 +90,7 @@ const navigationClass =
           <icon-lucide-refresh-cw class="size-3.5" /> {{ panels.libraryUpdates }}
           <span
             v-if="visibleUpdateGroups.length"
-            class="ml-auto rounded-full bg-accent px-1.5 text-[10px] text-white"
+            class="ml-auto rounded-full bg-accent px-1.5 text-[10px] text-on-accent"
             >{{ visibleUpdateGroups.length }}</span
           >
         </button>
@@ -111,6 +112,15 @@ const navigationClass =
             @click="setSource('storage')"
           >
             {{ panels.storageLibraries }}
+          </button>
+          <button
+            v-if="signedIn"
+            type="button"
+            class="rounded px-2 py-1 text-xs data-[active=true]:bg-hover"
+            :data-active="service.catalogSource === 'console'"
+            @click="setSource('console')"
+          >
+            {{ panels.workspaceLibraries }}
           </button>
         </div>
         <div
@@ -188,7 +198,7 @@ const navigationClass =
           <AppSwitch v-model="showAllPages" :label="panels.showUpdatesForAllPages" />
           <button
             type="button"
-            class="rounded bg-accent px-3 py-1.5 text-xs text-white disabled:opacity-50"
+            class="rounded bg-accent px-3 py-1.5 text-xs text-on-accent disabled:opacity-50"
             :disabled="visibleUpdateGroups.length === 0 || applying !== null"
             @click="updateAll"
           >

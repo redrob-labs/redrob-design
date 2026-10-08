@@ -24,7 +24,7 @@ const show = !IS_TAURI && IS_BROWSER && !window.showSaveFilePicker
     </span>
     <button
       data-test-id="safari-banner-dismiss"
-      class="shrink-0 rounded px-1.5 py-0.5 font-medium text-[var(--color-warning-action)] transition-colors hover:bg-amber-500/20"
+      class="shrink-0 rounded px-1.5 py-0.5 font-medium text-warning-action transition-colors hover:bg-warning-bg"
       @click="dismissed = true"
     >
       {{ common.dismiss }}

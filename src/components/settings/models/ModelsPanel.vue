@@ -96,7 +96,7 @@ watch(
         </div>
         <button
           type="button"
-          class="flex items-center gap-1 rounded bg-accent px-2.5 py-1.5 text-[11px] font-medium text-white hover:bg-accent/90"
+          class="flex items-center gap-1 rounded bg-accent px-2.5 py-1.5 text-[11px] font-medium text-on-accent hover:bg-accent-hover"
           data-test-id="settings-add-model"
           @click="addModel"
         >

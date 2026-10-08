@@ -124,7 +124,7 @@ export const aiMessageDefaults = {
   responses: 'Responses',
   connectRedrob: 'Connect Redrob',
   connectRedrobHint: 'Sign in to Redrob Console and the key is stored for you.',
-  connectRedrobWaiting: params('Enter {code} at {url} — waiting for approval.'),
+  connectRedrobWaiting: params('Enter {code} at {url}, then wait for approval.'),
   connectRedrobConnected: 'Connected. The workspace key is stored.',
   connectRedrobDenied: 'The request was declined in Console.',
   connectRedrobExpired: 'The code expired before it was approved. Try again.',

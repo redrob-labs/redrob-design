@@ -31,11 +31,11 @@ test('tooltips stay hoverable and clickable in WebKit', async () => {
   await effectAdd.click()
   await expect(propertyItems(editor.page, 'effects')).toHaveCount(1)
 
-  await editor.page.keyboard.press('Meta+J')
+  await editor.page.keyboard.press('ControlOrMeta+J')
   await expect(editor.page.getByTestId('provider-setup')).toBeVisible()
   await editor.page.getByTestId('api-key-input').fill('test-key')
   await editor.page.getByTestId('api-key-save').click()
-  await expect(editor.page.getByTestId('chat-input')).toBeVisible()
+  await expect(editor.page.getByRole('textbox', { name: 'Describe a change' })).toBeVisible()
 
   const settings = editor.page.getByTestId('provider-settings-trigger')
   await settings.hover()

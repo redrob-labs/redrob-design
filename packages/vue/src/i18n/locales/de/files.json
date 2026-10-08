@@ -23,5 +23,6 @@
   "saveAsPrompt": "Speichern unter:",
   "browserFileAPINotSupported": "Dein Browser unterstützt die lokale Datei-API nicht. Dateien werden heruntergeladen, statt direkt gespeichert zu werden.",
   "useChrome": "Chrome verwenden",
-  "orEdgeForFullSupport": "oder Edge für vollständige Unterstützung."
+  "orEdgeForFullSupport": "oder Edge für vollständige Unterstützung.",
+  "homeTab": "Start"
 }

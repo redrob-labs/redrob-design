@@ -13,6 +13,6 @@ export default {
     itemIcon: 'flex size-6 shrink-0 items-center justify-center text-muted',
     itemLabel: 'min-w-0 flex-1 truncate',
     shortcut: 'flex shrink-0 items-center gap-1 text-xs text-muted',
-    key: 'inline-flex min-w-5 items-center justify-center rounded border border-border bg-panel px-1 py-0.5 font-mono text-[10px] leading-none'
+    key: 'inline-flex min-w-5 items-center justify-center rounded-xs border border-border bg-panel-secondary px-1 py-0.5 font-mono text-[10px] leading-none'
   }
 } as const

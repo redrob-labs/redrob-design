@@ -47,6 +47,7 @@ import type {
 import { createUndoActions } from './undo'
 import { createVariableActions } from './variables'
 import { createVectorizeActions } from './vectorize'
+import { createViewOnlyActions } from './view-only'
 import { createViewportActions } from './viewport'
 
 export { createDefaultEditorState } from './state'
@@ -203,6 +204,7 @@ export function createEditor(options?: EditorOptions) {
 
   // Assemble domain modules
   const viewport = createViewportActions(ctx)
+  const viewOnly = createViewOnlyActions(ctx)
   const selection = createSelectionActions(ctx)
   const pages = createPageActions(ctx)
   const guides = createGuideActions(ctx)
@@ -338,6 +340,7 @@ export function createEditor(options?: EditorOptions) {
 
     // Viewport
     ...viewport,
+    ...viewOnly,
 
     // Undo — bridge functions that need cross-module refs
     ...undoBridge,

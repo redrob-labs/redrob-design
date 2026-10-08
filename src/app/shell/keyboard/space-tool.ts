@@ -2,6 +2,7 @@ import { useEventListener } from '@vueuse/core'
 import type { ComputedRef } from 'vue'
 
 import type { EditorStore } from '@/app/editor/active-store'
+import { isControlActivation } from '@/app/shell/keyboard/focus'
 
 export function bindSpaceHandTool(inputFocused: ComputedRef<boolean>, store: EditorStore) {
   let toolBeforeSpace: typeof store.state.activeTool | null = null
@@ -14,7 +15,9 @@ export function bindSpaceHandTool(inputFocused: ComputedRef<boolean>, store: Edi
 
   useEventListener(window, 'keydown', (event: KeyboardEvent) => {
     if (event.code !== 'Space') return
-    if (inputFocused.value || store.state.editingTextId) return
+    // View-only already pans on every drag.
+    if (inputFocused.value || store.state.editingTextId || store.state.viewOnly) return
+    if (isControlActivation(event)) return
     if (event.metaKey || event.ctrlKey || event.altKey) return
     event.preventDefault()
     if (toolBeforeSpace !== null || store.state.activeTool === 'HAND') return

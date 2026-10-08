@@ -8,8 +8,17 @@ export interface RemotePeer {
   selection?: string[]
 }
 
+/**
+ * idle: no shared file open. connecting: waiting for the relay. live: with collaborators.
+ * unavailable: the relay cannot be reached; the file still works here and saves when it can.
+ * revoked: access to the file ended during the session.
+ */
+export type CollabStatus = 'idle' | 'connecting' | 'live' | 'unavailable' | 'revoked'
+
 export interface CollabState {
   connected: boolean
+  status: CollabStatus
+  /** The shared file the session is for. */
   roomId: string | null
   peers: RemotePeer[]
   localName: string
@@ -18,6 +27,7 @@ export interface CollabState {
 
 export const DEFAULT_COLLAB_STATE: CollabState = {
   connected: false,
+  status: 'idle',
   roomId: null,
   peers: [],
   localName: '',

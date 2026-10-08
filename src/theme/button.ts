@@ -4,7 +4,7 @@ const appButton = tv({
   slots: {
     base: [
       'inline-flex items-center justify-center gap-1.5 font-medium select-none transition-colors',
-      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50',
+      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-panel-focus',
       'disabled:cursor-not-allowed disabled:opacity-50'
     ],
     icon: 'size-3.5 shrink-0'
@@ -69,7 +69,7 @@ const appButton = tv({
     {
       color: 'primary',
       variant: 'solid',
-      class: { base: 'bg-accent text-white hover:bg-accent/90' }
+      class: { base: 'bg-accent text-on-accent hover:bg-accent-hover' }
     },
     {
       color: 'primary',
@@ -87,21 +87,21 @@ const appButton = tv({
     {
       color: 'error',
       variant: 'solid',
-      class: { base: 'bg-red-500 text-white hover:bg-red-500/90' }
+      class: { base: 'bg-error text-panel hover:bg-error/90' }
     },
     {
       color: 'error',
       variant: 'outline',
-      class: { base: 'border border-red-400/50 text-red-400 hover:bg-red-500/10' }
+      class: { base: 'border border-error-border text-error hover:bg-error-bg' }
     },
     {
       color: 'error',
       variant: 'soft',
-      class: { base: 'bg-red-500/15 text-red-400 hover:bg-red-500/20' }
+      class: { base: 'bg-error-bg text-error hover:bg-error/15' }
     },
-    { color: 'error', variant: 'subtle', class: { base: 'text-red-400 hover:bg-red-500/10' } },
-    { color: 'error', variant: 'ghost', class: { base: 'text-red-400 hover:bg-red-500/10' } },
-    { color: 'error', variant: 'link', class: { base: 'text-red-400 hover:underline' } }
+    { color: 'error', variant: 'subtle', class: { base: 'text-error hover:bg-error-bg' } },
+    { color: 'error', variant: 'ghost', class: { base: 'text-error hover:bg-error-bg' } },
+    { color: 'error', variant: 'link', class: { base: 'text-error hover:underline' } }
   ],
   defaultVariants: { color: 'neutral', variant: 'ghost', size: 'sm', shape: 'rounded' }
 })

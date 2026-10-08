@@ -9,7 +9,7 @@ import { createCanvasLabelEdit } from '#vue/canvas/labels/edit'
 import { handlePenDragMove, updatePenHover } from '#vue/canvas/pen/input'
 import { createCanvasPointer } from '#vue/canvas/pointer/use'
 import { createTextEditInput } from '#vue/canvas/text-edit/input'
-import { handleToolMouseDown } from '#vue/canvas/tools/input'
+import { handleToolMouseDown, startPanDrag } from '#vue/canvas/tools/input'
 import { createCanvasTransformInput } from '#vue/canvas/transform/input'
 import {
   handleBendHandleMove,
@@ -212,6 +212,7 @@ export function useCanvasInput(
   }
 
   function onDblClick(e: MouseEvent) {
+    if (editor.state.viewOnly) return
     if (startAutoLayoutPaddingEdit(e)) return
     onTextDblClick(e)
   }
@@ -219,6 +220,11 @@ export function useCanvasInput(
   function onMouseDown(e: MouseEvent) {
     onActivate?.()
     if (!isEnabled()) return
+    // View-only: every press pans; nothing selects or edits.
+    if (editor.state.viewOnly) {
+      if (e.button === 0 || e.button === 1) startPanDrag(e, setDrag, editor)
+      return
+    }
     editor.setMeasurementMode('off')
     const paddingEdit = autoLayoutPaddingEdit.value
     if (paddingEdit) {
@@ -259,6 +265,10 @@ export function useCanvasInput(
   // eslint-disable-next-line complexity
   function onMouseMove(e: MouseEvent) {
     if (!isEnabled()) return
+    if (editor.state.viewOnly) {
+      if (drag.value?.type === 'pan') handlePanMove(drag.value, e)
+      return
+    }
     pointerInside.value = true
     const coords = getCoords(e)
     lastPointer.value = { cx: coords.cx, cy: coords.cy }
@@ -441,6 +451,7 @@ export function useCanvasInput(
   useEventListener(canvasRef, 'mousemove', onMouseMove)
   useEventListener(canvasRef, 'mouseup', onMouseUp)
   useEventListener(window, 'keydown', (event) => {
+    if (editor.state.viewOnly) return
     if (!guideInput.deleteSelected(event)) updateModifier(event.code, true)
   })
   useEventListener(window, 'keyup', (event) => updateModifier(event.code, false))

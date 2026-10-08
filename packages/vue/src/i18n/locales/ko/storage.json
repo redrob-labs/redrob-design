@@ -15,5 +15,11 @@
   "bucket": "버킷",
   "region": "리전",
   "accessKeyID": "액세스 키 ID",
-  "secretAccessKey": "시크릿 액세스 키"
+  "secretAccessKey": "시크릿 액세스 키",
+  "publishHeading": "게시 사이트",
+  "publishDescription": "게시하면 배포한 페이지를 이 버킷에 올립니다. 파일이 동기화되는 곳과는 따로입니다. 버킷 공개는 제공업체에서 설정하세요. Redrob은 누가 읽을 수 있는지 절대 바꾸지 않습니다.",
+  "publicSiteURL": "공개 사이트 URL",
+  "publicSiteURLHint": "이 버킷이 제공되는 주소입니다. 예: https://site.example.com",
+  "siteURLNotHttps": "https 주소를 사용하세요.",
+  "siteURLInvalid": "쿼리나 # 없이 전체 웹 주소를 입력하세요."
 }

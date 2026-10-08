@@ -109,6 +109,13 @@ export const APP_MENU_SCHEMA = [
       },
       { type: 'separator' },
       { id: 'autosave', label: 'Autosave', checkbox: true },
+      {
+        id: 'version-history',
+        label: 'Version History…',
+        handler: 'shell',
+        palette: { icon: 'file' }
+      },
+      { id: 'comments', label: 'Comments…', handler: 'shell', palette: { icon: 'file' } },
       { id: 'close', label: 'Close Tab', shortcut: 'MOD+W' }
     ]
   },

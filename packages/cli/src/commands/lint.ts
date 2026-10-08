@@ -36,7 +36,7 @@ export default defineCommand({
     preset: {
       type: 'string',
       default: 'recommended',
-      description: 'Preset: recommended, strict, accessibility'
+      description: 'Preset: recommended, strict, accessibility, design-system'
     },
     rule: { type: 'string', description: 'Run specific rule(s) only (repeatable)' },
     json: { type: 'boolean', default: false, description: 'Output as JSON' },

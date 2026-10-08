@@ -23,5 +23,6 @@
   "saveAsPrompt": "Enregistrer sous :",
   "browserFileAPINotSupported": "Votre navigateur ne prend pas en charge l’API de fichiers locaux. Les fichiers seront téléchargés au lieu d’être enregistrés sur place.",
   "useChrome": "Utiliser Chrome",
-  "orEdgeForFullSupport": "ou Edge pour une prise en charge complète."
+  "orEdgeForFullSupport": "ou Edge pour une prise en charge complète.",
+  "homeTab": "Accueil"
 }

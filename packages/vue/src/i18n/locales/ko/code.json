@@ -3,7 +3,7 @@
   "jsxUpToDate": "최신 상태",
   "source": "코드 소스",
   "sourceDesignJSX": "디자인 JSX 코드",
-  "sourceTailwindJSX": "Tailwind JSX 코드",
+  "sourceTailwindJSX": "React + Tailwind",
   "sourceHTMLCSS": "HTML/CSS 코드",
   "editorDesignLabel": "디자인 JSX",
   "editorHTMLCSSLabel": "HTML 및 CSS",
@@ -11,5 +11,8 @@
   "updatedLive": "실시간 업데이트됨",
   "previewFailed": "미리보기 실패",
   "generatedReadOnly": "자동 생성됨, 읽기 전용",
-  "reset": "초기화"
+  "reset": "초기화",
+  "downloadTokens": "디자인 토큰 다운로드(DTCG JSON)",
+  "copyTokensCSS": "디자인 토큰을 CSS 변수로 복사",
+  "noTokens": "이 파일에는 아직 내보낼 변수가 없습니다"
 }

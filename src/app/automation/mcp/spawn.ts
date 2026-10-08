@@ -23,6 +23,8 @@ export interface AutomationHealth {
   authRequired?: boolean
   discoveryPath?: string
   tools?: ToolDescriptor[]
+  /** MCP clients (such as Claude Code) with a live session; only sent to an authorized caller. */
+  clientSessions?: number
 }
 
 export interface AutomationServerHandle {
@@ -174,6 +176,7 @@ interface AutomationHealthRecord {
   authRequired?: unknown
   discoveryPath?: unknown
   tools?: unknown
+  clientSessions?: unknown
 }
 
 function isAutomationHealthRecord(value: unknown): value is AutomationHealthRecord {
@@ -225,6 +228,13 @@ function parseAutomationHealth(value: unknown): AutomationHealth | null {
   if (authRequired !== undefined) health.authRequired = authRequired
   if (discoveryPath !== undefined) health.discoveryPath = discoveryPath
   if (tools !== undefined) health.tools = tools
+  if (
+    typeof value.clientSessions === 'number' &&
+    Number.isInteger(value.clientSessions) &&
+    value.clientSessions >= 0
+  ) {
+    health.clientSessions = value.clientSessions
+  }
   return health
 }
 

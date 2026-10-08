@@ -12,6 +12,47 @@ export interface RulerTheme {
   label: Color
 }
 
+/**
+ * Overlay colours the host app resolves from its design tokens and hands to the renderer, because
+ * CanvasKit cannot read CSS. Every field is optional per frame: `null`/absent falls back to the
+ * constants in `#core/constants`, which carry the same design-system light values, so headless and
+ * CLI rendering match the app's light theme.
+ */
+export interface CanvasTheme {
+  selection: Color
+  component: Color
+  snap: Color
+  measurement: Color
+  /** Auto-layout padding hover: ticks and striped padding bands. */
+  layoutPadding: Color
+  /** Auto-layout gap hover: striped spacing bands between children. */
+  layoutGap: Color
+  /** Comment pins on the canvas. */
+  commentPin: Color
+  /**
+   * The canvas page behind the layers, when the page has no colour of its own. Optional: a theme
+   * that leaves it out keeps the light default, which is also the `.fig` page default.
+   */
+  page?: Color
+}
+
+export type CanvasThemeColor = keyof CanvasTheme
+
+/**
+ * A comment thread's pin, at a canvas position the host has already
+ * resolved. Drawn at a fixed screen size whatever the zoom.
+ */
+export interface CommentPin {
+  id: string
+  x: number
+  y: number
+  /** A short label inside the pin, such as the thread's number. */
+  label: string
+  resolved: boolean
+  /** The open thread, drawn larger. */
+  active: boolean
+}
+
 export type MeasurementMode = 'off' | 'shallow' | 'deep'
 
 export interface RenderOverlays {
@@ -73,4 +114,5 @@ export interface RenderOverlays {
     y: number
     selection?: string[]
   }>
+  commentPins?: CommentPin[]
 }

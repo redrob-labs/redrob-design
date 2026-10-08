@@ -13,8 +13,8 @@ import type { SnapGuide } from '@redrob-design/scene-graph/snap'
 import type { UndoManager } from '@redrob-design/scene-graph/undo'
 
 import type { GuideOverlayState } from '#core/canvas/guides/types'
-import type { RulerTheme, SkiaRenderer } from '#core/canvas/renderer'
-import type { MeasurementMode, RenderOverlays } from '#core/canvas/renderer/types'
+import type { CanvasTheme, RulerTheme, SkiaRenderer } from '#core/canvas/renderer'
+import type { CommentPin, MeasurementMode, RenderOverlays } from '#core/canvas/renderer/types'
 import type { SnappingPreferences } from '#core/editor/preferences'
 import type { TextEditor } from '#core/text/editor'
 import type { FontResolutionEvent, FontResolutionSnapshot } from '#core/text/resolver'
@@ -44,6 +44,10 @@ export interface EditorSharedState {
   }>
   documentName: string
   rulerTheme?: RulerTheme
+  /** Overlay colours resolved by the host from its design tokens; absent means core defaults. */
+  canvasTheme?: CanvasTheme
+  /** Comment pins on the current page, resolved by the host; absent means none. */
+  commentPins?: CommentPin[]
   sceneVersion: number
 }
 
@@ -65,6 +69,11 @@ export interface EditorViewState {
   } | null
   hoveredNodeId: string | null
   measurementMode: MeasurementMode
+  /**
+   * The person can look, pan and zoom but not edit. Tools, the AI and other
+   * programmatic edits still run; input layers read this to stand down.
+   */
+  viewOnly: boolean
   editingTextId: string | null
   penState: {
     vertices: VectorVertex[]
@@ -86,7 +95,11 @@ export interface EditorViewState {
     side?: 'top' | 'right' | 'bottom' | 'left'
   } | null
   panX: number
-  pageColor: Color
+  /**
+   * The page's own background, set from the Page section. `null` means it has none and follows the
+   * theme's page colour; read the painted colour with `resolvePageColor`.
+   */
+  pageColor: Color | null
   panY: number
   zoom: number
   navigation: NavigationState
@@ -124,6 +137,8 @@ export interface EditorEvents extends SceneGraphEvents {
   'graph:replaced': (graph: SceneGraph) => void
   'selection:changed': (selectedIds: string[], previousIds: string[]) => void
   'tool:changed': (tool: Tool, previousTool: Tool) => void
+  /** Direct editing by the person was turned off (Describe) or back on (Edit). */
+  'view-only:changed': (viewOnly: boolean) => void
   'page:changed': (pageId: string, previousPageId: string) => void
   'guides:changed': (ownerId: string, guides: readonly CanvasGuide[]) => void
   'clipboard:images-missing': (resolution: ClipboardImageResolution) => void

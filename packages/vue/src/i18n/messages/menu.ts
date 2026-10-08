@@ -7,6 +7,10 @@ export const menuMessageDefaults = {
   object: 'Object',
   arrange: 'Arrange',
   text: 'Text',
+  help: 'Help',
+  mainMenu: 'Main menu',
+  backToHome: 'Back to Home',
+  searchCommands: 'Search commands…',
 
   new: 'New',
   open: 'Open…',
@@ -19,6 +23,8 @@ export const menuMessageDefaults = {
   exportSelectionAsPPTX: 'Export selection as PPTX',
   exportSelectionAsFig: 'Export selection as .fig',
   autosave: 'Auto-save to local file',
+  versionHistory: 'Version history…',
+  comments: 'Comments…',
   closeTab: 'Close tab',
 
   copy: 'Copy',

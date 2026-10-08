@@ -11,8 +11,13 @@ import { BLACK } from '#core/constants'
 const toRGB = converter('rgb')
 
 export function parseColor(input: string): Color {
+  return tryParseColor(input) ?? { ...BLACK }
+}
+
+/** Like `parseColor`, but `null` for input that is not a colour instead of black. */
+export function tryParseColor(input: string): Color | null {
   const parsed = parse(input)
-  if (!parsed) return { ...BLACK }
+  if (!parsed) return null
   const rgb = toRGB(parsed)
   return {
     r: rgb.r,

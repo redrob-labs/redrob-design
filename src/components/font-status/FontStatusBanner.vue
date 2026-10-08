@@ -30,7 +30,7 @@ const issues = computed(() => status.value.issues)
       <button
         type="button"
         data-test-id="font-status-select"
-        class="shrink-0 rounded px-1.5 py-0.5 font-medium text-[var(--color-warning-action)] transition-colors hover:bg-amber-500/20"
+        class="shrink-0 rounded px-1.5 py-0.5 font-medium text-warning-action transition-colors hover:bg-warning-bg"
         @click="selectAffectedNodes"
       >
         {{ fonts.selectAffectedLayers }}
@@ -38,7 +38,7 @@ const issues = computed(() => status.value.issues)
       <button
         type="button"
         data-test-id="font-status-retry"
-        class="shrink-0 rounded px-1.5 py-0.5 font-medium text-[var(--color-warning-action)] transition-colors hover:bg-amber-500/20 disabled:opacity-50"
+        class="shrink-0 rounded px-1.5 py-0.5 font-medium text-warning-action transition-colors hover:bg-warning-bg disabled:opacity-50"
         :disabled="retrying"
         @click="retry"
       >
@@ -47,7 +47,7 @@ const issues = computed(() => status.value.issues)
       <button
         type="button"
         :aria-label="expanded ? fonts.collapseIssues : fonts.expandIssues"
-        class="flex size-5 shrink-0 items-center justify-center rounded hover:bg-amber-500/20"
+        class="flex size-5 shrink-0 items-center justify-center rounded hover:bg-warning-bg"
         @click="expanded = !expanded"
       >
         <icon-lucide-chevron-up v-if="expanded" class="size-3.5" />

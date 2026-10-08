@@ -7,7 +7,8 @@ import { formatShortcut, useI18n, useViewportKind } from '@redrob-design/vue'
 import { useEditorStore } from '@/app/editor/active-store'
 import { appRuntimeConfig } from '@/app/runtime/config'
 import { appMenuShortcut } from '@/app/shell/menu/shortcut'
-import { activeTab } from '@/app/tabs'
+import { activeTab, activeTabMode } from '@/app/tabs'
+import DescribeWorkspace from '@/components/editor/describe/DescribeWorkspace.vue'
 import CanvasSplitRoot from '@/components/canvas/CanvasSplitRoot.vue'
 import CollabPanel from '@/components/CollabPanel/CollabPanel.vue'
 import EditorCanvas from '@/components/EditorCanvas.vue'
@@ -29,8 +30,13 @@ const horizontalSplitterStyles = tv(splitterTheme)({ direction: 'horizontal' })
 </script>
 
 <template>
+  <DescribeWorkspace
+    v-if="!isMobile && showChrome && store.state.showUI && activeTabMode === 'describe'"
+    :key="'describe-' + activeTab?.id"
+  />
+
   <SplitterGroup
-    v-if="!isMobile && showChrome && store.state.showUI"
+    v-else-if="!isMobile && showChrome && store.state.showUI"
     :key="activeTab?.id"
     direction="horizontal"
     class="flex-1 overflow-hidden"
@@ -67,7 +73,9 @@ const horizontalSplitterStyles = tv(splitterTheme)({ direction: 'horizontal' })
       :max-size="30"
       class="flex flex-col"
     >
-      <div class="flex shrink-0 items-center justify-between border-b border-border px-1.5 py-1.5">
+      <div
+        class="flex h-12 shrink-0 items-center justify-between border-b border-l border-border bg-panel px-3"
+      >
         <CollabPanel />
       </div>
       <PropertiesPanel />
@@ -82,7 +90,7 @@ const horizontalSplitterStyles = tv(splitterTheme)({ direction: 'horizontal' })
     <div class="relative flex min-w-0 flex-1">
       <EditorCanvas />
       <MobileHud />
-      <Toolbar />
+      <Toolbar v-if="activeTabMode !== 'describe' && !activeTab?.readOnly" />
     </div>
     <MobileDrawer />
   </div>

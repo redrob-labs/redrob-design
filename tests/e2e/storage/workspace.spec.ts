@@ -83,14 +83,15 @@ test('configured storage lists previews through ranges before opening the docume
   await page.goto('/storage?test')
   const canvas = new CanvasHelper(page)
   await page.getByRole('button', { name: 'Settings' }).last().click()
-  await page.getByLabel('Endpoint').fill('https://s3.example.com')
-  await page.getByLabel('Bucket').fill('designs')
+  const storageProfile = page.locator('[data-storage-profile="default"]')
+  await storageProfile.getByLabel('Endpoint').fill('https://s3.example.com')
+  await storageProfile.getByLabel('Bucket').fill('designs')
 
   for (const [field, value] of [
     ['access-key-id', 'access-key'],
     ['secret-access-key', 'secret-key']
   ] as const) {
-    const container = page.locator(`[data-credential="${field}"]`)
+    const container = storageProfile.locator(`[data-credential="${field}"]`)
     await container.locator('input').fill(value)
     await container.getByRole('button', { name: 'Save' }).click()
   }

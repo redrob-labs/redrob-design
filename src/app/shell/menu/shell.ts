@@ -1,5 +1,7 @@
 import { useI18n } from '@redrob-design/vue'
 
+import { openComments } from '@/app/comments/service'
+import { openVersionHistory } from '@/app/document/history/service'
 import { openSettingsDialog } from '@/app/settings/dialog'
 import { setSnappingPreference } from '@/app/settings/preferences/apply'
 import { syncNativeSnappingMenu } from '@/app/settings/preferences/native-menu'
@@ -38,6 +40,8 @@ export function useShellMenu() {
       void import('@/router').then(({ default: router }) => openStorageWorkspace(router))
     },
     settings: openSettingsDialog,
+    'version-history': openVersionHistory,
+    comments: openComments,
     'snap-geometry': () => {
       const current = appPreferences.value.editing.snapping.geometry
       setSnappingPreference('geometry', !current)

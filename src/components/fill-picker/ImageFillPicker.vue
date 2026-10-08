@@ -2,6 +2,8 @@
 import { computed, shallowRef, watch } from 'vue'
 import { useFileDialog, useObjectUrl } from '@vueuse/core'
 
+import { usePanelMessages } from '@redrob-design/vue'
+
 import AppSelect from '@/components/ui/AppSelect.vue'
 
 import { useEditorStore } from '@/app/editor/active-store'
@@ -19,6 +21,7 @@ const { fill } = defineProps<{ fill: Fill }>()
 const emit = defineEmits<{ update: [fill: Fill] }>()
 
 const store = useEditorStore()
+const panels = usePanelMessages()
 
 const imageBlob = shallowRef<Blob | null>(null)
 const imagePreviewURL = useObjectUrl(imageBlob)
@@ -77,6 +80,7 @@ const scaleMode = computed({
       {{ fill.imageHash ? 'Replace' : 'Choose image' }}
     </button>
     <AppSelect
+      :label="panels.imageScaleMode"
       :model-value="scaleMode"
       :options="IMAGE_SCALE_MODES"
       @update:model-value="(m) => (scaleMode = m as ImageScaleMode)"

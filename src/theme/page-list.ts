@@ -2,7 +2,9 @@ const pageListTheme = {
   slots: {
     panel: 'flex min-h-0 flex-1 flex-col',
     header: 'flex shrink-0 items-center justify-between px-3 py-1.5',
-    title: 'text-[11px] font-semibold text-surface',
+    title: 'flex items-center gap-1.5 text-[13px] font-semibold text-surface',
+    count:
+      'inline-flex h-4.5 min-w-4.5 items-center justify-center rounded-full bg-panel-field px-1.5 text-[11px] font-medium text-muted tabular-nums',
     add: 'cursor-pointer rounded border-none bg-transparent px-1 text-base leading-none text-muted hover:bg-hover hover:text-surface focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-panel-focus',
     body: 'min-h-0 flex-1 overflow-hidden',
     viewport: 'scrollbar-thin h-full overflow-x-hidden overflow-y-auto px-1 pb-1',

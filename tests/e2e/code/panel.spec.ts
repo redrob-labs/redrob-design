@@ -8,6 +8,7 @@ import {
   waitForNode,
   waitForNodeNamed
 } from '#tests/helpers/code-panel'
+import { setAppTheme, tokenColor } from '#tests/helpers/theme'
 
 const editor = useEditorSetup()
 
@@ -94,7 +95,7 @@ test('live previews Design JSX and keeps one undo transaction', async () => {
 
   await designTab().click()
   await editor.page.waitForTimeout(50)
-  await editor.page.keyboard.press('Meta+z')
+  await editor.page.keyboard.press('ControlOrMeta+z')
   await waitForNode(editor.page, originalId)
   expect(await hasNode(editor.page, originalId)).toBe(true)
   expect(await hasNodeNamed(editor.page, 'Live JSX final')).toBe(false)
@@ -117,15 +118,11 @@ test('keeps the last valid preview while showing invalid-code diagnostics', asyn
   await codeEditor().fill('<Frame>')
   const errorAlert = editor.page.getByTestId('code-panel-error')
   await expect(errorAlert).toBeVisible()
-  await expect(errorAlert).toHaveCSS('color', 'rgb(248, 113, 113)')
-
-  await editor.page.evaluate(async () => {
-    const themeModulePath = '/src/app/shell/theme.ts'
-    const themeModule = await import(themeModulePath)
-    themeModule.useAppTheme().setTheme('light')
-  })
-  await editor.page.waitForFunction(() => document.documentElement.dataset.theme === 'light')
-  await expect(errorAlert).toHaveCSS('color', 'rgb(185, 28, 28)')
+  // The alert reads the error token in both themes.
+  await setAppTheme(editor.page, 'dark')
+  await expect(errorAlert).toHaveCSS('color', await tokenColor(editor.page, '--color-error'))
+  await setAppTheme(editor.page, 'light')
+  await expect(errorAlert).toHaveCSS('color', await tokenColor(editor.page, '--color-error'))
   expect(await hasNodeNamed(editor.page, 'Last valid')).toBe(true)
 })
 
@@ -155,10 +152,10 @@ test('HTML/CSS live preview commits as one undoable session', async () => {
 
   await designTab().click()
   await expect.poll(() => getUndoLabel(editor.page)).toBe('Edit HTML/CSS')
-  await editor.page.keyboard.press('Meta+z')
+  await editor.page.keyboard.press('ControlOrMeta+z')
   await waitForNode(editor.page, originalId)
   expect(await hasNode(editor.page, originalId)).toBe(true)
-  await editor.page.keyboard.press('Meta+Shift+z')
+  await editor.page.keyboard.press('ControlOrMeta+Shift+z')
   await expect.poll(() => hasNode(editor.page, originalId)).toBe(false)
 })
 
@@ -171,7 +168,7 @@ test('switching source formats commits the current live session', async () => {
   await selectSource('HTML/CSS')
   await expect(codeEditor()).toContainText('<style>')
   await expect.poll(() => getUndoLabel(editor.page)).toBe('Edit JSX')
-  await editor.page.keyboard.press('Meta+z')
+  await editor.page.keyboard.press('ControlOrMeta+z')
   await waitForNode(editor.page, originalId)
 })
 
@@ -199,10 +196,10 @@ test('HTML/CSS uses the same editor and live reloads the canvas', async () => {
   expect(importedNodes.some((node) => node.type !== 'DOCUMENT' && node.type !== 'PAGE')).toBe(true)
 })
 
-test('Tailwind JSX is generated read-only in the same editor', async () => {
+test('React + Tailwind is generated read-only in the same editor', async () => {
   await editor.canvas.drawRect(100, 100, 200, 150)
   await openCodePanel()
-  await selectSource('Tailwind JSX')
+  await selectSource('React + Tailwind')
   await expect(editor.page.getByTestId('code-panel-status')).toContainText('Generated, read only')
   await expect(codeEditor()).toHaveAttribute('contenteditable', 'false')
 })

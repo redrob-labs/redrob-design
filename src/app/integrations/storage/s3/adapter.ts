@@ -294,6 +294,20 @@ export function createS3StorageAdapter(runtime: StorageProviderRuntime): S3Stora
           etag: null
         }))
       }
+    },
+
+    siteObjects: {
+      async getObject(key) {
+        return getObject(await resolveConfig(runtime), key)
+      },
+      async putObject(key, bytes, contentType, cacheControl) {
+        await putObject(await resolveConfig(runtime), key, bytes, contentType, undefined, {
+          cacheControl
+        })
+      },
+      async deleteObject(key) {
+        await deleteObject(await resolveConfig(runtime), key)
+      }
     }
   }
 }

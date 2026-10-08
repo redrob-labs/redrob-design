@@ -129,13 +129,15 @@ function createHonoApp(options: {
   app.get('/health', async (c) => {
     const provided = bearerToken(c.req.header('authorization'))
     const canInspectConfiguration = authToken === null || isAuthorized(provided, authToken)
-    return c.json({
+    const health = {
       status: browserRPC.isConnected() ? 'ok' : 'no_app',
       version: MCP_VERSION,
       installCommand: await mcpInstallCommand(),
-      authRequired: authToken !== null,
-      ...(canInspectConfiguration ? { tools: toolDescriptors } : {})
-    })
+      authRequired: authToken !== null
+    }
+    // Tools and connected agents are only shown to a caller who may configure the server.
+    if (!canInspectConfiguration) return c.json(health)
+    return c.json({ ...health, tools: toolDescriptors, clientSessions: mcpSessions.count() })
   })
 
   app.use('/rpc', async (c, next) => {

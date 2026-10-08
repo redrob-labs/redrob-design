@@ -7,6 +7,7 @@ import {
   handleOpenFile,
   handleSaveFile
 } from '@/app/automation/bridge/file-handlers'
+import { handleGetHandoff } from '@/app/automation/bridge/handoff-handler'
 import { handleRPCFallback } from '@/app/automation/bridge/rpc-handler'
 import { handleSelection } from '@/app/automation/bridge/selection-handler'
 import {
@@ -38,7 +39,8 @@ export function createAutomationCommandHandlers(makeFigma: FigmaFactory) {
     selection: handleSelection,
     save_file: handleSaveFile,
     new_document: handleNewDocument,
-    open_file: handleOpenFile
+    open_file: handleOpenFile,
+    get_handoff: handleGetHandoff
   }
 
   async function handleRequest(

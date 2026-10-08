@@ -17,12 +17,15 @@ const toolbarTheme = {
     navigationIcon: 'size-3.5',
     action:
       'flex size-8 cursor-pointer items-center justify-center rounded-[6px] border-none bg-transparent text-muted transition-colors outline-none select-none active:bg-hover active:text-surface focus-visible:ring-1 focus-visible:ring-accent',
-    actionIcon: 'size-4'
+    actionIcon: 'size-4',
+    separator: 'mx-1 h-6 w-px self-center bg-border',
+    ask: 'flex h-8 cursor-pointer items-center gap-1.5 rounded-lg border-none bg-transparent px-2.5 text-[13px] font-medium text-surface transition-colors outline-none hover:bg-hover focus-visible:ring-2 focus-visible:ring-accent',
+    askIcon: 'size-4 text-accent'
   },
   variants: {
     active: {
       true: {
-        button: 'bg-accent text-white'
+        button: 'bg-accent text-on-accent'
       },
       false: {}
     },

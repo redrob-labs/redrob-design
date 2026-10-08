@@ -1,11 +1,10 @@
 import { ref } from 'vue'
 import type * as awarenessProtocol from 'y-protocols/awareness'
 
-import { randomIndex } from '@redrob-design/core/random'
 import type { Color } from '@redrob-design/scene-graph/primitives'
 
 import type { EditorStore } from '@/app/editor/active-store'
-import { PEER_COLORS, ROOM_ID_CHARS, ROOM_ID_LENGTH } from '@/constants'
+import { PEER_COLORS } from '@/constants'
 
 import type { RemotePeer } from './types'
 
@@ -93,12 +92,4 @@ export function createFollowActions(
   }
 
   return { followingPeer, followPeer, resetFollow, tickFollow }
-}
-
-export function generateRoomId(): string {
-  let result = ''
-  for (let i = 0; i < ROOM_ID_LENGTH; i++) {
-    result += ROOM_ID_CHARS[randomIndex(ROOM_ID_CHARS.length)]
-  }
-  return result
 }

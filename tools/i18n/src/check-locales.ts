@@ -10,7 +10,7 @@ import {
   type TranslatedLocale
 } from '@redrob-design/vue'
 
-import { hasMixedLatinAndCjk, placeholders } from './quality'
+import { hasForbiddenDash, hasMixedLatinAndCjk, placeholders } from './quality'
 
 const LOCALES_DIR = 'packages/vue/src/i18n/locales'
 const LOCALE_FILE_NAMES: Record<string, string> = {
@@ -84,6 +84,17 @@ const observedMixedScript = new Set<string>()
 
 let hasErrors = false
 
+for (const [namespace, defaults] of Object.entries(messageDefaults)) {
+  for (const [key, value] of Object.entries(defaults)) {
+    const source = sourceMessage(value)
+    if (source !== null && hasForbiddenDash(source)) {
+      report(
+        `en:${namespace}.${key}: use a short dash; em dashes, en dashes and minus signs are not Redrob copy`
+      )
+    }
+  }
+}
+
 const mappingLocales = Object.keys(LOCALE_DIR_NAMES)
 const localeMappingDiff = sameMembers(mappingLocales, TRANSLATED_LOCALES)
 for (const locale of localeMappingDiff.missing) {
@@ -155,6 +166,9 @@ for (const [locale, dir] of expectedLocaleDirs) {
         report(
           `${id}: placeholders differ from source (${placeholders(source).join(', ')} != ${placeholders(localized).join(', ')})`
         )
+      }
+      if (hasForbiddenDash(localized)) {
+        report(`${id}: use a short dash; em dashes, en dashes and minus signs are not Redrob copy`)
       }
       if ((locale === 'ja' || locale === 'zh-CN') && hasMixedLatinAndCjk(localized)) {
         observedMixedScript.add(id)

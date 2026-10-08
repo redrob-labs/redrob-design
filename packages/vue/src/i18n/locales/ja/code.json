@@ -3,7 +3,7 @@
   "jsxUpToDate": "最新です",
   "source": "コードソース",
   "sourceDesignJSX": "Design JSX",
-  "sourceTailwindJSX": "Tailwind JSX",
+  "sourceTailwindJSX": "React + Tailwind",
   "sourceHTMLCSS": "HTML/CSS",
   "editorDesignLabel": "Design JSX",
   "editorHTMLCSSLabel": "HTML と CSS",
@@ -11,5 +11,8 @@
   "updatedLive": "リアルタイム更新済み",
   "previewFailed": "プレビューに失敗しました",
   "generatedReadOnly": "生成済み、読み取り専用",
-  "reset": "リセット"
+  "reset": "リセット",
+  "downloadTokens": "デザイントークンをダウンロード（DTCG JSON）",
+  "copyTokensCSS": "デザイントークンを CSS 変数としてコピー",
+  "noTokens": "このファイルにはまだ書き出せる変数がありません"
 }

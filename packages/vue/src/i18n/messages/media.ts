@@ -7,8 +7,8 @@ export const mediaMessageDefaults = {
   vectorizeProvider: 'Vectorization service',
   pexelsAPIKey: 'Pexels API Key (stock photos)',
   unsplashAccessKey: 'Unsplash Access Key',
-  stockPhotoToolOptional: 'Optional — for stock_photo tool',
-  pexelsAlternativeOptional: 'Optional — alternative to Pexels',
+  stockPhotoToolOptional: 'Optional, for the stock_photo tool',
+  pexelsAlternativeOptional: 'Optional, instead of Pexels',
   getPexelsAPIKey: 'Get free Pexels API key →',
   getUnsplashAccessKey: 'Get free Unsplash access key →'
 } as const

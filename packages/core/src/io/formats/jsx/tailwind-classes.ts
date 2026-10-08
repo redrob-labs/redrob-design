@@ -6,6 +6,7 @@ import { colorToCSSCompact } from '#core/color'
 import { DEFAULT_FONT_FAMILY } from '#core/constants'
 import { resolveNodeTextDirection } from '#core/text/direction'
 
+import { tokenCSSName } from './dtcg'
 import { formatTrack, getNodeContext, solidFillColor, solidStroke } from './helpers'
 
 function px(v: number): string {
@@ -155,8 +156,65 @@ function nodeToStyle(node: SceneNode, graph: SceneGraph): Record<string, string>
   return style
 }
 
+function boundToken(node: SceneNode, graph: SceneGraph, field: string): string | null {
+  const variableId = node.boundVariables[field]
+  const variable = variableId ? graph.variables.get(variableId) : undefined
+  return variable ? tokenCSSName(variable) : null
+}
+
+function singleVisibleIndex(
+  paints: ReadonlyArray<{ visible: boolean; type?: string }>,
+  solid: boolean
+) {
+  const indices = paints.flatMap((paint, index) =>
+    paint.visible && (!solid || paint.type === 'SOLID') ? [index] : []
+  )
+  return indices.length === 1 ? indices[0] : -1
+}
+
+/**
+ * Values bound to variables become Tailwind classes that read the token
+ * (`bg-(--action-primary)`), so the code follows the design system instead
+ * of copying its hex. The matching style entries are removed first.
+ */
+function tokenClasses(style: Record<string, string>, node: SceneNode, graph: SceneGraph): string[] {
+  const classes: string[] = []
+  const take = (key: string, token: string | null, cls: (token: string) => string) => {
+    if (!token || !(key in style)) return
+    Reflect.deleteProperty(style, key)
+    classes.push(cls(token))
+  }
+  const fill = singleVisibleIndex(node.fills, true)
+  if (fill >= 0) {
+    const token = boundToken(node, graph, `fills/${fill}/color`)
+    if (node.type === 'TEXT') take('color', token, (name) => `text-(${name})`)
+    else take('backgroundColor', token, (name) => `bg-(${name})`)
+  }
+  const stroke = singleVisibleIndex(node.strokes, false)
+  if (stroke >= 0) {
+    take(
+      'borderColor',
+      boundToken(node, graph, `strokes/${stroke}/color`),
+      (name) => `border-(${name})`
+    )
+  }
+  take('gap', boundToken(node, graph, 'itemSpacing'), (name) => `gap-(${name})`)
+  if (!node.independentCorners) {
+    take('borderRadius', boundToken(node, graph, 'cornerRadius'), (name) => `rounded-(${name})`)
+  }
+  take('fontSize', boundToken(node, graph, 'fontSize'), (name) => `text-(length:${name})`)
+  const sides = ['paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft'].map((side) =>
+    boundToken(node, graph, side)
+  )
+  if (sides.every((token) => token && token === sides[0])) {
+    take('padding', sides[0], (name) => `p-(${name})`)
+  }
+  return classes
+}
+
 export function collectTailwindClasses(node: SceneNode, graph: SceneGraph): string[] {
   const style = nodeToStyle(node, graph)
+  const tokens = tokenClasses(style, node, graph)
   const ctx = getNodeContext(node, graph)
 
   const extraClasses: string[] = []
@@ -172,8 +230,8 @@ export function collectTailwindClasses(node: SceneNode, graph: SceneGraph): stri
 
   if (style.display === 'grid') {
     const filtered = combined.filter((c) => c !== 'grid')
-    return [...extraClasses, ...filtered]
+    return [...extraClasses, ...filtered, ...tokens]
   }
 
-  return [...extraClasses, ...combined]
+  return [...extraClasses, ...combined, ...tokens]
 }

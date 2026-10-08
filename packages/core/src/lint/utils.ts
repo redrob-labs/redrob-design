@@ -1,3 +1,5 @@
+import type { LintFix, LintFixField } from './types'
+
 export function isDefaultName(name: string): boolean {
   return /^(Frame|Rectangle|Ellipse|Line|Text|Group|Vector|Polygon|Star|Section|Component|Instance|Slice)\s*\d*$/i.test(
     name
@@ -44,3 +46,26 @@ export function contrastRatio(
 }
 
 export const SPACING_SCALE = [0, 1, 2, 4, 8, 12, 16, 20, 24, 32, 40, 48, 56, 64, 80, 96, 128]
+
+/** A fix that sets each listed field to its value. */
+export function fixFields(entries: ReadonlyArray<readonly [LintFixField, number]>): LintFix {
+  const set: LintFix['set'] = {}
+  for (const [field, value] of entries) set[field] = value
+  return { set }
+}
+
+/** The value in `scale` closest to `value`; the smaller one on a tie. */
+export function nearestInScale(value: number, scale: readonly number[]): number {
+  let best = scale[0]
+  for (const candidate of scale) {
+    if (Math.abs(candidate - value) < Math.abs(best - value)) best = candidate
+  }
+  return best
+}
+
+/** The closest value that is in the spacing scale or a multiple of `base`. */
+export function nearestSpacing(value: number, base: number): number {
+  const multiple = Math.max(base, Math.round(value / base) * base)
+  const inScale = nearestInScale(value, SPACING_SCALE)
+  return Math.abs(multiple - value) < Math.abs(inScale - value) ? multiple : inScale
+}

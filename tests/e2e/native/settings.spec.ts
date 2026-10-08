@@ -39,13 +39,16 @@ describe('native preferences', () => {
     })
     assert.equal(initial, true)
 
-    await browser.executeAsync((done) => {
-      const toggle = document.querySelector<HTMLElement>('[data-test-id="app-settings-trigger"]')
-      toggle?.click()
-      requestAnimationFrame(() => {
-        document.querySelector<HTMLElement>('[data-test-id="settings-snap-objects"]')?.click()
-        setTimeout(done, 200)
+    if (!(await settingsOpen())) {
+      await browser.keys([process.platform === 'darwin' ? 'Meta' : 'Control', ','])
+      await browser.waitUntil(settingsOpen, {
+        timeout: 10_000,
+        timeoutMsg: 'Settings did not open from the platform shortcut'
       })
+    }
+    await browser.executeAsync((done) => {
+      document.querySelector<HTMLElement>('[data-test-id="settings-snap-objects"]')?.click()
+      setTimeout(done, 200)
     })
     const updated = await browser.execute(async () => {
       const { invoke } = await import('@tauri-apps/api/core')

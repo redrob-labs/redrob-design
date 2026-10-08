@@ -4,6 +4,7 @@ import { ALL_TOOLS, registerComponentCatalog } from '@redrob-design/core/tools'
 import type { JSONObject } from '@redrob-design/scene-graph/primitives'
 
 import type { AutomationTarget } from '@/app/automation/bridge/target'
+import { assertCanEdit } from '@/app/cloud/files/permissions'
 import { ensureGraphFonts } from '@/app/editor/fonts'
 import { useLibraryService } from '@/app/libraries'
 
@@ -52,6 +53,7 @@ export function createAutomationToolHandler(makeFigma: FigmaFactory) {
     libraryService.bindEditor(store)
     registerComponentCatalog(store.graph, libraryService)
     const figma = makeFigma(store, target.pageId)
+    if (def.mutates) assertCanEdit(store)
     const result = def.mutates
       ? await store.runMutationWithLayout(
           () => def.execute(figma, toolArgs),

@@ -2,7 +2,8 @@
 import { computed, ref, watch } from 'vue'
 import { useLocalStorage } from '@vueuse/core'
 
-import { useDocumentWorkspace, useI18n } from '@redrob-design/vue'
+import { tv } from 'tailwind-variants'
+import { useDocumentWorkspace, useHomeMessages, useI18n } from '@redrob-design/vue'
 
 import {
   activeStorageProviderID,
@@ -21,12 +22,17 @@ import {
 import { openSettingsDialog } from '@/app/settings/dialog'
 import { openFileFromPath } from '@/app/shell/menu/use'
 import { createStorageWorkspaceSource } from '@/app/storage/workspace/source'
+import SharedWithYou from '@/components/home/SharedWithYou.vue'
 import { openStorageDocumentInNewTab } from '@/app/tabs'
+import HomeBrief from '@/components/home/brief/HomeBrief.vue'
 import HomeSearchActions from '@/components/home/search/HomeSearchActions.vue'
+import homeTheme from '@/theme/home'
 import Tip from '@/components/ui/Tip.vue'
 
 const emit = defineEmits<{ 'new-document': [] }>()
 const { panels, locale, storage, files, common, settings } = useI18n()
+const home = useHomeMessages()
+const styles = tv(homeTheme)()
 const view = useLocalStorage<'grid' | 'list'>('redrob-design:home-files-view', 'grid')
 const query = ref('')
 const openError = ref<string | null>(null)
@@ -145,6 +151,12 @@ async function openStorageDocument(document: StorageDocument): Promise<void> {
   }
 }
 
+function cardMeta(updatedAt: string, local: boolean): string {
+  const when = formattedDate(updatedAt)
+  const where = local ? home.value.onThisComputer : storageDescription.value
+  return when ? `${home.value.editedAt({ when })} · ${where}` : where
+}
+
 function formattedDate(updatedAt: string): string {
   const date = new Date(updatedAt)
   if (date.getTime() === 0) return ''
@@ -153,15 +165,13 @@ function formattedDate(updatedAt: string): string {
 </script>
 
 <template>
-  <main
-    class="flex min-h-0 flex-1 flex-col overflow-x-hidden overflow-y-auto bg-app text-surface"
-    data-test-id="recent-files-home"
-  >
-    <section
-      class="mx-auto flex w-full max-w-7xl flex-col pt-4 pr-[max(1rem,env(safe-area-inset-right))] pb-4 pl-[max(1rem,env(safe-area-inset-left))] sm:px-6 sm:py-5"
-    >
-      <HomeSearchActions v-model="query" @new-document="emit('new-document')" />
-
+  <main :class="styles.root()" data-test-id="recent-files-home">
+    <div :class="styles.wash()">
+      <div :class="styles.inner({ class: 'pb-0' })">
+        <HomeBrief />
+      </div>
+    </div>
+    <section :class="styles.inner()">
       <p v-if="openError" class="mb-4 text-xs text-danger" role="alert">{{ openError }}</p>
       <p
         v-if="noSearchMatches"
@@ -171,14 +181,10 @@ function formattedDate(updatedAt: string): string {
       </p>
 
       <section v-if="!noSearchMatches">
-        <div class="mb-3">
-          <div class="flex items-start gap-3">
-            <div class="min-w-0 flex-1">
-              <h1 class="text-base font-semibold">{{ files.recentFiles }}</h1>
-              <p class="mt-0.5 text-pretty text-xs text-muted">
-                {{ files.recentFilesDescription }}
-              </p>
-            </div>
+        <div class="mb-4">
+          <div class="flex flex-wrap items-center gap-3">
+            <h2 :class="styles.sectionTitle()">{{ home.recent }}</h2>
+            <HomeSearchActions v-model="query" @new-document="emit('new-document')" />
             <div class="ml-auto hidden shrink-0 items-center gap-1 sm:flex">
               <Tip v-if="hasRecentFiles" :label="common.clear">
                 <button
@@ -254,7 +260,7 @@ function formattedDate(updatedAt: string): string {
 
         <div
           v-if="filteredRecentFiles.length && view === 'grid'"
-          class="grid grid-cols-1 gap-x-5 gap-y-6 sm:grid-cols-[repeat(auto-fill,minmax(200px,1fr))]"
+          class="grid grid-cols-1 gap-x-5 gap-y-6 sm:grid-cols-[repeat(auto-fill,minmax(260px,1fr))]"
         >
           <button
             v-for="document in filteredRecentFiles"
@@ -277,7 +283,7 @@ function formattedDate(updatedAt: string): string {
             </div>
             <p class="mt-2 truncate text-xs font-medium">{{ document.name }}</p>
             <p class="mt-0.5 truncate text-[10px] text-muted">
-              {{ formattedDate(document.updatedAt) }}
+              {{ cardMeta(document.updatedAt, document.kind === 'local') }}
             </p>
           </button>
         </div>
@@ -315,6 +321,8 @@ function formattedDate(updatedAt: string): string {
         </div>
       </section>
 
+      <SharedWithYou />
+
       <section class="mt-7">
         <div class="mb-3 flex items-start gap-3">
           <div class="min-w-0">
@@ -349,7 +357,7 @@ function formattedDate(updatedAt: string): string {
 
         <div
           v-if="storageLoading && storageDocuments.length === 0"
-          class="grid grid-cols-1 gap-x-5 gap-y-6 sm:grid-cols-[repeat(auto-fill,minmax(200px,1fr))]"
+          class="grid grid-cols-1 gap-x-5 gap-y-6 sm:grid-cols-[repeat(auto-fill,minmax(260px,1fr))]"
           :aria-label="storage.loadingWorkspace"
         >
           <div v-for="index in 3" :key="index" class="min-w-0 animate-pulse">
@@ -376,7 +384,7 @@ function formattedDate(updatedAt: string): string {
 
         <div
           v-else-if="filteredStorageDocuments.length && view === 'grid'"
-          class="grid grid-cols-1 gap-x-5 gap-y-6 sm:grid-cols-[repeat(auto-fill,minmax(200px,1fr))]"
+          class="grid grid-cols-1 gap-x-5 gap-y-6 sm:grid-cols-[repeat(auto-fill,minmax(260px,1fr))]"
         >
           <button
             v-for="document in filteredStorageDocuments"
@@ -399,7 +407,7 @@ function formattedDate(updatedAt: string): string {
             </div>
             <p class="mt-2 truncate text-xs font-medium">{{ document.name }}</p>
             <p class="mt-0.5 truncate text-[10px] text-muted">
-              {{ formattedDate(document.updatedAt) }}
+              {{ cardMeta(document.updatedAt, false) }}
             </p>
           </button>
         </div>
@@ -449,6 +457,19 @@ function formattedDate(updatedAt: string): string {
           {{ storage.emptyStorageWorkspace }}
         </div>
       </section>
+      <footer data-test-id="home-files-footer" :class="styles.foot()">
+        <icon-lucide-cloud class="size-4 shrink-0" />
+        <span>{{ home.filesStayHere }}</span>
+        <span v-if="storageConfigured">{{ home.syncingWith({ bucket: storageDescription }) }}</span>
+        <button
+          v-else
+          type="button"
+          :class="styles.footLink()"
+          @click="openSettingsDialog('storage')"
+        >
+          {{ home.keepInCloud }}
+        </button>
+      </footer>
     </section>
   </main>
 </template>

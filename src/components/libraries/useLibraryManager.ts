@@ -1,13 +1,18 @@
 import { computed, ref, watch, type Ref } from 'vue'
 
+import { usePanelMessages } from '@redrob-design/vue'
+
 import type { EditorStore } from '@/app/editor/session'
 import { notificationMessages } from '@/app/i18n/notifications'
+import { signedIn } from '@/app/integrations/console'
 import { createActiveStorageAdapter, storagePreferencesComplete } from '@/app/integrations/storage'
 import { activeStorageProviderID } from '@/app/integrations/storage/preferences'
 import {
+  ConsoleLibraryCatalog,
   readLibraryCatalogSource,
   readLibraryPriority,
   StorageLibraryCatalog,
+  type LibraryCatalogSource,
   type LibraryService
 } from '@/app/libraries'
 import type { LibraryAssetUpdateGroup } from '@/app/libraries/update-groups'
@@ -23,6 +28,7 @@ export function useLibraryManager(
   editor: EditorStore,
   service: LibraryService
 ) {
+  const panels = usePanelMessages()
   const section = ref<'browse' | 'updates'>('browse')
   const loading = ref(false)
   const showAllPages = ref(false)
@@ -57,10 +63,13 @@ export function useLibraryManager(
     }
   }
 
-  async function setSource(source: 'local' | 'storage') {
+  async function setSource(source: LibraryCatalogSource) {
     await runOperation(async () => {
       if (source === 'local') service.useLocalCatalog()
-      else {
+      else if (source === 'console') {
+        if (!signedIn.value) throw new Error(panels.value.workspaceLibrariesSignedOut)
+        service.useConsoleCatalog(new ConsoleLibraryCatalog())
+      } else {
         const providerId = activeStorageProviderID.value
         if (!storagePreferencesComplete(providerId)) throw new Error('Storage is not configured')
         const objects = createActiveStorageAdapter(providerId).libraryObjects
@@ -131,6 +140,8 @@ export function useLibraryManager(
 
   const source = readLibraryCatalogSource()
   if (source === 'storage' && !open.value) void setSource('storage')
+  // Workspace libraries come back once signed in; signed out, the local copies serve.
+  if (source === 'console' && !open.value && signedIn.value) void setSource('console')
 
   return {
     section,

@@ -23,5 +23,6 @@
   "saveAsPrompt": "Guardar como:",
   "browserFileAPINotSupported": "Tu navegador no admite la API de archivos locales. Los archivos se descargarán en lugar de guardarse en el mismo lugar.",
   "useChrome": "Usar Chrome",
-  "orEdgeForFullSupport": "o Edge para disponer de compatibilidad completa."
+  "orEdgeForFullSupport": "o Edge para disponer de compatibilidad completa.",
+  "homeTab": "Inicio"
 }

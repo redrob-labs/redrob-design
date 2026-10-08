@@ -9,6 +9,7 @@ import { ALL_TOOLS, CODEGEN_PROMPT } from '@redrob-design/core/tools'
 
 import type { RPCJSONObject } from '#mcp/json'
 import { MAX_RESULT_BYTES, fail, ok, resultTooLargeMessage } from '#mcp/result'
+import { fetchHandoff, handoffSummary, registerHandoffResources } from '#mcp/tool/handoff'
 import { createToolDescriptors } from '#mcp/tool/manifest'
 import type { ToolDescriptor, ToolEffect, ToolPolicy } from '#mcp/tool/metadata'
 import { resolveSafePath, writeToolOutput } from '#mcp/tool/output'
@@ -266,4 +267,38 @@ export function registerTools(mcpServer: McpServer, options: RegisterToolsOption
     },
     async () => ok({ prompt: CODEGEN_PROMPT })
   )
+
+  register(
+    'get_handoff',
+    {
+      description:
+        'Get the page handed off from Redrob Design: its brief, Page.jsx, tokens.json and resource links for every file. Call when the user asks to implement a Redrob hand-off.',
+      inputSchema: z.object({
+        document: z.string().describe('Optional Redrob Design document ID').optional()
+      })
+    },
+    async (args: { document?: string }) => {
+      try {
+        const handoff = await fetchHandoff(sendRPC, args.document)
+        return {
+          content: [
+            { type: 'text' as const, text: handoffSummary(handoff) },
+            ...handoff.files
+              .filter((file) => file.text !== undefined && file.name !== 'brief.md')
+              .map((file) => ({
+                type: 'text' as const,
+                text: `--- ${file.name} ---\n${file.text ?? ''}`
+              }))
+          ]
+        }
+      } catch (e) {
+        return fail(e)
+      }
+    }
+  )
+
+  const handoffDescriptor = descriptors.get('get_handoff')
+  if (handoffDescriptor && isToolEnabled(handoffDescriptor, policy)) {
+    registerHandoffResources(mcpServer, sendRPC)
+  }
 }

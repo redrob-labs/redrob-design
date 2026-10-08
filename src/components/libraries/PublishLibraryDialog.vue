@@ -36,6 +36,14 @@ const changeLabels = computed(() => ({
   removed: panels.value.libraryChangeRemoved
 }))
 const publication = computed(() => readSourceLibraryPublication(editor.graph))
+const destinationLabel = computed(
+  () =>
+    ({
+      local: panels.value.localLibraries,
+      storage: panels.value.storageLibraries,
+      console: panels.value.workspaceLibraries
+    })[service.catalogSource]
+)
 const visibleChanges = computed(() => {
   const normalized = query.value.trim().toLowerCase()
   return normalized
@@ -154,9 +162,7 @@ async function publish() {
         class="flex items-center justify-between rounded-lg border border-border bg-input px-3 py-2 text-xs"
       >
         <span class="text-muted">{{ panels.libraryDestination }}</span>
-        <span>{{
-          service.catalogSource === 'storage' ? panels.storageLibraries : panels.localLibraries
-        }}</span>
+        <span>{{ destinationLabel }}</span>
       </div>
       <div class="flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border border-border">
         <div class="flex items-center gap-2 border-b border-border px-3 py-2 text-xs font-medium">
@@ -222,7 +228,7 @@ async function publish() {
       </button>
       <button
         type="button"
-        class="h-8 rounded-md bg-accent px-4 text-xs font-medium text-white hover:bg-accent/90 disabled:opacity-50"
+        class="h-8 rounded-md bg-accent px-4 text-xs font-medium text-on-accent hover:bg-accent-hover disabled:opacity-50"
         :disabled="
           publishing ||
           loading ||

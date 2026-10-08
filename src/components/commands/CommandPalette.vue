@@ -53,7 +53,7 @@ if (IS_BROWSER) {
     size="md"
     :ui="{
       content: 'w-[min(40rem,94vw)] p-0',
-      overlay: 'bg-black/40'
+      overlay: 'bg-scrim'
     }"
     @escape-key-down="close"
   >

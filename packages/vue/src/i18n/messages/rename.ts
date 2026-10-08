@@ -4,6 +4,7 @@ import { i18n } from '#vue/i18n/create'
 
 export const renameMessageDefaults = {
   title: 'Rename',
+  layersOne: 'Rename 1 layer',
   layers: params('Rename {count} layers'),
   preview: 'Preview',
   match: 'Match',

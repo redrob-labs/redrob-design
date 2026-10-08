@@ -3,20 +3,16 @@ import { computed } from 'vue'
 import { tv } from 'tailwind-variants'
 import { PopoverContent, PopoverPortal, PopoverRoot, PopoverTrigger } from 'reka-ui'
 
-import ConnectedRoom from '@/components/CollabPanel/ConnectedRoom.vue'
-import JoinRoomPrompt from '@/components/CollabPanel/JoinRoomPrompt.vue'
-import ShareOrJoinRoom from '@/components/CollabPanel/ShareOrJoinRoom.vue'
+import FileAccess from '@/components/CollabPanel/FileAccess.vue'
+import OpenSharedFile from '@/components/CollabPanel/OpenSharedFile.vue'
 import { useCollabPanelContext } from '@/components/CollabPanel/context'
+import AppButton from '@/components/ui/AppButton.vue'
 import { usePopoverUI } from '@/components/ui/popover'
 import collaborationTheme from '@/theme/collaboration'
 
 const collab = useCollabPanelContext()
-const cls = usePopoverUI({ content: 'z-50 w-72 p-3' })
-const connection = computed(() => {
-  if (collab.state.connected) return 'connected'
-  if (collab.isJoining) return 'joining'
-  return 'idle'
-})
+const cls = usePopoverUI({ content: 'z-50 w-80 p-3' })
+const connection = computed(() => (collab.state.connected ? 'connected' : 'idle'))
 const collaboration = tv(collaborationTheme)
 const styles = computed(() => collaboration({ connection: connection.value }))
 </script>
@@ -30,13 +26,7 @@ const styles = computed(() => collaboration({ connection: connection.value }))
         :class="styles.shareButton()"
       >
         <icon-lucide-share-2 class="size-3.5" />
-        {{
-          collab.state.connected
-            ? collab.messages.connected
-            : collab.isJoining
-              ? collab.messages.joinRoom
-              : collab.messages.share
-        }}
+        {{ collab.file && collab.file.link ? collab.messages.viewOnly : collab.messages.share }}
       </button>
     </PopoverTrigger>
 
@@ -48,9 +38,39 @@ const styles = computed(() => collaboration({ connection: connection.value }))
         side="bottom"
         align="end"
       >
-        <ConnectedRoom v-if="collab.state.connected" />
-        <JoinRoomPrompt v-else-if="collab.isJoining" />
-        <ShareOrJoinRoom v-else />
+        <div class="flex flex-col gap-3 text-xs">
+          <p v-if="collab.error" role="alert" class="text-error">{{ collab.error }}</p>
+
+          <template v-if="collab.file">
+            <FileAccess v-if="!collab.file.link" />
+            <p v-else class="text-muted">{{ collab.messages.viewLinkOn }}</p>
+          </template>
+
+          <template v-else-if="collab.signedIn">
+            <div class="font-medium text-surface">{{ collab.messages.shareThisFile }}</div>
+            <p class="text-muted">{{ collab.messages.shareDescription }}</p>
+            <AppButton
+              data-test-id="collab-share-file"
+              color="primary"
+              variant="solid"
+              size="md"
+              :loading="collab.busy"
+              @click="collab.share"
+            >
+              <icon-lucide-share-2 class="size-3.5" />
+              {{ collab.messages.shareThisFile }}
+            </AppButton>
+          </template>
+
+          <template v-else>
+            <p class="text-muted">{{ collab.messages.signInToShare }}</p>
+            <AppButton color="primary" variant="solid" size="md" @click="collab.signIn">
+              {{ collab.messages.signIn }}
+            </AppButton>
+          </template>
+
+          <OpenSharedFile />
+        </div>
       </PopoverContent>
     </PopoverPortal>
   </PopoverRoot>

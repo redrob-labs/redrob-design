@@ -39,6 +39,7 @@ export default defineConfig([
       'redrob-design/no-app-imports-in-shared-ui': 'error',
       'redrob-design/no-property-panel-internals-outside-panel': 'error',
       'redrob-design/no-native-title-attributes-in-vue': 'error',
+      'redrob-design/no-raw-palette-classes': 'error',
       'redrob-design/no-ui-imports-in-core': 'error',
       'redrob-design/scripts-are-entrypoint-shims': 'error',
       'redrob-design/strict-tools-layout': 'error'

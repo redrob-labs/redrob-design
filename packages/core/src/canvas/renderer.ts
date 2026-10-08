@@ -6,8 +6,6 @@ import { decodeBase64 } from '#core/bytes'
 import type { ResolvedRenderColor } from '#core/color/management'
 /* eslint-disable max-lines -- SkiaRenderer facade owns CanvasKit state and delegates domain drawing */
 import {
-  SELECTION_COLOR,
-  COMPONENT_COLOR,
   CANVAS_BG_COLOR,
   DEFAULT_FONT_SIZE,
   COMPONENT_SET_DASH,
@@ -23,6 +21,7 @@ import type { FontResolutionSnapshot } from '#core/text/resolver'
 import { LabelCache } from './labels/cache'
 import * as LabelHitTest from './labels/hit-test'
 import { LabelParagraphCache } from './labels/paragraph-cache'
+import { canvasThemeColor } from './renderer/canvas-theme'
 import * as RenderColors from './renderer/colors'
 import * as RendererFonts from './renderer/fonts'
 import { destroyRenderer } from './renderer/lifecycle'
@@ -32,7 +31,14 @@ import * as RenderPipeline from './renderer/pipeline'
 import type { SceneBacking, SceneBackingBuild } from './renderer/retained-backing/types'
 import * as RendererState from './renderer/state'
 import * as RenderText from './text'
-export type { MeasurementMode, RenderOverlays, RulerTheme } from './renderer/types'
+export type {
+  CanvasTheme,
+  CanvasThemeColor,
+  CommentPin,
+  MeasurementMode,
+  RenderOverlays,
+  RulerTheme
+} from './renderer/types'
 import type {
   Image as CKImage,
   Path,
@@ -64,7 +70,7 @@ export interface PendingFontNode {
 
 import type { EffectRasterCacheEntry } from './renderer/effect-raster-cache'
 import { TiledSceneController } from './renderer/tiles'
-import type { RenderOverlays, RulerTheme } from './renderer/types'
+import type { CanvasTheme, RenderOverlays, RulerTheme } from './renderer/types'
 
 export class SkiaRenderer {
   ck: CanvasKit
@@ -160,6 +166,7 @@ export class SkiaRenderer {
   showRulers = true
   pageColor = CANVAS_BG_COLOR
   rulerTheme: RulerTheme | null = null
+  canvasTheme: CanvasTheme | null = null
   pageId: string | null = null
 
   boundEffectLayersToViewport = false
@@ -374,11 +381,13 @@ export class SkiaRenderer {
   }
 
   selColor(alpha = 1) {
-    return this.ck.Color4f(SELECTION_COLOR.r, SELECTION_COLOR.g, SELECTION_COLOR.b, alpha)
+    const c = canvasThemeColor(this.canvasTheme, 'selection')
+    return this.ck.Color4f(c.r, c.g, c.b, alpha)
   }
 
   compColor(alpha = 1) {
-    return this.ck.Color4f(COMPONENT_COLOR.r, COMPONENT_COLOR.g, COMPONENT_COLOR.b, alpha)
+    const c = canvasThemeColor(this.canvasTheme, 'component')
+    return this.ck.Color4f(c.r, c.g, c.b, alpha)
   }
 
   isComponentType(type: string): boolean {

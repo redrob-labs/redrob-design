@@ -1,5 +1,6 @@
 {
   "title": "重命名",
+  "layersOne": "重命名 1 个图层",
   "layers": "重命名 {count} 个图层",
   "preview": "预览",
   "match": "匹配",

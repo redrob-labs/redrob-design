@@ -2,19 +2,24 @@
 import { computed } from 'vue'
 import { tv } from 'tailwind-variants'
 
+import { usePanelMessages } from '@redrob-design/vue'
+
 import { useLayerTreeUI } from './ui'
 
 import layerTreeTheme from '@/theme/layer-tree'
 
-const { expanded, visible } = defineProps<{
+const { expanded, visible, name } = defineProps<{
   expanded: boolean
   visible: boolean
+  /** The layer's name, so the toggle says whose children it shows. */
+  name: string
 }>()
 
 const emit = defineEmits<{
   toggle: []
 }>()
 
+const panels = usePanelMessages()
 const ui = useLayerTreeUI()
 const layerTree = tv(layerTreeTheme)
 const styles = computed(() => layerTree({ expanded }))
@@ -25,6 +30,8 @@ const styles = computed(() => layerTree({ expanded }))
     v-if="visible"
     type="button"
     data-slot="disclosure"
+    :aria-label="panels.layerChildren({ name })"
+    :aria-expanded="expanded"
     :data-expanded="expanded || undefined"
     :class="styles.disclosure({ class: ui?.disclosure })"
     @click.stop="emit('toggle')"

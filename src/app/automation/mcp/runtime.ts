@@ -23,6 +23,8 @@ export interface MCPRuntimeState {
   error: string | null
   checking: boolean
   externallyManaged: boolean
+  /** Agents connected to the local MCP server right now, as of the last health check. */
+  clientSessions: number
 }
 
 export type MCPRuntimeResult = { ok: true } | { ok: false; error: Error }
@@ -46,7 +48,8 @@ export function createMCPRuntimeService(dependencies: MCPRuntimeDependencies) {
     version: null,
     error: null,
     checking: false,
-    externallyManaged: false
+    externallyManaged: false,
+    clientSessions: 0
   })
 
   let server: AutomationServerHandle | null = null
@@ -65,6 +68,7 @@ export function createMCPRuntimeService(dependencies: MCPRuntimeDependencies) {
 
   function applyHealth(health: AutomationHealth): void {
     state.version = health.version ?? null
+    state.clientSessions = health.clientSessions ?? 0
     dependencies.setToolDescriptors(health.tools ?? [])
     state.status = 'running'
     state.error = null
@@ -79,6 +83,7 @@ export function createMCPRuntimeService(dependencies: MCPRuntimeDependencies) {
         return { ok: true }
       }
       state.version = null
+      state.clientSessions = 0
       dependencies.setToolDescriptors([])
       if (state.status !== 'error') state.status = 'stopped'
       return { ok: true }
@@ -136,6 +141,7 @@ export function createMCPRuntimeService(dependencies: MCPRuntimeDependencies) {
     if (releaseStore) activeStore = null
     state.status = disconnectError ? 'error' : 'stopped'
     state.version = null
+    state.clientSessions = 0
     state.error = disconnectError?.message ?? null
     state.externallyManaged = false
     dependencies.setToolDescriptors([])

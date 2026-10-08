@@ -240,7 +240,7 @@
       "path": "design-systems/redrob-brand.md",
       "category": "design-system",
       "license": "MIT-internal",
-      "source": "Redrob brand tokens, same values as packages/ui/src/tokens.css",
+      "source": "Redrob Group Design System 2026, same values as @redrob-labs/ui tokens.json",
       "aliases": ["redrob", "redrob-tokens", "redrob-brand-tokens", "브랜드"]
     },
     "landing-hero": {

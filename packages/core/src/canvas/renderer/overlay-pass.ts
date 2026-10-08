@@ -3,6 +3,7 @@ import type { Canvas } from 'canvaskit-wasm'
 import type { SceneGraph } from '@redrob-design/scene-graph'
 
 import { drawGuides } from '#core/canvas/guides/draw'
+import { drawCommentPins } from '#core/canvas/overlays/comments'
 import { drawMeasurementSegment } from '#core/canvas/overlays/measurement'
 import type { RenderOverlays, SkiaRenderer } from '#core/canvas/renderer'
 
@@ -54,6 +55,7 @@ export function drawOverlayPass(
   if (!measuring) r.drawAutoLayoutHover(canvas, graph, overlays.autoLayoutHover)
   r.drawNodeEditOverlay(canvas, graph, overlays.nodeEditState)
   r.drawPenOverlay(canvas, overlays.penState)
+  drawCommentPins(r, canvas, overlays.commentPins)
   r.drawRemoteCursors(canvas, graph, overlays.remoteCursors)
 }
 

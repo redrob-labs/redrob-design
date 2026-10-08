@@ -13,7 +13,7 @@ const preview: Preview = {
         dark: 'dark',
         light: 'light'
       },
-      defaultTheme: 'dark',
+      defaultTheme: 'light',
       attributeName: 'data-theme'
     }),
     (story, context) => ({
@@ -22,12 +22,12 @@ const preview: Preview = {
         const { setTheme } = useAppTheme()
         watch(
           () => context.globals.theme,
-          (theme) => setTheme(theme === 'light' ? 'light' : 'dark'),
+          (theme) => setTheme(theme === 'dark' ? 'dark' : 'light'),
           { immediate: true }
         )
       },
       template:
-        '<div class="min-h-screen bg-canvas p-8 text-surface [--vp-c-bg-alt:var(--color-panel-field)] [--vp-c-bg-soft:var(--color-panel)] [--vp-c-brand-1:var(--color-component)] [--vp-c-divider:var(--color-border)] [--vp-c-text-1:var(--color-surface)] [--vp-c-text-2:var(--color-muted)]"><story /></div>'
+        '<div class="min-h-screen bg-canvas p-8 text-surface [--vp-c-bg-alt:var(--color-panel-field)] [--vp-c-bg-soft:var(--color-panel)] [--vp-c-brand-1:var(--color-brand-ink)] [--vp-c-divider:var(--color-border)] [--vp-c-text-1:var(--color-surface)] [--vp-c-text-2:var(--color-muted)]"><story /></div>'
     })
   ],
   parameters: {

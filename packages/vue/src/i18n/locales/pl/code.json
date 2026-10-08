@@ -3,7 +3,7 @@
   "jsxUpToDate": "Aktualne",
   "source": "Źródło kodu",
   "sourceDesignJSX": "Design JSX",
-  "sourceTailwindJSX": "Tailwind JSX",
+  "sourceTailwindJSX": "React + Tailwind",
   "sourceHTMLCSS": "HTML/CSS",
   "editorDesignLabel": "Design JSX",
   "editorHTMLCSSLabel": "HTML i CSS",
@@ -11,5 +11,8 @@
   "updatedLive": "Zaktualizowano na żywo",
   "previewFailed": "Podgląd nie powiódł się",
   "generatedReadOnly": "Wygenerowany, tylko do odczytu",
-  "reset": "Resetuj"
+  "reset": "Resetuj",
+  "downloadTokens": "Pobierz tokeny projektowe (JSON DTCG)",
+  "copyTokensCSS": "Kopiuj tokeny projektowe jako zmienne CSS",
+  "noTokens": "Ten plik nie ma jeszcze zmiennych do eksportu"
 }

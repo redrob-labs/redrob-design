@@ -12,6 +12,8 @@
   "saveAs": "名前を付けて保存…",
   "exportSelection": "選択範囲をエクスポート…",
   "autosave": "ファイルに自動保存",
+  "versionHistory": "バージョン履歴…",
+  "comments": "コメント…",
   "copy": "コピー",
   "paste": "貼り付け",
   "theme": "テーマ",
@@ -70,5 +72,9 @@
   "exportSelectionAsPNG": "選択範囲を PNG としてエクスポート",
   "exportSelectionAsSVG": "選択範囲を SVG としてエクスポート",
   "exportSelectionAsPPTX": "選択範囲を PPTX としてエクスポート",
-  "exportSelectionAsFig": "選択範囲を .fig としてエクスポート"
+  "exportSelectionAsFig": "選択範囲を .fig としてエクスポート",
+  "help": "ヘルプ",
+  "mainMenu": "メインメニュー",
+  "backToHome": "ホームに戻る",
+  "searchCommands": "コマンドを検索…"
 }
