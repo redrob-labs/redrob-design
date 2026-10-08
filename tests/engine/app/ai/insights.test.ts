@@ -146,6 +146,12 @@ describe('design insights sync', () => {
       fetch: async () => new Response('', { status: 403 })
     })
     expect(refused.status).toBe('refused')
+    const olderConsole = await syncInsights({
+      outbox,
+      connection: { apiKey: 'k', base: 'x' },
+      fetch: async () => new Response('', { status: 400 })
+    })
+    expect(olderConsole.status).toBe('refused')
     const offline = await syncInsights({
       outbox,
       connection: { apiKey: 'k', base: 'x' },

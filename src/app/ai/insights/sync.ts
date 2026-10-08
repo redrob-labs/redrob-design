@@ -74,18 +74,12 @@ export async function syncInsights(opts: {
     } catch {
       return settled ? { status: 'sent', settled } : { status: 'unreachable' }
     }
-    if (response.status === 401 || response.status === 403) {
-      return { status: 'refused', code: response.status }
-    }
     // A 200 settles the batch: each session was stored, updated, or refused with a reason that
-    // sending it again would not change. A 400 is a shape the console will never take, and keeping
-    // it would hold every later session back.
-    if (response.ok || response.status === 400) {
-      opts.outbox.remove(new Set(batch.map((s) => s.externalId)))
-      settled += batch.length
-      continue
-    }
-    return settled ? { status: 'sent', settled } : { status: 'unreachable' }
+    // sending it again would not change. Anything else (a key it does not take, or a label an older
+    // console does not know yet) keeps everything, as Cowork does, until the console takes it.
+    if (!response.ok) return { status: 'refused', code: response.status }
+    opts.outbox.remove(new Set(batch.map((s) => s.externalId)))
+    settled += batch.length
   }
   return { status: 'sent', settled }
 }
