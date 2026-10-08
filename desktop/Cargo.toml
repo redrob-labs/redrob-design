@@ -1,6 +1,6 @@
 [package]
 name = "redrob_design"
-version = "0.14.0"
+version = "0.15.0"
 description = "Redrob Design desktop app"
 authors = ["Redrob"]
 edition = "2021"
