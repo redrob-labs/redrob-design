@@ -7,7 +7,6 @@
   "loadingWorkspace": "Загрузка рабочей области хранилища…",
   "notConfigured": "Настройте хранилище перед использованием этой области.",
   "providerS3": "Хранилище S3",
-  "providerR2": "Cloudflare R2",
   "providerAmazonS3": "Amazon S3",
   "providerBackblaze": "Backblaze B2",
   "copyCors": "Скопировать JSON CORS",

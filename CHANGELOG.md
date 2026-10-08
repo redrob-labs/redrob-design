@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Changed
+
+- List storage settings as AWS S3, Backblaze B2, MinIO and other S3-compatible storage, without naming Cloudflare R2.
+
 ## 0.15.0 — 2026-10-08
 
 ### Added

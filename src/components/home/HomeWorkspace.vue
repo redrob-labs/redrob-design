@@ -82,8 +82,7 @@ const storageDescription = computed(() => {
   if (endpoint) {
     try {
       const hostname = new URL(endpoint).hostname
-      if (hostname.endsWith('.r2.cloudflarestorage.com')) label = storage.value.providerR2
-      else if (hostname.includes('amazonaws.com')) label = storage.value.providerAmazonS3
+      if (hostname.includes('amazonaws.com')) label = storage.value.providerAmazonS3
       else if (hostname.includes('backblazeb2.com')) label = storage.value.providerBackblaze
       else if (hostname) label = storage.value.providerS3
     } catch {

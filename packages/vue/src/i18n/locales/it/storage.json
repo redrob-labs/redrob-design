@@ -7,7 +7,6 @@
   "loadingWorkspace": "Caricamento area di archiviazione…",
   "notConfigured": "Configura l’archiviazione prima di usare quest’area.",
   "providerS3": "Archiviazione S3",
-  "providerR2": "Cloudflare R2",
   "providerAmazonS3": "Amazon S3",
   "providerBackblaze": "Backblaze B2",
   "copyCors": "Copia JSON CORS",

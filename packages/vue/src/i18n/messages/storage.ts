@@ -8,7 +8,6 @@ export const storageMessageDefaults = {
   loadingDocuments: 'Loading documents…',
   notConfigured: 'Configure storage before using this workspace.',
   providerS3: 'S3 storage',
-  providerR2: 'Cloudflare R2',
   providerAmazonS3: 'Amazon S3',
   providerBackblaze: 'Backblaze B2',
   loadingWorkspace: 'Loading storage workspace…',

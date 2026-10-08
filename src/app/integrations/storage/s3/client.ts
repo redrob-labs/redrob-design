@@ -35,7 +35,7 @@ export function normalizeEndpoint(endpoint: string): string {
   return `https://${trimmed}`
 }
 
-/** Path-style object URL: {endpoint}/{bucket}/{key} — works with B2, MinIO, R2, AWS. */
+/** Path-style object URL: {endpoint}/{bucket}/{key} — works with B2, MinIO, AWS and other S3-compatible storage. */
 export function objectURL(config: S3CompatibleConfig, key: string): string {
   const base = normalizeEndpoint(config.endpoint)
   const encodedKey = key
