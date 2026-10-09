@@ -9,7 +9,9 @@ import { useDesktopWindow } from '@/app/tauri/window'
 
 const { menu } = useI18n()
 const { frameless, maximized, minimize, toggleMaximize, close } = useDesktopWindow()
-const styles = tv(windowControlsTheme)()
+// Windows gets its own caption-button look; everything else frameless here is Linux.
+const platform: 'windows' | 'linux' = /Windows/i.test(navigator.userAgent) ? 'windows' : 'linux'
+const styles = tv(windowControlsTheme)({ platform })
 </script>
 
 <!--

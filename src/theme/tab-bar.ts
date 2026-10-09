@@ -12,7 +12,12 @@ const tabBarTheme = {
     newAction:
       'flex size-8 shrink-0 cursor-pointer touch-manipulation items-center justify-center self-center rounded-md text-muted transition-colors hover:bg-hover hover:text-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent',
     newIcon: 'size-3.5',
-    end: 'ml-auto flex shrink-0 items-center self-center'
+    end: 'ml-auto flex shrink-0 items-center gap-2 self-center',
+    search:
+      'flex h-7 w-60 shrink-0 cursor-pointer touch-manipulation items-center gap-2 self-center rounded-md border border-border bg-panel px-2 text-xs text-muted transition-colors hover:border-border-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent',
+    searchIcon: 'size-3.5 shrink-0',
+    searchLabel: 'min-w-0 flex-1 truncate text-left',
+    searchKbd: 'rounded-xs border border-border px-1 text-[11px] leading-4 text-muted'
   },
   variants: {
     active: {
