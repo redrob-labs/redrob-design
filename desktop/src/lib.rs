@@ -14,7 +14,7 @@ use credentials::{
 use fig_container::build_fig_file;
 use fonts::{list_system_fonts, load_system_font};
 use http::proxy_http_request;
-use menu::{install_app_menu, native_menu_checked, set_native_menu_checked};
+use menu::{install_app_menu, native_menu_checked, set_native_menu_checked, use_custom_title_bar};
 use menu_events::handle_menu_event;
 use std::{
     path::{Path, PathBuf},
@@ -235,7 +235,9 @@ pub fn run() {
         })
         .setup(|app| {
             queue_open_paths(app.handle(), startup_open_paths());
-            Ok(install_app_menu(app.handle(), &[])?)
+            install_app_menu(app.handle(), &[])?;
+            use_custom_title_bar(app.handle());
+            Ok(())
         })
         .build(context)
         .expect("error while building tauri application")

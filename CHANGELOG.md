@@ -5,6 +5,8 @@
 ### Changed
 
 - List storage settings as AWS S3, Backblaze B2, MinIO and other S3-compatible storage, without naming Cloudflare R2.
+- Show the Redrob Design product icon for the desktop app, installers, favicon and installed web app.
+- Draw the desktop window's title bar in the tab bar on Windows and Linux, with its own minimize, maximize and close buttons, and open the app's menus from the Redrob Design mark instead of a native menu bar.
 
 ## 0.15.0 — 2026-10-08
 

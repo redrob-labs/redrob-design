@@ -6,6 +6,7 @@ import { tv } from 'tailwind-variants'
 import MainMenu from '@/components/main-menu/MainMenu.vue'
 import PreparationIndicator from '@/components/preparation/tab/Indicator.vue'
 import Tip from '@/components/ui/Tip.vue'
+import WindowControls from '@/components/window-controls/WindowControls.vue'
 import tabBarTheme from '@/theme/tab-bar'
 import { useTabsStore, createHomeTab } from '@/app/tabs'
 import { useI18n } from '@redrob-design/vue'
@@ -46,10 +47,11 @@ function onClose(e: MouseEvent, tabId: string) {
     v-model="modelValue"
     activation-mode="automatic"
     data-test-id="tabbar"
+    data-tauri-drag-region
     :class="baseStyles.root()"
   >
     <MainMenu />
-    <TabsList :class="baseStyles.list()">
+    <TabsList data-tauri-drag-region :class="baseStyles.list()">
       <TabsTrigger
         v-for="tab in tabs"
         :key="tab.id"
@@ -93,5 +95,6 @@ function onClose(e: MouseEvent, tabId: string) {
     <div data-test-id="tabbar-end" :class="baseStyles.end()">
       <slot name="end" />
     </div>
+    <WindowControls />
   </TabsRoot>
 </template>

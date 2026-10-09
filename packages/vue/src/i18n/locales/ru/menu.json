@@ -75,6 +75,10 @@
   "exportSelectionAsFig": "Экспортировать выделение как .fig",
   "help": "Справка",
   "mainMenu": "Главное меню",
+  "minimizeWindow": "Свернуть",
+  "maximizeWindow": "Развернуть",
+  "restoreWindow": "Восстановить",
+  "closeWindow": "Закрыть окно",
   "backToHome": "Вернуться на главную",
   "searchCommands": "Поиск команд…"
 }

@@ -75,6 +75,10 @@
   "exportSelectionAsFig": "Eksportuj zaznaczenie jako .fig",
   "help": "Pomoc",
   "mainMenu": "Menu główne",
+  "minimizeWindow": "Minimalizuj",
+  "maximizeWindow": "Maksymalizuj",
+  "restoreWindow": "Przywróć",
+  "closeWindow": "Zamknij okno",
   "backToHome": "Wróć do strony głównej",
   "searchCommands": "Szukaj poleceń…"
 }

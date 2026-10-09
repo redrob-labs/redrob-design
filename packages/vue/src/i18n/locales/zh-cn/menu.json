@@ -75,6 +75,10 @@
   "exportSelectionAsFig": "将所选内容导出为 .fig",
   "help": "帮助",
   "mainMenu": "主菜单",
+  "minimizeWindow": "最小化",
+  "maximizeWindow": "最大化",
+  "restoreWindow": "还原",
+  "closeWindow": "关闭窗口",
   "backToHome": "返回主页",
   "searchCommands": "搜索命令…"
 }

@@ -242,5 +242,33 @@ pub fn install_app_menu<R: tauri::Runtime>(
     }
 
     app.set_menu(builder.build()?)?;
+    hide_menu_bars(app);
     Ok(())
+}
+
+/// Windows and Linux show no native menu bar: the tab bar's main menu
+/// (`MainMenu.vue`) carries the same groups. The menu stays set, so its
+/// accelerators and `native_menu_checked` keep working; only the bar is
+/// hidden. `set_menu` re-attaches and shows it on every window, so this runs
+/// after every install, including the recent-files rebuild.
+fn hide_menu_bars<R: tauri::Runtime>(app: &tauri::AppHandle<R>) {
+    // A no-op on macOS, where the menu lives in the system menu bar.
+    let _ = app.hide_menu();
+}
+
+/// Windows and Linux lose the OS title bar too: `TabBar.vue` is the title bar,
+/// with `data-tauri-drag-region` and its own minimise, maximise and close
+/// buttons (`WindowControls.vue`). Done here rather than in a platform config
+/// file so `tauri.native-test.conf.json`, which replaces the window list, gets
+/// the same frame. macOS keeps its native title bar and traffic lights.
+pub fn use_custom_title_bar<R: tauri::Runtime>(app: &tauri::AppHandle<R>) {
+    #[cfg(not(target_os = "macos"))]
+    {
+        use tauri::Manager;
+        if let Some(window) = app.get_webview_window("main") {
+            let _ = window.set_decorations(false);
+        }
+    }
+    #[cfg(target_os = "macos")]
+    let _ = app;
 }
