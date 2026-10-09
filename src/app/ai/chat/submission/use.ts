@@ -34,14 +34,24 @@ interface SubmissionOptions {
   messages: Ref<SubmissionMessages>
   reportError: (message: string, action?: { label: string; run: () => void }) => void
   openModelSettings: () => void
+  /** A message is about to be sent: AI work insights count it (and classify the first). */
+  onUserTurn?: (editor: EditorStore, turn: { text: string; attachedSource: boolean }) => void
 }
 
 export function useChatSubmission(options: SubmissionOptions) {
   const isPreparingAttachments = ref(false)
   let operationVersion = 0
 
+  function noteUserTurn(submission: ChatSubmission): void {
+    options.onUserTurn?.(options.getEditor(), {
+      text: submission.displayText,
+      attachedSource: submission.images.length > 0 || submission.nodes.length > 0
+    })
+  }
+
   async function sendText(currentChat: ChatInstance, submission: ChatSubmission): Promise<void> {
     const previousIds = new Set(currentChat.messages.map((message) => message.id))
+    noteUserTurn(submission)
     await currentChat.sendMessage({ text: submission.modelText }).catch(() => undefined)
     const message = currentChat.messages.find(
       (candidate) => candidate.role === 'user' && !previousIds.has(candidate.id)
@@ -69,6 +79,7 @@ export function useChatSubmission(options: SubmissionOptions) {
     for (const image of submission.images) revokeImagePreviewURL(image.previewURL)
 
     if (submission.images.length === 0) {
+      noteUserTurn(submission)
       await currentChat
         .sendMessage({ messageId, text: submission.modelText })
         .catch(() => undefined)
@@ -87,6 +98,7 @@ export function useChatSubmission(options: SubmissionOptions) {
       preparedImages
     )
     setMessageAttachments(messageId, [...nodeAttachments, ...normalizedImages])
+    noteUserTurn(submission)
     await currentChat
       .sendMessage({
         messageId,

@@ -11,8 +11,10 @@ import { classifyAIChatError, type AIChatFailure } from '@/app/ai/chat/failure'
 import { resolveLanguageModelID } from '@/app/ai/chat/model'
 import { buildReasoningProviderOptions, type AIProviderOptions } from '@/app/ai/chat/reasoning'
 import SYSTEM_PROMPT from '@/app/ai/chat/system-prompt.md?raw'
+import { chatInsights } from '@/app/ai/insights'
 import { createAIModelRuntime, resolveModelConnectionAPIKey } from '@/app/ai/models'
 import { MAX_AGENT_STEPS, createAITools, recordStep, resetRunSteps } from '@/app/ai/tools'
+import type { AIToolObserver } from '@/app/ai/tools'
 import {
   recordChatCompleted,
   recordChatFailed,
@@ -39,6 +41,7 @@ export type ToolLoopTransportOptions = {
   maxOutputTokens: number
   reasoningEffort: string
   onError?: (error: unknown) => void
+  toolObserver?: AIToolObserver
 }
 
 const ANTHROPIC_CACHE_CONTROL = {
@@ -80,9 +83,10 @@ export function createToolLoopTransport({
   effectiveModelID,
   maxOutputTokens,
   reasoningEffort,
-  onError
+  onError,
+  toolObserver
 }: ToolLoopTransportOptions) {
-  const tools = createAITools(store)
+  const tools = createAITools(store, toolObserver)
   const cacheProviderOptions = supportsAnthropicCaching(providerID, effectiveModelID)
     ? ANTHROPIC_CACHE_CONTROL
     : undefined
@@ -226,14 +230,20 @@ export function createChatSessionManager({
   }
 
   async function createTransport(store: EditorStore) {
-    if (overrideTransport) return overrideTransport()
+    if (overrideTransport) {
+      chatInsights.bindChat(store, null)
+      return overrideTransport()
+    }
 
     await destroyAgentTransports()
 
-    const runtime = await createAIModelRuntime('design')
+    const runtime = await createAIModelRuntime('design', {
+      sessionID: () => chatInsights.sessionID(store)
+    })
     if (runtime?.kind !== 'direct') {
       throw new Error('The Design model is not configured for direct API access')
     }
+    chatInsights.bindChat(store, runtime.role.connection.providerID)
     return createToolLoopTransport({
       store,
       providerID: runtime.role.connection.providerID,
@@ -245,7 +255,14 @@ export function createChatSessionManager({
       }),
       maxOutputTokens: runtime.role.profile.maxOutputTokens,
       reasoningEffort: runtime.role.profile.reasoningEffort ?? '',
-      onError: captureProviderError
+      onError: captureProviderError,
+      toolObserver: {
+        onToolLog: (entry) =>
+          chatInsights.toolCall(store, {
+            failed: entry.error !== undefined,
+            changedScene: entry.mutates && entry.error === undefined
+          })
+      }
     })
   }
 
@@ -261,9 +278,13 @@ export function createChatSessionManager({
     if (!chat || transportDirty || currentChatStore !== store) {
       const messages = currentChatMessages.get(store)
       let transport: ChatTransport<UIMessage>
-      if (isACPProvider.value) transport = await createActiveACPTransport()
-      else if (isHarnessProvider.value) transport = await createActiveHarnessTransport()
-      else transport = await createTransport(store)
+      if (isACPProvider.value || isHarnessProvider.value) {
+        // These agents do not go through the Console: their sessions are not recorded.
+        chatInsights.bindChat(store, null)
+        transport = isACPProvider.value
+          ? await createActiveACPTransport()
+          : await createActiveHarnessTransport()
+      } else transport = await createTransport(store)
       chat = new Chat<UIMessage>({
         transport,
         messages,
@@ -271,11 +292,15 @@ export function createChatSessionManager({
           const reportedError = activeProviderError ?? error
           activeProviderError = null
           failure.value = classifyAIChatError(reportedError)
+          chatInsights.chatFinished(store, { isAbort: false, isError: true, isDisconnect: false })
           recordChatFailed({
             errorName: reportedError instanceof Error ? reportedError.name : 'unknown'
           })
         },
-        onFinish: handleChatFinish
+        onFinish: (event) => {
+          handleChatFinish(event)
+          chatInsights.chatFinished(store, event)
+        }
       })
       currentChatStore = store
       transportDirty = false
@@ -284,7 +309,10 @@ export function createChatSessionManager({
   }
 
   async function resetChat() {
-    if (currentChatStore) currentChatMessages.delete(currentChatStore)
+    if (currentChatStore) {
+      currentChatMessages.delete(currentChatStore)
+      void chatInsights.end(currentChatStore)
+    }
     await destroyAgentTransports()
     failure.value = null
     chat = null

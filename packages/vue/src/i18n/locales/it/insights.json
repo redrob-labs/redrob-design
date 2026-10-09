@@ -1,0 +1,11 @@
+{
+  "title": "Approfondimenti sul lavoro con l’IA",
+  "description": "Etichetta ogni sessione di IA Redrob su questo dispositivo. Alla console del tuo spazio di lavoro vengono inviati solo etichette e conteggi, mai i tuoi messaggi.",
+  "modelLabel": "Modello di lavoro",
+  "absent": "Non scaricato. Viene scaricato in background dopo la tua prossima chat Redrob.",
+  "downloading": "Download in corso, {percent}%",
+  "loading": "Caricamento",
+  "ready": "Pronto",
+  "failed": "Download non riuscito: {reason}. Verrà ritentato più tardi.",
+  "unavailable": "Non usato nel browser. Le sessioni vengono etichettate senza il tipo di lavoro."
+}

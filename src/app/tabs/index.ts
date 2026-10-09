@@ -8,6 +8,7 @@ import { populateLazyFigImportRoots } from '@redrob-design/core/kiwi'
 import { computeAllLayouts } from '@redrob-design/core/layout'
 import type { SceneGraph } from '@redrob-design/scene-graph'
 
+import { chatInsights } from '@/app/ai/insights'
 import { setRedrobDesignStore } from '@/app/browser-bridge'
 import { describeDiagnosticError, recordStorageFailure } from '@/app/diagnostics'
 import { readFigDocument } from '@/app/document/io/fig'
@@ -157,6 +158,7 @@ export async function closeTab(tabId: string): Promise<void> {
   const wasActive = activeTabId.value === tabId
   coverThumbnailListeners.get(closingTab.store)?.()
   coverThumbnailListeners.delete(closingTab.store)
+  void chatInsights.end(closingTab.store)
   closingTab.store.preparationController.dispose()
   await closingTab.store.persistRecoveryNow()
   closingTab.store.dispose()

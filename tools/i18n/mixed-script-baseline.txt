@@ -66,6 +66,8 @@ ja:files.importHTMLCSSDescription
 ja:files.orEdgeForFullSupport
 ja:files.useChrome
 ja:fonts.downloadFallbackPacksDescription
+ja:insights.description
+ja:insights.title
 ja:media.getPexelsAPIKey
 ja:media.getUnsplashAccessKey
 ja:media.pexelsAlternativeOptional
@@ -175,6 +177,8 @@ zh-cn:files.importHTMLCSSDescription
 zh-cn:files.orEdgeForFullSupport
 zh-cn:files.useChrome
 zh-cn:fonts.downloadFallbackPacksDescription
+zh-cn:insights.description
+zh-cn:insights.title
 zh-cn:media.getPexelsAPIKey
 zh-cn:media.getUnsplashAccessKey
 zh-cn:media.pexelsAlternativeOptional

@@ -1,0 +1,11 @@
+{
+  "title": "Einblicke in die KI-Arbeit",
+  "description": "Kennzeichnet jede Redrob-KI-Sitzung auf diesem Gerät. Nur Kennzeichnungen und Zählwerte gehen an die Konsole deines Arbeitsbereichs, nie deine Nachrichten.",
+  "modelLabel": "Arbeitsmodell",
+  "absent": "Nicht heruntergeladen. Es wird nach deinem nächsten Redrob-Chat im Hintergrund geladen.",
+  "downloading": "Wird heruntergeladen, {percent}%",
+  "loading": "Wird geladen",
+  "ready": "Bereit",
+  "failed": "Download fehlgeschlagen: {reason}. Es wird später erneut versucht.",
+  "unavailable": "Im Browser nicht verwendet. Sitzungen werden ohne die Art der Arbeit gekennzeichnet."
+}

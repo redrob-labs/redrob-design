@@ -13,6 +13,7 @@ import { devAutomationRoute } from './src/app/automation/bridge/portless-route'
 import { createRedrobAliases } from './vite/aliases'
 import { localAutomationToken, redrobAutomationPlugin } from './vite/automation'
 import { copyCanvasKitAssetsPlugin } from './vite/canvaskit-assets'
+import { ortAssetsPlugin } from './vite/ort-assets'
 import { redrobPwaPlugin } from './vite/pwa'
 import { rawMarkdownPlugin } from './vite/raw-markdown'
 import { createDevServerOptions } from './vite/server'
@@ -59,6 +60,7 @@ export default defineConfig(async ({ command }) => ({
   plugins: [
     rawMarkdownPlugin(),
     copyCanvasKitAssetsPlugin(),
+    ortAssetsPlugin(),
     tailwindcss(),
     Icons({ compiler: 'vue3' }),
     Components({ resolvers: [IconsResolver({ prefix: 'icon' })] }),

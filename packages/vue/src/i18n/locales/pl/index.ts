@@ -11,6 +11,7 @@ import diagnostics from './diagnostics.json'
 import editor from './editor.json'
 import files from './files.json'
 import fonts from './fonts.json'
+import insights from './insights.json'
 import media from './media.json'
 import menu from './menu.json'
 import pages from './pages.json'
@@ -37,6 +38,7 @@ export default {
   editor,
   files,
   fonts,
+  insights,
   media,
   menu,
   pages,

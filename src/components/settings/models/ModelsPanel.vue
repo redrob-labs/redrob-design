@@ -8,6 +8,7 @@ import { aiModelSettings, modelConnection, modelConnectionCredentialStatus } fro
 import type { CredentialStatus } from '@/app/settings/credentials/types'
 import ProfileEditor from '@/components/settings/models/ProfileEditor.vue'
 import RoleAssignments from '@/components/settings/models/RoleAssignments.vue'
+import WorkModelStatus from '@/components/settings/insights/WorkModelStatus.vue'
 
 const { ai, collaboration, common } = useI18n()
 const editing = ref(false)
@@ -165,5 +166,7 @@ watch(
       </div>
       <RoleAssignments />
     </section>
+
+    <WorkModelStatus />
   </div>
 </template>

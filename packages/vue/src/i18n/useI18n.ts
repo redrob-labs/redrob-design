@@ -16,6 +16,7 @@ import {
   editorMessages,
   filesMessages,
   fontsMessages,
+  insightsMessages,
   mediaMessages,
   menuMessages,
   pageMessages,
@@ -46,6 +47,7 @@ export const useDiagnosticsMessages = () => useI18nNamespace(diagnosticsMessages
 export const useEditorMessages = () => useI18nNamespace(editorMessages)
 export const useFileMessages = () => useI18nNamespace(filesMessages)
 export const useFontMessages = () => useI18nNamespace(fontsMessages)
+export const useInsightsMessages = () => useI18nNamespace(insightsMessages)
 export const useMediaMessages = () => useI18nNamespace(mediaMessages)
 export const useMenuMessages = () => useI18nNamespace(menuMessages)
 export const usePageMessages = () => useI18nNamespace(pageMessages)
@@ -74,6 +76,7 @@ export function useI18n() {
     editor: useEditorMessages(),
     files: useFileMessages(),
     fonts: useFontMessages(),
+    insights: useInsightsMessages(),
     media: useMediaMessages(),
     menu: useMenuMessages(),
     pages: usePageMessages(),

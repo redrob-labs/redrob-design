@@ -1,0 +1,11 @@
+{
+  "title": "AI 工作洞察",
+  "description": "在此设备上为每个 AI 会话添加标签。发送到工作区控制台的只有标签和计数，绝不包含你的消息。",
+  "modelLabel": "工作模型",
+  "absent": "尚未下载。会在你下一次聊天后于后台下载。",
+  "downloading": "正在下载，{percent}%",
+  "loading": "正在加载",
+  "ready": "就绪",
+  "failed": "下载失败：{reason}。稍后会重试。",
+  "unavailable": "浏览器中不使用。会话标签不包含工作类型。"
+}

@@ -1,0 +1,11 @@
+{
+  "title": "Información sobre el trabajo con IA",
+  "description": "Etiqueta cada sesión de IA de Redrob en este dispositivo. Solo se envían etiquetas y recuentos a la consola de tu espacio de trabajo, nunca tus mensajes.",
+  "modelLabel": "Modelo de trabajo",
+  "absent": "No descargado. Se descarga en segundo plano después de tu próximo chat de Redrob.",
+  "downloading": "Descargando, {percent}%",
+  "loading": "Cargando",
+  "ready": "Listo",
+  "failed": "La descarga falló: {reason}. Se volverá a intentar más tarde.",
+  "unavailable": "No se usa en el navegador. Las sesiones se etiquetan sin el tipo de trabajo."
+}

@@ -26,6 +26,7 @@
 - Inspect selected designs with a configured Vision model and attach images to AI chat with bounded analysis and previews. (#232, #471)
 - Pin selected layers as explicit AI chat context, show collapsible reasoning, copy individual responses, and grow the composer with multiline prompts. (#13)
 - Render streaming AI responses with the upstream Comark-based Markdown pipeline and optional Shiki code highlighting without the former project fork.
+- Report Redrob AI sessions to the workspace console as on-device work labels (kind of work, mode, and turn count), never message text, with the work model downloaded and verified on first use in the desktop app.
 
 ### Changed
 

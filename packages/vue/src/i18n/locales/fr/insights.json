@@ -1,0 +1,11 @@
+{
+  "title": "Aperçu du travail avec l’IA",
+  "description": "Étiquette chaque session d’IA Redrob sur cet appareil. Seuls des étiquettes et des comptes sont envoyés à la console de votre espace de travail, jamais vos messages.",
+  "modelLabel": "Modèle de travail",
+  "absent": "Non téléchargé. Il se télécharge en arrière-plan après votre prochaine conversation Redrob.",
+  "downloading": "Téléchargement, {percent} %",
+  "loading": "Chargement",
+  "ready": "Prêt",
+  "failed": "Échec du téléchargement : {reason}. Une nouvelle tentative aura lieu plus tard.",
+  "unavailable": "Non utilisé dans le navigateur. Les sessions sont étiquetées sans le type de travail."
+}

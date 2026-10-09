@@ -18,7 +18,8 @@ const MODEL_PROVIDER_ADAPTERS = {
   // Console arrives with its own base URL, so an explicit one wins over the default.
   redrob: createOpenAICompatibleAdapter({
     baseURL: (config) => config.customBaseURL.trim() || REDROB_CONSOLE_API_BASE,
-    mode: 'chat'
+    mode: 'chat',
+    sessionHeader: true
   }),
   openrouter: {
     create(config, runtime) {

@@ -5,5 +5,6 @@ export const APP_DATABASE_NAMES = {
   localCanvas: 'redrob-design-cloud-local',
   outbox: 'redrob-design-cloud-outbox',
   recovery: 'redrob-design-recovery',
-  diagnostics: 'redrob-design-diagnostics'
+  diagnostics: 'redrob-design-diagnostics',
+  insights: 'redrob-design-insights'
 } as const

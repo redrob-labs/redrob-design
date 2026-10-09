@@ -57,6 +57,16 @@ Storage-provider schemas and runtime adapters live under `src/app/integrations/s
 
 Bitmap-to-vector conversion lives in `packages/core/src/vector/vectorize/`; app provider clients, preferences, and lazy credential resolution live under `src/app/editor/vectorize/`. Keep provider credentials in the centralized credential manager, bound request and response sizes, and validate provider-owned download URLs before importing returned SVG.
 
+### AI work insights
+
+`src/app/ai/insights/**` labels each Redrob AI chat session on the device with `@redrob-labs/work-labeller`, the package Cowork and Office use, so all three label the same way. What leaves the machine is fixed by that contract:
+
+- **Sent** to the Redrob connection's own Console (`customBaseURL`, else `REDROB_CONSOLE_API_BASE`), with that connection's key resolved through `CredentialResolver` at send time: the package's `LabeledSession` — an opaque session id (`dz_…`), the start time, the kind of work and its family, the mode, the turn count, yes/no flags (produced output, checked, steered, and similar), and the labeler id and version. Chat requests to Redrob also carry `x-redrob-session` with the same id; other providers never receive it.
+- **Never sent:** message text, tool arguments or results, file names, or document content. Text reaches only the local classifier.
+- Design is `agentic: false` in the Console's tool table, so `toDesignSession()` caps mode at Iterate (3) and drops the `agent` block. Keep that when the shared rules change.
+- The outbox is IndexedDB (`database-names.ts`), bounded to 2000 sessions. Without a Redrob connection nothing is sent and the outbox waits.
+- The model (multilingual-e5-base int8, ~295 MB) is downloaded only by the desktop app, after the first finished Redrob chat, through the `download_verified` command in `desktop/src/insights/`. That command streams to `$APPLOCALDATA/models/insights/<revision>/`, verifies each file's pinned SHA-256, resumes with `Range`, accepts only `github.com` and `release-assets.githubusercontent.com` over HTTPS, requires 600 MB free, and removes other revisions. Inference runs in the webview with single-threaded onnxruntime-web WASM (`vite/ort-assets.ts` copies the runtime into the ignored `public/ort/`). The browser build never downloads the model and sends sessions without the kind of work.
+
 App dialogs compose the Reka-backed components under `src/components/ui/dialog/` and the typed theme in `src/theme/dialog.ts`. Do not repeat portal, overlay, content, header, or footer infrastructure in feature dialogs.
 
 ## Commands
