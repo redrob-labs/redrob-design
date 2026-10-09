@@ -101,6 +101,8 @@ ja:home.suggestionLaunch
 ja:home.suggestionOnboarding
 ja:home.suggestionPricing
 ja:home.suggestionPricingBrief
+ja:insights.description
+ja:insights.title
 ja:media.getPexelsAPIKey
 ja:media.getUnsplashAccessKey
 ja:media.pexelsAlternativeOptional
@@ -267,6 +269,8 @@ zh-cn:home.suggestionLaunch
 zh-cn:home.suggestionOnboarding
 zh-cn:home.suggestionPricing
 zh-cn:home.suggestionPricingBrief
+zh-cn:insights.description
+zh-cn:insights.title
 zh-cn:media.getPexelsAPIKey
 zh-cn:media.getUnsplashAccessKey
 zh-cn:media.pexelsAlternativeOptional

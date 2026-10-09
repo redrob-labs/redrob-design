@@ -40,7 +40,8 @@ import type { JSONObject } from '@redrob-design/scene-graph/primitives'
 
 const IS_DEV = import.meta.env.DEV
 
-const { isConfigured, ensureChat, resetChat, chatFailure, clearChatFailure } = useAIChat()
+const { isConfigured, ensureChat, resetChat, chatFailure, clearChatFailure, recordUserTurn } =
+  useAIChat()
 const { copy } = useClipboard()
 const { ai } = useI18n()
 const thread = useThreadMessages()
@@ -60,7 +61,8 @@ const submission = useChatSubmission({
     visionUnavailable: ai.value.visionModelUnavailable
   })),
   reportError: toast.error,
-  openModelSettings: () => openSettingsDialog('ai')
+  openModelSettings: () => openSettingsDialog('ai'),
+  onUserTurn: recordUserTurn
 })
 
 // Cards in the thread (Plan's questions, directions) answer as the person.

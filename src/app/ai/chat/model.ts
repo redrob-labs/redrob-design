@@ -1,6 +1,7 @@
 import type { LanguageModel } from 'ai'
 
 import { modelProviderAdapter } from '@/app/ai/providers/registry'
+import type { SessionIDSource } from '@/app/ai/providers/session'
 import type { ModelConfig } from '@/app/ai/providers/types'
 import type { FetchFunction } from '@/app/http/types'
 import { isTauri } from '@/app/tauri/env'
@@ -25,6 +26,12 @@ function desktopFetch(): FetchFunction | undefined {
   return isTauri() ? tauriFetch : undefined
 }
 
-export function createLanguageModel(config: ModelConfig): LanguageModel {
-  return modelProviderAdapter(config.providerID).create(config, { fetch: desktopFetch() })
+export function createLanguageModel(
+  config: ModelConfig,
+  options: { sessionID?: SessionIDSource } = {}
+): LanguageModel {
+  return modelProviderAdapter(config.providerID).create(config, {
+    fetch: desktopFetch(),
+    sessionID: options.sessionID
+  })
 }

@@ -17,6 +17,7 @@ import { filesMessageDefaults, filesMessages } from '#vue/i18n/messages/files'
 import { fontsMessageDefaults, fontsMessages } from '#vue/i18n/messages/fonts'
 import { historyMessageDefaults, historyMessages } from '#vue/i18n/messages/history'
 import { homeMessageDefaults, homeMessages } from '#vue/i18n/messages/home'
+import { insightsMessageDefaults, insightsMessages } from '#vue/i18n/messages/insights'
 import { mediaMessageDefaults, mediaMessages } from '#vue/i18n/messages/media'
 import { menuMessageDefaults, menuMessages } from '#vue/i18n/messages/menu'
 import { pageMessageDefaults, pageMessages } from '#vue/i18n/messages/pages'
@@ -61,6 +62,7 @@ export {
   editorMessages,
   filesMessages,
   fontsMessages,
+  insightsMessages,
   mediaMessages,
   menuMessages,
   pageMessages,
@@ -98,6 +100,7 @@ export const messageDefaults = {
   editor: editorMessageDefaults,
   files: filesMessageDefaults,
   fonts: fontsMessageDefaults,
+  insights: insightsMessageDefaults,
   media: mediaMessageDefaults,
   menu: menuMessageDefaults,
   pages: pageMessageDefaults,

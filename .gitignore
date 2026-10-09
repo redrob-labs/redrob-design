@@ -50,6 +50,7 @@ storybook-static/
 # Copied from node_modules at build time
 public/canvaskit.wasm
 public/canvaskit-webgpu/
+public/ort/
 
 # Documentation build/cache output
 packages/docs/.vitepress/cache/

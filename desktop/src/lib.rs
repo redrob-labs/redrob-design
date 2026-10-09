@@ -2,6 +2,7 @@ mod credentials;
 mod fig_container;
 mod fonts;
 mod http;
+mod insights;
 mod menu;
 mod menu_events;
 #[cfg(target_os = "macos")]
@@ -14,6 +15,7 @@ use credentials::{
 use fig_container::build_fig_file;
 use fonts::{list_system_fonts, load_system_font};
 use http::proxy_http_request;
+use insights::download_verified;
 use menu::{install_app_menu, native_menu_checked, set_native_menu_checked};
 use menu_events::handle_menu_event;
 use std::{
@@ -214,6 +216,7 @@ pub fn run() {
             credential_status,
             credential_store_availability,
             credential_write,
+            download_verified,
             mcp_executable_available,
             list_system_fonts,
             load_system_font,

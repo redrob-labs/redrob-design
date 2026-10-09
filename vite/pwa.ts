@@ -7,6 +7,8 @@ export function redrobPwaPlugin() {
     workbox: {
       maximumFileSizeToCacheInBytes: 12 * 1024 * 1024,
       globPatterns: ['**/*.{js,css,html,wasm,png,ico,ttf,webmanifest}'],
+      // The browser build never runs the work classifier, so its runtime is not precached.
+      globIgnores: ['ort/**'],
       navigateFallback: '/index.html'
     },
     manifest: {

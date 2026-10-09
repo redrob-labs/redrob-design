@@ -1,0 +1,11 @@
+{
+  "title": "Wgląd w pracę z AI",
+  "description": "Oznacza każdą sesję AI Redrob na tym urządzeniu. Do konsoli obszaru roboczego trafiają tylko etykiety i liczby, nigdy Twoje wiadomości.",
+  "modelLabel": "Model pracy",
+  "absent": "Nie pobrano. Zostanie pobrany w tle po Twoim następnym czacie Redrob.",
+  "downloading": "Pobieranie, {percent}%",
+  "loading": "Wczytywanie",
+  "ready": "Gotowy",
+  "failed": "Pobieranie nie powiodło się: {reason}. Nastąpi ponowna próba później.",
+  "unavailable": "Nieużywany w przeglądarce. Sesje są oznaczane bez rodzaju pracy."
+}

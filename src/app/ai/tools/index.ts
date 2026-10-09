@@ -68,7 +68,13 @@ export function clearToolLogEntries(store?: EditorStore): void {
   getRunState(store).clear()
 }
 
-export function createAITools(store: EditorStore) {
+export type AIToolObserver = {
+  /** Each tool call as it finishes, for AI work insights. */
+  onToolLog?: (entry: ToolLogEntry) => void
+}
+
+export function createAITools(store: EditorStore, observer: AIToolObserver = {}) {
+  let beforeSnapshot: Map<string, SceneNode> | null = null
   const runState = getRunState(store)
   const libraryService = useLibraryService()
   libraryService.bindEditor(store)
@@ -110,6 +116,7 @@ export function createAITools(store: EditorStore) {
       },
       onToolLog: (entry) => {
         runState.toolLog.push(entry)
+        observer.onToolLog?.(entry)
       },
       getStepBudget: (): StepBudget => ({
         current: runState.currentSteps,
