@@ -75,6 +75,10 @@
   "exportSelectionAsFig": "선택 항목을 .fig로 내보내기",
   "help": "도움말",
   "mainMenu": "메인 메뉴",
+  "minimizeWindow": "최소화",
+  "maximizeWindow": "최대화",
+  "restoreWindow": "이전 크기로",
+  "closeWindow": "창 닫기",
   "backToHome": "홈으로 돌아가기",
   "searchCommands": "명령 검색…"
 }

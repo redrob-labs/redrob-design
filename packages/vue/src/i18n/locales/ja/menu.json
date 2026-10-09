@@ -75,6 +75,10 @@
   "exportSelectionAsFig": "選択範囲を .fig としてエクスポート",
   "help": "ヘルプ",
   "mainMenu": "メインメニュー",
+  "minimizeWindow": "最小化",
+  "maximizeWindow": "最大化",
+  "restoreWindow": "元に戻す",
+  "closeWindow": "ウィンドウを閉じる",
   "backToHome": "ホームに戻る",
   "searchCommands": "コマンドを検索…"
 }

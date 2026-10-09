@@ -6,11 +6,14 @@ import { tv } from 'tailwind-variants'
 import MainMenu from '@/components/main-menu/MainMenu.vue'
 import PreparationIndicator from '@/components/preparation/tab/Indicator.vue'
 import Tip from '@/components/ui/Tip.vue'
+import WindowControls from '@/components/window-controls/WindowControls.vue'
 import tabBarTheme from '@/theme/tab-bar'
 import { useTabsStore, createHomeTab } from '@/app/tabs'
-import { useI18n } from '@redrob-design/vue'
+import { commandPaletteOpen } from '@/app/shell/command-palette'
+import { formatShortcut, useI18n } from '@redrob-design/vue'
 
-const { files } = useI18n()
+const { files, menu } = useI18n()
+const paletteShortcut = formatShortcut('MOD+K')
 
 const { tabs, activeTabId, switchTab, closeTab } = useTabsStore()
 const tabBarStyles = tv(tabBarTheme)
@@ -46,10 +49,11 @@ function onClose(e: MouseEvent, tabId: string) {
     v-model="modelValue"
     activation-mode="automatic"
     data-test-id="tabbar"
+    data-tauri-drag-region
     :class="baseStyles.root()"
   >
     <MainMenu />
-    <TabsList :class="baseStyles.list()">
+    <TabsList data-tauri-drag-region :class="baseStyles.list()">
       <TabsTrigger
         v-for="tab in tabs"
         :key="tab.id"
@@ -91,7 +95,18 @@ function onClose(e: MouseEvent, tabId: string) {
       </button>
     </Tip>
     <div data-test-id="tabbar-end" :class="baseStyles.end()">
+      <button
+        data-test-id="tabbar-search"
+        :class="baseStyles.search()"
+        :aria-label="menu.searchCommands"
+        @click="commandPaletteOpen = true"
+      >
+        <icon-lucide-search :class="baseStyles.searchIcon()" />
+        <span :class="baseStyles.searchLabel()">{{ menu.searchCommands }}</span>
+        <kbd :class="baseStyles.searchKbd()">{{ paletteShortcut }}</kbd>
+      </button>
       <slot name="end" />
     </div>
+    <WindowControls />
   </TabsRoot>
 </template>
