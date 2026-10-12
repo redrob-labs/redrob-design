@@ -4,7 +4,12 @@ import { useI18n } from '@redrob-design/vue'
 
 import { ACP_AGENTS, AI_PROVIDERS } from '@redrob-design/core/constants'
 
-import { aiModelSettings, modelConnection, modelConnectionCredentialStatus } from '@/app/ai/models'
+import {
+  aiModelSettings,
+  modelConnection,
+  modelConnectionCredentialStatus,
+  modelConnectionKeySource
+} from '@/app/ai/models'
 import type { CredentialStatus } from '@/app/settings/credentials/types'
 import ProfileEditor from '@/components/settings/models/ProfileEditor.vue'
 import RoleAssignments from '@/components/settings/models/RoleAssignments.vue'
@@ -13,6 +18,8 @@ const { ai, collaboration, common } = useI18n()
 const editing = ref(false)
 const editingProfileId = ref<string>()
 const statusByConnection = ref<Record<string, CredentialStatus>>({})
+/** Connections whose key is Redrob Launcher's shared sign-in rather than this app's own. */
+const launcherConnections = ref<Record<string, boolean>>({})
 function providerName(providerID: string): string {
   if (providerID === 'harness:pi') return 'Pi'
   if (providerID.startsWith('acp:')) {
@@ -51,15 +58,23 @@ async function refreshStatuses(): Promise<void> {
   const entries = await Promise.all(
     aiModelSettings.value.connections.map(
       async (connection) =>
-        [connection.id, await modelConnectionCredentialStatus(connection.id)] as const
+        [
+          connection.id,
+          await modelConnectionCredentialStatus(connection.id),
+          (await modelConnectionKeySource(connection.id)) === 'launcher'
+        ] as const
     )
   )
-  statusByConnection.value = Object.fromEntries(entries)
+  statusByConnection.value = Object.fromEntries(entries.map(([id, status]) => [id, status]))
+  launcherConnections.value = Object.fromEntries(entries.map(([id, , launcher]) => [id, launcher]))
 }
 
 function statusLabel(connectionId: string, providerID: string): string {
   if (providerID.startsWith('acp:')) return ai.value.modelAgentConnection
   const status = statusByConnection.value[connectionId]
+  if (status === 'configured' && launcherConnections.value[connectionId]) {
+    return ai.value.signedInWithLauncher
+  }
   if (status === 'configured') return collaboration.value.connected
   if (status === 'locked' || status === 'unavailable') return common.value.unavailable
   return ai.value.modelNeedsCredential

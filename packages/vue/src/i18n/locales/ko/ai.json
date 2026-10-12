@@ -118,5 +118,6 @@
   "connectRedrobExpired": "승인되기 전에 코드가 만료되었습니다. 다시 시도하세요.",
   "connectRedrobUnreachable": "Redrob Console에 연결할 수 없습니다. 네트워크를 확인하세요.",
   "connectRedrobFailed": "연결이 완료되지 않았습니다. 다시 시도하세요.",
-  "connectRedrobCancel": "취소"
+  "connectRedrobCancel": "취소",
+  "signedInWithLauncher": "Redrob Launcher로 로그인됨"
 }

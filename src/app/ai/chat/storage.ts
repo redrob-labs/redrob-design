@@ -3,6 +3,7 @@ import { computed, ref, watch } from 'vue'
 import { IS_TAURI } from '@redrob-design/core/constants'
 import { setPexelsAPIKey, setUnsplashAccessKey } from '@redrob-design/core/tools'
 
+import { sharedAccountRevision, startSharedAccountWatch } from '@/app/ai/connect/app-shared-account'
 import {
   designCustomAPIType,
   designCustomBaseURL,
@@ -12,7 +13,9 @@ import {
   designModelID,
   designProviderDefinition,
   designProviderID,
-  modelConnectionCredentialRef
+  modelConnectionCredentialRef,
+  modelConnectionCredentialStatus,
+  resolveModelConnectionAPIKey
 } from '@/app/ai/models'
 import { appCredentialServices, browserCredentialsRemembered } from '@/app/settings/credentials/app'
 import {
@@ -59,9 +62,13 @@ function designCredentialReference(): CredentialRef | null {
   return modelConnectionCredentialRef(connection)
 }
 
+/**
+ * The Design connection's status goes through the model layer, which counts Redrob
+ * Launcher's shared sign-in as configured when the app has no key of its own.
+ */
 export async function refreshAIProviderStatus(): Promise<void> {
-  const reference = designCredentialReference()
-  apiKeyStatus.value = reference ? await refreshStatus(reference) : 'missing'
+  const connection = designModelConnection.value
+  apiKeyStatus.value = connection ? await modelConnectionCredentialStatus(connection.id) : 'missing'
 }
 
 async function refreshMediaCredentials(): Promise<void> {
@@ -90,8 +97,8 @@ export const credentialsReady = initializeCredentialMigration().then(async () =>
 
 export async function resolveAPIKey(): Promise<string | null> {
   await credentialsReady
-  const reference = designCredentialReference()
-  return reference ? appCredentialServices.resolver.resolve(reference) : null
+  const connection = designModelConnection.value
+  return connection ? resolveModelConnectionAPIKey(connection.id) : null
 }
 
 export async function setAPIKey(key: string): Promise<void> {
@@ -100,7 +107,7 @@ export async function setAPIKey(key: string): Promise<void> {
   const value = key.trim()
   if (value) await appCredentialServices.manager.set(reference, value)
   else await appCredentialServices.manager.clear(reference)
-  apiKeyStatus.value = await refreshStatus(reference)
+  await refreshAIProviderStatus()
   credentialRevision.value++
 }
 
@@ -143,4 +150,11 @@ export function registerAIChatEffects(markTransportDirty: () => void) {
   watch(customBaseURL, markTransportDirty)
   watch(maxOutputTokens, markTransportDirty)
   watch(credentialRevision, markTransportDirty)
+  // A launcher sign-in or sign-out changes the key a Redrob connection resolves to, so the
+  // transport holding the old key is rebuilt the same way it is when the app's own key changes.
+  watch(sharedAccountRevision, () => {
+    void refreshAIProviderStatus()
+    markTransportDirty()
+  })
+  startSharedAccountWatch()
 }

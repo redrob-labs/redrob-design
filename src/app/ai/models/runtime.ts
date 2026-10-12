@@ -1,6 +1,8 @@
 import type { LanguageModel } from 'ai'
 
 import { createLanguageModel } from '@/app/ai/chat/model'
+import { readSharedAccount } from '@/app/ai/connect/app-shared-account'
+import { resolveWorkspaceKey, type WorkspaceKey } from '@/app/ai/connect/shared-account'
 import { modelConnection, resolveAIModelRole } from '@/app/ai/models/store'
 import type { AIModelConnection, AIModelRole, ResolvedAIModelRole } from '@/app/ai/models/types'
 import { appCredentialServices } from '@/app/settings/credentials/app'
@@ -32,14 +34,52 @@ export function modelConnectionCredentialRef(connection: AIModelConnection): Cre
   return providerCredentialRef(connection.providerID, connection.credentialProfileId)
 }
 
+/** Only Console-issued keys have a launcher-shared counterpart; other providers never fall back. */
+function usesRedrobWorkspaceKey(connection: AIModelConnection): boolean {
+  return connection.providerID === 'redrob'
+}
+
+/**
+ * The key a connection uses, with where it came from. The app's own stored key wins; a
+ * Redrob connection without one falls back to Redrob Launcher's shared sign-in, read at
+ * this moment so a launcher sign-in or sign-out while the app runs is honoured.
+ */
+export async function resolveModelConnectionKey(
+  connectionId: string
+): Promise<WorkspaceKey | null> {
+  await initializeCredentialMigration()
+  const connection = modelConnection(connectionId)
+  if (!connection || connection.providerID.startsWith('acp:')) return null
+  const reference = modelConnectionCredentialRef(connection)
+  return resolveWorkspaceKey(
+    () => appCredentialServices.resolver.resolve(reference),
+    usesRedrobWorkspaceKey(connection) ? readSharedAccount : async () => null
+  )
+}
+
 export async function modelConnectionCredentialStatus(
   connectionId: string
 ): Promise<CredentialStatus> {
   const connection = modelConnection(connectionId)
   if (!connection || connection.providerID.startsWith('acp:')) return 'missing'
-  return appCredentialServices.manager.status(modelConnectionCredentialRef(connection))
+  const status = await appCredentialServices.manager.status(
+    modelConnectionCredentialRef(connection)
+  )
+  if (status !== 'missing' || !usesRedrobWorkspaceKey(connection)) return status
+  return (await readSharedAccount()) ? 'configured' : 'missing'
 }
 
+/** `launcher` when the key in use is Redrob Launcher's, `own` for the app's, `null` for none. */
+export async function modelConnectionKeySource(
+  connectionId: string
+): Promise<WorkspaceKey['source'] | null> {
+  return (await resolveModelConnectionKey(connectionId))?.source ?? null
+}
+
+/**
+ * Stores or clears the app's OWN key. Clearing never touches the launcher's shared file,
+ * so after a clear the connection may still resolve to the launcher's key.
+ */
 export async function setModelConnectionAPIKey(connectionId: string, value: string): Promise<void> {
   const connection = modelConnection(connectionId)
   if (!connection || connection.providerID.startsWith('acp:')) return
@@ -50,10 +90,7 @@ export async function setModelConnectionAPIKey(connectionId: string, value: stri
 }
 
 export async function resolveModelConnectionAPIKey(connectionId: string): Promise<string | null> {
-  await initializeCredentialMigration()
-  const connection = modelConnection(connectionId)
-  if (!connection || connection.providerID.startsWith('acp:')) return null
-  return appCredentialServices.resolver.resolve(modelConnectionCredentialRef(connection))
+  return (await resolveModelConnectionKey(connectionId))?.apiKey ?? null
 }
 
 export async function createAIModelRuntime(role: AIModelRole): Promise<AIModelRuntime | null> {

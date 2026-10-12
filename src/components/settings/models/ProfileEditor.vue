@@ -22,6 +22,7 @@ import {
   modelProfile,
   removeModelProfile,
   resolveModelConnectionAPIKey,
+  resolveModelConnectionKey,
   saveModelProfileDraft,
   setModelConnectionAPIKey,
   type AIModelCapability
@@ -48,6 +49,8 @@ const { ai, common, credentials } = useI18n()
 const draft = reactive(createModelProfileDraft(profileId))
 const keyInput = ref('')
 const keyStatus = ref<'configured' | 'missing' | 'unavailable' | 'locked'>('missing')
+/** Who Redrob Launcher signed in, when its shared key is the one this connection uses. */
+const launcherAccount = ref<{ accountName?: string | undefined } | null>(null)
 const saveError = ref<string | null>(null)
 const connectionTestStatus = ref<'idle' | 'testing' | 'success' | 'error'>('idle')
 const connectionTestReason = ref<ProviderConnectionTestFailureReason | null>(null)
@@ -103,6 +106,9 @@ const modelDisplayName = computed(() => {
   return providerDef.value.models.find((model) => model.id === modelId)?.name || modelId
 })
 const hasExistingKey = computed(() => keyStatus.value === 'configured')
+const signedInWithLauncher = computed(() => launcherAccount.value !== null)
+/** Only the app's own key can be cleared here; the launcher's is not this app's to remove. */
+const hasOwnKey = computed(() => hasExistingKey.value && !signedInWithLauncher.value)
 const canDelete = computed(() => Boolean(profileId) && aiModelSettings.value.models.length > 1)
 const toolsEnabled = capabilityModel('tools')
 const visionEnabled = capabilityModel('vision')
@@ -143,6 +149,9 @@ function resetConnectionTest(): void {
 async function refreshKeyStatus(): Promise<void> {
   const connection = findModelConnectionForDraft(draft)
   keyStatus.value = connection ? await modelConnectionCredentialStatus(connection.id) : 'missing'
+  // Only the source and the account name are kept; the key itself never reaches the view.
+  const key = connection ? await resolveModelConnectionKey(connection.id) : null
+  launcherAccount.value = key?.source === 'launcher' ? { accountName: key.accountName } : null
 }
 
 function effectiveModelID(): string {
@@ -431,12 +440,21 @@ void refreshKeyStatus()
           @cancel="cancelConnect"
         />
 
+        <p
+          v-if="signedInWithLauncher"
+          class="text-[11px] text-muted"
+          data-test-id="provider-signed-in-with-launcher"
+        >
+          {{ ai.signedInWithLauncher
+          }}<span v-if="launcherAccount?.accountName"> · {{ launcherAccount.accountName }}</span>
+        </p>
+
         <ProviderSettingsKeyField
           v-model="keyInput"
           :label="ai.apiKey"
-          :saved="hasExistingKey"
+          :saved="hasOwnKey"
           kind="api"
-          :placeholder="hasExistingKey ? credentials.savedReplace : providerDef.keyPlaceholder"
+          :placeholder="hasOwnKey ? credentials.savedReplace : providerDef.keyPlaceholder"
           :key-u-r-l="providerDef.keyURL"
           :key-u-r-l-label="credentials.getAPIKey"
           @clear="clearKey"

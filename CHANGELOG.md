@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Added
+
+- Use Redrob Launcher's shared sign-in for the Redrob model connection when this app has no workspace key of its own; the connection then reads "Signed in with Redrob Launcher", a key stored here still wins, and Clear never touches the launcher's sign-in.
+
 ### Changed
 
 - List storage settings as AWS S3, Backblaze B2, MinIO and other S3-compatible storage, without naming Cloudflare R2.
