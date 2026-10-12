@@ -11,7 +11,11 @@ A clean, standalone extraction of the **frontend UI/UX** introduced by
 
 This repository keeps **only the presentation layer** of that work: Vue
 components, their styling (theme token maps), the i18n UI copy, and the brand
-assets. Everything the original UI reached into — the AI engine, provider
+assets. The colour theme in [`src/app.css`](src/app.css) is transcribed from
+the canonical **Redrob Design System 2026** source
+([redrob-labs/redrob-ui](https://github.com/redrob-labs/redrob-ui),
+`src/styles/tokens.css`), so the slice stays colour-faithful to the real
+product without depending on the design-system package. Everything the original UI reached into — the AI engine, provider
 plumbing, local storage, the Tauri native shell, telemetry — has been **removed**
 and replaced with small, clearly-labelled **stubs** under
 [`src/stubs/`](src/stubs). Each stub documents the real contract it stands in
