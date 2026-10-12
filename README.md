@@ -30,29 +30,51 @@ i18n package, `@redrob-design/core`) is satisfied by a local module in
 and exercise its states — not re-implementations of the backend. They are the
 seams where this slice would reconnect to the full application.
 
+## Components ported from PR #89
+
+All eight UI components the PR added or modified are present and build:
+
+| Component | Fidelity |
+|---|---|
+| `window-controls/WindowControls.vue` | verbatim |
+| `settings/insights/WorkModelStatus.vue` | verbatim |
+| `chat/ModelGuideDialog.vue` | verbatim |
+| `TabBar.vue` + `main-menu/MainMenu.vue` | verbatim |
+| `settings/models/ModelsPanel.vue` + `RoleAssignments.vue` | verbatim |
+| `settings/models/ProfileEditor.vue` | ported verbatim; backend seams are no-ops |
+| `ChatPanel.vue` | **presentational skeleton** |
+
+`ProfileEditor` and `ChatPanel` are the two integration-heavy surfaces: in the
+app they are ~90% AI-engine wiring. They are kept as presentational skeletons —
+their layout and interaction shape are real, their backend calls resolve to
+documented no-ops — rather than re-authoring a fake chat/model engine, which
+would be plumbing, not UI/UX.
+
 ## Layout
 
 | Path | What it is |
 |---|---|
-| `src/components/` | The UI components ported from PR #89 |
+| `src/components/` | The UI components ported from PR #89 + trimmed shared primitives (`ui/`) |
 | `src/theme/` | Tailwind-variants token maps for those components |
 | `src/stubs/` | Documented stand-ins for every backend / shared-foundation seam |
-| `src/i18n/` | UI copy (message defaults) used by the components |
-| `public/` | Brand assets: favicons, app icon, launch splash |
+| `src/i18n/` | Translated UI copy (9 locales) kept as reference — see its README |
+| `public/` | Brand assets: favicons, app icons, launch splash |
+| `src/App.vue` | A showcase that mounts every component |
 
 ## Running
 
 ```sh
 bun install   # or npm/pnpm install
-bun run dev   # vite dev server
-bun run typecheck
-bun run storybook
+bun run dev        # vite dev server — the showcase in src/App.vue
+bun run typecheck  # vue-tsc --noEmit
+bun run build      # vue-tsc + vite production build
 ```
 
 ## Provenance & scope
 
-This is a derivative UI extraction for design/engineering reference. It is
-**not** a runnable product — the stubs have no real backend behind them. The
+This is a derivative UI extraction for design/engineering reference. The
+components render and the showcase is interactive, but the stubs have **no real
+backend** behind them — it is a presentation slice, not the product. The
 canonical application lives at
 [redrob-labs/redrob-design](https://github.com/redrob-labs/redrob-design).
 Licensed MIT, matching the upstream repository.
