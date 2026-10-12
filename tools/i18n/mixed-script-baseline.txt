@@ -22,6 +22,7 @@ ja:ai.modelIDPlaceholder
 ja:ai.modelRoleDesignDescription
 ja:ai.provider
 ja:ai.reasoningEffortPlaceholder
+ja:ai.signedInWithLauncher
 ja:automation.addServerConnection
 ja:automation.authenticationDescription
 ja:automation.bearerAuthentication
@@ -190,6 +191,7 @@ zh-cn:ai.modelIDPlaceholder
 zh-cn:ai.modelRoleDesignDescription
 zh-cn:ai.provider
 zh-cn:ai.reasoningEffortPlaceholder
+zh-cn:ai.signedInWithLauncher
 zh-cn:automation.addServerConnection
 zh-cn:automation.authenticationDescription
 zh-cn:automation.bearerAuthentication
