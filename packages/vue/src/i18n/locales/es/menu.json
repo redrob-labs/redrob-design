@@ -75,6 +75,10 @@
   "exportSelectionAsFig": "Exportar selección como .fig",
   "help": "Ayuda",
   "mainMenu": "Menú principal",
+  "minimizeWindow": "Minimizar",
+  "maximizeWindow": "Maximizar",
+  "restoreWindow": "Restaurar",
+  "closeWindow": "Cerrar ventana",
   "backToHome": "Volver al inicio",
   "searchCommands": "Buscar comandos…"
 }

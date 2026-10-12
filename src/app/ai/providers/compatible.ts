@@ -3,6 +3,7 @@ import { createOpenAI } from '@ai-sdk/openai'
 
 import { IS_TAURI } from '@redrob-design/core/constants'
 
+import { withRedrobSession } from '@/app/ai/providers/session'
 import type { ModelConfig, ModelProviderAdapter } from '@/app/ai/providers/types'
 
 // Anthropic omits CORS headers unless the caller opts in, so browser requests fail with an
@@ -14,6 +15,8 @@ export type CompatibleEndpoint = string | ((config: ModelConfig) => string)
 type OpenAICompatibleOptions = {
   baseURL?: CompatibleEndpoint
   mode?: 'default' | 'chat' | 'configurable'
+  /** Send `x-redrob-session` (the Redrob Console only). */
+  sessionHeader?: boolean
 }
 
 type AnthropicCompatibleOptions = {
@@ -32,7 +35,9 @@ export function createOpenAICompatibleAdapter(
       const provider = createOpenAI({
         apiKey: config.apiKey,
         baseURL: resolveEndpoint(options.baseURL, config),
-        fetch: runtime.fetch
+        fetch: options.sessionHeader
+          ? withRedrobSession(config.providerID, runtime.fetch, runtime.sessionID)
+          : runtime.fetch
       })
       const modelID = config.customModelID.trim() || config.modelID
       if (options.mode === 'chat') return provider.chat(modelID)

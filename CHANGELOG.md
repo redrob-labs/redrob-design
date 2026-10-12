@@ -5,12 +5,16 @@
 ### Changed
 
 - List storage settings as AWS S3, Backblaze B2, MinIO and other S3-compatible storage, without naming Cloudflare R2.
+- Show the Redrob Design product icon for the desktop app, installers, favicon and installed web app.
+- Draw the desktop window's title bar in the tab bar on Windows and Linux, with its own minimize, maximize and close buttons, and open the app's menus from the Redrob Design mark instead of a native menu bar.
+- Search commands from a box in the tab bar, which opens the command palette.
 
 ## 0.15.0 — 2026-10-08
 
 ### Added
 
 - Share a file with the people you invite, from Share in the editor: Redrob Cloud keeps it end-to-end encrypted, each person gets a role (owner, can edit, can comment or can view), people from other workspaces can be invited by email, a view link opens it for reading with nothing else, and files shared with you are listed on Home and open from a pasted link.
+- Label each Redrob Auto request with its Model Guide profession and task on this device, so Console routes it to the best-ranked model for that work, and show the Model Guide from the Redrob model profile. The labeller's model downloads after launch when a Redrob connection exists; until then requests route as before.
 - Add a searchable command palette for editor and application actions.
 - Render triangle and line arrow stroke caps on lines and open vector paths, and choose them from the stroke cap picker.
 - Expose component properties and instance-swap targets through the Figma API and automation.
@@ -56,6 +60,7 @@
 - Keep each file's Redrob conversation across reloads and provider changes, follow Redrob's progress step by step while it works, and read a receipt under every answer with the model and who chose it, the price, what was kept private, and Fact check when it ran.
 - Pin selected layers as explicit AI chat context, show collapsible reasoning, copy individual responses, and grow the composer with multiline prompts. (#13)
 - Render streaming AI responses with the upstream Comark-based Markdown pipeline and optional Shiki code highlighting without the former project fork.
+- Report Redrob AI sessions to the workspace console as on-device work labels (kind of work, mode, and turn count), never message text, with the work model downloaded and verified on first use in the desktop app. Every Design session reports the `design` work family even before the classifier model is ready, so the console reads "A design" rather than "Not labeled".
 
 ### Changed
 

@@ -130,7 +130,21 @@ export const aiMessageDefaults = {
   connectRedrobExpired: 'The code expired before it was approved. Try again.',
   connectRedrobUnreachable: 'Could not reach Redrob Console. Check your connection.',
   connectRedrobFailed: 'Connect did not complete. Try again.',
-  connectRedrobCancel: 'Cancel'
+  connectRedrobCancel: 'Cancel',
+  modelGuideOpen: 'How Redrob Auto chooses',
+  modelGuideTitle: 'Model Guide',
+  modelGuideDescription:
+    'For each profession, task and working language, the models Redrob Auto tries in order, at the effort shown.',
+  modelGuideLoading: 'Loading the Model Guide…',
+  modelGuideUnavailable:
+    'The Model Guide could not be loaded. Check your connection and try again.',
+  modelGuideProfession: 'I work as',
+  modelGuideTask: 'I want to',
+  modelGuideLanguage: 'Working language',
+  modelGuideLanguageEn: 'English',
+  modelGuideLanguageKo: 'Korean',
+  modelGuideLanguageHi: 'Hindi',
+  modelGuideEdition: params('Edition {date}')
 } as const
 
 export const aiMessages = i18n('ai', aiMessageDefaults)

@@ -30,6 +30,7 @@ import ProviderConnectionTestButton from '@/components/chat/ProviderConnectionTe
 import RedrobConnectButton, {
   type RedrobConnectStatus
 } from '@/components/chat/RedrobConnectButton.vue'
+import ModelGuideDialog from '@/components/chat/ModelGuideDialog.vue'
 import ProviderSelect from '@/components/settings/provider-select/ProviderSelect.vue'
 import ProviderSettingsField from '@/components/settings/provider/ProviderSettingsField.vue'
 import ProviderSettingsInput from '@/components/settings/provider/ProviderSettingsInput.vue'
@@ -430,6 +431,8 @@ void refreshKeyStatus()
           @connect="connectRedrob"
           @cancel="cancelConnect"
         />
+
+        <ModelGuideDialog v-if="draft.providerID === 'redrob'" />
 
         <ProviderSettingsKeyField
           v-model="keyInput"

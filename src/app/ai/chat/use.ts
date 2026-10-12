@@ -26,6 +26,7 @@ import {
   unsplashKeyStatus
 } from '@/app/ai/chat/storage'
 import { createChatSessionManager } from '@/app/ai/chat/transports'
+import { chatInsights } from '@/app/ai/insights'
 import { NO_REVIEW_MODEL, setCrossCheckDependencies } from '@/app/assistant/cross-check/session'
 import { exposeChatTransportOverride, exposeCrossCheckOverride } from '@/app/browser-bridge'
 import { getActiveEditorStore } from '@/app/editor/active-store'
@@ -74,6 +75,7 @@ export function useAIChat() {
     isConfigured,
     ensureChat: chatSession.ensureChat,
     resetChat: chatSession.resetChat,
+    recordUserTurn: chatInsights.userTurn,
     chatFailure: chatSession.failure,
     clearChatFailure: chatSession.clearFailure
   }

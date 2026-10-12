@@ -10,6 +10,7 @@ de:ai.connectRedrobUnreachable
 de:ai.harnessThinkingMinimal
 de:ai.modelAgentConnection
 de:ai.modelCapabilityVisionShort
+de:ai.modelGuideLanguageHi
 de:ai.modelName
 de:ai.modelRoleVision
 de:ai.responses
@@ -82,6 +83,8 @@ es:ai.connectRedrobExpired
 es:ai.connectRedrobFailed
 es:ai.connectRedrobHint
 es:ai.connectRedrobUnreachable
+es:ai.connectRedrobWaiting
+es:ai.modelGuideLanguageHi
 es:ai.responses
 es:ai.toolError
 es:automation.statusError
@@ -128,6 +131,7 @@ fr:ai.connectRedrobUnreachable
 fr:ai.harnessThinkingMinimal
 fr:ai.modelAgentConnection
 fr:ai.modelCapabilityVisionShort
+fr:ai.modelGuideLanguageHi
 fr:ai.modelRoleVision
 fr:ai.responses
 fr:automation.port
@@ -202,6 +206,8 @@ it:ai.connectRedrobExpired
 it:ai.connectRedrobFailed
 it:ai.connectRedrobHint
 it:ai.connectRedrobUnreachable
+it:ai.connectRedrobWaiting
+it:ai.modelGuideLanguageHi
 it:ai.responses
 it:cloud.heading
 it:code.editorDesignLabel
@@ -277,6 +283,7 @@ pl:ai.connectRedrobHint
 pl:ai.connectRedrobUnreachable
 pl:ai.modelAgentConnection
 pl:ai.modelConfiguration
+pl:ai.modelGuideLanguageHi
 pl:ai.responses
 pl:automation.port
 pl:cloud.heading

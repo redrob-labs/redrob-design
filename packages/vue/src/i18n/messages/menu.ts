@@ -9,6 +9,10 @@ export const menuMessageDefaults = {
   text: 'Text',
   help: 'Help',
   mainMenu: 'Main menu',
+  minimizeWindow: 'Minimize',
+  maximizeWindow: 'Maximize',
+  restoreWindow: 'Restore',
+  closeWindow: 'Close window',
   backToHome: 'Back to Home',
   searchCommands: 'Search commands…',
 

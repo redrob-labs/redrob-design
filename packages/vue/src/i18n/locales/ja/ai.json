@@ -118,5 +118,17 @@
   "connectRedrobExpired": "The code expired before it was approved. Try again.",
   "connectRedrobUnreachable": "Could not reach Redrob Console. Check your connection.",
   "connectRedrobFailed": "Connect did not complete. Try again.",
-  "connectRedrobCancel": "Cancel"
+  "connectRedrobCancel": "Cancel",
+  "modelGuideOpen": "Redrob Auto の選び方",
+  "modelGuideTitle": "モデルガイド",
+  "modelGuideDescription": "職業・タスク・作業言語ごとに、Redrob Auto が順に試すモデルと、その推論レベルを示します。",
+  "modelGuideLoading": "モデルガイドを読み込み中…",
+  "modelGuideUnavailable": "モデルガイドを読み込めませんでした。接続を確認して、もう一度お試しください。",
+  "modelGuideProfession": "職業",
+  "modelGuideTask": "やりたいこと",
+  "modelGuideLanguage": "作業言語",
+  "modelGuideLanguageEn": "英語",
+  "modelGuideLanguageKo": "韓国語",
+  "modelGuideLanguageHi": "ヒンディー語",
+  "modelGuideEdition": "{date} 版"
 }

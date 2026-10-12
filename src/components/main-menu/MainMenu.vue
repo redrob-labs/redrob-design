@@ -43,7 +43,7 @@ const subCls = useMenuUI({ item: styles.item(), content: styles.subContent() })
       :aria-label="menu.mainMenu"
       :class="styles.trigger()"
     >
-      <img src="/redrob-design-icon.svg" alt="" :class="styles.mark()" />
+      <img src="/redrob-design-icon-small.svg" alt="" :class="styles.mark()" />
       <icon-lucide-chevron-down :class="styles.chevron()" />
     </DropdownMenuTrigger>
     <DropdownMenuPortal>

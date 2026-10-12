@@ -118,5 +118,17 @@
   "connectRedrobExpired": "The code expired before it was approved. Try again.",
   "connectRedrobUnreachable": "Could not reach Redrob Console. Check your connection.",
   "connectRedrobFailed": "Connect did not complete. Try again.",
-  "connectRedrobCancel": "Cancel"
+  "connectRedrobCancel": "Cancel",
+  "modelGuideOpen": "Come sceglie Redrob Auto",
+  "modelGuideTitle": "Guida ai modelli",
+  "modelGuideDescription": "Per ogni professione, attività e lingua di lavoro, i modelli che Redrob Auto prova in ordine, con l’impegno indicato.",
+  "modelGuideLoading": "Caricamento della guida ai modelli…",
+  "modelGuideUnavailable": "Impossibile caricare la guida ai modelli. Controlla la connessione e riprova.",
+  "modelGuideProfession": "Lavoro come",
+  "modelGuideTask": "Voglio",
+  "modelGuideLanguage": "Lingua di lavoro",
+  "modelGuideLanguageEn": "Inglese",
+  "modelGuideLanguageKo": "Coreano",
+  "modelGuideLanguageHi": "Hindi",
+  "modelGuideEdition": "Edizione {date}"
 }

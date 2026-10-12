@@ -3,6 +3,7 @@ import type { LanguageModel } from 'ai'
 import { createLanguageModel } from '@/app/ai/chat/model'
 import { modelConnection, resolveAIModelRole } from '@/app/ai/models/store'
 import type { AIModelConnection, AIModelRole, ResolvedAIModelRole } from '@/app/ai/models/types'
+import type { SessionIDSource } from '@/app/ai/providers/session'
 import { appCredentialServices } from '@/app/settings/credentials/app'
 import {
   initializeCredentialMigration,
@@ -56,7 +57,10 @@ export async function resolveModelConnectionAPIKey(connectionId: string): Promis
   return appCredentialServices.resolver.resolve(modelConnectionCredentialRef(connection))
 }
 
-export async function createAIModelRuntime(role: AIModelRole): Promise<AIModelRuntime | null> {
+export async function createAIModelRuntime(
+  role: AIModelRole,
+  options: { sessionID?: SessionIDSource } = {}
+): Promise<AIModelRuntime | null> {
   const resolved = resolveAIModelRole(role)
   if (!resolved) return null
   if (role === 'design' && !resolved.profile.capabilities.includes('tools')) {
@@ -83,13 +87,16 @@ export async function createAIModelRuntime(role: AIModelRole): Promise<AIModelRu
   return {
     kind: 'direct',
     role: resolved,
-    model: createLanguageModel({
-      providerID: resolved.connection.providerID,
-      apiKey,
-      modelID: resolved.profile.modelID,
-      customModelID: resolved.profile.customModelID,
-      customBaseURL: resolved.connection.customBaseURL,
-      customAPIType: resolved.connection.customAPIType
-    })
+    model: createLanguageModel(
+      {
+        providerID: resolved.connection.providerID,
+        apiKey,
+        modelID: resolved.profile.modelID,
+        customModelID: resolved.profile.customModelID,
+        customBaseURL: resolved.connection.customBaseURL,
+        customAPIType: resolved.connection.customAPIType
+      },
+      options
+    )
   }
 }

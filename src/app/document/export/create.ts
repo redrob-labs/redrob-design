@@ -1,6 +1,7 @@
 import type { Editor, EditorState } from '@redrob-design/core/editor'
 import type { ExportRequest, IORegistry } from '@redrob-design/core/io'
 
+import { emitDocumentExported } from '@/app/document/export/events'
 import {
   bundleExportFiles,
   createExportTargetActions,
@@ -58,7 +59,7 @@ export function createDocumentExportActions(
   }
 
   async function saveExportFile(file: ExportedFile) {
-    await saveExportedFile(
+    const saved = await saveExportedFile(
       file.bytes,
       file.fileName,
       file.format,
@@ -66,6 +67,7 @@ export function createDocumentExportActions(
       file.mime,
       downloadBlob
     )
+    if (saved) emitDocumentExported(state)
   }
 
   async function exportTarget(
@@ -93,7 +95,7 @@ export function createDocumentExportActions(
 
     const baseNames = new Set(requests.map((r) => getExportBaseName(editor.graph, r.target)))
     const zipBaseName = baseNames.size === 1 ? [...baseNames][0] : 'export'
-    await saveExportedFile(
+    const saved = await saveExportedFile(
       bundleExportFiles(files),
       `${zipBaseName}.zip`,
       'ZIP',
@@ -101,6 +103,7 @@ export function createDocumentExportActions(
       'application/zip',
       downloadBlob
     )
+    if (saved) emitDocumentExported(state)
   }
 
   async function exportSelection(
