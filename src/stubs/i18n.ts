@@ -212,3 +212,31 @@ export const vTestId = {
     el.setAttribute('data-test-id', binding.value)
   }
 }
+
+/**
+ * Menu model types — the app's menu tree, reproduced from the ported menu
+ * components' usage. A `MenuEntry` is either a separator or an action node; an
+ * action node may carry a shortcut, a checkbox binding, or nested sub-items.
+ */
+export interface MenuSeparatorNode {
+  separator: true
+}
+
+export interface MenuActionNode {
+  label: string
+  shortcut?: string
+  disabled?: boolean
+  checked?: boolean
+  onCheckedChange?: (checked: boolean) => void
+  action?: () => void
+  sub?: MenuEntry[]
+}
+
+export type MenuEntry = MenuSeparatorNode | MenuActionNode
+
+/** A top-level menu group as the main menu renders it. */
+export interface MenuGroup {
+  id: string
+  label: string
+  items: MenuEntry[]
+}

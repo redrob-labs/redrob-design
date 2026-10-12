@@ -35,6 +35,16 @@ export default defineConfig({
       '@/app/ai/insights': fileURLToPath(new URL('./src/stubs/ai-insights.ts', import.meta.url)),
       '@/app/ai/model-guide': fileURLToPath(
         new URL('./src/stubs/ai-model-guide.ts', import.meta.url)
+      ),
+      '@/app/tabs': fileURLToPath(new URL('./src/stubs/tabs.ts', import.meta.url)),
+      '@/app/shell/command-palette': fileURLToPath(
+        new URL('./src/stubs/shell-command-palette.ts', import.meta.url)
+      ),
+      '@/app/shell/menu/entry': fileURLToPath(
+        new URL('./src/stubs/shell-menu-entry.ts', import.meta.url)
+      ),
+      '@/app/shell/menu/main-menu': fileURLToPath(
+        new URL('./src/stubs/shell-main-menu.ts', import.meta.url)
       )
     }
   }

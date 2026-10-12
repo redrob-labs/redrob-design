@@ -23,7 +23,11 @@
       "@redrob-labs/route-labeller": ["./src/stubs/route-labeller.ts"],
       "@/app/tauri/window": ["./src/stubs/tauri-window.ts"],
       "@/app/ai/insights": ["./src/stubs/ai-insights.ts"],
-      "@/app/ai/model-guide": ["./src/stubs/ai-model-guide.ts"]
+      "@/app/ai/model-guide": ["./src/stubs/ai-model-guide.ts"],
+      "@/app/tabs": ["./src/stubs/tabs.ts"],
+      "@/app/shell/command-palette": ["./src/stubs/shell-command-palette.ts"],
+      "@/app/shell/menu/entry": ["./src/stubs/shell-menu-entry.ts"],
+      "@/app/shell/menu/main-menu": ["./src/stubs/shell-main-menu.ts"]
     },
     "baseUrl": "."
   },
