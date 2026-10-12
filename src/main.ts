@@ -14,6 +14,12 @@ preloadFonts()
 const head = createHead()
 createApp(App).use(router).use(head).mount('#app')
 
+// Tell the launch splash (index.html) the app has painted its first frame.
+requestAnimationFrame(() => {
+  ;(window as Window & { __redrobAppReady?: boolean }).__redrobAppReady = true
+  window.dispatchEvent(new Event('redrob:app-ready'))
+})
+
 if (!IS_TAURI) {
   void import('virtual:pwa-register').then(({ registerSW }) => {
     registerSW({ immediate: true })
