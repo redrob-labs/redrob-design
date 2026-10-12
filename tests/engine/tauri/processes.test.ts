@@ -15,7 +15,7 @@ afterEach(async () => {
 })
 
 describe('Tauri process helpers', () => {
-  test('omits shell env so ACP children inherit the host process environment', async () => {
+  test('passes only the app label in shell env, so ACP children inherit the host environment plus it', async () => {
     const calls: Array<{ cmd: string; args: unknown }> = []
     await mockTauriIPC((cmd, args) => {
       calls.push({ cmd, args })
@@ -25,9 +25,10 @@ describe('Tauri process helpers', () => {
           args: ['acp'],
           options: { encoding: 'raw' }
         })
-        expect(args).not.toMatchObject({ options: { env: expect.anything() } })
+        // plugin-shell: a present `env` is inherit+overlay (`Command::envs`), `null` clears. The one
+        // key is the label the engine sends as `x-redrob-app`; no host secret is re-passed here.
         const options = (args as { options?: Record<string, unknown> }).options ?? {}
-        expect(Object.hasOwn(options, 'env')).toBe(false)
+        expect(options.env).toEqual({ REDROB_APP: 'design' })
         return 51
       }
       return null
@@ -55,7 +56,9 @@ describe('Tauri process helpers', () => {
           args: ['--stdio'],
           options: { encoding: 'raw' }
         })
-        expect(Object.hasOwn((args as { options: object }).options, 'env')).toBe(false)
+        expect((args as { options: { env?: unknown } }).options.env).toEqual({
+          REDROB_APP: 'design'
+        })
         onEvent = (args as { onEvent: { onmessage: (event: unknown) => void } }).onEvent.onmessage
         return 42
       }
@@ -99,7 +102,9 @@ describe('Tauri process helpers', () => {
           args: ['/c', 'agent-cli', '--stdio'],
           options: { encoding: 'raw' }
         })
-        expect(Object.hasOwn((args as { options: object }).options, 'env')).toBe(false)
+        expect((args as { options: { env?: unknown } }).options.env).toEqual({
+          REDROB_APP: 'design'
+        })
         return 44
       }
       return null

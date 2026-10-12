@@ -23,11 +23,12 @@ export async function spawnACPProcess({
 }: ACPProcessOptions) {
   const { Command } = await import('@tauri-apps/plugin-shell')
   const resolved = resolvePlatformCommand(commandName, args)
-  // Omit `env` so the child inherits the host process environment.
-  // Tauri shell treats `env: null` as clear, and `env: {}` as inherit+overlay;
-  // omitting keeps secrets in the host process instead of re-passing them from the renderer.
+  // Keep the host's secrets out of `env`: Tauri shell treats `env: null` as clear and a present
+  // `env` as inherit+overlay, so this only ADDS the one label and re-passes nothing from the
+  // renderer. The engine sends REDROB_APP as `x-redrob-app`, so the Console can group AI work by app.
   const command = Command.create(resolved.command, resolved.args, {
-    encoding: 'raw'
+    encoding: 'raw',
+    env: { REDROB_APP: 'design' }
   })
 
   const stdoutChunks: Uint8Array[] = []
