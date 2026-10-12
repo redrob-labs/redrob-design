@@ -1,0 +1,108 @@
+/*
+ * Self-contained theme for the UI slice.
+ *
+ * The upstream app imports the full Redrob Design System token file
+ * (`@redrob-design/brand/tokens.css`). That whole system is out of scope for a
+ * presentation-only extraction, so this file instead declares exactly the
+ * semantic tokens the ported components reference — nothing more — as Tailwind
+ * v4 theme variables, with a light default and a `[data-theme='dark']` override.
+ *
+ * Semantic tokens in use (grep-verified against the kept components):
+ *   surface, muted, canvas, panel, panel-field(+hover), panel-focus,
+ *   border(+strong+subtle), accent(+hover), on-accent, hover, input,
+ *   error, success, danger.
+ */
+@import 'tailwindcss';
+
+@theme {
+  --color-canvas: #f4f5f7;
+  --color-panel: #ffffff;
+  --color-panel-field: #f7f8fa;
+  --color-panel-field-hover: #eef0f3;
+  --color-panel-focus: #c7d2fe;
+  --color-input: #ffffff;
+
+  --color-surface: #1f2328;
+  --color-muted: #6b7280;
+
+  --color-border: #e2e5ea;
+  --color-border-strong: #cbd0d8;
+  --color-border-subtle: #eceef1;
+
+  --color-accent: #4f46e5;
+  --color-accent-hover: #4338ca;
+  --color-on-accent: #ffffff;
+
+  --color-hover: #eef0f3;
+
+  --color-error: #dc2626;
+  --color-success: #16a34a;
+  --color-danger: #dc2626;
+
+  --radius-full: 9999px;
+}
+
+[data-theme='dark'] {
+  --color-canvas: #16181d;
+  --color-panel: #1f2228;
+  --color-panel-field: #262a31;
+  --color-panel-field-hover: #2d323a;
+  --color-panel-focus: #4f46e5;
+  --color-input: #262a31;
+
+  --color-surface: #e6e8eb;
+  --color-muted: #9aa1ab;
+
+  --color-border: #2d323a;
+  --color-border-strong: #3a4049;
+  --color-border-subtle: #262a31;
+
+  --color-accent: #6366f1;
+  --color-accent-hover: #818cf8;
+  --color-on-accent: #ffffff;
+
+  --color-hover: #2d323a;
+
+  --color-error: #f87171;
+  --color-success: #4ade80;
+  --color-danger: #f87171;
+}
+
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--color-canvas);
+  color: var(--color-surface);
+  font-family:
+    'Pretendard', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Thin / hidden scrollbar utilities the tab bar and panels rely on. */
+@utility scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-subtle) transparent;
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: var(--color-border-subtle);
+    border-radius: var(--radius-full);
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: var(--color-border-strong);
+  }
+}
