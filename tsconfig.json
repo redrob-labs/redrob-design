@@ -17,7 +17,11 @@
     "noEmit": true,
     "types": ["vite/client", "unplugin-icons/types/vue"],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@redrob-design/vue": ["./src/stubs/i18n.ts"],
+      "@redrob-design/core/constants": ["./src/stubs/core-constants.ts"],
+      "@redrob-labs/route-labeller": ["./src/stubs/route-labeller.ts"],
+      "@/app/tauri/window": ["./src/stubs/tauri-window.ts"]
     },
     "baseUrl": "."
   },

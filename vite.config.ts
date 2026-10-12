@@ -21,7 +21,17 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+      // Shared-foundation packages are satisfied by local stubs in this slice.
+      '@redrob-design/vue': fileURLToPath(new URL('./src/stubs/i18n.ts', import.meta.url)),
+      '@redrob-design/core/constants': fileURLToPath(
+        new URL('./src/stubs/core-constants.ts', import.meta.url)
+      ),
+      '@redrob-labs/route-labeller': fileURLToPath(
+        new URL('./src/stubs/route-labeller.ts', import.meta.url)
+      ),
+      // Backend/native seams mapped to documented stubs.
+      '@/app/tauri/window': fileURLToPath(new URL('./src/stubs/tauri-window.ts', import.meta.url))
     }
   }
 })
