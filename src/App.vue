@@ -5,6 +5,7 @@ import WorkModelStatus from '@/components/settings/insights/WorkModelStatus.vue'
 import ModelGuideDialog from '@/components/chat/ModelGuideDialog.vue'
 import TabBar from '@/components/TabBar.vue'
 import ModelsPanel from '@/components/settings/models/ModelsPanel.vue'
+import ChatPanel from '@/components/ChatPanel.vue'
 </script>
 
 <template>
@@ -37,6 +38,18 @@ import ModelsPanel from '@/components/settings/models/ModelsPanel.vue'
       <h2 class="text-xs font-medium text-muted">Models settings panel</h2>
       <div class="flex max-h-[32rem] flex-col rounded border border-border bg-panel p-3">
         <ModelsPanel />
+      </div>
+    </section>
+
+    <section class="flex flex-col gap-2">
+      <h2 class="text-xs font-medium text-muted">Chat panel (presentational skeleton)</h2>
+      <div class="grid gap-4 md:grid-cols-2">
+        <div class="flex h-96 flex-col rounded border border-border bg-panel">
+          <ChatPanel />
+        </div>
+        <div class="flex h-96 flex-col rounded border border-border bg-panel">
+          <ChatPanel :configured="false" />
+        </div>
       </div>
     </section>
     </main>
