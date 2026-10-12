@@ -56,7 +56,7 @@
 - Keep each file's Redrob conversation across reloads and provider changes, follow Redrob's progress step by step while it works, and read a receipt under every answer with the model and who chose it, the price, what was kept private, and Fact check when it ran.
 - Pin selected layers as explicit AI chat context, show collapsible reasoning, copy individual responses, and grow the composer with multiline prompts. (#13)
 - Render streaming AI responses with the upstream Comark-based Markdown pipeline and optional Shiki code highlighting without the former project fork.
-- Report Redrob AI sessions to the workspace console as on-device work labels (kind of work, mode, and turn count), never message text, with the work model downloaded and verified on first use in the desktop app.
+- Report Redrob AI sessions to the workspace console as on-device work labels (kind of work, mode, and turn count), never message text, with the work model downloaded and verified on first use in the desktop app. Every Design session reports the `design` work family even before the classifier model is ready, so the console reads "A design" rather than "Not labeled".
 
 ### Changed
 

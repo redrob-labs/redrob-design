@@ -68,7 +68,7 @@ describe('chat insights recorder', () => {
     expect(session).toMatchObject({
       toolKey: 'design',
       labelerId: 'design',
-      labelerVersion: '1',
+      labelerVersion: '2',
       familyKey: 'design',
       producedOutput: true,
       turns: 2,
@@ -185,7 +185,9 @@ describe('chat insights recorder', () => {
     insights.toolCall(tab, { failed: false, changedScene: true })
     insights.chatFinished(tab, done)
     await insights.end(tab)
-    expect(queued[0].familyKey).toBeUndefined()
+    // The design family is the app's own and is stamped without the classifier; only the kind of
+    // work (actionKey) waits for the model.
+    expect(queued[0].familyKey).toBe('design')
     expect(queued[0].actionKey).toBeUndefined()
     expect(queued[0].producedOutput).toBe(true)
   })
@@ -242,7 +244,7 @@ describe('toDesignSession', () => {
       humanEquivHours: 0
     },
     labelerId: 'design',
-    labelerVersion: '1'
+    labelerVersion: '2'
   }
 
   test('caps Delegate and Orchestrate by the produced-output rule', () => {

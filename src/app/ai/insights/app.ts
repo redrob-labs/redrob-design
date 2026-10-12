@@ -5,7 +5,7 @@ export const DESIGN_LABELING_APP: LabelingApp = {
   toolKey: 'design',
   idPrefix: 'dz_',
   labelerId: 'design',
-  labelerVersion: '1'
+  labelerVersion: '2'
 }
 
 /** The highest mode Design reports: Iterate. */
@@ -24,6 +24,10 @@ export const DESIGN_MAX_MODE = 3
 export function toDesignSession(session: LabeledSession): LabeledSession {
   const rest: LabeledSession = { ...session }
   delete rest.agent
+  // Every Design session works on a canvas, so the family is the app's own and does not wait for the
+  // work classifier. Stamping it here means the Console reads "A design" instead of "Not labeled"
+  // even before the classifier model has downloaded (ported from the earlier #85).
+  rest.familyKey = 'design'
   if (session.mode <= DESIGN_MAX_MODE) return rest
   // Modes 4 and 5 always produced something, so the produced-output rule applies.
   return { ...rest, mode: session.turns >= 3 ? DESIGN_MAX_MODE : 2 }

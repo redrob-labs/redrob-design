@@ -23,7 +23,7 @@ function session(id: number): LabeledSession {
     sensitiveOk: false,
     turns: 1,
     labelerId: 'design',
-    labelerVersion: '1'
+    labelerVersion: '2'
   }
 }
 
