@@ -4,6 +4,7 @@ mod fonts;
 mod http;
 mod menu;
 mod menu_events;
+mod shared_account;
 #[cfg(target_os = "macos")]
 mod window;
 
@@ -16,6 +17,7 @@ use fonts::{list_system_fonts, load_system_font};
 use http::proxy_http_request;
 use menu::{install_app_menu, native_menu_checked, set_native_menu_checked};
 use menu_events::handle_menu_event;
+use shared_account::shared_account_read;
 use std::{
     path::{Path, PathBuf},
     sync::Mutex,
@@ -221,6 +223,7 @@ pub fn run() {
             set_recent_files,
             native_menu_checked,
             set_native_menu_checked,
+            shared_account_read,
             take_pending_open,
             updater_available
         ])

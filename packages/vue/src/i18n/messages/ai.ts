@@ -130,7 +130,8 @@ export const aiMessageDefaults = {
   connectRedrobExpired: 'The code expired before it was approved. Try again.',
   connectRedrobUnreachable: 'Could not reach Redrob Console. Check your connection.',
   connectRedrobFailed: 'Connect did not complete. Try again.',
-  connectRedrobCancel: 'Cancel'
+  connectRedrobCancel: 'Cancel',
+  signedInWithLauncher: 'Signed in with Redrob Launcher'
 } as const
 
 export const aiMessages = i18n('ai', aiMessageDefaults)
