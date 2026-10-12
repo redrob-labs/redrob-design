@@ -31,7 +31,8 @@ export default defineConfig({
         new URL('./src/stubs/route-labeller.ts', import.meta.url)
       ),
       // Backend/native seams mapped to documented stubs.
-      '@/app/tauri/window': fileURLToPath(new URL('./src/stubs/tauri-window.ts', import.meta.url))
+      '@/app/tauri/window': fileURLToPath(new URL('./src/stubs/tauri-window.ts', import.meta.url)),
+      '@/app/ai/insights': fileURLToPath(new URL('./src/stubs/ai-insights.ts', import.meta.url))
     }
   }
 })

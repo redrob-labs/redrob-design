@@ -21,7 +21,8 @@
       "@redrob-design/vue": ["./src/stubs/i18n.ts"],
       "@redrob-design/core/constants": ["./src/stubs/core-constants.ts"],
       "@redrob-labs/route-labeller": ["./src/stubs/route-labeller.ts"],
-      "@/app/tauri/window": ["./src/stubs/tauri-window.ts"]
+      "@/app/tauri/window": ["./src/stubs/tauri-window.ts"],
+      "@/app/ai/insights": ["./src/stubs/ai-insights.ts"]
     },
     "baseUrl": "."
   },
