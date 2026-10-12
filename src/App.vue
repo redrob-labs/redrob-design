@@ -4,6 +4,7 @@ import WindowControls from '@/components/window-controls/WindowControls.vue'
 import WorkModelStatus from '@/components/settings/insights/WorkModelStatus.vue'
 import ModelGuideDialog from '@/components/chat/ModelGuideDialog.vue'
 import TabBar from '@/components/TabBar.vue'
+import ModelsPanel from '@/components/settings/models/ModelsPanel.vue'
 </script>
 
 <template>
@@ -30,6 +31,13 @@ import TabBar from '@/components/TabBar.vue'
     <section class="flex flex-col gap-2">
       <h2 class="text-xs font-medium text-muted">Model Guide dialog</h2>
       <ModelGuideDialog />
+    </section>
+
+    <section class="flex max-w-lg flex-col gap-2">
+      <h2 class="text-xs font-medium text-muted">Models settings panel</h2>
+      <div class="flex max-h-[32rem] flex-col rounded border border-border bg-panel p-3">
+        <ModelsPanel />
+      </div>
     </section>
     </main>
   </div>

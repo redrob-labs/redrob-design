@@ -66,6 +66,36 @@ export default defineConfig({
         find: /^@\/app\/shell\/menu\/main-menu$/,
         replacement: fileURLToPath(new URL('./src/stubs/shell-main-menu.ts', import.meta.url))
       },
+      {
+        find: /^@\/app\/ai\/models$/,
+        replacement: fileURLToPath(new URL('./src/stubs/ai-models.ts', import.meta.url))
+      },
+      {
+        find: /^@\/app\/settings\/credentials\/types$/,
+        replacement: fileURLToPath(
+          new URL('./src/stubs/settings-credentials-types.ts', import.meta.url)
+        )
+      },
+      {
+        find: /^@\/app\/ai\/chat\/storage$/,
+        replacement: fileURLToPath(new URL('./src/stubs/ai-chat-connect.ts', import.meta.url))
+      },
+      {
+        find: /^@\/app\/ai\/models\/catalog$/,
+        replacement: fileURLToPath(new URL('./src/stubs/ai-chat-connect.ts', import.meta.url))
+      },
+      {
+        find: /^@\/app\/ai\/chat\/connection-test$/,
+        replacement: fileURLToPath(new URL('./src/stubs/ai-chat-connect.ts', import.meta.url))
+      },
+      {
+        find: /^@\/app\/ai\/connect\/app-connect$/,
+        replacement: fileURLToPath(new URL('./src/stubs/ai-chat-connect.ts', import.meta.url))
+      },
+      {
+        find: /^@\/app\/ai\/connect\/device-connect$/,
+        replacement: fileURLToPath(new URL('./src/stubs/ai-chat-connect.ts', import.meta.url))
+      },
       // Generic project alias — last, so the exact seams above win.
       { find: /^@\//, replacement: fileURLToPath(new URL('./src/', import.meta.url)) }
     ]

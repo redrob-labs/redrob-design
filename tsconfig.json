@@ -27,7 +27,14 @@
       "@/app/tabs": ["./src/stubs/tabs.ts"],
       "@/app/shell/command-palette": ["./src/stubs/shell-command-palette.ts"],
       "@/app/shell/menu/entry": ["./src/stubs/shell-menu-entry.ts"],
-      "@/app/shell/menu/main-menu": ["./src/stubs/shell-main-menu.ts"]
+      "@/app/shell/menu/main-menu": ["./src/stubs/shell-main-menu.ts"],
+      "@/app/ai/models": ["./src/stubs/ai-models.ts"],
+      "@/app/settings/credentials/types": ["./src/stubs/settings-credentials-types.ts"],
+      "@/app/ai/chat/storage": ["./src/stubs/ai-chat-connect.ts"],
+      "@/app/ai/models/catalog": ["./src/stubs/ai-chat-connect.ts"],
+      "@/app/ai/chat/connection-test": ["./src/stubs/ai-chat-connect.ts"],
+      "@/app/ai/connect/app-connect": ["./src/stubs/ai-chat-connect.ts"],
+      "@/app/ai/connect/device-connect": ["./src/stubs/ai-chat-connect.ts"]
     },
     "baseUrl": "."
   },

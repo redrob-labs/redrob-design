@@ -133,7 +133,18 @@ const aiMessages = {
   modelGuideLanguageEn: 'English',
   modelGuideLanguageKo: 'Korean',
   modelGuideLanguageHi: 'Hindi',
-  modelGuideEdition: tmpl('As of {date}')
+  modelGuideEdition: tmpl('As of {date}'),
+  // Role assignments
+  modelRoleDesign: 'Design',
+  modelRoleDesignDescription: 'The main model for design work.',
+  modelRoleReview: 'Review',
+  modelRoleReviewDescription: 'Reviews and critiques output.',
+  modelRoleFast: 'Fast',
+  modelRoleFastDescription: 'A quick model for lightweight tasks.',
+  modelRoleVision: 'Vision',
+  modelRoleVisionDescription: 'Handles work that needs reading images.',
+  modelRoleUseDesign: 'Same as Design',
+  noModel: 'No model'
 }
 
 /** The main hook. Returns each message group as a reactive computed ref. */
