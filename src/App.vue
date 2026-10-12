@@ -2,6 +2,7 @@
 // Showcase shell. Components are mounted here as each feature slice lands.
 import WindowControls from '@/components/window-controls/WindowControls.vue'
 import WorkModelStatus from '@/components/settings/insights/WorkModelStatus.vue'
+import ModelGuideDialog from '@/components/chat/ModelGuideDialog.vue'
 </script>
 
 <template>
@@ -21,6 +22,11 @@ import WorkModelStatus from '@/components/settings/insights/WorkModelStatus.vue'
     <section class="flex max-w-md flex-col gap-2">
       <h2 class="text-xs font-medium text-muted">Work-model status (insights settings)</h2>
       <WorkModelStatus />
+    </section>
+
+    <section class="flex flex-col gap-2">
+      <h2 class="text-xs font-medium text-muted">Model Guide dialog</h2>
+      <ModelGuideDialog />
     </section>
   </main>
 </template>

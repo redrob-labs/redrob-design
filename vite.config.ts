@@ -32,7 +32,10 @@ export default defineConfig({
       ),
       // Backend/native seams mapped to documented stubs.
       '@/app/tauri/window': fileURLToPath(new URL('./src/stubs/tauri-window.ts', import.meta.url)),
-      '@/app/ai/insights': fileURLToPath(new URL('./src/stubs/ai-insights.ts', import.meta.url))
+      '@/app/ai/insights': fileURLToPath(new URL('./src/stubs/ai-insights.ts', import.meta.url)),
+      '@/app/ai/model-guide': fileURLToPath(
+        new URL('./src/stubs/ai-model-guide.ts', import.meta.url)
+      )
     }
   }
 })
