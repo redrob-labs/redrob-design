@@ -17,6 +17,8 @@
  * since the two repositories share no code.
  */
 
+import { LAUNCHER_MANIFEST_NAME } from './launcher-manifest'
+
 export const RELEASE_ASSET_STEM = 'redrob-design'
 
 /** os-arch tokens the launcher looks for, in the spelling it looks for them. */
@@ -120,7 +122,8 @@ export interface CheckResult {
 /**
  * Judge a set of file names about to become the release's assets.
  *
- * Every file must either parse as an installable asset of `version` or be a known companion of one.
+ * Every file must either parse as an installable asset of `version`, be a known companion of one, or
+ * be the launcher manifest (`redrob-launcher.json`; the CLI requires it and checks its content).
  * Every requirement -- a platform and the kinds it must ship -- must be satisfied. Anything else is an
  * error, listed in full so one run names every problem.
  */
@@ -137,6 +140,10 @@ export function checkReleaseAssets(
   const present = new Set<string>()
 
   for (const name of names) {
+    if (name === LAUNCHER_MANIFEST_NAME) {
+      companions.push(name)
+      continue
+    }
     const parsed = parseLauncherAssetName(name, stem)
     if (parsed) {
       if (parsed.version !== expected) {

@@ -4,14 +4,17 @@
  * Usage: bun scripts/check-release-assets.ts <dir> <version> [--require <os>-<arch>:<ext>[,<ext>]]...
  *
  * Exits non-zero when any file carries a name Redrob Launcher cannot read, when any required
- * platform/extension is absent, or when the directory is empty. Runs in the release workflow after
- * every platform job has staged its bundles and BEFORE the release leaves draft, so a renaming mistake
- * in one job fails the release rather than publishing an app the launcher cannot install.
+ * platform/extension is absent, when `redrob-launcher.json` is absent or does not say what this app
+ * does, or when the directory is empty. Runs in the release workflow after every platform job has
+ * staged its bundles and BEFORE the release leaves draft, so a renaming mistake in one job fails the
+ * release rather than publishing an app the launcher cannot install.
  */
 
-import { readdir } from 'node:fs/promises'
+import { readdir, readFile } from 'node:fs/promises'
+import { join } from 'node:path'
 
 import { checkReleaseAssets, parseRequirement, type Requirement } from './asset-names'
+import { checkLauncherManifest, LAUNCHER_MANIFEST_NAME } from './launcher-manifest'
 
 export async function main(argv: string[] = process.argv.slice(2)): Promise<void> {
   const positional: string[] = []
@@ -40,11 +43,15 @@ export async function main(argv: string[] = process.argv.slice(2)): Promise<void
   if (names.length === 0) throw new Error(`${dir} holds no files to release`)
 
   const result = checkReleaseAssets(names, version, requirements)
+  const manifest = names.includes(LAUNCHER_MANIFEST_NAME)
+    ? await readFile(join(dir, LAUNCHER_MANIFEST_NAME), 'utf8')
+    : null
+  const errors = [...result.errors, ...checkLauncherManifest(manifest)]
   for (const name of result.installable) console.log(`installable  ${name}`)
   for (const name of result.companions) console.log(`companion    ${name}`)
-  if (result.errors.length > 0) {
-    for (const error of result.errors) console.error(`::error::${error}`)
-    throw new Error(`${result.errors.length} release asset name problem(s)`)
+  if (errors.length > 0) {
+    for (const error of errors) console.error(`::error::${error}`)
+    throw new Error(`${errors.length} release asset problem(s)`)
   }
   console.log(
     `${result.installable.length} launcher-installable asset(s) for ${version.replace(/^v/, '')}.`

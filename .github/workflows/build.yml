@@ -368,6 +368,12 @@ jobs:
           path: assets
           merge-multiple: true
 
+      # One more asset beside the installers: the manifest Redrob Launcher reads to learn, without a
+      # launcher change, that this release uses the launcher sign-in (shared account). The check that
+      # follows refuses a staging directory without it, and publish-release.sh uploads it with the rest.
+      - name: Write the launcher release manifest
+        run: bun scripts/write-launcher-manifest.ts assets
+
       - name: Check every asset name against what Redrob Launcher reads
         run: |
           bun scripts/check-release-assets.ts assets "${{ steps.version.outputs.version }}" \
