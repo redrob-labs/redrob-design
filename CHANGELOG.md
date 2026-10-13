@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.15.1 — 2026-10-13
+
 ### Added
 
 - Use Redrob Launcher's shared sign-in for the Redrob model connection when this app has no workspace key of its own; the connection then reads "Signed in with Redrob Launcher", a key stored here still wins, and Clear never touches the launcher's sign-in.
