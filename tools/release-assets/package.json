@@ -1,0 +1,8 @@
+{
+  "name": "@redrob-design/release-assets-tools",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "bun test"
+  }
+}
