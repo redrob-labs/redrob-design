@@ -2,12 +2,15 @@
 
 ## Unreleased
 
+## 0.15.1 — 2026-10-13
+
 ### Added
 
 - Use Redrob Launcher's shared sign-in for the Redrob model connection when this app has no workspace key of its own; the connection then reads "Signed in with Redrob Launcher", a key stored here still wins, and Clear never touches the launcher's sign-in.
 
 ### Changed
 
+- Publish GitHub Release assets under names Redrob Launcher installs from (`redrob-design-<version>-macos-aarch64.dmg`, `-windows-x64.msi`, `-linux-x86_64.AppImage` and so on), build Windows and Linux alongside macOS, and check every name before the release leaves draft.
 - List storage settings as AWS S3, Backblaze B2, MinIO and other S3-compatible storage, without naming Cloudflare R2.
 
 ## 0.15.0 — 2026-10-08
