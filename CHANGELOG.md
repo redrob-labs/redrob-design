@@ -8,6 +8,7 @@
 
 ### Changed
 
+- Publish GitHub Release assets under names Redrob Launcher installs from (`redrob-design-<version>-macos-aarch64.dmg`, `-windows-x64.msi`, `-linux-x86_64.AppImage` and so on), build Windows and Linux alongside macOS, and check every name before the release leaves draft.
 - List storage settings as AWS S3, Backblaze B2, MinIO and other S3-compatible storage, without naming Cloudflare R2.
 
 ## 0.15.0 — 2026-10-08
