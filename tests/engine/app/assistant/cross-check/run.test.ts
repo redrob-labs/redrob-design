@@ -232,7 +232,9 @@ describe('checking an answer in a thread', () => {
     })
     expect(receiptFor('a1')?.factCheckBy).toBe('gemini-2.5-pro')
     expect(prompts[0]).toContain('added TEXT "Title"')
-    expect(prompts[0]).not.toContain('jane@example.com')
+    // Personal details are masked in the engine, which every review request now goes through;
+    // the material leaves this app as written.
+    expect(prompts[0]).toContain('jane@example.com')
   })
 
   test('auto leaves an answer that changed nothing alone', async () => {

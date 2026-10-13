@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, test } from 'bun:test'
 
 import { buildReasoningProviderOptions } from '@/app/ai/chat/reasoning'
+import { connectEngine, resetEngineConnection } from '@/app/ai/engine/daemon'
 import {
   aiModelSettings,
   createAIModelRuntime,
@@ -11,7 +12,6 @@ import {
   replaceAIModelSettings,
   resolveAIModelRole,
   saveModelProfileDraft,
-  setModelConnectionAPIKey,
   setModelRoleAssignment,
   type AIModelSettings
 } from '@/app/ai/models'
@@ -24,27 +24,21 @@ function settingsFixture(): AIModelSettings {
   return {
     version: 1,
     connections: [
+      // One engine, one connection: every profile is a model the engine reaches.
       {
-        id: 'connection-anthropic',
-        providerID: 'anthropic',
+        id: 'connection-engine',
+        providerID: 'engine',
         customBaseURL: '',
         customAPIType: 'completions',
-        credentialProfileId: 'anthropic-main'
-      },
-      {
-        id: 'connection-google',
-        providerID: 'google',
-        customBaseURL: '',
-        customAPIType: 'completions',
-        credentialProfileId: 'google-main'
+        credentialProfileId: 'connection-engine'
       }
     ],
     models: [
       {
         id: 'model-design',
         name: 'Design model',
-        connectionId: 'connection-anthropic',
-        modelID: 'claude-sonnet-4-6-20260301',
+        connectionId: 'connection-engine',
+        modelID: 'anthropic/claude-sonnet-4-6-20260301',
         customModelID: '',
         maxOutputTokens: 16_384,
         capabilities: ['tools', 'vision']
@@ -52,8 +46,8 @@ function settingsFixture(): AIModelSettings {
       {
         id: 'model-fast',
         name: 'Fast model',
-        connectionId: 'connection-google',
-        modelID: 'gemini-3-flash-preview',
+        connectionId: 'connection-engine',
+        modelID: 'google/gemini-3-flash-preview',
         customModelID: '',
         maxOutputTokens: 8192,
         capabilities: ['tools']
@@ -82,12 +76,12 @@ describe('AI model profiles and role assignments', () => {
     expect(resolveAIModelRole('review')).toMatchObject({
       requestedRole: 'review',
       profile: { id: 'model-design' },
-      connection: { id: 'connection-anthropic' }
+      connection: { id: 'connection-engine' }
     })
     expect(resolveAIModelRole('fast')).toMatchObject({
       requestedRole: 'fast',
       profile: { id: 'model-fast' },
-      connection: { id: 'connection-google' }
+      connection: { id: 'connection-engine' }
     })
   })
 
@@ -108,7 +102,7 @@ describe('AI model profiles and role assignments', () => {
 
     setModelRoleAssignment('design', 'model-fast')
     expect(resolveAIModelRole('design')?.profile.id).toBe('model-fast')
-    expect(resolveAIModelRole('design')?.connection.id).toBe('connection-google')
+    expect(resolveAIModelRole('design')?.connection.id).toBe('connection-engine')
 
     setModelRoleAssignment('design', 'model-design')
     expect(resolveAIModelRole('design')?.profile.id).toBe('model-design')
@@ -118,7 +112,7 @@ describe('AI model profiles and role assignments', () => {
     aiModelSettings.value.models.push({
       id: 'model-textonly',
       name: 'Text only',
-      connectionId: 'connection-google',
+      connectionId: 'connection-engine',
       modelID: 'text-only',
       customModelID: '',
       maxOutputTokens: 4096,
@@ -132,50 +126,20 @@ describe('AI model profiles and role assignments', () => {
   test('reuses matching provider connections when adding models', () => {
     const draft = createModelProfileDraft()
     draft.name = 'Review model'
-    draft.providerID = 'anthropic'
-    draft.modelID = 'claude-opus-4-6-20260301'
+    draft.providerID = 'engine'
+    draft.modelID = 'anthropic/claude-opus-4-6-20260301'
     draft.sourceConnectionId = null
 
     const profile = saveModelProfileDraft(draft)
-    expect(profile.connectionId).toBe('connection-anthropic')
-    expect(modelSettingsSnapshot().connections).toHaveLength(2)
-  })
-
-  test('stores multiple Harness provider profiles with independent model IDs', () => {
-    const first = createModelProfileDraft()
-    Object.assign(first, {
-      name: 'Pi Sonnet',
-      providerID: 'harness:pi',
-      modelID: '',
-      customModelID: 'anthropic/claude-sonnet-4.6',
-      harnessThinkingLevel: 'medium',
-      harnessPermissionMode: 'allow-edits'
-    })
-    const second = createModelProfileDraft()
-    Object.assign(second, {
-      name: 'Pi custom',
-      providerID: 'harness:pi',
-      modelID: '',
-      customModelID: 'custom/provider-model',
-      harnessThinkingLevel: 'high',
-      harnessPermissionMode: 'allow-reads'
-    })
-
-    const savedFirst = saveModelProfileDraft(first)
-    const savedSecond = saveModelProfileDraft(second)
-    expect(savedFirst.customModelID).toBe('anthropic/claude-sonnet-4.6')
-    expect(savedSecond.customModelID).toBe('custom/provider-model')
-    expect(savedFirst.harnessThinkingLevel).toBe('medium')
-    expect(savedSecond.harnessThinkingLevel).toBe('high')
-    expect(savedFirst.harnessPermissionMode).toBe('allow-edits')
-    expect(savedSecond.harnessPermissionMode).toBe('allow-reads')
+    expect(profile.connectionId).toBe('connection-engine')
+    expect(modelSettingsSnapshot().connections).toHaveLength(1)
   })
 
   test('keeps ACP agents exclusive to the Design role', () => {
     const settings = modelSettingsSnapshot()
     settings.connections.push({
       id: 'connection-acp',
-      providerID: 'acp:claude-code',
+      providerID: 'acp:redrob-code',
       customBaseURL: '',
       customAPIType: 'completions',
       credentialProfileId: 'connection-acp'
@@ -215,15 +179,13 @@ describe('AI model profiles and role assignments', () => {
     expect(createModelProfileDraft('model-fast').reasoningEffort).toBe('none')
   })
 
-  test('maps reasoning effort to supported provider options', () => {
-    expect(buildReasoningProviderOptions('openai-compatible', 'none')).toEqual({
+  test('maps reasoning effort onto the engine route as OpenAI reasoning_effort', () => {
+    // The engine's route is OpenAI-compatible whatever provider sits behind the model.
+    expect(buildReasoningProviderOptions('engine', 'none')).toEqual({
       openai: { reasoningEffort: 'none' }
     })
-    expect(buildReasoningProviderOptions('openrouter', 'high')).toEqual({
-      openrouter: { reasoning: { effort: 'high' } }
-    })
-    expect(buildReasoningProviderOptions('google', 'high')).toBeUndefined()
-    expect(buildReasoningProviderOptions('openai', '')).toBeUndefined()
+    expect(buildReasoningProviderOptions('acp:redrob-code', 'high')).toBeUndefined()
+    expect(buildReasoningProviderOptions('engine', '')).toBeUndefined()
   })
 
   test('repairs assignments when removing a model', () => {
@@ -231,7 +193,7 @@ describe('AI model profiles and role assignments', () => {
     const settings = modelSettingsSnapshot()
     expect(settings.assignments.design).toBe('model-fast')
     expect(settings.assignments.vision).toBeNull()
-    expect(settings.connections.map((connection) => connection.id)).toEqual(['connection-google'])
+    expect(settings.connections.map((connection) => connection.id)).toEqual(['connection-engine'])
   })
 
   test('keeps the assigned design profile when no capable fallback exists', () => {
@@ -241,7 +203,7 @@ describe('AI model profiles and role assignments', () => {
       {
         id: 'model-text-only',
         name: 'Text-only model',
-        connectionId: 'connection-google',
+        connectionId: 'connection-engine',
         modelID: 'text-only',
         customModelID: '',
         maxOutputTokens: 4096,
@@ -259,21 +221,36 @@ describe('AI model profiles and role assignments', () => {
     expect(resolveAIModelRole('design')?.profile.id).toBe('model-design')
   })
 
-  test('includes configured connection credentials in persistence changes', () => {
+  test('keeps no model credential in this app: the engine holds the Redrob key', () => {
     const keys = appCredentialRefs().map(credentialKey)
-    expect(keys).toContain('v1:anthropic:anthropic-main:api-key')
-    expect(keys).toContain('v1:google:google-main:api-key')
+    expect(keys.some((key) => key.includes(':connection-engine:'))).toBe(false)
+    expect(keys.some((key) => key.startsWith('v1:engine:'))).toBe(false)
   })
 
-  test('creates a role runtime without exposing its resolved credential', async () => {
-    await setModelConnectionAPIKey('connection-anthropic', 'review-secret')
+  test('creates a role runtime on the shared daemon without exposing its secret', async () => {
+    // The daemon record `redrob service start --json` would print, without running anything.
+    await connectEngine({
+      fresh: true,
+      spawn: async () => ({
+        code: 0,
+        stdout: JSON.stringify({
+          id: 'd1',
+          version: 'test',
+          url: 'http://127.0.0.1:4096',
+          port: 4096,
+          pid: 1,
+          secret: 's3cret'
+        })
+      })
+    })
     try {
       const runtime = await createAIModelRuntime('review')
       expect(runtime?.kind).toBe('direct')
       expect(runtime?.role.profile.id).toBe('model-design')
       expect(runtime).not.toHaveProperty('apiKey')
+      expect(JSON.stringify(runtime)).not.toContain('s3cret')
     } finally {
-      await setModelConnectionAPIKey('connection-anthropic', '')
+      resetEngineConnection()
     }
   })
 })

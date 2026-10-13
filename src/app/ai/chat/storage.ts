@@ -13,9 +13,9 @@ import {
   designModelID,
   designProviderDefinition,
   designProviderID,
-  modelConnectionCredentialRef,
   modelConnectionCredentialStatus,
-  resolveModelConnectionAPIKey
+  resolveModelConnectionAPIKey,
+  setModelConnectionAPIKey
 } from '@/app/ai/models'
 import { appCredentialServices, browserCredentialsRemembered } from '@/app/settings/credentials/app'
 import {
@@ -40,26 +40,19 @@ export const unsplashKeyStatus = ref<CredentialStatus>('missing')
 const credentialRevision = ref(0)
 
 export const isACPProvider = computed(() => providerID.value.startsWith('acp:'))
-export const isHarnessProvider = computed(() => providerID.value === 'harness:pi')
-export const isAgentProvider = computed(() => isACPProvider.value || isHarnessProvider.value)
+export const isAgentProvider = isACPProvider
 
+/**
+ * Configured means the engine can run this: the ACP agent needs the desktop app (it spawns the
+ * engine); a model profile needs the engine reachable and signed in to Redrob (models/runtime.ts).
+ */
 export const isConfigured = computed(() => {
   if (isACPProvider.value) return IS_TAURI
-  if (isHarnessProvider.value) return IS_TAURI && apiKeyStatus.value === 'configured'
-  if (apiKeyStatus.value !== 'configured') return false
-  const needsBaseURL =
-    providerID.value === 'openai-compatible' || providerID.value === 'anthropic-compatible'
-  return !needsBaseURL || Boolean(customBaseURL.value)
+  return apiKeyStatus.value === 'configured'
 })
 
 async function refreshStatus(reference: CredentialRef): Promise<CredentialStatus> {
   return appCredentialServices.manager.status(reference)
-}
-
-function designCredentialReference(): CredentialRef | null {
-  const connection = designModelConnection.value
-  if (!connection || connection.providerID.startsWith('acp:')) return null
-  return modelConnectionCredentialRef(connection)
 }
 
 /**
@@ -101,12 +94,11 @@ export async function resolveAPIKey(): Promise<string | null> {
   return connection ? resolveModelConnectionAPIKey(connection.id) : null
 }
 
+/** Hands a Redrob key to the engine (or removes it there); the app keeps no key of its own. */
 export async function setAPIKey(key: string): Promise<void> {
-  const reference = designCredentialReference()
-  if (!reference) return
-  const value = key.trim()
-  if (value) await appCredentialServices.manager.set(reference, value)
-  else await appCredentialServices.manager.clear(reference)
+  const connection = designModelConnection.value
+  if (!connection) return
+  await setModelConnectionAPIKey(connection.id, key)
   await refreshAIProviderStatus()
   credentialRevision.value++
 }

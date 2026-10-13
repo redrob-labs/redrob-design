@@ -153,7 +153,7 @@ export const TEXT_SELECTION_COLOR = { ...SELECTION_COLOR, a: 0.3 }
 export const TEXT_CARET_COLOR = BLACK
 export const TEXT_CARET_WIDTH = 1
 
-export type ACPAgentID = 'redrob-code' | 'claude-code' | 'codex' | 'gemini-cli'
+export type ACPAgentID = 'redrob-code'
 
 export interface ACPAgentDef {
   id: ACPAgentID
@@ -187,11 +187,18 @@ export interface RedrobCodeCommand {
 }
 
 /**
- * The engine subcommand that starts the ACP stdio server. Appended to every
- * resolved Redrob Code invocation; a bare `redrob` opens the interactive TUI
- * and never speaks ACP.
+ * The engine subcommand that starts the ACP stdio face. `--attach` makes it a thin client of the
+ * user's shared daemon (one engine for every Redrob app) instead of an engine of its own. A bare
+ * `redrob` opens the interactive TUI and never speaks ACP.
  */
-export const REDROB_CODE_ACP_ARGS = ['acp'] as const
+export const REDROB_CODE_ACP_ARGS = ['acp', '--attach'] as const
+
+/**
+ * The engine subcommand that finds the user's shared daemon or starts it, and prints its record
+ * (url, secret, pid, version) as one JSON line. The model profiles talk to that daemon over
+ * `/v1/chat/completions`.
+ */
+export const REDROB_CODE_SERVICE_ARGS = ['service', 'start', '--json'] as const
 
 /**
  * Locate the Redrob Code engine, mirroring the resolution the standalone engine
@@ -207,20 +214,28 @@ export const REDROB_CODE_ACP_ARGS = ['acp'] as const
  * Kept pure (env passed in) so the ACP wiring can be unit-tested without a live
  * engine or any host environment.
  */
-export function resolveRedrobCodeCommand(env: RedrobCodeEnv = {}): RedrobCodeCommand {
+export function resolveRedrobCodeCommand(
+  env: RedrobCodeEnv = {},
+  subcommand: readonly string[] = REDROB_CODE_ACP_ARGS
+): RedrobCodeCommand {
   const bin = env.REDROB_CODE_BIN?.trim()
-  if (bin) return { command: bin, args: [...REDROB_CODE_ACP_ARGS], source: 'REDROB_CODE_BIN' }
+  if (bin) return { command: bin, args: [...subcommand], source: 'REDROB_CODE_BIN' }
 
   const devRoot = env.REDROB_CODE_DEV_ROOT?.trim()
   if (devRoot) {
     return {
       command: env.REDROB_CODE_BUN?.trim() || 'bun',
-      args: ['run', `${devRoot}/packages/redrob/src/index.ts`, ...REDROB_CODE_ACP_ARGS],
+      args: ['run', `${devRoot}/packages/redrob/src/index.ts`, ...subcommand],
       source: 'REDROB_CODE_DEV_ROOT'
     }
   }
 
-  return { command: 'redrob', args: [...REDROB_CODE_ACP_ARGS], source: 'PATH' }
+  return { command: 'redrob', args: [...subcommand], source: 'PATH' }
+}
+
+/** The invocation that finds or starts the user's shared engine daemon ({@link REDROB_CODE_SERVICE_ARGS}). */
+export function resolveRedrobCodeServiceCommand(env: RedrobCodeEnv = {}): RedrobCodeCommand {
+  return resolveRedrobCodeCommand(env, REDROB_CODE_SERVICE_ARGS)
 }
 
 /**
@@ -302,6 +317,10 @@ function ambientRedrobCodeEnv(): RedrobCodeEnv {
 
 const REDROB_CODE_COMMAND = resolveRedrobCodeCommand(ambientRedrobCodeEnv())
 
+/** `redrob service start --json` resolved against the same ambient environment as the ACP command. */
+export const REDROB_CODE_SERVICE_COMMAND: RedrobCodeCommand =
+  resolveRedrobCodeServiceCommand(ambientRedrobCodeEnv())
+
 export const ACP_AGENTS: ACPAgentDef[] = [
   {
     id: REDROB_CODE_AGENT_ID,
@@ -309,43 +328,17 @@ export const ACP_AGENTS: ACPAgentDef[] = [
     command: REDROB_CODE_COMMAND.command,
     args: REDROB_CODE_COMMAND.args,
     installCommand: REDROB_CODE_INSTALL_COMMAND
-  },
-  {
-    id: 'claude-code',
-    name: 'Claude Code',
-    command: 'claude-agent-acp',
-    args: [],
-    installCommand: 'npm i -g @agentclientprotocol/claude-agent-acp'
-  },
-  {
-    id: 'codex',
-    name: 'Codex',
-    command: 'codex-acp',
-    args: [],
-    installCommand: 'npm i -g @zed-industries/codex-acp'
-  },
-  {
-    id: 'gemini-cli',
-    name: 'Gemini CLI',
-    command: 'gemini',
-    args: ['--acp'],
-    installCommand: 'npm i -g @google/gemini-cli'
   }
 ]
 
-export type AIProviderID =
-  | 'redrob'
-  | 'openrouter'
-  | 'anthropic'
-  | 'openai'
-  | 'google'
-  | 'deepseek'
-  | 'openai-compatible'
-  | 'zai'
-  | 'minimax'
-  | 'anthropic-compatible'
-  | 'harness:pi'
-  | `acp:${ACPAgentID}`
+/**
+ * Where a model request goes. There are two, and both are the engine: `engine` is Redrob Code's
+ * OpenAI-compatible route (`/v1/chat/completions` on the user's shared daemon), for the model
+ * profiles (design, review, fast, vision); `acp:redrob-code` is the engine's agent over ACP, for the
+ * design-by-prompt loop. No direct provider: the engine holds the credentials, picks the provider
+ * and masks personal details, once, for every Redrob app.
+ */
+export type AIProviderID = 'engine' | `acp:${ACPAgentID}`
 
 export interface ModelOption {
   id: string
@@ -366,223 +359,34 @@ export interface AIProviderDef {
   supportsCustomModel?: boolean
 }
 
-export const HARNESS_PROVIDER_ID = 'harness:pi' as const
-
 /**
- * Redrob Console's inference base. It is OpenAI-compatible on
- * `POST /v1/chat/completions` and relays tool definitions without executing them,
- * which is what Design's tool loop needs.
+ * Redrob Console's API base. Not a model endpoint any more (models go through the engine); the
+ * app still talks to the Console for the device sign-in flow and for AI work labels.
  */
 export const REDROB_CONSOLE_API_BASE = 'https://console.redrob.ai/api/backend/v1'
 
 /**
- * The wire model id Console's chat/completions accepts (route `redrob/auto`). Console
- * picks the serving model, so there is nothing else to choose here.
+ * The wire model id for the engine's own Console route (`redrob/auto`). The engine lists every
+ * other model it can reach at `GET /api/model`; this one is always there once the user is signed in.
  */
-export const REDROB_CONSOLE_MODEL = 'auto'
+export const ENGINE_AUTO_MODEL = 'redrob/auto'
+
+/** Cowork's name for the engine's OpenAI face, used in the app's own copy. */
+export const ENGINE_PROVIDER_ID: AIProviderID = 'engine'
 
 export const AI_PROVIDERS: AIProviderDef[] = [
   {
-    id: 'redrob',
-    name: 'Redrob',
-    keyPlaceholder: 'rrk_…',
+    id: ENGINE_PROVIDER_ID,
+    name: 'Redrob Code',
+    keyPlaceholder: '',
     keyURL: 'https://console.redrob.ai',
-    defaultModel: REDROB_CONSOLE_MODEL,
-    models: [
-      {
-        id: REDROB_CONSOLE_MODEL,
-        name: 'Redrob Auto',
-        capabilities: ['tools']
-      }
-    ]
-  },
-  {
-    id: HARNESS_PROVIDER_ID,
-    name: 'Pi',
-    keyPlaceholder: 'Provider API key',
-    keyURL: '',
-    defaultModel: '',
-    supportsCustomModel: true,
-    models: []
-  },
-  {
-    id: 'openrouter',
-    name: 'OpenRouter',
-    keyPlaceholder: 'sk-or-…',
-    keyURL: 'https://openrouter.ai/keys',
-    defaultModel: 'anthropic/claude-sonnet-4.6',
-    supportsCustomModel: true,
-    models: [
-      {
-        id: 'anthropic/claude-sonnet-4.6',
-        name: 'Claude Sonnet 4.6',
-        tag: 'Best for design',
-        capabilities: ['tools', 'vision']
-      },
-      {
-        id: 'anthropic/claude-opus-4.6',
-        name: 'Claude Opus 4.6',
-        tag: 'Smartest',
-        capabilities: ['tools', 'vision']
-      },
-      {
-        id: 'moonshotai/kimi-k2.5',
-        name: 'Kimi K2.5',
-        tag: 'Vision + code',
-        capabilities: ['tools', 'vision']
-      },
-      {
-        id: 'google/gemini-3.1-pro-preview',
-        name: 'Gemini 3.1 Pro',
-        tag: '1M context',
-        capabilities: ['tools', 'vision']
-      },
-      { id: 'openai/gpt-5.3-codex', name: 'GPT-5.3 Codex' },
-      {
-        id: 'google/gemini-3-flash-preview',
-        name: 'Gemini 3 Flash',
-        tag: 'Fast',
-        capabilities: ['tools', 'vision']
-      },
-      { id: 'deepseek/deepseek-v3.2', name: 'DeepSeek V3.2', tag: 'Cheap' },
-      { id: 'qwen/qwen3.5-flash-02-23', name: 'Qwen 3.5 Flash', tag: 'Cheap' },
-      { id: 'qwen/qwen3-coder:free', name: 'Qwen3 Coder', tag: 'Free' },
-      { id: 'openai/gpt-oss-120b:free', name: 'GPT-OSS 120B', tag: 'Free' }
-    ]
-  },
-  {
-    id: 'anthropic',
-    name: 'Anthropic',
-    keyPlaceholder: 'sk-ant-…',
-    keyURL: 'https://console.anthropic.com/settings/keys',
-    defaultModel: 'claude-sonnet-4-6-20260301',
-    models: [
-      {
-        id: 'claude-sonnet-4-6-20260301',
-        name: 'Claude Sonnet 4.6',
-        tag: 'Best for design',
-        capabilities: ['tools', 'vision']
-      },
-      {
-        id: 'claude-opus-4-6-20260301',
-        name: 'Claude Opus 4.6',
-        tag: 'Smartest',
-        capabilities: ['tools', 'vision']
-      }
-    ]
-  },
-  {
-    id: 'openai',
-    name: 'OpenAI',
-    keyPlaceholder: 'sk-…',
-    keyURL: 'https://platform.openai.com/api-keys',
-    defaultModel: 'gpt-5.3-codex',
-    models: [
-      { id: 'gpt-5.3-codex', name: 'GPT-5.3 Codex' },
-      { id: 'gpt-4.1', name: 'GPT-4.1' },
-      { id: 'o3', name: 'o3', tag: 'Reasoning' },
-      { id: 'o4-mini', name: 'o4-mini', tag: 'Fast reasoning' }
-    ]
-  },
-  {
-    id: 'google',
-    name: 'Google AI',
-    keyPlaceholder: 'AIza…',
-    keyURL: 'https://aistudio.google.com/apikey',
-    defaultModel: 'gemini-3.1-pro-preview',
-    models: [
-      {
-        id: 'gemini-3.1-pro-preview',
-        name: 'Gemini 3.1 Pro',
-        tag: '1M context',
-        capabilities: ['tools', 'vision']
-      },
-      {
-        id: 'gemini-3-flash-preview',
-        name: 'Gemini 3 Flash',
-        tag: 'Fast',
-        capabilities: ['tools', 'vision']
-      }
-    ]
-  },
-  {
-    id: 'deepseek',
-    name: 'DeepSeek',
-    keyPlaceholder: 'sk-…',
-    keyURL: 'https://platform.deepseek.com/api_keys',
-    defaultModel: 'deepseek-v4-flash',
-    models: [
-      { id: 'deepseek-v4-flash', name: 'DeepSeek V4 Flash', tag: 'Fast' },
-      { id: 'deepseek-v4-pro', name: 'DeepSeek V4 Pro', tag: 'Reasoning' }
-    ]
-  },
-  {
-    id: 'zai',
-    name: 'Z.ai',
-    keyPlaceholder: 'API key',
-    keyURL: 'https://docs.z.ai/devpack/quick-start',
-    defaultModel: 'glm-5.1',
-    models: [
-      { id: 'glm-5.1', name: 'GLM-5.1', tag: 'Best' },
-      { id: 'glm-5', name: 'GLM-5' },
-      { id: 'glm-5-code', name: 'GLM-5-Code' },
-      { id: 'glm-4.7', name: 'GLM-4.7' },
-      { id: 'glm-4.7-flashx', name: 'GLM-4.7-FlashX' },
-      { id: 'glm-4.6', name: 'GLM-4.6' },
-      { id: 'glm-4.5', name: 'GLM-4.5' },
-      { id: 'glm-4.5-x', name: 'GLM-4.5-X' },
-      { id: 'glm-4.5-air', name: 'GLM-4.5-Air' },
-      { id: 'glm-4.5-airx', name: 'GLM-4.5-AirX' },
-      { id: 'glm-4-32b-0414-128k', name: 'GLM-4-32B-0414-128K' },
-      { id: 'glm-4.7-flash', name: 'GLM-4.7-Flash', tag: 'Free' },
-      { id: 'glm-4.5-flash', name: 'GLM-4.5-Flash', tag: 'Free' }
-    ]
-  },
-  {
-    id: 'minimax',
-    name: 'MiniMax',
-    keyPlaceholder: 'API key',
-    keyURL: 'https://platform.minimax.io/user-center/basic-information/interface-key',
-    defaultModel: 'MiniMax-M3',
-    models: [
-      { id: 'MiniMax-M3', name: 'MiniMax-M3', tag: 'Best' },
-      { id: 'MiniMax-M2.7', name: 'MiniMax-M2.7' },
-      { id: 'MiniMax-M2.7-highspeed', name: 'MiniMax-M2.7-highspeed', tag: 'Fast' },
-      { id: 'MiniMax-M2.5', name: 'MiniMax-M2.5' },
-      { id: 'MiniMax-M2.5-highspeed', name: 'MiniMax-M2.5 Highspeed', tag: 'Fast' },
-      { id: 'MiniMax-M2.1', name: 'MiniMax-M2.1' },
-      { id: 'MiniMax-M2.1-highspeed', name: 'MiniMax-M2.1 Highspeed', tag: 'Fast' },
-      { id: 'MiniMax-M2', name: 'MiniMax-M2' }
-    ]
-  },
-  {
-    id: 'openai-compatible',
-    name: 'OpenAI-compatible',
-    keyPlaceholder: 'API key',
-    keyURL: '',
-    defaultModel: '',
-    models: [],
-    supportsCustomBaseURL: true,
-    supportsCustomModel: true
-  },
-  {
-    id: 'anthropic-compatible',
-    name: 'Anthropic-compatible',
-    keyPlaceholder: 'API key',
-    keyURL: '',
-    defaultModel: '',
-    models: [],
-    supportsCustomBaseURL: true,
+    defaultModel: ENGINE_AUTO_MODEL,
+    models: [{ id: ENGINE_AUTO_MODEL, name: 'Redrob Auto', capabilities: ['tools', 'vision'] }],
     supportsCustomModel: true
   }
 ]
 
-/**
- * Redrob Code is the only engine Redrob Design's design-by-prompt loop runs on,
- * so the Design agent role defaults to it. The built-in direct providers
- * (OpenRouter/Anthropic/OpenAI/…) stay available in code but do not silently
- * drive the design loop unless a user explicitly assigns one.
- */
+/** Redrob Code is the only engine the design-by-prompt loop runs on, so the Design role defaults to it. */
 export const DEFAULT_AI_PROVIDER: AIProviderID = REDROB_CODE_PROVIDER_ID
 export const DEFAULT_AI_MODEL =
   AI_PROVIDERS.find((provider) => provider.id === DEFAULT_AI_PROVIDER)?.defaultModel ?? ''

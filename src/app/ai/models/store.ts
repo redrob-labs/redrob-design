@@ -172,8 +172,7 @@ function parseSettings(value: unknown): AIModelSettings | null {
     const profileId = assignment === 'design' ? resolvedDesign : assignment
     const profile = models.find((candidate) => candidate.id === profileId)
     const connection = connections.find((candidate) => candidate.id === profile?.connectionId)
-    const invalidAgent =
-      connection?.providerID.startsWith('acp:') || connection?.providerID === 'harness:pi'
+    const invalidAgent = connection?.providerID.startsWith('acp:')
     const invalidVision = role === 'vision' && !profile?.capabilities.includes('vision')
     if (invalidAgent || invalidVision) assignments[role] = null
   }
@@ -262,7 +261,7 @@ export function designModelProfiles(): AIModelProfile[] {
 
 export function isAgentModelProfile(profile: AIModelProfile | null): boolean {
   const providerID = profile ? modelConnection(profile.connectionId)?.providerID : undefined
-  return Boolean(providerID?.startsWith('acp:') || providerID === 'harness:pi')
+  return Boolean(providerID?.startsWith('acp:'))
 }
 
 export function isACPModelProfile(profile: AIModelProfile | null): boolean {
@@ -388,10 +387,6 @@ export function saveModelProfileDraft(draft: AIModelProfileDraft): AIModelProfil
     customModelID: draft.customModelID.trim(),
     maxOutputTokens: normalizedMaxOutputTokens(draft.maxOutputTokens),
     reasoningEffort: draft.reasoningEffort.trim() || undefined,
-    harnessThinkingLevel:
-      draft.providerID === 'harness:pi' ? draft.harnessThinkingLevel : undefined,
-    harnessPermissionMode:
-      draft.providerID === 'harness:pi' ? draft.harnessPermissionMode : undefined,
     capabilities: [...new Set(draft.capabilities)]
   }
   const index = aiModelSettings.value.models.findIndex((model) => model.id === profile.id)

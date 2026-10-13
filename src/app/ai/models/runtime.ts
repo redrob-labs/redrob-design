@@ -1,16 +1,16 @@
 import type { LanguageModel } from 'ai'
 
 import { createLanguageModel } from '@/app/ai/chat/model'
-import { readSharedAccount } from '@/app/ai/connect/app-shared-account'
-import { resolveWorkspaceKey, type WorkspaceKey } from '@/app/ai/connect/shared-account'
-import { modelConnection, resolveAIModelRole } from '@/app/ai/models/store'
-import type { AIModelConnection, AIModelRole, ResolvedAIModelRole } from '@/app/ai/models/types'
-import { appCredentialServices } from '@/app/settings/credentials/app'
+import type { WorkspaceKey } from '@/app/ai/connect/shared-account'
 import {
-  initializeCredentialMigration,
-  providerCredentialRef
-} from '@/app/settings/credentials/migration'
-import type { CredentialRef, CredentialStatus } from '@/app/settings/credentials/types'
+  clearEngineRedrobKey,
+  readEngineAccountStatus,
+  setEngineRedrobKey
+} from '@/app/ai/engine/auth'
+import { connectEngine, engineOpenAIBaseURL } from '@/app/ai/engine/daemon'
+import { modelConnection, resolveAIModelRole } from '@/app/ai/models/store'
+import type { AIModelRole, ResolvedAIModelRole } from '@/app/ai/models/types'
+import type { CredentialStatus } from '@/app/settings/credentials/types'
 
 export type DirectAIModelRuntime = {
   kind: 'direct'
@@ -23,74 +23,57 @@ export type ACPModelRuntime = {
   role: ResolvedAIModelRole
 }
 
-export type HarnessModelRuntime = {
-  kind: 'harness'
-  role: ResolvedAIModelRole
-}
-
-export type AIModelRuntime = DirectAIModelRuntime | ACPModelRuntime | HarnessModelRuntime
-
-export function modelConnectionCredentialRef(connection: AIModelConnection): CredentialRef {
-  return providerCredentialRef(connection.providerID, connection.credentialProfileId)
-}
-
-/** Only Console-issued keys have a launcher-shared counterpart; other providers never fall back. */
-function usesRedrobWorkspaceKey(connection: AIModelConnection): boolean {
-  return connection.providerID === 'redrob'
-}
+export type AIModelRuntime = DirectAIModelRuntime | ACPModelRuntime
 
 /**
- * The key a connection uses, with where it came from. The app's own stored key wins; a
- * Redrob connection without one falls back to Redrob Launcher's shared sign-in, read at
- * this moment so a launcher sign-in or sign-out while the app runs is honoured.
+ * What the engine connection "has" as a key: the engine's own Redrob account. This app never holds
+ * a Console key; the sign-in flow hands it to the engine (engine/auth.ts), and the launcher's
+ * shared sign-in counts because the engine reads that file itself.
  */
 export async function resolveModelConnectionKey(
   connectionId: string
 ): Promise<WorkspaceKey | null> {
-  await initializeCredentialMigration()
   const connection = modelConnection(connectionId)
-  if (!connection || connection.providerID.startsWith('acp:')) return null
-  const reference = modelConnectionCredentialRef(connection)
-  return resolveWorkspaceKey(
-    () => appCredentialServices.resolver.resolve(reference),
-    usesRedrobWorkspaceKey(connection) ? readSharedAccount : async () => null
-  )
+  if (connection?.providerID !== 'engine') return null
+  const status = await readEngineAccountStatus().catch(() => ({ connected: false }) as const)
+  if (!status.connected) return null
+  // The engine keeps the key; what the app knows is where it came from.
+  return { apiKey: '', source: status.source === 'launcher' ? 'launcher' : 'own' }
 }
 
 export async function modelConnectionCredentialStatus(
   connectionId: string
 ): Promise<CredentialStatus> {
   const connection = modelConnection(connectionId)
-  if (!connection || connection.providerID.startsWith('acp:')) return 'missing'
-  const status = await appCredentialServices.manager.status(
-    modelConnectionCredentialRef(connection)
-  )
-  if (status !== 'missing' || !usesRedrobWorkspaceKey(connection)) return status
-  return (await readSharedAccount()) ? 'configured' : 'missing'
+  if (connection?.providerID !== 'engine') return 'missing'
+  try {
+    return (await readEngineAccountStatus()).connected ? 'configured' : 'missing'
+  } catch {
+    return 'unavailable'
+  }
 }
 
-/** `launcher` when the key in use is Redrob Launcher's, `own` for the app's, `null` for none. */
+/** `launcher` when the engine's key is Redrob Launcher's, `own` when it was handed over here, `null` for none. */
 export async function modelConnectionKeySource(
   connectionId: string
 ): Promise<WorkspaceKey['source'] | null> {
   return (await resolveModelConnectionKey(connectionId))?.source ?? null
 }
 
-/**
- * Stores or clears the app's OWN key. Clearing never touches the launcher's shared file,
- * so after a clear the connection may still resolve to the launcher's key.
- */
+/** Hands a Console key to the engine, or removes the engine's. The launcher's shared file is never touched. */
 export async function setModelConnectionAPIKey(connectionId: string, value: string): Promise<void> {
   const connection = modelConnection(connectionId)
-  if (!connection || connection.providerID.startsWith('acp:')) return
-  const reference = modelConnectionCredentialRef(connection)
+  if (connection?.providerID !== 'engine') return
   const key = value.trim()
-  if (key) await appCredentialServices.manager.set(reference, key)
-  else await appCredentialServices.manager.clear(reference)
+  if (key) await setEngineRedrobKey(key)
+  else await clearEngineRedrobKey()
 }
 
+/** The daemon's secret, which is what the engine adapter authenticates with; not a provider key. */
 export async function resolveModelConnectionAPIKey(connectionId: string): Promise<string | null> {
-  return (await resolveModelConnectionKey(connectionId))?.apiKey ?? null
+  const connection = modelConnection(connectionId)
+  if (connection?.providerID !== 'engine') return null
+  return (await connectEngine()).secret
 }
 
 export async function createAIModelRuntime(role: AIModelRole): Promise<AIModelRuntime | null> {
@@ -102,12 +85,6 @@ export async function createAIModelRuntime(role: AIModelRole): Promise<AIModelRu
   if (role === 'vision' && !resolved.profile.capabilities.includes('vision')) {
     throw new Error('The Vision model must support image input')
   }
-  if (resolved.connection.providerID === 'harness:pi') {
-    if (role !== 'design') {
-      throw new Error('Harness agents can only be assigned to the Design agent role')
-    }
-    return { kind: 'harness', role: resolved }
-  }
   if (resolved.connection.providerID.startsWith('acp:')) {
     if (role !== 'design') {
       throw new Error('ACP agents can only be assigned to the Design agent role')
@@ -115,18 +92,18 @@ export async function createAIModelRuntime(role: AIModelRole): Promise<AIModelRu
     return { kind: 'acp', role: resolved }
   }
 
-  const apiKey = await resolveModelConnectionAPIKey(resolved.connection.id)
-  if (!apiKey) throw new Error(`Credential is unavailable for the ${role} model role`)
+  // The shared daemon, found or started now: its secret is the Basic password and its `/v1` the base.
+  const daemon = await connectEngine()
   return {
     kind: 'direct',
     role: resolved,
     model: createLanguageModel({
       providerID: resolved.connection.providerID,
-      apiKey,
+      apiKey: daemon.secret,
       modelID: resolved.profile.modelID,
       customModelID: resolved.profile.customModelID,
-      customBaseURL: resolved.connection.customBaseURL,
-      customAPIType: resolved.connection.customAPIType
+      customBaseURL: engineOpenAIBaseURL(daemon),
+      customAPIType: 'completions'
     })
   }
 }

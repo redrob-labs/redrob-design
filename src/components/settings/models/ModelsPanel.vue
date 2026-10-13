@@ -21,7 +21,6 @@ const statusByConnection = ref<Record<string, CredentialStatus>>({})
 /** Connections whose key is Redrob Launcher's shared sign-in rather than this app's own. */
 const launcherConnections = ref<Record<string, boolean>>({})
 function providerName(providerID: string): string {
-  if (providerID === 'harness:pi') return 'Pi'
   if (providerID.startsWith('acp:')) {
     const agentID = providerID.slice('acp:'.length)
     return ACP_AGENTS.find((agent) => agent.id === agentID)?.name ?? providerID

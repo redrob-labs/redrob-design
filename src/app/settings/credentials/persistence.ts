@@ -1,14 +1,7 @@
-import { AI_PROVIDERS } from '@redrob-design/core/constants'
-
-import { aiModelSettings, modelConnectionCredentialRef } from '@/app/ai/models'
 import { VECTORIZE_CREDENTIAL_REFS } from '@/app/editor/vectorize/credentials'
 import { mcpConnectionSettings, mcpConnectionCredentialRef } from '@/app/integrations/mcp'
 import { storageCredentialRefs, storageProviderRegistry } from '@/app/integrations/storage'
-import {
-  PEXELS_CREDENTIAL,
-  UNSPLASH_CREDENTIAL,
-  providerCredentialRef
-} from '@/app/settings/credentials/migration'
+import { PEXELS_CREDENTIAL, UNSPLASH_CREDENTIAL } from '@/app/settings/credentials/migration'
 import { credentialKey } from '@/app/settings/credentials/reference'
 
 import { setBrowserCredentialPersistence } from './app'
@@ -19,18 +12,11 @@ function uniqueCredentialRefs(references: CredentialRef[]): CredentialRef[] {
 }
 
 export function appCredentialRefs(): CredentialRef[] {
-  const legacyAIRefs = AI_PROVIDERS.filter((provider) => !provider.id.startsWith('acp:')).map(
-    (provider) => providerCredentialRef(provider.id)
-  )
-  const modelConnectionRefs = aiModelSettings.value.connections
-    .filter((connection) => !connection.providerID.startsWith('acp:'))
-    .map(modelConnectionCredentialRef)
+  // No model credentials: the engine holds the Redrob key, this app never does.
   const storageCredentials = storageProviderRegistry
     .list()
     .flatMap((provider) => storageCredentialRefs(provider.id))
   return uniqueCredentialRefs([
-    ...legacyAIRefs,
-    ...modelConnectionRefs,
     PEXELS_CREDENTIAL,
     UNSPLASH_CREDENTIAL,
     ...VECTORIZE_CREDENTIAL_REFS,

@@ -1,15 +1,14 @@
 import { StorageSerializers, useLocalStorage } from '@vueuse/core'
-import type { ModelMessage } from 'ai'
-import { computed, shallowReactive } from 'vue'
+import { computed, shallowReactive, watch } from 'vue'
 
-import { redactModelMessages } from './messages'
-import { createPrivacyVault, revealText, type PrivacyVault } from './redact'
-import { isPrivacyLevelId, rulesFor, type PrivacyLevelId } from './rules'
+import { connectEngine, engineHeaders } from '@/app/ai/engine/daemon'
+
+import { engineModeForLevel, isPrivacyLevelId, type PrivacyLevelId } from './rules'
 
 const LEVEL_KEY = 'redrob-design:privacy-level'
 const TERMS_KEY = 'redrob-design:privacy-terms'
 
-/** The default when nothing is chosen: cards, keys, IDs and contact details. */
+/** The default when nothing is chosen: cards, keys, IDs and contact details, plus names. */
 export const DEFAULT_PRIVACY_LEVEL: PrivacyLevelId = 'high'
 
 const storedLevel = useLocalStorage<string>(LEVEL_KEY, DEFAULT_PRIVACY_LEVEL, {
@@ -40,7 +39,10 @@ export function lockPrivacyLevel(level: PrivacyLevelId | null): void {
   lockedLevel.value = level
 }
 
-/** Names and other words the person listed as private, kept on this computer. */
+/**
+ * Names and other words the person listed as private, kept on this computer. The engine's masker
+ * takes no list of its own yet; the list is kept so a workspace policy's terms are not lost.
+ */
 export const privateTerms = computed<string[]>(() =>
   Array.isArray(storedTerms.value)
     ? storedTerms.value.filter((term): term is string => typeof term === 'string')
@@ -51,46 +53,32 @@ export function setPrivateTerms(terms: readonly string[]): void {
   storedTerms.value = [...new Set(terms.map((term) => term.trim()).filter(Boolean))]
 }
 
-const vaults = new WeakMap<object, PrivacyVault>()
-
-/** The thread's current placeholders and the values they stand for. */
-export function privacyVaultFor(owner: object): PrivacyVault {
-  let vault = vaults.get(owner)
-  if (!vault) {
-    vault = createPrivacyVault()
-    vaults.set(owner, vault)
-  }
-  return vault
-}
+type PrivacyFetch = (url: string, init: RequestInit) => Promise<Response>
 
 /**
- * Redacts one request to a direct model. The vault is rebuilt from the
- * request's own messages, which hold the whole thread, so placeholders stay
- * stable across turns and reloads without the values ever being stored.
+ * Carry the level to the engine (`PUT /api/privacy`). The engine masks for every provider and every
+ * app; one switch, so the level set here is what Cowork and Office run under too. Fails loudly: a
+ * caller learns the engine did not take it, rather than a level being shown that is not enforced.
  */
-export function protectRequest(
-  owner: object,
-  messages: readonly ModelMessage[]
-): { messages: ModelMessage[]; keptPrivate: number } {
-  const vault = createPrivacyVault()
-  vaults.set(owner, vault)
-  return redactModelMessages(messages, rulesFor(privacyLevel.value, privateTerms.value), vault)
+export async function syncEnginePrivacy(
+  level: PrivacyLevelId = privacyLevel.value,
+  fetcher: PrivacyFetch = fetch
+): Promise<void> {
+  const daemon = await connectEngine()
+  const response = await fetcher(`${daemon.url.replace(/\/+$/, '')}/api/privacy`, {
+    method: 'PUT',
+    headers: { ...engineHeaders(daemon), 'content-type': 'application/json' },
+    body: JSON.stringify({ mode: engineModeForLevel(level) })
+  })
+  if (!response.ok)
+    throw new Error(`The engine did not accept the privacy level (${response.status})`)
 }
 
-/**
- * Rebuilds the vault from a thread read back from this computer, so answers
- * written before a reload show real values again.
- */
-export function rememberThreadPrivacy(owner: object, userTexts: readonly string[]): void {
-  protectRequest(
-    owner,
-    userTexts.map((text): ModelMessage => ({ role: 'user', content: text }))
-  )
-}
+let syncing = false
 
-/** Shows the person real values where the model wrote placeholders. */
-export function revealForDisplay(owner: object | null, text: string): string {
-  if (!owner) return text
-  const vault = vaults.get(owner)
-  return vault ? revealText(text, vault) : text
+/** Keeps the engine's switch in step with the level, for as long as the app runs. */
+export function startEnginePrivacySync(onError: (error: unknown) => void = console.error): void {
+  if (syncing) return
+  syncing = true
+  watch(privacyLevel, (level) => void syncEnginePrivacy(level).catch(onError), { immediate: true })
 }
