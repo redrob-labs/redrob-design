@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.16.0 — 2026-10-13
+
 ### Breaking changes
 
 - Direct providers (OpenRouter, Anthropic, OpenAI, Google AI, DeepSeek, Z.ai, MiniMax, OpenAI- and Anthropic-compatible endpoints), the Pi harness and the Claude Code, Codex and Gemini CLI agents: the engine reaches those providers, with one sign-in. Keys an earlier build stored for them are removed on first start.
