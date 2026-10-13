@@ -22,10 +22,11 @@ the **Redrob Code** engine over ACP, and Code is what signs in to a workspace: r
 the short code it shows in [Redrob Console](https://console.redrob.ai). Design then
 uses that connection through the engine.
 
-Console's one-click device flow is not wired into this app directly. If you would
-rather not route through the engine at all, **Settings → AI & agents** also takes
-your own key for OpenRouter, Anthropic, OpenAI, Google AI, Z.ai, MiniMax or a
-compatible endpoint.
+**Settings → AI & agents → Connect Redrob** runs the same sign-in from inside the app and
+hands the key to the engine. Every model Design uses, for the design loop, review, fast
+answers and vision, runs through the one Redrob Code daemon shared by every Redrob app
+on the machine: the engine holds the credentials, picks the provider and masks personal
+details before anything leaves the computer. There is no other provider to configure.
 
 ## Design by prompt with Redrob Code
 
@@ -36,8 +37,8 @@ If the Redrob Code engine is not installed, the app guides you through installin
 ## What it does
 
 - **Opens `.fig` and `.pen` files**: read and write native Figma files, open Redrob Design documents from the app or OS file browser, copy & paste nodes between apps
-- **AI builds designs**: describe what you want in chat, 90+ tools create and modify nodes. Route design through the Redrob Code engine, or connect OpenRouter, Anthropic, OpenAI, Google AI, Z.ai, MiniMax, or compatible endpoints
-- **Fully programmable**: headless CLI, XPath queries, Figma Plugin API via `eval`, MCP server for AI agents, and desktop agent integrations for Redrob Code and other ACP agents
+- **AI builds designs**: describe what you want in chat, 90+ tools create and modify nodes. Every model runs through the Redrob Code engine, which picks the provider and masks personal details
+- **Fully programmable**: headless CLI, XPath queries, Figma Plugin API via `eval`, MCP server for AI agents, and the Redrob Code agent over ACP
 - **Lint, convert, and extract tokens**: inspect documents, lint naming/layout/accessibility, convert between supported formats, analyze colors/typography/spacing/clusters, and extract design tokens
 - **Design tokens & theme library**: import design tokens (DTCG, CSS variables, Tailwind), and the built-in Redrob brand theme/deck library
 - **Components and variants**: create reusable components, group variants into component sets, insert local assets as instances, and switch variants from the inspector
@@ -179,7 +180,7 @@ All commands support `--json` for machine-readable output.
 
 ### Built-in chat
 
-Press <kbd>⌘</kbd><kbd>J</kbd> to open the AI assistant. It has 100+ tools that can create shapes, set fills and strokes, manage auto-layout, work with components and variables, run boolean operations, analyze design tokens, and export assets. Design turns route through the Redrob Code engine by default, or bring your own API key for OpenRouter, Anthropic, OpenAI, Google AI, Z.ai, MiniMax, or compatible endpoints. No backend, no account.
+Press <kbd>⌘</kbd><kbd>J</kbd> to open the AI assistant. It has 100+ tools that can create shapes, set fills and strokes, manage auto-layout, work with components and variables, run boolean operations, analyze design tokens, and export assets. Every turn runs through the Redrob Code engine on this computer; sign in once with Connect Redrob. No backend of its own.
 
 ### Coding agents (desktop)
 
@@ -281,7 +282,7 @@ tests/            E2E, visual, engine, and integration tests
 | File format   | Kiwi binary + Zstd + ZIP                                                          |
 | Collaboration | Trystero (WebRTC P2P) + Yjs (CRDT)                                                |
 | Desktop       | Tauri v2                                                                          |
-| AI/MCP        | Redrob Code engine (ACP), multi-provider (Anthropic, OpenAI, Google AI, OpenRouter), MCP SDK, Hono |
+| AI/MCP        | Redrob Code engine (ACP + OpenAI-compatible route on the shared daemon), MCP SDK, Hono |
 
 ### Desktop builds
 

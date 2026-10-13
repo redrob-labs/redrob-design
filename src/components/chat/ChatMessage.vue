@@ -23,8 +23,6 @@ import ReasoningBlock from '@/components/chat/ReasoningBlock.vue'
 import IconButton from '@/components/ui/IconButton.vue'
 import AnswerReceipt from '@/components/ui/agent/AnswerReceipt.vue'
 import { receiptFor } from '@/app/assistant/thread/store'
-import { revealForDisplay } from '@/app/assistant/privacy/store'
-import { getActiveEditorStoreOrNull } from '@/app/editor/active-store'
 import { receiptItems } from './receipt/items'
 import { classifyToolState } from './tool-state'
 
@@ -66,8 +64,9 @@ const assistantText = computed(() =>
 )
 
 /** Real values where the model wrote privacy placeholders; the model never saw them. */
+/** The engine puts real values back where the model wrote placeholders, so what arrives is what is shown. */
 function shown(text: string): string {
-  return message.role === 'assistant' ? revealForDisplay(getActiveEditorStoreOrNull(), text) : text
+  return text
 }
 const firstAssistantTextPartIndex = computed(() =>
   message.parts.findIndex((part) => isTextUIPart(part) && part.text.length > 0)

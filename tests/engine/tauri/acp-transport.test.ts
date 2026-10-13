@@ -19,7 +19,7 @@ describe('Tauri ACP transport', () => {
       return '/Users/tester'
     })
 
-    const transport = (await createACPTransport('acp:claude-code')) as ACPChatTransport & {
+    const transport = (await createACPTransport('acp:redrob-code')) as ACPChatTransport & {
       cwd: string
     }
 
