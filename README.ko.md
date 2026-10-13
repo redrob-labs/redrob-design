@@ -26,9 +26,10 @@ Redrob에 접속하며, 워크스페이스에 로그인하는 주체는 Code입�
 짧은 코드를 [Redrob Console](https://console.redrob.ai)에서 승인합니다. 그러면 디자인은 엔진을
 통해 그 연결을 사용합니다.
 
-콘솔의 원클릭 장치 연결 흐름은 이 앱에 직접 배선돼 있지 않습니다. 엔진을 경유하고 싶지 않다면
-**설정 → AI & agents**에서 OpenRouter, Anthropic, OpenAI, Google AI, Z.ai, MiniMax 또는 호환
-엔드포인트의 키를 직접 입력할 수 있습니다.
+**설정 → AI & agents → Connect Redrob**은 같은 로그인을 앱 안에서 실행해 키를 엔진에 넘깁니다.
+디자인 루프, 검토, 빠른 답, 비전까지 레드롭 디자인이 쓰는 모든 모델은 이 컴퓨터의 Redrob 앱들이
+함께 쓰는 Redrob Code 데몬 하나를 지나갑니다. 자격 증명을 들고, 제공자를 고르고, 개인 정보를
+가리는 일은 엔진이 합니다. 따로 설정할 제공자는 없습니다.
 
 ## Redrob Code로 프롬프트 디자인
 
@@ -44,8 +45,7 @@ Redrob Code 엔진이 설치돼 있지 않으면 앱이 설치 과정을 안내�
 - **`.fig`·`.pen` 파일 열기**: 네이티브 Figma 파일 읽기·쓰기, 앱이나 OS 파일 탐색기에서 레드롭
   디자인 문서 열기, 앱 사이 노드 복사·붙여넣기
 - **AI가 디자인을 만듦**: 채팅으로 원하는 것을 설명하면 90여 개 도구가 노드를 만들고 수정합니다.
-  Redrob Code 엔진으로 보내거나 OpenRouter, Anthropic, OpenAI, Google AI, Z.ai, MiniMax, 호환
-  엔드포인트를 연결합니다
+  모든 모델은 제공자를 고르고 개인 정보를 가리는 Redrob Code 엔진을 지나갑니다
 - **완전한 프로그래밍 가능성**: 헤드리스 CLI, XPath 질의, `eval`을 통한 Figma Plugin API, AI
   에이전트용 MCP 서버, Redrob Code와 다른 ACP 에이전트를 위한 데스크톱 연동
 - **린트·변환·토큰 추출**: 문서 점검, 이름·레이아웃·접근성 린트, 지원 포맷 간 변환,
@@ -165,8 +165,8 @@ redrob-design eval -c "figma.currentPage.name"   # Query the editor
 
 <kbd>⌘</kbd><kbd>J</kbd>로 AI 어시스턴트를 엽니다. 도형 생성, 채움·선 설정, 오토 레이아웃 관리,
 컴포넌트·변수 작업, 불리언 연산, 디자인 토큰 분석, 자산 내보내기를 하는 100여 개 도구가 있습니다.
-디자인 요청은 기본적으로 Redrob Code 엔진을 지나가며, 원한다면 OpenRouter, Anthropic, OpenAI,
-Google AI, Z.ai, MiniMax, 호환 엔드포인트의 키를 직접 쓸 수 있습니다. 백엔드도 계정도 없습니다.
+모든 요청은 이 컴퓨터의 Redrob Code 엔진을 지나갑니다. Connect Redrob으로 한 번 로그인하면
+됩니다. 자체 백엔드는 없습니다.
 
 ### 코딩 에이전트 (데스크톱)
 
@@ -269,7 +269,7 @@ tests/            E2E, visual, engine, and integration tests
 | 파일 포맷 | Kiwi binary + Zstd + ZIP |
 | 협업 | Trystero (WebRTC P2P) + Yjs (CRDT) |
 | 데스크톱 | Tauri v2 |
-| AI·MCP | Redrob Code 엔진(ACP), 다중 제공자(Anthropic, OpenAI, Google AI, OpenRouter), MCP SDK, Hono |
+| AI·MCP | Redrob Code 엔진(ACP + 공용 데몬의 OpenAI 호환 경로), MCP SDK, Hono |
 
 ### 데스크톱 빌드
 

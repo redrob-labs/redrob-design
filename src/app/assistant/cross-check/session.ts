@@ -4,9 +4,6 @@ import { shallowReactive } from 'vue'
 import { createAIModelRuntime } from '@/app/ai/models'
 import { changeSetFor } from '@/app/assistant/changes/store'
 import { assistantControlsFor } from '@/app/assistant/controls/store'
-import { redactText } from '@/app/assistant/privacy/redact'
-import { rulesFor } from '@/app/assistant/privacy/rules'
-import { privacyLevel, privacyVaultFor, privateTerms } from '@/app/assistant/privacy/store'
 import { receiptFor, setReceipt } from '@/app/assistant/thread/store'
 import type { TurnOwner } from '@/app/assistant/turn/instructions'
 import { designMemoryBrief, designMemorySource } from '@/app/memory/service'
@@ -43,19 +40,6 @@ let checkCount = 0
 /** Answers being cross-checked right now, by message id. */
 export const crossChecksRunning = shallowReactive(new Set<string>())
 
-/** The review model is a direct model too: it reads the same placeholders. */
-function protect(owner: object, material: CheckMaterial): CheckMaterial {
-  const rules = rulesFor(privacyLevel.value, privateTerms.value)
-  const vault = privacyVaultFor(owner)
-  const hide = (text: string) => redactText(text, rules, vault).text
-  return {
-    brief: hide(material.brief),
-    answer: hide(material.answer),
-    changes: material.changes.map(hide),
-    memory: material.memory
-  }
-}
-
 /**
  * Runs Cross-check on one finished answer when the person's levels call for
  * it, records the checker on the receipt, and returns the message to post.
@@ -79,12 +63,13 @@ export async function crossCheckAnswer(
     controls.memory === 'none'
       ? ''
       : designMemoryBrief(designMemorySource().read(store.graph, store.state.documentName))
-  const material = protect(store, {
+  // The review model runs through the engine too, which masks personal details for every request.
+  const material: CheckMaterial = {
     brief: briefFor(messages, message.id),
     answer: answerText(message),
     changes: changeSet ? describeChanges(changeSet.items, store.graph) : [],
     memory
-  })
+  }
 
   crossChecksRunning.add(message.id)
   let data: CrossCheckData

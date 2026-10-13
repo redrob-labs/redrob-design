@@ -11,13 +11,8 @@ export type { ModelConfig } from '@/app/ai/providers/types'
 export function resolveLanguageModelID(
   config: Pick<ModelConfig, 'providerID' | 'modelID' | 'customModelID'>
 ): string {
-  if (
-    config.providerID === 'openrouter' ||
-    config.providerID === 'openai-compatible' ||
-    config.providerID === 'anthropic-compatible'
-  ) {
-    return config.customModelID.trim() || config.modelID
-  }
+  // The engine lists models as `provider/model`; a custom id names one the list did not offer.
+  if (config.providerID === 'engine') return config.customModelID.trim() || config.modelID
   return config.modelID
 }
 

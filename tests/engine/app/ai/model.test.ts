@@ -1,42 +1,41 @@
 import { describe, expect, test } from 'bun:test'
 
-import {
-  AI_PROVIDERS,
-  REDROB_CONSOLE_API_BASE,
-  REDROB_CONSOLE_MODEL
-} from '@redrob-design/core/constants'
+import { AI_PROVIDERS, ENGINE_AUTO_MODEL } from '@redrob-design/core/constants'
 
 import { resolveLanguageModelID } from '@/app/ai/chat/model'
-import { normalizeOpenRouterModel } from '@/app/ai/chat/provider-models'
-import { createAnthropicCompatibleAdapter } from '@/app/ai/providers/compatible'
+import { normalizeEngineModel } from '@/app/ai/chat/provider-models'
 import { modelProviderAdapter } from '@/app/ai/providers/registry'
 import type { ModelConfig } from '@/app/ai/providers/types'
 
 describe('resolveLanguageModelID', () => {
-  test('uses the selected OpenRouter model when no custom model is configured', () => {
+  test('uses the selected engine model when no custom model is configured', () => {
     expect(
       resolveLanguageModelID({
-        providerID: 'openrouter',
+        providerID: 'engine',
         modelID: 'anthropic/claude-sonnet-4.6',
         customModelID: ''
       })
     ).toBe('anthropic/claude-sonnet-4.6')
   })
 
-  test('uses a custom OpenRouter model ID when provided', () => {
+  test('uses a custom model ID when provided, trimmed', () => {
     expect(
       resolveLanguageModelID({
-        providerID: 'openrouter',
+        providerID: 'engine',
         modelID: 'anthropic/claude-sonnet-4.6',
-        customModelID: '  meta-llama/llama-3.3-70b-instruct  '
+        customModelID: '  ollama/llama3.3  '
       })
-    ).toBe('meta-llama/llama-3.3-70b-instruct')
+    ).toBe('ollama/llama3.3')
   })
 })
 
 describe('model provider registry', () => {
-  async function captureRedrobRequest(
-    customBaseURL: string
+  /**
+   * What `createAIModelRuntime` hands the adapter: the daemon's secret as `apiKey` and its `/v1`
+   * base as `customBaseURL` (models/runtime.ts). No Console key is anywhere in this request.
+   */
+  async function captureEngineRequest(
+    customModelID = ''
   ): Promise<{ url: string; body: string; headers: Record<string, string> }> {
     let url = ''
     let body = ''
@@ -48,15 +47,15 @@ describe('model provider registry', () => {
       throw new Error('stop')
     }
     const config: ModelConfig = {
-      providerID: 'redrob',
-      apiKey: 'rrk_test_secret',
-      modelID: REDROB_CONSOLE_MODEL,
-      customModelID: '',
-      customBaseURL,
+      providerID: 'engine',
+      apiKey: 's3cret',
+      modelID: ENGINE_AUTO_MODEL,
+      customModelID,
+      customBaseURL: 'http://127.0.0.1:4096/v1',
       customAPIType: 'completions'
     }
 
-    const model = modelProviderAdapter('redrob').create(config, { fetch: fetchSpy })
+    const model = modelProviderAdapter('engine').create(config, { fetch: fetchSpy })
     await model
       .doGenerate({ prompt: [{ role: 'user', content: [{ type: 'text', text: 'hi' }] }] })
       .catch(() => undefined)
@@ -64,129 +63,65 @@ describe('model provider registry', () => {
     return { url, body, headers }
   }
 
-  test('offers MiniMax-M3 as the default MiniMax model', () => {
-    const provider = AI_PROVIDERS.find(({ id }) => id === 'minimax')
-    expect(provider?.defaultModel).toBe('MiniMax-M3')
-    expect(provider?.models[0]).toMatchObject({ id: 'MiniMax-M3' })
-  })
-
-  test('sends MiniMax-M3 through the OpenAI-compatible chat endpoint', async () => {
-    let requestURL = ''
-    let requestBody = ''
-    const fetchSpy: typeof fetch = async (input, init) => {
-      requestURL = String(input)
-      requestBody = String(init?.body)
-      throw new Error('stop')
-    }
-    const config: ModelConfig = {
-      providerID: 'minimax',
-      apiKey: 'test-key',
-      modelID: 'MiniMax-M3',
-      customModelID: '',
-      customBaseURL: '',
-      customAPIType: 'completions'
-    }
-
-    const model = modelProviderAdapter('minimax').create(config, { fetch: fetchSpy })
-    await model
-      .doGenerate({ prompt: [{ role: 'user', content: [{ type: 'text', text: 'hi' }] }] })
-      .catch(() => undefined)
-
-    expect(requestURL).toBe('https://api.minimax.io/v1/chat/completions')
-    expect(requestBody).toContain('"model":"MiniMax-M3"')
-  })
-
-  test('offers Console auto as the only Redrob model', () => {
-    const provider = AI_PROVIDERS.find(({ id }) => id === 'redrob')
-    expect(provider?.defaultModel).toBe(REDROB_CONSOLE_MODEL)
+  test('offers Redrob Auto as the engine model shown before the engine lists its own', () => {
+    expect(AI_PROVIDERS.map((provider) => provider.id)).toEqual(['engine'])
+    const provider = AI_PROVIDERS[0]
+    expect(provider?.defaultModel).toBe(ENGINE_AUTO_MODEL)
     expect(provider?.models).toEqual([
-      { id: REDROB_CONSOLE_MODEL, name: 'Redrob Auto', capabilities: ['tools'] }
+      { id: ENGINE_AUTO_MODEL, name: 'Redrob Auto', capabilities: ['tools', 'vision'] }
     ])
+    expect(provider?.supportsCustomModel).toBe(true)
   })
 
-  test('sends Redrob requests to Console chat/completions with the workspace key', async () => {
-    const { url, body, headers } = await captureRedrobRequest('')
-    expect(url).toBe(`${REDROB_CONSOLE_API_BASE}/chat/completions`)
-    expect(body).toContain(`"model":"${REDROB_CONSOLE_MODEL}"`)
-    expect(headers).toHaveProperty('authorization', 'Bearer rrk_test_secret')
+  test("sends requests to the shared daemon's chat/completions with its Basic secret", async () => {
+    const { url, body, headers } = await captureEngineRequest()
+    expect(url).toBe('http://127.0.0.1:4096/v1/chat/completions')
+    expect(body).toContain(`"model":"${ENGINE_AUTO_MODEL}"`)
+    expect(headers.authorization).toBe(`Basic ${btoa('redrob:s3cret')}`)
   })
 
-  test('a key minted for a self-hosted Console keeps its own base URL', async () => {
-    const { url } = await captureRedrobRequest('https://console.example.com/api/backend/v1')
-    expect(url).toBe('https://console.example.com/api/backend/v1/chat/completions')
+  test('a custom model id names a model the list did not offer', async () => {
+    const { body } = await captureEngineRequest('ollama/llama3.3')
+    expect(body).toContain('"model":"ollama/llama3.3"')
   })
 
-  test('registers every direct provider without handling agent runtimes as models', () => {
-    for (const provider of AI_PROVIDERS.filter((entry) => entry.id !== 'harness:pi')) {
-      expect(modelProviderAdapter(provider.id).create).toBeFunction()
-    }
-    expect(() => modelProviderAdapter('harness:pi')).toThrow('Harness agents')
-    expect(() => modelProviderAdapter('acp:claude-code')).toThrow(
-      'ACP providers and Harness agents do not use direct API models'
+  test('the ACP agent is not a model', () => {
+    expect(() => modelProviderAdapter('acp:redrob-code')).toThrow(
+      'ACP agents do not use direct API models'
     )
   })
 })
 
-describe('anthropic compatible adapter', () => {
-  const config: ModelConfig = {
-    providerID: 'anthropic',
-    apiKey: 'test-key',
-    modelID: 'claude-sonnet-4.6',
-    customModelID: '',
-    customBaseURL: '',
-    customAPIType: 'completions'
-  }
-
-  async function capturedHeaders(): Promise<Record<string, string>> {
-    let captured: Record<string, string> = {}
-    const fetchSpy: typeof fetch = async (_input, init) => {
-      captured = Object.fromEntries(new Headers(init?.headers).entries())
-      throw new Error('stop')
-    }
-
-    const model = createAnthropicCompatibleAdapter().create(config, { fetch: fetchSpy })
-    await model
-      .doGenerate({ prompt: [{ role: 'user', content: [{ type: 'text', text: 'hi' }] }] })
-      .catch(() => undefined)
-
-    return captured
-  }
-
-  test('opts into direct browser access so Anthropic returns CORS headers', async () => {
-    // Anthropic omits Access-Control-Allow-Origin unless this header is sent, which makes the
-    // web build fail with an opaque network error. See #436.
-    expect(await capturedHeaders()).toHaveProperty(
-      'anthropic-dangerous-direct-browser-access',
-      'true'
-    )
-  })
-})
-
-describe('normalizeOpenRouterModel', () => {
-  test('keeps tool-capable OpenRouter models', () => {
+describe('normalizeEngineModel', () => {
+  test("reads the engine's model list into provider/model ids with capabilities", () => {
     expect(
-      normalizeOpenRouterModel({
-        id: 'meta-llama/llama-3.3-70b-instruct',
-        name: 'Llama 3.3 70B Instruct',
-        supported_parameters: ['tools'],
-        architecture: { input_modalities: ['text', 'image'] },
-        top_provider: { max_completion_tokens: 32_768 }
+      normalizeEngineModel({
+        id: 'claude-sonnet-4-6',
+        providerID: 'anthropic',
+        name: 'Claude Sonnet 4.6',
+        enabled: true,
+        capabilities: { tools: true, input: ['text', 'image'] }
       })
     ).toEqual({
-      id: 'meta-llama/llama-3.3-70b-instruct',
-      name: 'Llama 3.3 70B Instruct',
-      capabilities: ['tools', 'vision'],
-      recommendedMaxOutputTokens: 32_768
+      id: 'anthropic/claude-sonnet-4-6',
+      name: 'Claude Sonnet 4.6 (anthropic)',
+      capabilities: ['tools', 'vision']
     })
   })
 
-  test('skips OpenRouter models without tool support', () => {
+  test('names Redrob Auto, and skips disabled or malformed entries', () => {
     expect(
-      normalizeOpenRouterModel({
-        id: 'text-only/model',
-        name: 'Text Only',
-        supported_parameters: []
+      normalizeEngineModel({
+        id: 'auto',
+        providerID: 'redrob',
+        capabilities: { tools: true, input: [] }
       })
-    ).toBeNull()
+    ).toEqual({
+      id: ENGINE_AUTO_MODEL,
+      name: 'Redrob Auto',
+      capabilities: ['tools']
+    })
+    expect(normalizeEngineModel({ id: 'x', providerID: 'p', enabled: false })).toBeNull()
+    expect(normalizeEngineModel({ id: 'x' })).toBeNull()
   })
 })

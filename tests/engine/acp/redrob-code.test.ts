@@ -10,6 +10,7 @@ import {
   REDROB_CODE_PROVIDER_ID,
   redrobCodeMissingMessage,
   resolveRedrobCodeCommand,
+  resolveRedrobCodeServiceCommand,
   redrobCodeEnvFromMeta
 } from '@redrob-design/core/constants'
 
@@ -27,7 +28,7 @@ describe('resolveRedrobCodeCommand', () => {
     const resolved = resolveRedrobCodeCommand({ REDROB_CODE_BIN: '/opt/redrob/bin/redrob' })
     expect(resolved).toEqual({
       command: '/opt/redrob/bin/redrob',
-      args: ['acp'],
+      args: ['acp', '--attach'],
       source: 'REDROB_CODE_BIN'
     })
   })
@@ -42,7 +43,7 @@ describe('resolveRedrobCodeCommand', () => {
     const resolved = resolveRedrobCodeCommand({ REDROB_CODE_DEV_ROOT: '/src/redrob-code' })
     expect(resolved).toEqual({
       command: 'bun',
-      args: ['run', '/src/redrob-code/packages/redrob/src/index.ts', 'acp'],
+      args: ['run', '/src/redrob-code/packages/redrob/src/index.ts', 'acp', '--attach'],
       source: 'REDROB_CODE_DEV_ROOT'
     })
   })
@@ -66,22 +67,38 @@ describe('resolveRedrobCodeCommand', () => {
 
   test('defaults to the redrob binary on PATH with no env', () => {
     const resolved = resolveRedrobCodeCommand({})
-    expect(resolved).toEqual({ command: 'redrob', args: ['acp'], source: 'PATH' })
+    expect(resolved).toEqual({ command: 'redrob', args: ['acp', '--attach'], source: 'PATH' })
   })
 
   test('treats blank env values as unset and falls back to PATH', () => {
     const resolved = resolveRedrobCodeCommand({ REDROB_CODE_BIN: '   ', REDROB_CODE_DEV_ROOT: '' })
     expect(resolved.source).toBe('PATH')
     expect(resolved.command).toBe('redrob')
-    expect(resolved.args).toEqual(['acp'])
+    expect(resolved.args).toEqual(['acp', '--attach'])
   })
 
-  test('always appends the acp subcommand so the engine speaks ACP, not the TUI', () => {
+  test('always appends the acp subcommand so the engine speaks ACP, not the TUI, attached to the shared daemon', () => {
     // A bare `redrob` invocation opens the interactive TUI; only `redrob acp`
-    // starts the stdio ACP server the transport connects to.
-    expect(resolveRedrobCodeCommand({}).args).toEqual(['acp'])
-    expect(resolveRedrobCodeCommand({ REDROB_CODE_BIN: '/opt/redrob' }).args).toEqual(['acp'])
-    expect(resolveRedrobCodeCommand({ REDROB_CODE_DEV_ROOT: '/src/x' }).args.at(-1)).toBe('acp')
+    // starts the stdio ACP face. `--attach` makes it a client of the one daemon
+    // every Redrob app shares instead of an engine of its own.
+    expect(resolveRedrobCodeCommand({}).args).toEqual(['acp', '--attach'])
+    expect(resolveRedrobCodeCommand({ REDROB_CODE_BIN: '/opt/redrob' }).args).toEqual([
+      'acp',
+      '--attach'
+    ])
+    expect(resolveRedrobCodeCommand({ REDROB_CODE_DEV_ROOT: '/src/x' }).args.slice(-2)).toEqual([
+      'acp',
+      '--attach'
+    ])
+  })
+
+  test('the service command finds or starts the shared daemon and prints its record', () => {
+    expect(resolveRedrobCodeServiceCommand({}).args).toEqual(['service', 'start', '--json'])
+    expect(resolveRedrobCodeServiceCommand({ REDROB_CODE_BIN: '/opt/redrob' })).toEqual({
+      command: '/opt/redrob',
+      args: ['service', 'start', '--json'],
+      source: 'REDROB_CODE_BIN'
+    })
   })
 })
 
@@ -121,12 +138,8 @@ describe('missingCommandMessage surfaces the Redrob guidance for the engine', ()
     expect(message).toContain(REDROB_CODE_INSTALL_COMMAND)
   })
 
-  test('other agents keep the generic install notice', () => {
-    const claude = requireAgent('claude-code')
-    const message = missingCommandMessage(claude)
-    expect(message).toBe(
-      '"claude-agent-acp" is not installed. Install it with: npm i -g @agentclientprotocol/claude-agent-acp'
-    )
+  test('the engine is the only ACP agent registered', () => {
+    expect(ACP_AGENTS.map((agent) => agent.id)).toEqual([REDROB_CODE_AGENT_ID])
   })
 })
 
@@ -141,8 +154,8 @@ describe('acp:redrob-code registration + default Design agent', () => {
     const redrobAgent = requireAgent(REDROB_CODE_AGENT_ID)
     // The sandbox has no REDROB_CODE_BIN/DEV_ROOT override, so it resolves to PATH.
     expect(redrobAgent.command).toBe('redrob')
-    // The `acp` subcommand is what starts the stdio ACP server the transport speaks to.
-    expect(redrobAgent.args).toEqual(['acp'])
+    // The `acp` subcommand is what starts the stdio ACP face the transport speaks to.
+    expect(redrobAgent.args).toEqual(['acp', '--attach'])
   })
 
   test('the provider ID is acp:redrob-code', () => {
@@ -218,7 +231,7 @@ describe('redrobCodeEnvFromMeta', () => {
     expect(mapped.REDROB_CODE_DEV_ROOT).toBe('/agent/repos/redrob-code')
     expect(resolveRedrobCodeCommand(mapped)).toEqual({
       command: 'bun',
-      args: ['run', '/agent/repos/redrob-code/packages/redrob/src/index.ts', 'acp'],
+      args: ['run', '/agent/repos/redrob-code/packages/redrob/src/index.ts', 'acp', '--attach'],
       source: 'REDROB_CODE_DEV_ROOT'
     })
   })

@@ -22,7 +22,7 @@ describe('Tauri process helpers', () => {
       if (cmd === 'plugin:shell|spawn') {
         expect(args).toMatchObject({
           program: 'agent-cli',
-          args: ['acp'],
+          args: ['acp', '--attach'],
           options: { encoding: 'raw' }
         })
         // plugin-shell: a present `env` is inherit+overlay (`Command::envs`), `null` clears. The one
@@ -36,7 +36,7 @@ describe('Tauri process helpers', () => {
 
     const process = await spawnACPProcess({
       command: 'agent-cli',
-      args: ['acp'],
+      args: ['acp', '--attach'],
       logId: 'env-inherit',
       destroying: () => false,
       onUnexpectedClose: vi.fn()

@@ -6,12 +6,13 @@ import { useI18n } from '@redrob-design/vue'
 import { ACP_AGENTS, AI_PROVIDERS, type AIProviderID } from '@redrob-design/core/constants'
 
 import { refreshAIProviderStatus } from '@/app/ai/chat/storage'
-import { resolveModelsDevModel } from '@/app/ai/models/catalog'
+import { listProviderModels, resetEngineModelList } from '@/app/ai/chat/provider-models'
 import {
   testProviderConnection,
   type ProviderConnectionTestFailureReason
 } from '@/app/ai/chat/connection-test'
 import { awaitRedrobConnect, beginRedrobConnect } from '@/app/ai/connect/app-connect'
+import { connectEngine, engineOpenAIBaseURL } from '@/app/ai/engine/daemon'
 import type { DeviceAuthorization } from '@/app/ai/connect/device-connect'
 import {
   aiModelSettings,
@@ -21,7 +22,6 @@ import {
   modelConnectionUsageCount,
   modelProfile,
   removeModelProfile,
-  resolveModelConnectionAPIKey,
   resolveModelConnectionKey,
   saveModelProfileDraft,
   setModelConnectionAPIKey,
@@ -59,26 +59,24 @@ const connectStatus = ref<RedrobConnectStatus>('idle')
 const connectAuthorization = ref<DeviceAuthorization | null>(null)
 let connectCancelled = false
 const advancedOpen = ref(Boolean(draft.customModelID.trim()))
-const customModelSelected = ref(
-  Boolean(draft.customModelID.trim()) || draft.providerID === 'harness:pi'
-)
+const customModelSelected = ref(Boolean(draft.customModelID.trim()))
 const catalogModel = ref<(typeof providerDef.value.models)[number] | null>(null)
 
 const providerDef = computed(
   () => AI_PROVIDERS.find((provider) => provider.id === draft.providerID) ?? AI_PROVIDERS[0]
 )
+/** The models the engine lists; the curated list until it answers. */
+const engineModels = ref<(typeof providerDef.value.models)[number][]>([...providerDef.value.models])
 const isACP = computed(() => draft.providerID.startsWith('acp:'))
-const isHarness = computed(() => draft.providerID === 'harness:pi')
-const supportsReasoningEffort = computed(() =>
-  ['openai', 'openai-compatible', 'openrouter'].includes(draft.providerID)
-)
+// The engine's route is OpenAI-compatible, so an effort travels as `reasoning_effort` to any model that takes one.
+const supportsReasoningEffort = computed(() => draft.providerID === 'engine')
 const providerDisplayName = computed(() => {
   if (!isACP.value) return providerDef.value.name
   const agentID = draft.providerID.slice('acp:'.length)
   return ACP_AGENTS.find((agent) => agent.id === agentID)?.name ?? draft.providerID
 })
 const modelOptions = computed(() => [
-  ...providerDef.value.models.map((model) => ({ value: model.id, label: model.name })),
+  ...engineModels.value.map((model) => ({ value: model.id, label: model.name })),
   ...(providerDef.value.supportsCustomModel
     ? [{ value: CUSTOM_MODEL_VALUE, label: ai.value.customModel }]
     : [])
@@ -91,6 +89,7 @@ const knownModel = computed(() => {
   if (draft.customModelID.trim()) return catalogModel.value
   return (
     catalogModel.value ??
+    engineModels.value.find((model) => model.id === draft.modelID) ??
     providerDef.value.models.find((model) => model.id === draft.modelID) ??
     null
   )
@@ -103,7 +102,7 @@ const outputTokenRecommendation = computed(
 )
 const modelDisplayName = computed(() => {
   const modelId = draft.customModelID.trim() || draft.modelID
-  return providerDef.value.models.find((model) => model.id === modelId)?.name || modelId
+  return engineModels.value.find((model) => model.id === modelId)?.name || modelId
 })
 const hasExistingKey = computed(() => keyStatus.value === 'configured')
 const signedInWithLauncher = computed(() => launcherAccount.value !== null)
@@ -121,9 +120,7 @@ const canSave = computed(
         : Boolean(draft.modelID.trim())))
 )
 const canTest = computed(() => {
-  if (isACP.value || isHarness.value) return false
-  if (!keyInput.value.trim() && !hasExistingKey.value) return false
-  if (providerDef.value.supportsCustomBaseURL && !draft.customBaseURL.trim()) return false
+  if (isACP.value) return false
   return customModelSelected.value
     ? Boolean(draft.customModelID.trim())
     : Boolean(draft.modelID.trim())
@@ -158,6 +155,7 @@ function effectiveModelID(): string {
   return customModelSelected.value ? draft.customModelID.trim() : draft.modelID.trim()
 }
 
+/** Ask the engine which models it can reach, then read the chosen one's capabilities from that list. */
 async function refreshCatalogModel(): Promise<void> {
   if (isACP.value) {
     catalogModel.value = null
@@ -165,8 +163,11 @@ async function refreshCatalogModel(): Promise<void> {
   }
   const providerID = draft.providerID
   const modelID = effectiveModelID()
-  catalogModel.value = await resolveModelsDevModel(providerID, modelID)
-  if (providerID !== draft.providerID || modelID !== effectiveModelID()) return
+  const models = await listProviderModels(providerID)
+  if (providerID !== draft.providerID) return
+  engineModels.value = [...models]
+  catalogModel.value = models.find((model) => model.id === modelID) ?? null
+  if (modelID !== effectiveModelID()) return
   applyKnownModelMetadata()
 }
 
@@ -182,10 +183,10 @@ function updateProvider(providerID: AIProviderID): void {
   const provider = AI_PROVIDERS.find((definition) => definition.id === providerID)
   draft.modelID = provider?.defaultModel ?? ''
   draft.customModelID = ''
-  customModelSelected.value = providerID === 'harness:pi'
+  customModelSelected.value = false
   draft.customBaseURL = ''
   draft.customAPIType = 'completions'
-  advancedOpen.value = providerID === 'harness:pi'
+  advancedOpen.value = false
   if (providerID.startsWith('acp:')) {
     draft.capabilities = ['tools']
     if (!draft.name.trim()) draft.name = providerDisplayName.value
@@ -243,11 +244,12 @@ async function clearKey(): Promise<void> {
 }
 
 /**
- * Run the device flow and persist what it returns straight away.
+ * Run the device flow and hand what it returns to the engine straight away.
  *
  * Console issues the workspace key exactly once, so this does not leave it sitting in
  * the form waiting for a Save that the user might never press: on success it goes
- * through the same save path a typed key does, which writes it to the credential store.
+ * through the same save path a typed key does, which gives it to the engine
+ * (`PUT /auth/redrob`); this app keeps no copy.
  */
 async function connectRedrob(): Promise<void> {
   connectCancelled = false
@@ -276,9 +278,9 @@ async function connectRedrob(): Promise<void> {
 
   connectStatus.value = 'connected'
   keyInput.value = outcome.key.apiKey
-  // A key minted for a self-hosted Console carries its own base URL.
-  if (outcome.key.apiBaseURL) draft.customBaseURL = outcome.key.apiBaseURL
   await save()
+  resetEngineModelList()
+  void refreshCatalogModel()
 }
 
 function cancelConnect(): void {
@@ -290,15 +292,22 @@ function cancelConnect(): void {
 async function testConnection(): Promise<void> {
   connectionTestStatus.value = 'testing'
   connectionTestReason.value = null
-  const connection = findModelConnectionForDraft(draft)
-  const existingKey = connection ? await resolveModelConnectionAPIKey(connection.id) : null
+  // The engine's daemon, found or started: its secret and `/v1` base are what the request needs.
+  let daemon: Awaited<ReturnType<typeof connectEngine>>
+  try {
+    daemon = await connectEngine()
+  } catch {
+    connectionTestStatus.value = 'error'
+    connectionTestReason.value = 'network'
+    return
+  }
   const result = await testProviderConnection({
     providerID: draft.providerID,
-    apiKey: keyInput.value.trim() || existingKey || '',
+    apiKey: daemon.secret,
     modelID: draft.modelID,
     customModelID: draft.customModelID,
-    customBaseURL: draft.customBaseURL,
-    customAPIType: draft.customAPIType
+    customBaseURL: engineOpenAIBaseURL(daemon),
+    customAPIType: 'completions'
   })
   if (result.ok) {
     connectionTestStatus.value = 'success'
@@ -413,27 +422,8 @@ void refreshKeyStatus()
           <div class="h-px flex-1 bg-border" />
         </div>
 
-        <ProviderSettingsField v-if="providerDef.supportsCustomBaseURL" :label="ai.baseURL">
-          <ProviderSettingsInput
-            v-model="draft.customBaseURL"
-            :aria-label="ai.baseURL"
-            placeholder="http://localhost:11434/v1"
-          />
-        </ProviderSettingsField>
-
-        <ProviderSettingsField v-if="draft.providerID === 'openai-compatible'" :label="ai.apiType">
-          <AppSelect
-            v-model="draft.customAPIType"
-            :label="ai.apiType"
-            :options="[
-              { value: 'completions', label: ai.completions },
-              { value: 'responses', label: ai.responses }
-            ]"
-          />
-        </ProviderSettingsField>
-
         <RedrobConnectButton
-          v-if="draft.providerID === 'redrob'"
+          v-if="draft.providerID === 'engine'"
           :status="connectStatus"
           :authorization="connectAuthorization"
           @connect="connectRedrob"
@@ -506,33 +496,6 @@ void refreshKeyStatus()
                 <AppSwitch v-else v-model="visionEnabled" :label="ai.modelCapabilityVision" />
               </div>
             </div>
-
-            <ProviderSettingsField v-if="isHarness" :label="ai.harnessThinkingLevel">
-              <AppSelect
-                v-model="draft.harnessThinkingLevel"
-                :label="ai.harnessThinkingLevel"
-                :options="[
-                  { value: 'off', label: ai.harnessThinkingOff },
-                  { value: 'minimal', label: ai.harnessThinkingMinimal },
-                  { value: 'low', label: ai.harnessThinkingLow },
-                  { value: 'medium', label: ai.harnessThinkingMedium },
-                  { value: 'high', label: ai.harnessThinkingHigh },
-                  { value: 'xhigh', label: ai.harnessThinkingExtraHigh }
-                ]"
-              />
-            </ProviderSettingsField>
-
-            <ProviderSettingsField v-if="isHarness" :label="ai.harnessToolPermissions">
-              <AppSelect
-                v-model="draft.harnessPermissionMode"
-                :label="ai.harnessToolPermissions"
-                :options="[
-                  { value: 'allow-reads', label: ai.harnessPermissionReads },
-                  { value: 'allow-edits', label: ai.harnessPermissionEdits },
-                  { value: 'allow-all', label: ai.harnessPermissionAll }
-                ]"
-              />
-            </ProviderSettingsField>
 
             <ProviderSettingsField v-if="supportsReasoningEffort" :label="ai.reasoningEffort">
               <ProviderSettingsInput

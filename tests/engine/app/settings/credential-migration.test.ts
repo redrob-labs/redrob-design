@@ -50,8 +50,9 @@ describe('legacy credential migration', () => {
     storage.setItem('redrob-design:pexels-api-key', 'pexels-key')
 
     expect(await migrateLegacyCredentials(storage, store)).toBeTrue()
-    expect(await store.read(providerCredentialRef('openrouter'))).toBe('old-openrouter-key')
-    expect(await store.read(providerCredentialRef('anthropic'))).toBe('anthropic-key')
+    // Model-provider keys are not migrated: models run through the engine, which holds the one
+    // Redrob key, so the old plaintext keys are removed and nothing is written for them.
+    expect(await store.read(providerCredentialRef('engine'))).toBeNull()
     expect(await store.read(PEXELS_CREDENTIAL)).toBe('pexels-key')
     expect(storage.getItem('redrob-design:openrouter-api-key')).toBeNull()
     expect(storage.getItem('redrob-design:ai-key:anthropic')).toBeNull()

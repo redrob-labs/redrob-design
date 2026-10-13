@@ -5,28 +5,20 @@ import type { ComputedRef, Ref } from 'vue'
 import { ref } from 'vue'
 
 import { ACP_AGENTS } from '@redrob-design/core/constants'
-import type { ACPAgentID, AIProviderID } from '@redrob-design/core/constants'
+import type { AIProviderID } from '@redrob-design/core/constants'
 
 import { classifyAIChatError, type AIChatFailure } from '@/app/ai/chat/failure'
 import { resolveLanguageModelID } from '@/app/ai/chat/model'
 import { buildReasoningProviderOptions, type AIProviderOptions } from '@/app/ai/chat/reasoning'
 import SYSTEM_PROMPT from '@/app/ai/chat/system-prompt.md?raw'
-import { createAIModelRuntime, resolveModelConnectionAPIKey } from '@/app/ai/models'
+import { createAIModelRuntime } from '@/app/ai/models'
 import { MAX_AGENT_STEPS, createAITools, recordStep, resetRunSteps } from '@/app/ai/tools'
 import { beginChangeTurn, finishChangeTurn } from '@/app/assistant/changes/store'
-import { protectedPrompt } from '@/app/assistant/privacy/prompt'
-import { privacyVaultFor, rememberThreadPrivacy } from '@/app/assistant/privacy/store'
-import { protectTools } from '@/app/assistant/privacy/tools'
+import { startEnginePrivacySync } from '@/app/assistant/privacy/store'
 import { loadThread, saveThread, saveThreadNow, threadKeyFor } from '@/app/assistant/thread/store'
-import { userTexts } from '@/app/assistant/thread/text'
 import { emitAnswerFinished } from '@/app/assistant/turn/finished'
 import { turnContext, turnInstructions } from '@/app/assistant/turn/instructions'
-import {
-  beginTurn,
-  finishTurn,
-  recordKeptPrivate,
-  recordTurnStep
-} from '@/app/assistant/turn/session'
+import { beginTurn, finishTurn, recordTurnStep } from '@/app/assistant/turn/session'
 import {
   recordChatCompleted,
   recordChatFailed,
@@ -39,7 +31,6 @@ type EditorStore = ReturnType<typeof getActiveEditorStore>
 type ChatSessionOptions = {
   isConfigured: ComputedRef<boolean>
   isACPProvider: ComputedRef<boolean>
-  isHarnessProvider: ComputedRef<boolean>
   providerID: Ref<AIProviderID>
   credentialsReady: Promise<void>
   getActiveEditorStore: () => EditorStore
@@ -55,28 +46,8 @@ export type ToolLoopTransportOptions = {
   onError?: (error: unknown) => void
 }
 
-const ANTHROPIC_CACHE_CONTROL = {
-  anthropic: { cacheControl: { type: 'ephemeral' } }
-} as const
-
-function supportsAnthropicCaching(providerID: AIProviderID, modelID: string): boolean {
-  return (
-    providerID === 'anthropic' ||
-    providerID === 'anthropic-compatible' ||
-    (providerID === 'openrouter' && modelID.startsWith('anthropic/'))
-  )
-}
-
-function mergeProviderOptions(
-  cacheOptions: typeof ANTHROPIC_CACHE_CONTROL | undefined,
-  reasoningOptions: AIProviderOptions | undefined
-): AIProviderOptions | undefined {
-  if (!cacheOptions && !reasoningOptions) return undefined
-  return { ...cacheOptions, ...reasoningOptions }
-}
-
 export async function createACPTransport(providerID: AIProviderID, turnContextFor?: () => string) {
-  const agentId = providerID.replace('acp:', '') as ACPAgentID
+  const agentId = providerID.slice('acp:'.length)
   const agentDef = ACP_AGENTS.find((a) => a.id === agentId)
   if (!agentDef) throw new Error(`Unknown ACP agent: ${agentId}`)
 
@@ -101,13 +72,11 @@ export function createToolLoopTransport({
   reasoningEffort,
   onError
 }: ToolLoopTransportOptions) {
-  const tools = protectTools(createAITools(store), () => privacyVaultFor(store))
-  const cacheProviderOptions = supportsAnthropicCaching(providerID, effectiveModelID)
-    ? ANTHROPIC_CACHE_CONTROL
-    : undefined
-  const providerOptions = mergeProviderOptions(
-    cacheProviderOptions,
-    buildReasoningProviderOptions(providerID, reasoningEffort)
+  const tools = createAITools(store)
+  // Prompt caching is the engine's business: it knows which provider is behind the model.
+  const providerOptions: AIProviderOptions | undefined = buildReasoningProviderOptions(
+    providerID,
+    reasoningEffort
   )
 
   const agent = new ToolLoopAgent({
@@ -123,7 +92,6 @@ export function createToolLoopTransport({
       beginChangeTurn(store)
       return {
         ...options,
-        ...protectedPrompt(store, options, (count) => recordKeptPrivate(store, count)),
         instructions: turnInstructions(store, SYSTEM_PROMPT),
         maxOutputTokens,
         providerOptions
@@ -160,7 +128,6 @@ export function createToolLoopTransport({
 export function createChatSessionManager({
   isConfigured,
   isACPProvider,
-  isHarnessProvider,
   providerID,
   credentialsReady,
   getActiveEditorStore
@@ -171,7 +138,6 @@ export function createChatSessionManager({
   const currentChatMessages = new WeakMap<EditorStore, UIMessage[]>()
   let chat: Chat<UIMessage> | null = null
   let acpTransportInstance: { destroy(): Promise<void> } | null = null
-  let harnessTransportInstance: { destroy(): Promise<void> } | null = null
   let overrideTransport: (() => ChatTransport<UIMessage>) | null = null
   let activeProviderError: unknown = null
 
@@ -221,10 +187,8 @@ export function createChatSessionManager({
 
   async function destroyAgentTransports(): Promise<void> {
     const acp = acpTransportInstance
-    const harness = harnessTransportInstance
     acpTransportInstance = null
-    harnessTransportInstance = null
-    const results = await Promise.allSettled([acp?.destroy(), harness?.destroy()])
+    const results = await Promise.allSettled([acp?.destroy()])
     const errors = results
       .filter((result) => result.status === 'rejected')
       .map((result) => result.reason)
@@ -235,36 +199,6 @@ export function createChatSessionManager({
     await destroyAgentTransports()
     const transport = await createACPTransport(providerID.value, () => turnContext(store))
     acpTransportInstance = transport
-    return transport as ChatTransport<UIMessage>
-  }
-
-  async function createActiveHarnessTransport(store: EditorStore) {
-    await destroyAgentTransports()
-    const runtime = await createAIModelRuntime('design')
-    if (runtime?.kind !== 'harness') throw new Error('The Design agent is not configured for Pi')
-    const [{ HarnessChatTransport }, { buildPiMCPServers }, { getActiveTabId }] = await Promise.all(
-      [import('@/app/ai/harness/transport'), import('@/app/integrations/mcp'), import('@/app/tabs')]
-    )
-    const apiKey = await resolveModelConnectionAPIKey(runtime.role.connection.id)
-    if (!apiKey) throw new Error('Credential is unavailable for the Pi agent')
-    const model = runtime.role.profile.customModelID || runtime.role.profile.modelID
-    const transport = new HarnessChatTransport(
-      `tab-${getActiveTabId()}-${runtime.role.profile.id}`,
-      {
-        adapter: 'pi',
-        sandbox: 'just-bash',
-        model,
-        settings: {
-          thinkingLevel: runtime.role.profile.harnessThinkingLevel ?? 'medium',
-          permissionMode: runtime.role.profile.harnessPermissionMode ?? 'allow-edits'
-        },
-        instructions: SYSTEM_PROMPT,
-        mcpServers: await buildPiMCPServers()
-      },
-      { REDROB_DESIGN_HARNESS_API_KEY: apiKey },
-      () => turnContext(store)
-    )
-    harnessTransportInstance = transport
     return transport as ChatTransport<UIMessage>
   }
 
@@ -306,10 +240,10 @@ export function createChatSessionManager({
         saveThread(threadKeyFor(currentChatStore), chat.messages)
       }
       const messages = currentChatMessages.get(store) ?? (await loadThread(threadKeyFor(store)))
-      rememberThreadPrivacy(store, userTexts(messages))
+      // Personal details are masked in the engine for every request this transport makes.
+      startEnginePrivacySync()
       let transport: ChatTransport<UIMessage>
       if (isACPProvider.value) transport = await createActiveACPTransport(store)
-      else if (isHarnessProvider.value) transport = await createActiveHarnessTransport(store)
       else transport = await createTransport(store)
       chat = new Chat<UIMessage>({
         transport,
