@@ -2,6 +2,8 @@ import { describe, expect, test } from 'bun:test'
 
 import type { SessionUpdate } from '@agentclientprotocol/sdk'
 
+import { REDROB_CODE_INSTALL_COMMAND } from '@redrob-design/core/constants'
+
 import { mapUpdate } from '@/app/ai/acp/map-update'
 import { formatConnectionError, buildCrashChunks } from '@/app/ai/acp/transport'
 
@@ -168,12 +170,12 @@ describe('mapUpdate', () => {
 })
 
 describe('formatConnectionError', () => {
-  const claudeAgent = {
-    id: 'claude-code',
-    name: 'Claude Code',
-    command: 'claude-agent-acp',
-    args: [],
-    installCommand: 'npm i -g @agentclientprotocol/claude-agent-acp'
+  const engineAgent = {
+    id: 'redrob-code',
+    name: 'Redrob Code',
+    command: 'redrob',
+    args: ['acp', '--attach'],
+    installCommand: REDROB_CODE_INSTALL_COMMAND
   } as const
 
   test('ECONNREFUSED maps to MCP not running', () => {
@@ -191,11 +193,11 @@ describe('formatConnectionError', () => {
     expect(msg).toBe('MCP server did not respond in time.')
   })
 
-  test('ENOENT maps to install instructions', () => {
-    const msg = formatConnectionError(new Error('spawn claude-agent-acp ENOENT'), claudeAgent)
-    expect(msg).toBe(
-      '"claude-agent-acp" is not installed. Install it with: npm i -g @agentclientprotocol/claude-agent-acp'
-    )
+  test('ENOENT maps to the engine install guidance', () => {
+    const msg = formatConnectionError(new Error('spawn redrob ENOENT'), engineAgent)
+    expect(msg).toContain('Redrob Design runs on the Redrob Code engine')
+    expect(msg).toContain('"redrob" was not found')
+    expect(msg).toContain(REDROB_CODE_INSTALL_COMMAND)
   })
 
   test('other errors pass through', () => {

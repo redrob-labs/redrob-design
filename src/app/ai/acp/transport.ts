@@ -8,11 +8,7 @@ import type {
 } from '@agentclientprotocol/sdk'
 import type { ChatTransport, UIMessage, UIMessageChunk } from 'ai'
 
-import {
-  REDROB_CODE_AGENT_ID,
-  redrobCodeMissingMessage,
-  type ACPAgentDef
-} from '@redrob-design/core/constants'
+import { redrobCodeMissingMessage, type ACPAgentDef } from '@redrob-design/core/constants'
 
 import { formatUnknownError } from '@/app/ai/chat/failure'
 import SYSTEM_PROMPT from '@/app/ai/chat/system-prompt.md?raw'
@@ -75,15 +71,9 @@ function isMissingCommandError(message: string): boolean {
 
 export function missingCommandMessage(agentDef?: ACPAgentDef): string {
   if (!agentDef) return 'ACP agent CLI is not installed.'
-  // Redrob Code is the engine Redrob Design runs on, so a missing engine is a
+  // Redrob Code is the only engine Redrob Design runs on, so a missing engine is a
   // setup problem to guide through, not a generic CLI-not-found notice.
-  if (agentDef.id === REDROB_CODE_AGENT_ID) {
-    return redrobCodeMissingMessage(`"${agentDef.command}" was not found.`)
-  }
-  if (!agentDef.installCommand) {
-    return `"${agentDef.command}" is not installed. Install it and restart Redrob Design.`
-  }
-  return `"${agentDef.command}" is not installed. Install it with: ${agentDef.installCommand}`
+  return redrobCodeMissingMessage(`"${agentDef.command}" was not found.`)
 }
 
 export function formatConnectionError(e: unknown, agentDef?: ACPAgentDef): string {
@@ -148,10 +138,7 @@ export class ACPChatTransport implements ChatTransport<UIMessage> {
     this.agentDef = options.agentDef
     this.cwd = options.cwd ?? '.'
     this.turnContext = options.turnContext ?? null
-    this.modelId =
-      options.agentDef.id === REDROB_CODE_AGENT_ID
-        ? normalizeRedrobCodeModelId(options.modelId)
-        : (options.modelId?.trim() ?? '')
+    this.modelId = normalizeRedrobCodeModelId(options.modelId)
   }
 
   async sendMessages({

@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+## 0.16.0 — 2026-10-13
+
+### Breaking changes
+
+- Direct providers (OpenRouter, Anthropic, OpenAI, Google AI, DeepSeek, Z.ai, MiniMax, OpenAI- and Anthropic-compatible endpoints), the Pi harness and the Claude Code, Codex and Gemini CLI agents: the engine reaches those providers, with one sign-in. Keys an earlier build stored for them are removed on first start.
+- The app's own privacy masker (pattern rules, placeholder vault, Strict confirm) and the models.dev catalogue; the engine masks and lists models.
+
+### Changed
+
+- Run every model through the Redrob Code engine. The design loop speaks ACP to the shared daemon (`redrob acp --attach`), and the design, review, fast and vision profiles use the daemon's OpenAI-compatible route, so one engine process serves Design and every other Redrob app on the machine. The engine picks the provider, holds the Redrob key (Connect Redrob hands it over; this app keeps none) and masks personal details for every request, including Cross-check and image analysis.
+- Carry the composer's privacy level to the engine's switch (Standard: emails, phones, cards and IDs; High and Strict: names of people, organisations and places too). The chosen level is what Cowork and Office run under as well.
+- Publish `redrob-launcher.json` (`{ "schema": 1, "sharedAccount": true }`) with every GitHub Release, so Redrob Launcher learns by itself that the release uses the launcher sign-in; the release check refuses a release without it.
+
 ## 0.15.1 — 2026-10-13
 
 ### Added

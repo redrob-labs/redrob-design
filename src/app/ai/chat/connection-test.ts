@@ -25,21 +25,10 @@ export type ProviderConnectionTestFailureReason =
   | 'network'
   | 'unknown'
 
-function isCompatibleProvider(providerID: ModelConfig['providerID']): boolean {
-  return providerID === 'openai-compatible' || providerID === 'anthropic-compatible'
-}
-
+/** For the engine, `apiKey` is the daemon's secret and `customBaseURL` its `/v1` base (models/runtime.ts). */
 function validateConfig(config: ModelConfig): ProviderConnectionTestFailureReason | null {
   if (!config.apiKey.trim()) return 'missing-api-key'
-  if (isCompatibleProvider(config.providerID)) {
-    if (!config.customBaseURL.trim()) return 'missing-base-url'
-    try {
-      const url = new URL(config.customBaseURL.trim())
-      if (url.protocol !== 'http:' && url.protocol !== 'https:') return 'invalid-base-url'
-    } catch {
-      return 'invalid-base-url'
-    }
-  }
+  if (!config.customBaseURL.trim()) return 'missing-base-url'
   if (!resolveLanguageModelID(config).trim()) return 'missing-model'
   return null
 }

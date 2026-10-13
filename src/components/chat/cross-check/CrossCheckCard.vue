@@ -3,9 +3,7 @@ import { computed } from 'vue'
 
 import { useThreadMessages } from '@redrob-design/vue'
 
-import { revealForDisplay } from '@/app/assistant/privacy/store'
 import type { CrossCheckData, FactVerdict } from '@/app/assistant/cross-check/types'
-import { getActiveEditorStoreOrNull } from '@/app/editor/active-store'
 import Finding from '@/components/ui/agent/Finding.vue'
 import type { FindingSeverity } from '@/components/ui/agent/types'
 
@@ -20,7 +18,7 @@ const SEVERITY: Record<FactVerdict, FindingSeverity> = {
 }
 
 function shown(text: string): string {
-  return revealForDisplay(getActiveEditorStoreOrNull(), text)
+  return text
 }
 
 function verdictLabel(verdict: FactVerdict): string {

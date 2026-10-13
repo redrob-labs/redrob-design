@@ -69,24 +69,17 @@ watch(pointRequest, (request) => {
 })
 
 const isStreaming = computed(() => status === 'streaming' || status === 'submitted')
-const isAgentProvider = computed(
-  () => providerID.value.startsWith('acp:') || providerID.value === 'harness:pi'
-)
+const isAgentProvider = computed(() => providerID.value.startsWith('acp:'))
 const agentName = computed(() => {
-  if (providerID.value === 'harness:pi') return 'Pi'
   const agentId = providerID.value.replace('acp:', '')
   return ACP_AGENTS.find((a) => a.id === agentId)?.name ?? agentId
 })
-const isCustomProvider = computed(
-  () => providerID.value === 'openai-compatible' || providerID.value === 'anthropic-compatible'
-)
 const customModelName = computed(() => customModelID.value.trim())
 const usesCustomModel = computed(
   () => !!providerDef.value.supportsCustomModel && !!customModelName.value
 )
 const selectedModelName = computed(() => {
   if (usesCustomModel.value) return customModelName.value
-  if (isCustomProvider.value) return 'No model'
   return providerDef.value.models.find((m) => m.id === modelID.value)?.name ?? modelID.value
 })
 // Redrob Auto answers with the Design role; this names the profile that holds it.

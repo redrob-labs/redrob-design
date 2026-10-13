@@ -8,11 +8,7 @@ export function buildReasoningProviderOptions(
   reasoningEffort: string
 ): AIProviderOptions | undefined {
   if (!reasoningEffort) return undefined
-  if (providerID === 'openrouter') {
-    return { openrouter: { reasoning: { effort: reasoningEffort } } }
-  }
-  if (providerID === 'openai' || providerID === 'openai-compatible') {
-    return { openai: { reasoningEffort } }
-  }
+  // The engine's route is OpenAI-compatible, so the effort travels as OpenAI's `reasoning_effort`.
+  if (providerID === 'engine') return { openai: { reasoningEffort } }
   return undefined
 }

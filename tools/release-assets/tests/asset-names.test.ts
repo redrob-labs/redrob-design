@@ -77,14 +77,24 @@ describe('checkReleaseAssets', () => {
         'redrob-design-0.15.1-macos-aarch64.dmg',
         'redrob-design-0.15.1-macos-x86_64.dmg',
         'redrob-design-0.15.1-windows-x64-setup.exe',
-        'redrob-design-0.15.1-windows-x64.msi'
+        'redrob-design-0.15.1-windows-x64.msi',
+        'redrob-launcher.json'
       ],
       'v0.15.1',
       requirements
     )
     expect(result.errors).toEqual([])
     expect(result.installable).toHaveLength(6)
-    expect(result.companions).toEqual(['redrob-design-0.15.1-windows-x64-setup.exe'])
+    expect(result.companions).toEqual([
+      'redrob-design-0.15.1-windows-x64-setup.exe',
+      'redrob-launcher.json'
+    ])
+  })
+
+  test('accepts the launcher manifest only under its exact name', () => {
+    expect(checkReleaseAssets(['redrob-launcher.json'], '0.15.1', []).errors).toEqual([])
+    expect(checkReleaseAssets(['redrob-launcher.JSON'], '0.15.1', []).errors).toHaveLength(1)
+    expect(checkReleaseAssets(['redrob-launcher-0.15.1.json'], '0.15.1', []).errors).toHaveLength(1)
   })
 
   test('names every missing platform, not just the first', () => {

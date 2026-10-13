@@ -69,7 +69,7 @@ describe('image attachment analysis', () => {
           role: {
             requestedRole: 'vision',
             profile: { maxOutputTokens: 8000, reasoningEffort: 'low' },
-            connection: { providerID: 'openrouter' }
+            connection: { providerID: 'engine' }
           }
         }) as never,
       inspect: async (options) => {
@@ -90,7 +90,8 @@ describe('image attachment analysis', () => {
       providerOptions?: unknown
       messages: Array<{ content: Array<{ type: string; data?: Uint8Array }> }>
     }
-    expect(request.providerOptions).toEqual({ openrouter: { reasoning: { effort: 'low' } } })
+    // The engine's route is OpenAI-compatible, so the effort travels as OpenAI's reasoning_effort.
+    expect(request.providerOptions).toEqual({ openai: { reasoningEffort: 'low' } })
     expect(request.messages[0]?.content.map((part) => part.type)).toEqual([
       'text',
       'file',
