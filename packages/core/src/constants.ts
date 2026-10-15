@@ -170,7 +170,8 @@ export const REDROB_CODE_AGENT_ID = 'redrob-code' as const
 export const REDROB_CODE_PROVIDER_ID = `acp:${REDROB_CODE_AGENT_ID}` as const
 
 /** The one supported way to install the Redrob Code engine. */
-export const REDROB_CODE_INSTALL_COMMAND = 'curl -fsSL https://code.redrob.ai/install | bash'
+export const REDROB_CODE_INSTALL_COMMAND =
+  'curl -fsSL https://console.redrob.ai/code/install.sh | sh'
 
 /**
  * A minimal environment shape so {@link resolveRedrobCodeCommand} can run both
