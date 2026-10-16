@@ -79,6 +79,14 @@ export async function resolveModelConnectionAPIKey(connectionId: string): Promis
 export async function createAIModelRuntime(role: AIModelRole): Promise<AIModelRuntime | null> {
   const resolved = resolveAIModelRole(role)
   if (!resolved) return null
+  return createResolvedAIModelRuntime(resolved)
+}
+
+/** The runtime for an already resolved role; `requestedRole` decides what the model must support. */
+export async function createResolvedAIModelRuntime(
+  resolved: ResolvedAIModelRole
+): Promise<AIModelRuntime> {
+  const role = resolved.requestedRole
   if (role === 'design' && !resolved.profile.capabilities.includes('tools')) {
     throw new Error('The Design model must support tools')
   }
@@ -87,7 +95,9 @@ export async function createAIModelRuntime(role: AIModelRole): Promise<AIModelRu
   }
   if (resolved.connection.providerID.startsWith('acp:')) {
     if (role !== 'design') {
-      throw new Error('ACP agents can only be assigned to the Design agent role')
+      throw new Error(
+        `An ACP agent such as Redrob Code or Claude Code can only run as the Design agent, not the ${roleName(role)} model. In Settings, under Agents and MCP, assign a direct model to ${roleName(role)} or set it to none.`
+      )
     }
     return { kind: 'acp', role: resolved }
   }
@@ -106,4 +116,8 @@ export async function createAIModelRuntime(role: AIModelRole): Promise<AIModelRu
       customAPIType: 'completions'
     })
   }
+}
+
+function roleName(role: AIModelRole): string {
+  return role.charAt(0).toUpperCase() + role.slice(1)
 }
