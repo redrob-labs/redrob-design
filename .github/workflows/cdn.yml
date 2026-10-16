@@ -14,8 +14,9 @@
 #   design/latest/redrob-design-{aarch64,x64}.dmg
 #   design/latest/redrob-design-x64.{AppImage,deb,rpm}
 #
-# Windows NSIS is signed with the organization Authenticode certificate
-# (WIN_CSC_LINK / WIN_CSC_KEY_PASSWORD, read by Tauri as WINDOWS_CERTIFICATE).
+# Windows NSIS is Authenticode-signed through Azure Artifact Signing with the
+# organization's shared recipe (redrob-labs/.github actions/sign-windows): an
+# OpenID Connect login, no certificate file, no client secret.
 # The Linux bundles are UNSIGNED: an ubuntu runner has no Linux signing
 # identity, and the download page must not imply otherwise.
 #
@@ -39,22 +40,45 @@ jobs:
   windows:
     if: github.repository == 'redrob-labs/redrob-design'
     runs-on: windows-latest
+    # `release` is the environment the organization's federated credential names; any other name
+    # is refused by Azure.
+    environment: release
+    permissions:
+      contents: read
+      # The OIDC token `azure/login` exchanges for the Artifact Signing credential.
+      id-token: write
     env:
-      # Organization secrets shared with every desktop app that ships a Windows
-      # installer. A repository secret of the same name would override them.
-      WINDOWS_CERTIFICATE: ${{ secrets.WIN_CSC_LINK }}
-      WINDOWS_CERTIFICATE_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
+      # Plain IDs (not credentials). The three ARTIFACT_SIGNING_* values are read by sign.ps1,
+      # which tauri runs as its `signCommand` (see build.yml for the same recipe).
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      ARTIFACT_SIGNING_ENDPOINT: ${{ secrets.ARTIFACT_SIGNING_ENDPOINT }}
+      ARTIFACT_SIGNING_ACCOUNT: ${{ secrets.ARTIFACT_SIGNING_ACCOUNT }}
+      ARTIFACT_SIGNING_CERT_PROFILE: ${{ secrets.ARTIFACT_SIGNING_CERT_PROFILE }}
+      SIGN_DESCRIPTION: Redrob Design
+      SIGN_URL: https://github.com/redrob-labs/redrob-design
     outputs:
       version: ${{ steps.version.outputs.version }}
 
     steps:
       - uses: actions/checkout@v7
 
-      - name: Require the Windows signing certificate
+      - uses: actions/checkout@v7
+        with:
+          repository: redrob-labs/.github
+          path: .redrob-shared
+
+      - name: Require the Windows signing configuration
         shell: pwsh
         run: |
-          if (-not $env:WINDOWS_CERTIFICATE) { throw "Missing WIN_CSC_LINK organization secret" }
-          if (-not $env:WINDOWS_CERTIFICATE_PASSWORD) { throw "Missing WIN_CSC_KEY_PASSWORD organization secret" }
+          foreach ($name in 'AZURE_CLIENT_ID', 'ARTIFACT_SIGNING_ENDPOINT', 'ARTIFACT_SIGNING_ACCOUNT', 'ARTIFACT_SIGNING_CERT_PROFILE') {
+            if (-not [Environment]::GetEnvironmentVariable($name)) { throw "Missing $name secret (Azure Artifact Signing)" }
+          }
+          foreach ($name in 'AZURE_TENANT_ID', 'AZURE_SUBSCRIPTION_ID') {
+            if (-not [Environment]::GetEnvironmentVariable($name)) { throw "Missing $name secret (Azure login)" }
+          }
+        env:
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - uses: dtolnay/rust-toolchain@stable
         with:
@@ -73,35 +97,29 @@ jobs:
         shell: bash
         run: echo "version=$(node -p "require('./desktop/tauri.conf.json').version")" >> "$GITHUB_OUTPUT"
 
-      # `tauri build` signs from the Windows certificate store by thumbprint. The
-      # WINDOWS_CERTIFICATE pair is only read by tauri-action, which this job does
-      # not use, so the PFX is imported here and its thumbprint is handed to the
-      # bundler as a config overlay. An overlay file rather than an edit to
-      # tauri.conf.json, because a thumbprint is specific to this runner's store.
-      - name: Import the signing certificate
-        id: certificate
+      # tauri signs mid-bundling, so the shared signing script is handed to it as
+      # `signCommand` through a config overlay: an absolute path into this runner's
+      # checkout, hence not committed. tauri replaces `%1` with the file to sign.
+      - name: Prepare the release build configuration
+        id: config
         shell: pwsh
         run: |
-          $pfx = Join-Path $env:RUNNER_TEMP "redrob-code-signing.pfx"
-          [IO.File]::WriteAllBytes($pfx, [Convert]::FromBase64String($env:WINDOWS_CERTIFICATE))
-          $password = ConvertTo-SecureString -String $env:WINDOWS_CERTIFICATE_PASSWORD -AsPlainText -Force
-          $imported = Import-PfxCertificate -FilePath $pfx -CertStoreLocation Cert:\CurrentUser\My -Password $password
-          Remove-Item $pfx -Force
-          if (-not $imported.Thumbprint) { throw "The certificate imported without a thumbprint" }
-          Write-Host "Imported $($imported.Subject)"
-          $overlay = Join-Path $env:RUNNER_TEMP "tauri.sign.conf.json"
+          $sign = Join-Path $env:GITHUB_WORKSPACE ".redrob-shared/actions/sign-windows/sign.ps1"
+          if (-not (Test-Path $sign)) { throw "shared signing script not found at $sign" }
+          $overlay = Join-Path $env:RUNNER_TEMP "tauri.release.conf.json"
           @{
             build = @{
               beforeBuildCommand = "bun run generate:tauri-menu && bun run build:packages && bunx vite build"
             }
             bundle = @{
               windows = @{
-                certificateThumbprint = $imported.Thumbprint
-                digestAlgorithm       = "sha256"
-                timestampUrl          = "http://timestamp.digicert.com"
+                signCommand = @{
+                  cmd  = "pwsh"
+                  args = @("-NoProfile", "-File", $sign, "%1")
+                }
               }
             }
-          } | ConvertTo-Json -Depth 5 | Set-Content -Path $overlay -Encoding utf8
+          } | ConvertTo-Json -Depth 6 | Set-Content -Path $overlay -Encoding utf8
           "overlay=$overlay" >> $env:GITHUB_OUTPUT
 
       # Layered rather than committed, for the same reason as the other jobs: both
@@ -119,30 +137,45 @@ jobs:
             echo "TAURI_UPDATER_CONFIG=$RUNNER_TEMP/tauri-updater.conf.json" >> "$GITHUB_ENV"
           fi
 
-      - name: Build the signed Windows installer
+      # Compile first, without bundling: nothing is signed here, so no credential is needed yet.
+      - name: Build the application
         shell: bash
         env:
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
-        run: bunx @tauri-apps/cli@2.11.4 build --target x86_64-pc-windows-msvc --bundles nsis --config "${{ steps.certificate.outputs.overlay }}" ${TAURI_UPDATER_CONFIG:+--config "$TAURI_UPDATER_CONFIG"}
+        run: bunx @tauri-apps/cli@2.11.4 build --target x86_64-pc-windows-msvc --no-bundle --config "${{ steps.config.outputs.overlay }}" ${TAURI_UPDATER_CONFIG:+--config "$TAURI_UPDATER_CONFIG"}
+
+      # The login comes after the build on purpose: the OpenID Connect token is
+      # short-lived and a long build left signtool without a usable credential.
+      - name: Log in to Azure (OIDC)
+        uses: azure/login@v3
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Bundle and sign the Windows installer
+        shell: bash
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        run: bunx @tauri-apps/cli@2.11.4 build --target x86_64-pc-windows-msvc --bundles nsis --config "${{ steps.config.outputs.overlay }}" ${TAURI_UPDATER_CONFIG:+--config "$TAURI_UPDATER_CONFIG"}
 
       - name: Verify the Authenticode signature
         shell: pwsh
         run: |
           $installer = Get-ChildItem -Recurse -Filter "*-setup.exe" -Path "desktop/target/x86_64-pc-windows-msvc/release/bundle" | Select-Object -First 1
           if (-not $installer) { throw "The NSIS installer was not produced" }
+          # sign.ps1 already ran `signtool verify /pa` on it; this re-checks the one file that
+          # leaves this job. A Public Trust certificate chains to a root the runner trusts, so
+          # anything but Valid is a failure.
           $signature = Get-AuthenticodeSignature $installer.FullName
-          if (-not $signature.SignerCertificate) {
-            throw "The installer has no Authenticode signer certificate"
+          if ($signature.Status -ne "Valid") {
+            throw "Authenticode signature is $($signature.Status) ($($signature.StatusMessage))"
           }
-          # A self-signed certificate is not trusted on the runner, so Status is
-          # UnknownError or NotTrusted rather than Valid. Reject only an unsigned
-          # file or a broken hash.
-          $accepted = @("Valid", "UnknownError", "NotTrusted")
-          if ($accepted -notcontains $signature.Status.ToString()) {
-            throw "Invalid Authenticode signature: $($signature.Status) ($($signature.StatusMessage))"
-          }
-          Write-Host "Signed by: $($signature.SignerCertificate.Subject) status=$($signature.Status)"
+          $cn = $signature.SignerCertificate.GetNameInfo([System.Security.Cryptography.X509Certificates.X509NameType]::SimpleName, $false)
+          if ($cn -ne "McKinley Rice, Inc.") { throw "Signed by CN=$cn, expected CN=McKinley Rice, Inc." }
+          Write-Host "Signed by CN=$cn"
           New-Item -ItemType Directory -Force -Path staging | Out-Null
           Copy-Item $installer.FullName "staging/redrob-design-x64-$($env:APP_VERSION)-setup.exe"
           # On Windows the update artefact IS the installer: with updater artefacts on,

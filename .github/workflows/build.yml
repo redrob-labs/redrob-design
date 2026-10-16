@@ -30,25 +30,55 @@ on:
 
 permissions:
   contents: write
-  id-token: write
 
 env:
   TAURI_CLI_VERSION: 2.11.4
 
 jobs:
+  # Windows Authenticode goes through Azure Artifact Signing with the organization's one copy of
+  # the recipe, redrob-labs/.github `actions/sign-windows`. There is no certificate file and no
+  # client secret: the job logs in to Azure with its OpenID Connect token (`azure/login`), and
+  # tauri's `bundle.windows.signCommand` runs that action's `sign.ps1` on every binary it bundles
+  # (the app exe, then the msi and the NSIS setup.exe). The login comes AFTER the compile and right
+  # before the bundling pass because the token is short-lived and the Rust build is long.
   windows:
     runs-on: windows-latest
+    # `release` is the environment the organization's federated credential names; any other name
+    # is refused by Azure.
+    environment: release
+    permissions:
+      contents: read
+      # The OIDC token `azure/login` exchanges for the Artifact Signing credential.
+      id-token: write
     env:
-      WINDOWS_CERTIFICATE: ${{ secrets.WIN_CSC_LINK }}
-      WINDOWS_CERTIFICATE_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
+      # Plain IDs (not credentials). The three ARTIFACT_SIGNING_* values are read by sign.ps1.
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      ARTIFACT_SIGNING_ENDPOINT: ${{ secrets.ARTIFACT_SIGNING_ENDPOINT }}
+      ARTIFACT_SIGNING_ACCOUNT: ${{ secrets.ARTIFACT_SIGNING_ACCOUNT }}
+      ARTIFACT_SIGNING_CERT_PROFILE: ${{ secrets.ARTIFACT_SIGNING_CERT_PROFILE }}
+      SIGN_DESCRIPTION: Redrob Design
+      SIGN_URL: https://github.com/redrob-labs/redrob-design
     steps:
       - uses: actions/checkout@v7
 
-      - name: Require the Windows signing certificate
+      # The shared signing recipe, checked out beside the sources so tauri can run it.
+      - uses: actions/checkout@v7
+        with:
+          repository: redrob-labs/.github
+          path: .redrob-shared
+
+      - name: Require the Windows signing configuration
         shell: pwsh
         run: |
-          if (-not $env:WINDOWS_CERTIFICATE) { throw "Missing WIN_CSC_LINK organization secret" }
-          if (-not $env:WINDOWS_CERTIFICATE_PASSWORD) { throw "Missing WIN_CSC_KEY_PASSWORD organization secret" }
+          foreach ($name in 'AZURE_CLIENT_ID', 'ARTIFACT_SIGNING_ENDPOINT', 'ARTIFACT_SIGNING_ACCOUNT', 'ARTIFACT_SIGNING_CERT_PROFILE') {
+            if (-not [Environment]::GetEnvironmentVariable($name)) { throw "Missing $name secret (Azure Artifact Signing)" }
+          }
+          foreach ($name in 'AZURE_TENANT_ID', 'AZURE_SUBSCRIPTION_ID') {
+            if (-not [Environment]::GetEnvironmentVariable($name)) { throw "Missing $name secret (Azure login)" }
+          }
+        env:
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - uses: dtolnay/rust-toolchain@stable
         with:
@@ -67,32 +97,29 @@ jobs:
         shell: bash
         run: bash .github/scripts/release-version.sh >> "$GITHUB_OUTPUT"
 
-      # `tauri build` signs from the certificate store by thumbprint, handed over as a config
-      # overlay because a thumbprint is specific to this runner's store.
-      - name: Import the signing certificate
-        id: certificate
+      # tauri signs mid-bundling, so the signing recipe is handed to it as `signCommand` through a
+      # config overlay (an absolute path to this runner's checkout, hence not committed). `%1` is
+      # replaced by tauri with the file to sign.
+      - name: Prepare the release build configuration
+        id: config
         shell: pwsh
         run: |
-          $pfx = Join-Path $env:RUNNER_TEMP "redrob-code-signing.pfx"
-          [IO.File]::WriteAllBytes($pfx, [Convert]::FromBase64String($env:WINDOWS_CERTIFICATE))
-          $password = ConvertTo-SecureString -String $env:WINDOWS_CERTIFICATE_PASSWORD -AsPlainText -Force
-          $imported = Import-PfxCertificate -FilePath $pfx -CertStoreLocation Cert:\CurrentUser\My -Password $password
-          Remove-Item $pfx -Force
-          if (-not $imported.Thumbprint) { throw "The certificate imported without a thumbprint" }
-          Write-Host "Imported $($imported.Subject)"
-          $overlay = Join-Path $env:RUNNER_TEMP "tauri.sign.conf.json"
+          $sign = Join-Path $env:GITHUB_WORKSPACE ".redrob-shared/actions/sign-windows/sign.ps1"
+          if (-not (Test-Path $sign)) { throw "shared signing script not found at $sign" }
+          $overlay = Join-Path $env:RUNNER_TEMP "tauri.release.conf.json"
           @{
             build = @{
               beforeBuildCommand = "bun run generate:tauri-menu && bun run build:packages && bunx vite build"
             }
             bundle = @{
               windows = @{
-                certificateThumbprint = $imported.Thumbprint
-                digestAlgorithm       = "sha256"
-                timestampUrl          = "http://timestamp.digicert.com"
+                signCommand = @{
+                  cmd  = "pwsh"
+                  args = @("-NoProfile", "-File", $sign, "%1")
+                }
               }
             }
-          } | ConvertTo-Json -Depth 5 | Set-Content -Path $overlay -Encoding utf8
+          } | ConvertTo-Json -Depth 6 | Set-Content -Path $overlay -Encoding utf8
           "overlay=$overlay" >> $env:GITHUB_OUTPUT
 
       - name: Prepare the updater configuration
@@ -106,28 +133,48 @@ jobs:
             echo "TAURI_UPDATER_CONFIG=$RUNNER_TEMP/tauri-updater.conf.json" >> "$GITHUB_ENV"
           fi
 
-      # msi is what the launcher installs; the NSIS setup.exe stays for people downloading by hand.
-      - name: Build the signed Windows installers
+      # Compile first, without bundling: nothing is signed here, so no credential is needed yet.
+      - name: Build the application
         shell: bash
         env:
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
-        run: bunx @tauri-apps/cli@$TAURI_CLI_VERSION build --target x86_64-pc-windows-msvc --bundles msi,nsis --config "${{ steps.certificate.outputs.overlay }}" ${TAURI_UPDATER_CONFIG:+--config "$TAURI_UPDATER_CONFIG"}
+        run: bunx @tauri-apps/cli@$TAURI_CLI_VERSION build --target x86_64-pc-windows-msvc --no-bundle --config "${{ steps.config.outputs.overlay }}" ${TAURI_UPDATER_CONFIG:+--config "$TAURI_UPDATER_CONFIG"}
 
+      # The login comes after the build on purpose: the OpenID Connect token is short-lived and a
+      # long build left signtool without a usable credential (it then waited on a browser).
+      - name: Log in to Azure (OIDC)
+        uses: azure/login@v3
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      # msi is what the launcher installs; the NSIS setup.exe stays for people downloading by hand.
+      # The compiled binary is reused; this pass bundles and runs sign.ps1 on each file.
+      - name: Bundle and sign the Windows installers
+        shell: bash
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        run: bunx @tauri-apps/cli@$TAURI_CLI_VERSION build --target x86_64-pc-windows-msvc --bundles msi,nsis --config "${{ steps.config.outputs.overlay }}" ${TAURI_UPDATER_CONFIG:+--config "$TAURI_UPDATER_CONFIG"}
+
+      # sign.ps1 already runs `signtool verify /pa` on every file it signs; this re-checks the two
+      # installers that leave this job, so an unsigned bundle can never be staged.
       - name: Verify the Authenticode signatures
         shell: pwsh
         run: |
           $bundle = "desktop/target/x86_64-pc-windows-msvc/release/bundle"
           $files = @(Get-ChildItem -Recurse -Path $bundle -Include "*.msi", "*-setup.exe" -File)
           if ($files.Count -lt 2) { throw "Expected an msi and a setup.exe under $bundle, found $($files.Count) file(s)" }
-          $accepted = @("Valid", "UnknownError", "NotTrusted")
           foreach ($file in $files) {
             $signature = Get-AuthenticodeSignature $file.FullName
-            if (-not $signature.SignerCertificate) { throw "$($file.Name) has no Authenticode signer certificate" }
-            if ($accepted -notcontains $signature.Status.ToString()) {
-              throw "$($file.Name): invalid Authenticode signature: $($signature.Status) ($($signature.StatusMessage))"
+            if ($signature.Status -ne "Valid") {
+              throw "$($file.Name): Authenticode signature is $($signature.Status) ($($signature.StatusMessage))"
             }
-            Write-Host "$($file.Name) signed by: $($signature.SignerCertificate.Subject) status=$($signature.Status)"
+            $cn = $signature.SignerCertificate.GetNameInfo([System.Security.Cryptography.X509Certificates.X509NameType]::SimpleName, $false)
+            if ($cn -ne "McKinley Rice, Inc.") { throw "$($file.Name) signed by CN=$cn, expected CN=McKinley Rice, Inc." }
+            Write-Host "$($file.Name) signed by CN=$cn"
           }
 
       - name: Stage the bundles under the launcher's names
@@ -389,80 +436,3 @@ jobs:
         env:
           TAG: ${{ github.ref_name }}
         run: bash .github/scripts/publish-release.sh "$TAG" assets "$RUNNER_TEMP/release-notes.md"
-
-  publish-npm:
-    if: startsWith(github.ref, 'refs/tags/v')
-    needs: release
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
-    steps:
-      - uses: actions/checkout@v7
-
-      - uses: actions/setup-node@v7
-        with:
-          node-version: 24.x
-          registry-url: https://registry.npmjs.org/
-
-      - uses: ./.github/actions/setup-bun
-
-      - name: Build packages for publish
-        run: |
-          publish_packages="packages/scene-graph packages/pen packages/kiwi packages/fig packages/core packages/dom-css packages/cli packages/mcp packages/harness packages/vue"
-          for dir in $publish_packages; do
-            if [ -f "$dir/package.json" ] && node -p "require('./$dir/package.json').scripts?.build" 2>/dev/null | grep -qv undefined; then
-              echo "Building $dir..."
-              (cd "$dir" && bun run build)
-            fi
-          done
-
-      - name: Prepare publish directories
-        run: |
-          bun tools/release-packages/src/prepare-publish-dirs.ts
-          find .publish -maxdepth 3 -type f | sort
-
-      - name: Pack packages for publish
-        run: |
-          mkdir -p .npm-packages
-          pack_if_new() {
-            local dir=$1
-            local name=$(node -p "require('./$dir/package.json').name")
-            local version=$(node -p "require('./$dir/package.json').version")
-            local publish_dir=".publish/$(basename "$dir")"
-            if npm view "${name}@${version}" version 2>/dev/null; then
-              echo "${name}@${version} already published, skipping pack"
-            else
-              (cd "$publish_dir" && npm pack --pack-destination "$root_dir/.npm-packages")
-            fi
-          }
-          root_dir="$PWD"
-          publish_packages="packages/scene-graph packages/pen packages/kiwi packages/fig packages/core packages/dom-css packages/cli packages/mcp packages/harness packages/vue"
-          for dir in $publish_packages; do
-            pack_if_new "$dir"
-          done
-          ls -la .npm-packages
-          for tarball in .npm-packages/redrob-design-*.tgz; do
-            echo "Contents of $tarball"
-            tar -tf "$tarball" | sed -n '1,60p' || true
-          done
-          bun tools/release-packages/src/validate-tarballs.ts
-
-      - name: Publish packages to npm
-        run: |
-          publish_if_new() {
-            local dir=$1
-            local name=$(node -p "require('./$dir/package.json').name")
-            local version=$(node -p "require('./$dir/package.json').version")
-            if npm view "${name}@${version}" version 2>/dev/null; then
-              echo "${name}@${version} already published, skipping"
-            else
-              local tarball
-              tarball=$(cd .npm-packages && ls redrob-design-$(basename "$dir")-${version}.tgz)
-              npm publish "./.npm-packages/${tarball}" --access public --provenance
-            fi
-          }
-          publish_packages="packages/scene-graph packages/pen packages/kiwi packages/fig packages/core packages/dom-css packages/cli packages/mcp packages/harness packages/vue"
-          for dir in $publish_packages; do
-            publish_if_new "$dir"
-          done

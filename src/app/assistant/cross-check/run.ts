@@ -96,11 +96,14 @@ export async function runCrossCheck(
     challenge: null,
     error: null
   }
+  // A reviewer that cannot be set up (no model, engine down, misassigned agent) is a
+  // settings matter the composer status shows; the thread never gets an error for it.
   let runtime: ReviewRuntime | null
   try {
     runtime = await dependencies.createRuntime()
   } catch (error) {
-    return { ...base, status: 'failed', error: errorText(error) }
+    console.warn('[Cross-check] No Review model could be set up', error)
+    return { ...base, status: 'no-model' }
   }
   if (!runtime) return { ...base, status: 'no-model' }
   const { model, modelID: by } = runtime

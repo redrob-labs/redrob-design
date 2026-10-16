@@ -107,7 +107,7 @@ describe('redrobCodeMissingMessage (guide to install)', () => {
     const message = redrobCodeMissingMessage()
     expect(message).toContain('Redrob Design runs on the Redrob Code engine')
     expect(message).toContain(REDROB_CODE_INSTALL_COMMAND)
-    expect(message).toContain('curl -fsSL https://code.redrob.ai/install | bash')
+    expect(message).toContain('curl -fsSL https://console.redrob.ai/code/install.sh | sh')
     expect(message).toContain('REDROB_CODE_BIN')
   })
 

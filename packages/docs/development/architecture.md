@@ -110,4 +110,4 @@ Frame-to-frame transitions, interaction triggers (click, hover, drag), overlay m
 
 ### Windows Code Signing
 
-macOS binaries are signed and notarized since v0.6.0. Windows Authenticode signing via Azure Code Signing is planned to remove the SmartScreen warning.
+macOS binaries are signed and notarized since v0.6.0. Windows installers are Authenticode-signed through Azure Artifact Signing with the organization's shared recipe (`redrob-labs/.github` `actions/sign-windows`, run by tauri as its `signCommand` after an OpenID Connect login); no certificate file or client secret lives in this repository.
