@@ -280,6 +280,26 @@ export function resolveAIModelRole(role: AIModelRole): ResolvedAIModelRole | nul
   return connection ? { requestedRole: role, profile, connection } : null
 }
 
+/**
+ * The model Cross-check reviews with. The Review assignment when it is a direct
+ * model. When it points at an ACP agent (an agent only runs as the Design agent,
+ * it cannot review; this happens when Review follows a Design role that was
+ * switched to an agent) the first direct model stands in. Null when no Review
+ * model is assigned or no direct model exists: then nothing is checked.
+ */
+export function resolveReviewModelRole(): ResolvedAIModelRole | null {
+  const assigned = resolveAIModelRole('review')
+  if (!assigned) return null
+  if (!isACPModelProfile(assigned.profile)) return assigned
+  for (const profile of aiModelSettings.value.models) {
+    const connection = modelConnection(profile.connectionId)
+    if (connection && !connection.providerID.startsWith('acp:')) {
+      return { requestedRole: 'review', profile, connection }
+    }
+  }
+  return null
+}
+
 function connectionMatchesDraft(
   connection: AIModelConnection,
   draft: AIModelProfileDraft

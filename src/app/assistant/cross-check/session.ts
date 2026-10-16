@@ -1,7 +1,7 @@
 import { generateText, type UIMessage } from 'ai'
 import { shallowReactive } from 'vue'
 
-import { createAIModelRuntime } from '@/app/ai/models'
+import { createResolvedAIModelRuntime, resolveReviewModelRole } from '@/app/ai/models'
 import { changeSetFor } from '@/app/assistant/changes/store'
 import { assistantControlsFor } from '@/app/assistant/controls/store'
 import { receiptFor, setReceipt } from '@/app/assistant/thread/store'
@@ -14,7 +14,11 @@ import { reviewRuntimeOf, runCrossCheck, shouldRun, type CrossCheckDependencies 
 import type { CrossCheckData } from './types'
 
 export const defaultCrossCheckDependencies: CrossCheckDependencies = {
-  createRuntime: async () => reviewRuntimeOf(await createAIModelRuntime('review')),
+  // An agent assigned to Review is replaced by a direct model, or nothing runs; never an error.
+  createRuntime: async () => {
+    const review = resolveReviewModelRole()
+    return review ? reviewRuntimeOf(await createResolvedAIModelRuntime(review)) : null
+  },
   generate: (options) => generateText(options)
 }
 

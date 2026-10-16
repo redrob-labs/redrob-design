@@ -3,12 +3,7 @@ import { computed } from 'vue'
 import { useComposerMessages } from '@redrob-design/vue'
 
 import { isAgentProvider } from '@/app/ai/chat/storage'
-import {
-  aiModelSettings,
-  isAgentModelProfile,
-  resolveAIModelRole,
-  setModelRoleAssignment
-} from '@/app/ai/models'
+import { aiModelSettings, resolveReviewModelRole, setModelRoleAssignment } from '@/app/ai/models'
 import { RANKING_HERE } from '@/app/ai/models/ranking/fixture'
 import { profileForPick } from '@/app/ai/models/ranking/profiles'
 import { rankedPick, rankedPicks, rankingSource } from '@/app/ai/models/ranking/store'
@@ -98,11 +93,10 @@ export function useComposerControls(controls: AssistantControls) {
         }
   )
 
-  /** Cross-check runs on the Review model, which must be a direct model. */
+  /** Cross-check runs on the Review model, a direct model (an agent there is stood in for). */
   const reviewModelReady = computed(() => {
     void aiModelSettings.value
-    const review = resolveAIModelRole('review')
-    return review !== null && !isAgentModelProfile(review.profile)
+    return resolveReviewModelRole() !== null
   })
 
   const statusItems = computed<ComposerStatusItem[]>(() => {
