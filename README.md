@@ -221,6 +221,21 @@ Local clients discover the private Unix socket automatically and fall back to lo
 
 **File access:** Set `REDROB_DESIGN_MCP_ROOT` to scope file operations (`open_file`, `new_document`, export `path` param) to a directory. Defaults to the current working directory. (This environment variable name is retained for compatibility with the underlying MCP server.)
 
+### Control from Redrob Code
+
+While the desktop app is open it registers itself with the shared Redrob Code daemon, so the agent in any Redrob surface (including a phone chat) can drive the open document through the `app:design` tools:
+
+- `document_info` - file path (or untitled), canvas size, page count, selection summary.
+- `list_layers` - the current page's layers as an indented tree: id, type, name, visible, locked.
+- `select` - select layers by id; answers the count.
+- `set_text` - replace a text layer's content.
+- `set_visible` - show or hide a layer.
+- `move_layer` - translate a layer by dx, dy.
+- `export` - export the selection or page as png, svg or pdf; answers the written path.
+- `save` - save the document to its file (untitled documents need Save As in the app).
+
+The daemon is optional: when it is not running the app works as before and nothing is registered.
+
 ## Collaboration
 
 Share a link to co-edit in real time. No server, no account: peers connect directly via WebRTC. When you are signed in to Redrob Cloud, sessions go through its relay, which works on networks that block peer-to-peer, and fall back to WebRTC when the relay cannot be reached.

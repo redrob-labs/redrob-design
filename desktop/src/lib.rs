@@ -1,3 +1,4 @@
+mod app_bridge;
 mod credentials;
 mod fig_container;
 mod fonts;
@@ -8,6 +9,7 @@ mod shared_account;
 #[cfg(target_os = "macos")]
 mod window;
 
+use app_bridge::app_bridge_reply;
 use credentials::{
     credential_read, credential_remove, credential_status, credential_store_availability,
     credential_write,
@@ -209,7 +211,10 @@ pub fn run() {
 
     builder
         .manage(PendingOpen(Mutex::new(Vec::new())))
+        .manage(app_bridge::PendingCalls::default())
+        .manage(app_bridge::BridgeHandle::default())
         .invoke_handler(tauri::generate_handler![
+            app_bridge_reply,
             build_fig_file,
             credential_read,
             credential_remove,
@@ -238,11 +243,16 @@ pub fn run() {
         })
         .setup(|app| {
             queue_open_paths(app.handle(), startup_open_paths());
-            Ok(install_app_menu(app.handle(), &[])?)
+            install_app_menu(app.handle(), &[])?;
+            // The main window is created from the config before setup runs; the
+            // bridge starts on its own thread so a missing daemon never delays it.
+            app_bridge::start(app.handle());
+            Ok(())
         })
         .build(context)
         .expect("error while building tauri application")
-        .run(|_app, event| match event {
+        .run(|app, event| match event {
+            tauri::RunEvent::Exit => app_bridge::stop(app),
             #[cfg(target_os = "macos")]
             tauri::RunEvent::Opened { urls } => {
                 let paths = urls
@@ -250,7 +260,7 @@ pub fn run() {
                     .filter_map(|url| url.to_file_path().ok())
                     .filter_map(file_association_path)
                     .collect();
-                queue_open_paths(_app, paths);
+                queue_open_paths(app, paths);
             }
             #[cfg(target_os = "macos")]
             tauri::RunEvent::Reopen {
@@ -258,7 +268,7 @@ pub fn run() {
                 ..
             } => {
                 if !has_visible_windows {
-                    show_main_window(_app);
+                    show_main_window(app);
                 }
             }
             _ => {}
