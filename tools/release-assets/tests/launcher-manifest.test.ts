@@ -9,13 +9,15 @@ import {
 
 describe('launcherManifestText', () => {
   test('is the exact line the launcher contract shows, newline-terminated', () => {
-    expect(launcherManifestText()).toBe('{ "schema": 1, "sharedAccount": true }\n')
+    expect(launcherManifestText()).toBe(
+      '{ "schema": 1, "sharedAccount": true, "icon": "redrob-design.png" }\n'
+    )
     expect(LAUNCHER_MANIFEST_NAME).toBe('redrob-launcher.json')
   })
 
-  test('parses as valid JSON with schema 1 and sharedAccount true', () => {
+  test('parses as valid JSON with schema 1, sharedAccount true and the icon asset name', () => {
     const parsed = JSON.parse(launcherManifestText()) as unknown
-    expect(parsed).toEqual({ schema: 1, sharedAccount: true })
+    expect(parsed).toEqual({ schema: 1, sharedAccount: true, icon: 'redrob-design.png' })
     expect(parsed).toEqual(launcherManifest())
   })
 
