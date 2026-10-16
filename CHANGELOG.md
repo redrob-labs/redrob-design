@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.16.1 — 2026-10-16
+
+### Fixed
+
+- Cross-check no longer posts "Cross-check could not run: ACP agents can only be assigned to the Design agent role" under every answer when an ACP agent (Redrob Code, Claude Code, Codex) is the only model. The Review role is stood in for by the first direct model; when there is none the composer status says a Review model is needed and the thread stays quiet. A reviewer that cannot be set up is never reported as a failed check.
+
 ## 0.16.0 — 2026-10-13
 
 ### Breaking changes
