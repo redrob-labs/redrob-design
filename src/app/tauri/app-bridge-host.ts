@@ -13,8 +13,8 @@ import { BUILTIN_IO_FORMATS, IORegistry } from '@redrob-design/core/io'
 import type { SceneNode } from '@redrob-design/scene-graph'
 
 import { makeFigmaFromStore } from '@/app/automation/bridge/figma-factory'
-import { createAutomationCommandHandlers } from '@/app/automation/bridge/handlers'
 import { ensureTauriParentDirectory } from '@/app/automation/bridge/file-handlers'
+import { createAutomationCommandHandlers } from '@/app/automation/bridge/handlers'
 import {
   getExportBaseName,
   getExportBytes,
@@ -41,11 +41,10 @@ type ToolHandler = (store: EditorStore, args: UnknownRecord) => Promise<string> 
 
 const io = new IORegistry(BUILTIN_IO_FORMATS)
 const { handleRequest: runAutomation } = createAutomationCommandHandlers(makeFigmaFromStore)
+const noop = () => undefined
 
 function readRecord(value: unknown): UnknownRecord {
-  return value && typeof value === 'object' && !Array.isArray(value)
-    ? (value as UnknownRecord)
-    : {}
+  return value && typeof value === 'object' && !Array.isArray(value) ? (value as UnknownRecord) : {}
 }
 
 function requireString(args: UnknownRecord, key: string): string {
@@ -57,7 +56,7 @@ function requireString(args: UnknownRecord, key: string): string {
 function requireNumber(args: UnknownRecord, key: string): number {
   const value = args[key]
   if (typeof value !== 'number' || !Number.isFinite(value)) {
-    throw new Error(`"${key}" must be a number`)
+    throw new TypeError(`"${key}" must be a number`)
   }
   return value
 }
@@ -148,7 +147,8 @@ const handlers: Record<string, ToolHandler> = {
     }
     walk(store.state.currentPageId, 0)
     if (total === 0) return 'The current page has no layers.'
-    if (total > lines.length) lines.push(`... ${total - lines.length} more (raise "max" to see them)`)
+    if (total > lines.length)
+      lines.push(`... ${total - lines.length} more (raise "max" to see them)`)
     return lines.join('\n')
   },
 
@@ -251,7 +251,7 @@ async function reply(id: string, ok: boolean, text: string): Promise<void> {
 }
 
 async function handleCall(call: BridgeCall): Promise<void> {
-  const handler = handlers[call.tool]
+  const handler = (handlers as Partial<Record<string, ToolHandler>>)[call.tool]
   try {
     if (!handler) throw new Error(`Unknown tool: ${call.tool}`)
     const text = await handler(documentStore(), readRecord(call.args))
@@ -266,7 +266,7 @@ async function handleCall(call: BridgeCall): Promise<void> {
  * outside Tauri.
  */
 export async function startAppBridgeHost(): Promise<() => void> {
-  if (!isTauri()) return () => {}
+  if (!isTauri()) return noop
   const { listen } = await import('@tauri-apps/api/event')
   return listen<BridgeCall>(CALL_EVENT, (event) => {
     void handleCall(event.payload)

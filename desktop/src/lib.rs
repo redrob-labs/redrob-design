@@ -93,11 +93,11 @@ fn open_paths_from_args(args: Vec<String>, cwd: &Path) -> Vec<PathBuf> {
 fn queue_open_paths<R: tauri::Runtime>(app: &tauri::AppHandle<R>, paths: Vec<PathBuf>) {
     let files = paths
         .into_iter()
-        .filter_map(|path| {
+        .map(|path| {
             let _ = app.fs_scope().allow_file(&path);
-            Some(PendingOpenFile {
+            PendingOpenFile {
                 path: path.to_string_lossy().into_owned(),
-            })
+            }
         })
         .collect::<Vec<_>>();
 

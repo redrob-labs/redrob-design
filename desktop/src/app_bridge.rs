@@ -57,7 +57,11 @@ fn next_call_id() -> String {
 /// The webview's answer to one `app-bridge:call` event.
 #[tauri::command]
 pub fn app_bridge_reply(state: tauri::State<PendingCalls>, id: String, ok: bool, text: String) {
-    let sender = state.0.lock().ok().and_then(|mut pending| pending.remove(&id));
+    let sender = state
+        .0
+        .lock()
+        .ok()
+        .and_then(|mut pending| pending.remove(&id));
     match sender {
         Some(sender) => {
             let _ = sender.send(if ok { Ok(text) } else { Err(text) });
@@ -109,7 +113,9 @@ fn call_webview(app: &AppHandle, tool: &str, args: Value) -> Reply {
 
 fn tool(app: &AppHandle, name: &'static str, description: &str, schema: Value) -> Tool {
     let app = app.clone();
-    Tool::new(name, description, schema, move |args| call_webview(&app, name, args))
+    Tool::new(name, description, schema, move |args| {
+        call_webview(&app, name, args)
+    })
 }
 
 fn tools(app: &AppHandle) -> Vec<Tool> {
