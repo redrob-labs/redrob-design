@@ -7,6 +7,7 @@ import { useRoute } from 'vue-router'
 import { exposeCollaborationActions } from '@/app/browser-bridge'
 import { appRuntimeConfig } from '@/app/runtime/config'
 import { startMCPRuntime, stopMCPRuntime } from '@/app/automation/mcp/runtime'
+import { startAppBridgeHost } from '@/app/tauri/app-bridge-host'
 import { COLLAB_KEY, useCollab } from '@/app/collab/use'
 import { createDemoShapes } from '@/app/demo/document'
 import { commandPaletteOpen } from '@/app/shell/command-palette'
@@ -65,6 +66,7 @@ useEventListener(
 )
 
 const fileAssociationCleanup = ref<(() => void) | null>(null)
+const appBridgeCleanup = ref<(() => void) | null>(null)
 
 interface PendingOpenFile {
   path: string
@@ -89,6 +91,12 @@ onMounted(async () => {
   await startMCPRuntime(getActiveStore)
 
   try {
+    appBridgeCleanup.value = await startAppBridgeHost()
+  } catch (error) {
+    console.error('[App Bridge]', error)
+  }
+
+  try {
     await bindAssociatedFileOpen()
   } catch (error) {
     console.error('[Open With]', error)
@@ -97,6 +105,7 @@ onMounted(async () => {
 
 onUnmounted(() => {
   void stopMCPRuntime()
+  appBridgeCleanup.value?.()
   fileAssociationCleanup.value?.()
 })
 </script>
