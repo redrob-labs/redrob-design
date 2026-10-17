@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## 0.17.0 — 2026-10-17
+
+### Added
+
+- Control the open document from Redrob Code: while the desktop app is open it registers itself with the shared Redrob Code daemon, so the agent in any Redrob surface (including a phone chat) can drive the document through the `app:design` tools — read file, canvas and selection details, list and select layers, replace a text layer's content, show or hide a layer, move a layer, export the selection or page as PNG, SVG or PDF, and save. The daemon is optional: when it is not running the app works as before and nothing is registered.
+
+### Changed
+
+- Ship the 512 px app icon as `redrob-design.png` with every GitHub Release and name it in `redrob-launcher.json`, so Redrob Launcher 0.5.0 shows this app's icon in its catalog.
+
 ## 0.16.1 — 2026-10-16
 
 ### Fixed
