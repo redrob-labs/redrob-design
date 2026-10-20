@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+## 0.18.0 — 2026-10-20
+
+### Added
+
+- Sign in to Redrob Cloud with your Redrob account in the browser (redrob-auth, PKCE); a Console key stored here still works as a fallback.
+- Open shared files that Redrob Launcher hands over, and send the file name with an invite so the invite email can name it.
+
+### Changed
+
+- Reach Redrob Cloud through the Redrob Chat API: files, share links and invites use its `/design` routes, and collaboration runs on its relay. Cloud reads as unavailable when that backend cannot be reached.
+- Use the 2026 Redrob Design app icon from the Redrob design system for the desktop app, the web app and PWA icons, and the icon Redrob Launcher shows.
+
 ## 0.17.0 — 2026-10-17
 
 ### Added

@@ -149,7 +149,7 @@
       "name": "@redrob-design/brand",
       "version": "0.1.0",
       "dependencies": {
-        "@redrob-labs/ui": "1.0.2",
+        "@redrob-labs/ui": "1.8.0",
         "yaml": "^2.8.4",
         "zod": "^4.4.3",
       },
@@ -159,7 +159,7 @@
     },
     "packages/cli": {
       "name": "@redrob-design/cli",
-      "version": "0.15.0",
+      "version": "0.17.0",
       "bin": {
         "redrob-design": "./bin/redrob-design.js",
       },
@@ -178,7 +178,7 @@
     },
     "packages/core": {
       "name": "@redrob-design/core",
-      "version": "0.15.0",
+      "version": "0.17.0",
       "dependencies": {
         "@chenglou/pretext": "^0.0.7",
         "@iconify/utils": "^3.1.4",
@@ -239,7 +239,7 @@
     },
     "packages/dom-css": {
       "name": "@redrob-design/dom-css",
-      "version": "0.15.0",
+      "version": "0.17.0",
       "dependencies": {
         "@acemir/cssom": "^0.9.31",
         "parse5": "^8.0.1",
@@ -259,7 +259,7 @@
     },
     "packages/fig": {
       "name": "@redrob-design/fig",
-      "version": "0.15.0",
+      "version": "0.17.0",
       "dependencies": {
         "es-toolkit": "^1.51.0",
         "fflate": "^0.8.3",
@@ -276,7 +276,7 @@
     },
     "packages/harness": {
       "name": "@redrob-design/harness",
-      "version": "0.15.0",
+      "version": "0.17.0",
       "bin": {
         "redrob-design-harness": "./dist/stdio.mjs",
       },
@@ -292,7 +292,7 @@
     },
     "packages/kiwi": {
       "name": "@redrob-design/kiwi",
-      "version": "0.15.0",
+      "version": "0.17.0",
       "dependencies": {
         "fflate": "^0.8.3",
         "fzstd": "^0.1.1",
@@ -305,7 +305,7 @@
     },
     "packages/mcp": {
       "name": "@redrob-design/mcp",
-      "version": "0.15.0",
+      "version": "0.17.0",
       "bin": {
         "redrob-design-mcp": "./dist/stdio.mjs",
         "redrob-design-mcp-http": "./dist/index.mjs",
@@ -326,7 +326,7 @@
     },
     "packages/pen": {
       "name": "@redrob-design/pen",
-      "version": "0.15.0",
+      "version": "0.17.0",
       "dependencies": {
         "culori": "^4.0.2",
       },
@@ -342,7 +342,7 @@
     },
     "packages/scene-graph": {
       "name": "@redrob-design/scene-graph",
-      "version": "0.15.0",
+      "version": "0.17.0",
       "dependencies": {
         "es-toolkit": "^1.51.0",
         "nanoevents": "^9.1.0",
@@ -356,7 +356,7 @@
     },
     "packages/vue": {
       "name": "@redrob-design/vue",
-      "version": "0.15.0",
+      "version": "0.17.0",
       "dependencies": {
         "@atlaskit/pragmatic-drag-and-drop": "^1.8.1",
         "@atlaskit/pragmatic-drag-and-drop-hitbox": "^1.2.0",
@@ -1234,7 +1234,7 @@
 
     "@redrob-design/vue": ["@redrob-design/vue@workspace:packages/vue"],
 
-    "@redrob-labs/ui": ["@redrob-labs/ui@1.0.2", "", { "peerDependencies": { "react": "^18.2.0 || ^19.0.0", "react-dom": "^18.2.0 || ^19.0.0" } }, "sha512-QfjxT1AFq74oJYLuobviBXLR53FAopjZXZolVaqvSmZgDpU7A2CI342rBAtCZuis00WxMcu7xjkrcU7bfVPLWQ=="],
+    "@redrob-labs/ui": ["@redrob-labs/ui@1.8.0", "", { "peerDependencies": { "react": "^18.2.0 || ^19.0.0", "react-dom": "^18.2.0 || ^19.0.0" } }, "sha512-3RwrHRytDMbKNpevn5Ydn8a/kF1i5QseimlkQkhrTvRIqOmQG/BENcm3EztX0+C6FHxvo9heSDkml/fGHQZuJw=="],
 
     "@rolldown/binding-android-arm64": ["@rolldown/binding-android-arm64@1.2.4", "", { "os": "android", "cpu": "arm64" }, "sha512-jHC2cnyKz5xU2fhECtFl8OZ83cYNt13GZQD+0uMJ/X3o+ijmd56okHhTUwxVSHPx1IRVIJEZ1/1pPzeLCU6XKA=="],
 

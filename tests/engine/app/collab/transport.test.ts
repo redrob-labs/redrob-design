@@ -53,6 +53,8 @@ beforeAll(() => {
   setConsoleClientForTests(
     createConsoleClient({
       baseURL: 'https://console.mock/v1',
+      // The ticket is only followed to the design API's own host, so the mock relay stands there.
+      designBaseURL: new URL(relay.url).origin.replace(/^ws/, 'http'),
       token: () => Promise.resolve(MOCK_TOKEN),
       fetch: mockConsoleFetch(mock)
     })

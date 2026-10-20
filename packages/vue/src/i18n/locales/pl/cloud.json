@@ -2,8 +2,9 @@
   "heading": "Redrob Cloud",
   "description": "Opcjonalne. Zaloguj się, aby udostępniać pliki zaproszonym osobom, z szyfrowaniem end-to-end, razem z komentarzami i wersjami. Twoje pliki i klucze AI zostają tam, gdzie są.",
   "signedOut": "Nie zalogowano. Wszystko działa na tym komputerze bez konta.",
-  "signIn": "Zaloguj się przez Redrob Console",
+  "signIn": "Zaloguj się przez Redrob",
   "signingIn": "Czekam, aż zatwierdzisz ten kod w Redrob Console.",
+  "signingInBrowser": "Dokończ logowanie w przeglądarce, a potem wróć tutaj.",
   "openConsole": "Otwórz Redrob Console",
   "cancel": "Anuluj",
   "signedInAs": "Zalogowano jako {name}.",
@@ -11,6 +12,7 @@
   "noWorkspace": "To konto nie należy jeszcze do żadnego obszaru roboczego.",
   "signOut": "Wyloguj",
   "unreachable": "Nie udało się połączyć z Redrob Console. Funkcje chmury czekają na odpowiedź.",
+  "unavailable": "Udostępnione pliki i współpraca na żywo nie są jeszcze dostępne na tym serwerze. Wszystko na tym komputerze działa dalej.",
   "denied": "Logowanie nie zostało zatwierdzone.",
   "expired": "Kod wygasł przed zatwierdzeniem. Spróbuj ponownie.",
   "role": "{role} w tym obszarze roboczym"

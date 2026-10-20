@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, test } from 'bun:test'
+import { afterEach, beforeEach, describe, expect, test } from 'bun:test'
 
 import {
   CONSOLE_SESSION_REF,
@@ -22,6 +22,7 @@ import {
   mockConsoleFetch,
   mockConsoleState
 } from '#tests/helpers/console/server'
+import { clearTauriMocks } from '#tests/helpers/tauri/mocks'
 
 const BASE = 'https://console.mock/v1'
 
@@ -160,6 +161,10 @@ describe('Console client', () => {
 })
 
 describe('Redrob Cloud sign-in', () => {
+  // These cover the browser build's Console device flow. A Tauri window another test file left
+  // behind would send signInToCloud down the desktop redrob-auth path instead.
+  beforeEach(() => clearTauriMocks())
+
   function cloudDeps(mock = createMockConsole()) {
     return {
       mock,

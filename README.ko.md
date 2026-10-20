@@ -59,7 +59,7 @@ Redrob Code 엔진이 설치돼 있지 않으면 앱이 설치 과정을 안내�
   컴포넌트 중심 코드 작업으로 옮기기
 - **커스텀 편집기용 Vue SDK**: 레드롭 디자인을 다른 앱에 넣거나 업무에 맞춘 편집 화면을 만드는
   헤드리스 컴포넌트와 컴포저블
-- **실시간 협업**: WebRTC P2P, 서버 없음, 계정 없음. 커서·프레즌스·따라가기 모드. Redrob Cloud에 로그인하면 릴레이를 거칩니다
+- **실시간 협업**: 초대한 사람과 파일을 공유해 Redrob Cloud 릴레이로 함께 편집하며, 종단 간 암호화됩니다. 커서·프레즌스·따라가기 모드. Redrob Cloud 로그인이 필요하고 P2P 모드는 없습니다
 - **선택형 Redrob Cloud**: 로그인하면 Design Memory, 댓글, 버전 기록, 컴포넌트 라이브러리를 워크스페이스와 공유합니다. 계정 없이도 이 컴퓨터에서 모두 동작하고, AI 키는 계속 내 것입니다
 - **오토 레이아웃과 CSS Grid**: Yoga WASM 기반 flex·grid 레이아웃, gap·padding·정렬·트랙 크기
 - **가벼운 데스크톱 앱**: macOS, Windows, Linux용 Tauri v2. 브라우저에서 PWA로도 동작
@@ -220,10 +220,10 @@ macOS·Linux에서 TCP를 끄려면 `PORT=0`을 지정합니다.
 
 ## 협업
 
-링크를 공유해 실시간으로 함께 편집합니다. 서버도 계정도 없고, 참여자는 WebRTC로 직접 연결됩니다. Redrob Cloud에 로그인하면 P2P를 막는 네트워크에서도 되는 릴레이를 거치고, 릴레이에 닿지 않으면 WebRTC로 돌아갑니다.
+초대한 사람과 파일을 공유해 실시간으로 함께 편집합니다. 공유하려면 Redrob Cloud 로그인(설정, 클라우드)이 필요하고, 나머지 기능은 로그인 없이 동작합니다. 실시간 세션은 Redrob Chat API가 제공하는 WebSocket 릴레이인 Redrob Cloud 릴레이를 거치며, P2P 연결은 없습니다. 모든 변경·커서·댓글은 내 컴퓨터를 떠나기 전에 파일 고유 키로 암호화되므로 릴레이는 암호문만 전달합니다.
 
-1. 오른쪽 위 패널의 공유 버튼을 누릅니다
-2. 생성된 링크(`app.redrob.design/share/<room-id>`)를 공유합니다
+1. 오른쪽 위의 **공유**를 누르고 **이 파일 공유**를 누릅니다
+2. 이메일로 사람을 초대하고 역할을 고르거나, 이미 권한이 있는 사람에게 링크를 복사해 줍니다
 3. 참여자에게 커서·선택·편집이 실시간으로 보입니다
 4. 참여자 아바타를 누르면 그 사람의 뷰포트를 따라갑니다
 
@@ -283,7 +283,7 @@ tests/            E2E, visual, engine, and integration tests
 | 레이아웃 | Yoga WASM (flex + grid) |
 | UI | Vue 3, Reka UI, Tailwind CSS 4 |
 | 파일 포맷 | Kiwi binary + Zstd + ZIP |
-| 협업 | Trystero (WebRTC P2P) + Yjs (CRDT) |
+| 협업 | Redrob Cloud 릴레이(WebSocket) 위의 Yjs (CRDT), 종단 간 암호화 |
 | 데스크톱 | Tauri v2 |
 | AI·MCP | Redrob Code 엔진(ACP + 공용 데몬의 OpenAI 호환 경로), MCP SDK, Hono |
 

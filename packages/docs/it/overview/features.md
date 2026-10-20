@@ -90,7 +90,7 @@ Tutti i comandi supportano `--json`. Installazione: `npm install -g @redrob-desi
 
 ## Collaborazione in tempo reale
 
-La connessione peer-to-peer WebRTC non richiede un server centrale. Condividi un link e modifica il documento insieme agli altri partecipanti, con cursori, presenza e modalità di seguito.
+Condividi un file con le persone che inviti e modificatelo insieme tramite il relay di Redrob Cloud, con crittografia end-to-end. Serve l'accesso a Redrob Cloud; non esiste una modalità P2P. Ci sono cursori, presenza e modalità di seguito.
 
 ## Desktop e Web
 

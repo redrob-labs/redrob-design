@@ -8,8 +8,9 @@ export const cloudMessageDefaults = {
   description:
     'Optional. Sign in to share files with the people you invite, end-to-end encrypted, with their comments and versions. Your files and AI keys stay where they are.',
   signedOut: 'Not signed in. Everything works on this computer without an account.',
-  signIn: 'Sign in with Redrob Console',
+  signIn: 'Sign in with Redrob',
   signingIn: 'Waiting for you to approve this code in Redrob Console.',
+  signingInBrowser: 'Finish signing in in your browser, then come back here.',
   openConsole: 'Open Redrob Console',
   cancel: 'Cancel',
   signedInAs: params('Signed in as {name}.'),
@@ -17,6 +18,8 @@ export const cloudMessageDefaults = {
   noWorkspace: 'This account is not in a workspace yet.',
   signOut: 'Sign out',
   unreachable: 'Redrob Console could not be reached. Cloud features wait until it answers.',
+  unavailable:
+    'Shared files and live collaboration are not available on this server yet. Everything on this computer keeps working.',
   denied: 'The sign-in was not approved.',
   expired: 'The code expired before it was approved. Try again.',
   role: params('{role} in this workspace')

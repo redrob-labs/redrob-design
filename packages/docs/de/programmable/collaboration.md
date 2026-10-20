@@ -1,38 +1,34 @@
 ---
 title: Zusammenarbeit
-description: Gemeinsame Bearbeitung in Echtzeit direkt über WebRTC, ohne zentralen Server.
+description: Eine Datei mit eingeladenen Personen teilen und gemeinsam in Echtzeit bearbeiten, Ende-zu-Ende-verschlüsselt über Redrob Cloud.
 ---
 
 # Zusammenarbeit
 
-Mehrere Personen können dasselbe Dokument gleichzeitig bearbeiten. Die Teilnehmer verbinden sich direkt über WebRTC; ein Konto ist nicht erforderlich.
+Eine Datei mit eingeladenen Personen teilen und gemeinsam in Echtzeit bearbeiten. Zum Teilen ist eine Anmeldung bei Redrob Cloud nötig (Einstellungen, Cloud); alles andere in Redrob Design funktioniert ohne Konto.
 
-## Raum teilen
+## Eine Datei teilen
 
-1. Schaltfläche „Teilen“ oben rechts öffnen.
-2. Den erzeugten Link `app.redrob.design/share/<room-id>` kopieren.
-3. Link an die anderen Teilnehmer senden.
+1. Oben rechts auf **Teilen** klicken, dann auf **Diese Datei teilen**.
+2. Personen per E-Mail einladen und wählen, was sie dürfen: **Kann bearbeiten**, **Kann kommentieren** oder **Kann ansehen**. Wer noch kein Konto hat, bekommt die Datei bei der ersten Anmeldung mit dieser Adresse.
+3. **Link kopieren** liefert einen Link, der sich für Personen mit Zugriff öffnet.
 
-Jede Person mit dem Link kann beitreten. Der Raum bleibt erreichbar, solange mindestens ein Teilnehmer die Seite geöffnet hat.
+Mit dir geteilte Dateien stehen auf der Startseite unter **Mit dir geteilt**.
 
-## Synchronisierte Daten
+## Ansichtslinks
 
-- **Dokument:** Änderungen an Formen, Text, Eigenschaften und Anordnung;
-- **Zeiger:** Position, Name und Farbe jedes Teilnehmers;
-- **Auswahl:** ausgewählte Objekte der anderen Teilnehmer.
+**Ansichtslink erstellen** erzeugt einen Link, mit dem jede Person die Datei lesen kann, angemeldet oder nicht. Bearbeiten und Kommentieren sind damit nicht möglich. Ein neuer Link schaltet den alten ab, und **Ausschalten** stoppt ihn sofort.
 
-## Ansichtsverfolgung
+## Was synchronisiert wird
 
-Ein Klick auf einen Avatar folgt der Ansicht dieses Teilnehmers. Position und Zoom werden angepasst. Ein weiterer Klick beendet die Verfolgung.
+- **Änderungen am Dokument**, sofort, und die Datei wird in Redrob Cloud gespeichert.
+- **Zeiger und Auswahl**, mit Name und Farbe jeder Person.
+- **Kommentare und Versionen**, für alle mit Zugriff.
 
-## Technische Grundlage
+Auf den Avatar einer Person klicken, um ihrer Ansicht zu folgen; erneut klicken, um aufzuhören.
 
-WebRTC überträgt die Designdaten direkt zwischen den Teilnehmern. Ein zentraler Anwendungsserver leitet die Änderungen nicht weiter.
+## So funktioniert es
 
-Yjs synchronisiert den Dokumentzustand als CRDT und führt gleichzeitige Änderungen automatisch zusammen. IndexedDB speichert den lokalen Stand, sodass ein erneutes Öffnen desselben Raums ihn wiederherstellt.
+Jede geteilte Datei hat einen eigenen Inhaltsschlüssel, erzeugt auf dem Computer, der sie geteilt hat. Namen, Dokument, Live-Änderungen, Zeiger, Kommentare und Versionen werden damit verschlüsselt, bevor sie den Computer verlassen. Redrob Cloud speichert und leitet nur Chiffretext weiter.
 
-## Hinweise
-
-- Zusammenarbeit funktioniert im Browser und in der Desktop-App.
-- Raumkennungen werden mit kryptografisch sicheren Zufallswerten erzeugt.
-- Zeiger und Anwesenheitseinträge getrennter Teilnehmer werden automatisch entfernt.
+Live-Sitzungen laufen über das Redrob-Cloud-Relay, einen WebSocket der Redrob-Chat-API. Es gibt keine P2P-Verbindung und keinen öffentlichen Signalisierungsserver. Der Dokumentzustand ist ein CRDT (Yjs), daher werden gleichzeitige Änderungen ohne Konflikte zusammengeführt.

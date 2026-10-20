@@ -88,7 +88,7 @@ Figma-compatible bidirectional clipboard. Encodes/decodes Kiwi binary (same form
 
 ### Collaboration
 
-Real-time collaboration on shared files via Yjs CRDT over the Redrob Cloud relay, a ticketed WebSocket. Every payload is sealed with the file's AES-256-GCM content key before it leaves the app, and keys are wrapped per device (ECIES over P-256), so neither the relay nor Console can read the document. Snapshots are sealed Yjs state on presigned S3 links, saved by compare-and-swap. Awareness provides live cursors, selections and presence. There is no peer-to-peer path.
+Real-time collaboration on shared files via Yjs CRDT over the Redrob Cloud relay, a ticketed WebSocket served by the Redrob Chat API at `/relay`. Every payload is sealed with the file's AES-256-GCM content key before it leaves the app, and keys are wrapped per device (ECIES over P-256), so neither the relay nor the design backend (`/design` on the chat API) can read the document. Snapshots are sealed Yjs state on presigned S3 links, saved by compare-and-swap. Awareness provides live cursors, selections and presence. There is no peer-to-peer path.
 
 ### CLI-to-App RPC Bridge
 

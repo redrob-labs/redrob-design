@@ -2,8 +2,9 @@
   "heading": "Redrob Cloud",
   "description": "Facultatif. Connectez-vous pour partager des fichiers avec les personnes que vous invitez, chiffrés de bout en bout, avec leurs commentaires et versions. Vos fichiers et clés AI restent où ils sont.",
   "signedOut": "Non connecté. Tout fonctionne sur cet ordinateur sans compte.",
-  "signIn": "Se connecter avec Redrob Console",
+  "signIn": "Se connecter avec Redrob",
   "signingIn": "En attente de votre approbation de ce code dans Redrob Console.",
+  "signingInBrowser": "Terminez la connexion dans votre navigateur, puis revenez ici.",
   "openConsole": "Ouvrir Redrob Console",
   "cancel": "Annuler",
   "signedInAs": "Connecté en tant que {name}.",
@@ -11,6 +12,7 @@
   "noWorkspace": "Ce compte n'appartient encore à aucun espace de travail.",
   "signOut": "Se déconnecter",
   "unreachable": "Redrob Console est injoignable. Les fonctions cloud attendent sa réponse.",
+  "unavailable": "Les fichiers partagés et la collaboration en direct ne sont pas encore disponibles sur ce serveur. Tout ce qui est sur cet ordinateur continue de fonctionner.",
   "denied": "La connexion n'a pas été approuvée.",
   "expired": "Le code a expiré avant d'être approuvé. Réessayez.",
   "role": "{role} dans cet espace de travail"
