@@ -2,8 +2,9 @@
   "heading": "Redrob Cloud",
   "description": "Optional. Melden Sie sich an, um Dateien mit eingeladenen Personen zu teilen, Ende-zu-Ende-verschlüsselt, mit Kommentaren und Versionen. Ihre Dateien und AI-Schlüssel bleiben, wo sie sind.",
   "signedOut": "Nicht angemeldet. Alles funktioniert ohne Konto auf diesem Computer.",
-  "signIn": "Mit Redrob Console anmelden",
+  "signIn": "Mit Redrob anmelden",
   "signingIn": "Warte darauf, dass du diesen Code in Redrob Console bestätigst.",
+  "signingInBrowser": "Schließe die Anmeldung im Browser ab und kehre dann hierher zurück.",
   "openConsole": "Redrob Console öffnen",
   "cancel": "Abbrechen",
   "signedInAs": "Angemeldet als {name}.",
@@ -11,6 +12,7 @@
   "noWorkspace": "Dieses Konto ist noch in keinem Workspace.",
   "signOut": "Abmelden",
   "unreachable": "Redrob Console war nicht erreichbar. Cloud-Funktionen warten, bis sie antwortet.",
+  "unavailable": "Geteilte Dateien und Live-Zusammenarbeit sind auf diesem Server noch nicht verfügbar. Alles auf diesem Computer funktioniert weiter.",
   "denied": "Die Anmeldung wurde nicht bestätigt.",
   "expired": "Der Code ist abgelaufen, bevor er bestätigt wurde. Versuche es erneut.",
   "role": "{role} in diesem Workspace"
