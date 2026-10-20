@@ -1,7 +1,10 @@
 import type { z } from 'zod'
 
-import { REDROB_CONSOLE_API_BASE } from '@redrob-design/core/constants'
-
+import {
+  REDROB_CHAT_API_BASE,
+  REDROB_CONSOLE_API_BASE,
+  isDesignPath
+} from './endpoints'
 import {
   consoleRoute,
   routePath,
@@ -38,7 +41,10 @@ export class ConsoleError extends Error {
 export type ConsoleFetch = (input: string, init: RequestInit) => Promise<Response>
 
 export interface ConsoleClientOptions {
+  /** Console: workspaces, feeds, watches. */
   baseURL?: string
+  /** The chat API, which serves every `/design/*` route. */
+  designBaseURL?: string
   /** Resolved for every request and never kept; null when signed out. */
   token: () => Promise<string | null>
   fetch: ConsoleFetch
@@ -141,11 +147,13 @@ function emptyData<Op extends ConsoleOperationId>(): ConsoleData<Op> {
  */
 export function createConsoleClient(options: ConsoleClientOptions) {
   const base = (options.baseURL ?? REDROB_CONSOLE_API_BASE).replace(/\/+$/, '')
+  const designBase = (options.designBaseURL ?? REDROB_CHAT_API_BASE).replace(/\/+$/, '')
   const timeoutMs = options.timeoutMs ?? CONSOLE_TIMEOUT_MS
   const limit = options.maxResponseBytes ?? CONSOLE_MAX_RESPONSE_BYTES
 
   function urlFor(route: ConsoleRoute, request: ConsoleRequest): string {
-    const url = new URL(`${base}${routePath(route, request.params)}`)
+    const root = isDesignPath(route.path) ? designBase : base
+    const url = new URL(`${root}${routePath(route, request.params)}`)
     for (const [key, value] of Object.entries(request.query ?? {})) {
       if (value !== undefined) url.searchParams.set(key, value)
     }
@@ -227,7 +235,7 @@ export function createConsoleClient(options: ConsoleClientOptions) {
     return { data: checked<Op>(parsed.data), etag }
   }
 
-  return { call, baseURL: base }
+  return { call, baseURL: base, designBaseURL: designBase }
 }
 
 export type ConsoleClient = ReturnType<typeof createConsoleClient>
