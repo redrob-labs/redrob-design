@@ -1,5 +1,13 @@
 name: CI
 
+# Pull requests run one fast path: fork boundary, then a quality job (format, lint,
+# typecheck, architecture, secrets) and one unsharded engine-test job in parallel.
+# A PR whose diff is docs-only or only bumps version strings skips both heavy jobs;
+# a skipped job still satisfies a required check.
+#
+# The slower checks (package integrity, repository hygiene, Storybook, native-test
+# contracts) run only when this workflow is dispatched by hand.
+
 on:
   pull_request:
     branches: [main, develop, master]
@@ -7,6 +15,7 @@ on:
       - 'packages/docs/**'
       - 'openspec/**'
       - '*.md'
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -17,6 +26,50 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  changes:
+    name: Changes
+    timeout-minutes: 2
+    runs-on: ubuntu-latest
+    outputs:
+      heavy: ${{ steps.classify.outputs.heavy }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Classify changed files
+        id: classify
+        shell: bash
+        env:
+          EVENT: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          set -euo pipefail
+          if [ "$EVENT" != "pull_request" ]; then
+            echo "heavy=true" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          base=$(git merge-base "$BASE_SHA" HEAD)
+          mapfile -t files < <(git diff --name-only "$base" HEAD)
+          heavy=false
+          for f in "${files[@]}"; do
+            case "$f" in
+              *.md|docs/*|LICENSE*|CHANGELOG*) continue ;;
+              VERSION|REDROB_VERSION|*-version.txt) continue ;;
+              package.json|*/package.json|bun.lock|Cargo.toml|*/Cargo.toml|Cargo.lock|*/Cargo.lock|*/tauri.conf.json)
+                # Version-only: every changed line is a "version": / version = line.
+                if git diff -U0 "$base" HEAD -- "$f" \
+                  | grep -E '^[-+]' | grep -vE '^(\+\+\+|---) ' \
+                  | grep -qvE '^[-+][[:space:]]*("version":[[:space:]]*"[^"]*",?|version[[:space:]]*=[[:space:]]*"[^"]*")[[:space:]]*$'; then
+                  heavy=true; break
+                fi
+                continue ;;
+              *) heavy=true; break ;;
+            esac
+          done
+          echo "changed files: ${#files[@]}, heavy=$heavy"
+          echo "heavy=$heavy" >> "$GITHUB_OUTPUT"
+
   fork-boundary:
     name: Fork boundary
     timeout-minutes: 5
@@ -27,13 +80,14 @@ jobs:
           persist-credentials: false
 
       # Reads upstream-base.json, LICENSE and NOTICE only, so it needs no install and
-      # no Bun. Kept in its own job so a deleted upstream copyright line fails fast
-      # instead of hiding behind the quality matrix.
+      # no Bun. Kept in its own job so a deleted upstream copyright line fails fast.
       - name: Verify upstream attribution and pin
         run: node scripts/check-upstream-boundary.mjs
 
   source-quality:
     name: Code quality
+    needs: changes
+    if: needs.changes.outputs.heavy == 'true'
     timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
@@ -58,8 +112,44 @@ jobs:
       - name: Enforce architecture and type-shape boundaries
         run: bun run check:arch && bun run test:type-shapes
 
+      - name: Scan for committed secrets
+        run: bun run check:secrets
+
+  unit-tests:
+    name: Engine tests
+    needs: changes
+    if: needs.changes.outputs.heavy == 'true'
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-bun
+        with:
+          lfs: 'true'
+
+      - name: Build shared Core test dependency
+        run: bun --filter @redrob-design/core build
+
+      - name: Run engine tests
+        shell: bash
+        run: |
+          mapfile -t test_files < <(bun tools/unit-tests/src/list.ts all)
+          if [ "${#test_files[@]}" -eq 0 ]; then
+            echo "No engine tests found"
+            exit 0
+          fi
+          bun test "${test_files[@]}"
+        env:
+          BUN_HEAVY_TESTS: 'false'
+
+  # ---- Dispatch-only: not run on pull requests --------------------------------
+
   package-quality:
     name: Package integrity
+    if: github.event_name == 'workflow_dispatch'
     timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
@@ -83,6 +173,7 @@ jobs:
 
   repository-quality:
     name: Repository hygiene
+    if: github.event_name == 'workflow_dispatch'
     timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
@@ -101,9 +192,6 @@ jobs:
       - name: Audit critical dependency vulnerabilities
         run: bun run check:audit
 
-      - name: Scan for committed secrets
-        run: bun run check:secrets
-
       - name: Test repository tooling
         run: bun run test:tools
 
@@ -112,6 +200,7 @@ jobs:
 
   storybook:
     name: Component workshop
+    if: github.event_name == 'workflow_dispatch'
     timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
@@ -129,22 +218,13 @@ jobs:
 
   native-test-contracts:
     name: Native app contracts
+    if: github.event_name == 'workflow_dispatch'
     timeout-minutes: 8
     runs-on: ubuntu-24.04
     container:
       # Published by .github/workflows/native-contracts-image.yml into a package owned by
-      # THIS repository (ghcr.io/<owner>/<repo>/...), not by the organisation namespace.
-      #
-      # An org-level name (ghcr.io/<owner>/native-contracts-ci) belongs to whichever
-      # repository first published it, and access does not follow a rename: the package
-      # created before this repository was renamed stayed linked to the old one, so this
-      # repository's GITHUB_TOKEN could neither pull it (`denied` at Initialize
-      # containers) nor republish over it (`permission_denied: read_package`), and no
-      # workflow change could grant it. A repository-scoped name is auto-linked to the
-      # repository that publishes it, so the two stay together through any rename.
-      #
-      # Referenced by tag rather than digest until the first image is published; pin the
-      # digest once it is.
+      # THIS repository (ghcr.io/<owner>/<repo>/...), not by the organisation namespace,
+      # so access follows the repository through renames.
       image: ghcr.io/${{ github.repository }}/native-contracts-ci:ubuntu-24.04
       credentials:
         username: ${{ github.actor }}
@@ -168,35 +248,3 @@ jobs:
 
       - name: Compile native-test Tauri feature
         run: cargo check --manifest-path desktop/Cargo.toml --features native-test
-
-  unit-tests:
-    timeout-minutes: 10
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: true
-      matrix:
-        group: [app, dom, editor, fig, render, scene, vue]
-    name: Engine tests — ${{ matrix.group }}
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-        with:
-          persist-credentials: false
-
-      - uses: ./.github/actions/setup-bun
-        with:
-          lfs: 'true'
-
-      - name: Build shared Core test dependency
-        run: bun --filter @redrob-design/core build
-
-      - name: Run ${{ matrix.group }} engine tests
-        shell: bash
-        run: |
-          mapfile -t test_files < <(bun tools/unit-tests/src/list.ts "${{ matrix.group }}")
-          if [ "${#test_files[@]}" -eq 0 ]; then
-            echo "No tests found for shard ${{ matrix.group }}"
-            exit 0
-          fi
-          bun test "${test_files[@]}"
-        env:
-          BUN_HEAVY_TESTS: 'false'
