@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Changed
+
+- Use the 2026 Redrob Design app icon from the Redrob design system for the desktop app, the web app and PWA icons, and the icon Redrob Launcher shows.
+
 ## 0.17.0 — 2026-10-17
 
 ### Added
