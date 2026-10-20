@@ -16,9 +16,9 @@ import SettingsSectionHeader from '@/components/settings/layout/SettingsSectionH
 import AppButton from '@/components/ui/AppButton.vue'
 
 /**
- * Redrob Cloud: optional sign-in to Redrob Console, and the workspace Cloud
- * features read from. The session token goes to the credential store and
- * never reaches this component.
+ * Redrob Cloud: optional sign-in (redrob-auth in the browser, or the Console device code as the
+ * fallback), and the workspace Cloud features read from. Tokens go to the credential store and
+ * never reach this component.
  */
 const t = useCloudMessages()
 
@@ -46,7 +46,7 @@ onMounted(() => void refreshCloudAccount())
     <p v-if="problem" role="alert" class="text-error">{{ problem }}</p>
 
     <template v-if="cloudState.status === 'signing-in'">
-      <p class="text-surface">{{ t.signingIn }}</p>
+      <p class="text-surface">{{ cloudState.signIn ? t.signingIn : t.signingInBrowser }}</p>
       <p
         v-if="cloudState.signIn"
         data-slot="cloud-user-code"
@@ -68,6 +68,13 @@ onMounted(() => void refreshCloudAccount())
           {{ t.cancel }}
         </AppButton>
       </div>
+    </template>
+
+    <template v-else-if="cloudState.status === 'unavailable'">
+      <p class="text-muted" data-slot="cloud-unavailable">{{ t.unavailable }}</p>
+      <AppButton class="self-start" color="neutral" variant="outline" @click="signOutOfCloud">
+        {{ t.signOut }}
+      </AppButton>
     </template>
 
     <template v-else-if="cloudState.account">

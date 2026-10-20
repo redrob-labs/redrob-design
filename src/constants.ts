@@ -64,6 +64,18 @@ import type { Color } from '@redrob-design/scene-graph/primitives'
 export const WEB_APP_ORIGIN = 'https://app.redrob.design'
 
 /**
+ * Where share links point: the Redrob Chat web page for a shared file (`<base>/<fileId>`), which
+ * hands the file to the launcher. Dev and staging builds point elsewhere with
+ * `VITE_REDROB_SHARE_LINK_BASE`.
+ */
+export const SHARE_LINK_BASE_DEFAULT = 'https://chat.redrob.ai/design/f'
+const shareLinkBaseEnv: unknown = import.meta.env.VITE_REDROB_SHARE_LINK_BASE
+export const SHARE_LINK_BASE = (
+  (typeof shareLinkBaseEnv === 'string' && shareLinkBaseEnv.trim()) ||
+  SHARE_LINK_BASE_DEFAULT
+).replace(/\/+$/, '')
+
+/**
  * Remote collaborator colours, from the Redrob design system accent families (tokens.json). Each is
  * vivid enough to read as a cursor on either canvas theme and carries white avatar initials.
  */

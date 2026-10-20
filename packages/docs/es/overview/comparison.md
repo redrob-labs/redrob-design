@@ -205,7 +205,7 @@ Penpot ofrece plugins aislados, pero no una API equivalente para scripting sin i
 | Desarrollo | Redrob Design | TypeScript y Vue frente a Clojure, Rust y Docker |
 | Aplicación de escritorio | Redrob Design | Tauri nativo |
 | Disposición | Redrob Design | Yoga frente a dos implementaciones propias |
-| Colaboración | Ventajas distintas | Penpot: servidor y control de acceso; Redrob Design: P2P sin alojamiento |
+| Colaboración | Ventajas distintas | Penpot: servidor y control de acceso; Redrob Design: relé de Redrob Cloud con roles por archivo y cifrado de extremo a extremo |
 | Alojamiento propio | Penpot | Despliegue con Docker |
 | Madurez del ecosistema | Penpot | Años de uso en producción |
 

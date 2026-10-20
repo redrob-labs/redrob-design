@@ -175,7 +175,7 @@ Penpot oferuje wtyczki wykonywane w izolacji, ale nie ma porównywalnego API dla
 | Programowanie | Redrob Design | TypeScript i Vue zamiast Clojure, Rust i Docker |
 | Aplikacja komputerowa | Redrob Design | Tauri |
 | Układ | Redrob Design | Yoga zamiast dwóch własnych implementacji |
-| Współpraca | Różne mocne strony | Penpot: serwer i kontrola dostępu; Redrob Design: P2P bez hostingu |
+| Współpraca | Różne mocne strony | Penpot: serwer i kontrola dostępu; Redrob Design: przekaźnik Redrob Cloud, role dla każdego pliku i szyfrowanie end-to-end |
 | Samodzielne wdrożenie | Penpot | Docker |
 | Dojrzałość | Penpot | Wieloletnie użycie produkcyjne |
 

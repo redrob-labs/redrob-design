@@ -18,7 +18,7 @@ Wbudowany asystent używa ponad 90 narzędzi. Opisz zadanie zwykłym językiem, 
 
 ## Współpraca
 
-Dokument jest synchronizowany bezpośrednio między uczestnikami przez WebRTC. Centralny serwer i konto nie są potrzebne. Kursory uczestników i tryb śledzenia pokazują ich obecność, a Yjs CRDT łączy równoczesne zmiany.
+Udostępniony plik jest synchronizowany przez przekaźnik Redrob Cloud z szyfrowaniem end-to-end. Wymaga zalogowania do Redrob Cloud; trybu P2P nie ma. Kursory uczestników i tryb śledzenia pokazują ich obecność, a Yjs CRDT łączy równoczesne zmiany.
 
 [Współpraca →](./collaboration)
 

@@ -2,8 +2,9 @@
   "heading": "Redrob Cloud",
   "description": "Opcional. Inicia sesión para compartir archivos con las personas que invites, cifrados de extremo a extremo, con sus comentarios y versiones. Tus archivos y claves de AI se quedan donde están.",
   "signedOut": "Sin sesión. Todo funciona en este equipo sin cuenta.",
-  "signIn": "Iniciar sesión con Redrob Console",
+  "signIn": "Iniciar sesión con Redrob",
   "signingIn": "Esperando a que apruebes este código en Redrob Console.",
+  "signingInBrowser": "Termina de iniciar sesión en el navegador y vuelve aquí.",
   "openConsole": "Abrir Redrob Console",
   "cancel": "Cancelar",
   "signedInAs": "Sesión iniciada como {name}.",
@@ -11,6 +12,7 @@
   "noWorkspace": "Esta cuenta aún no está en ningún espacio de trabajo.",
   "signOut": "Cerrar sesión",
   "unreachable": "No se pudo conectar con Redrob Console. Las funciones de la nube esperan a que responda.",
+  "unavailable": "Los archivos compartidos y la colaboración en vivo aún no están disponibles en este servidor. Todo en este equipo sigue funcionando.",
   "denied": "No se aprobó el inicio de sesión.",
   "expired": "El código caducó antes de aprobarse. Inténtalo de nuevo.",
   "role": "{role} en este espacio de trabajo"

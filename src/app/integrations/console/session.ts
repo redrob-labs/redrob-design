@@ -9,8 +9,19 @@ import {
   type DeviceAuthorization,
   type DeviceConnectDeps
 } from '@/app/ai/connect/device-connect'
+import {
+  RedrobAuthError,
+  RedrobAuthUnavailableError,
+  cancelRedrobAuthSignIn,
+  hasRedrobAuthSession,
+  redrobAuthAccessToken,
+  redrobAuthAvailable,
+  signInWithRedrobAuth,
+  signOutOfRedrobAuth
+} from '@/app/integrations/redrob-auth/login'
 import { appCredentialServices } from '@/app/settings/credentials/app'
 import { credentialRef } from '@/app/settings/credentials/reference'
+import { openExternalLink } from '@/app/shell/ui'
 import { isTauri } from '@/app/tauri/env'
 
 import { consoleCache } from './cache'
@@ -22,7 +33,7 @@ export const CONSOLE_SESSION_REF = credentialRef('console', 'session-token')
 /** The device-flow product Console issues Redrob Design Cloud sessions for. */
 export const CLOUD_DEVICE_PRODUCT = 'design-cloud' as const
 
-export type CloudStatus = 'signed-out' | 'signing-in' | 'signed-in' | 'unreachable'
+export type CloudStatus = 'signed-out' | 'signing-in' | 'signed-in' | 'unreachable' | 'unavailable'
 
 export interface CloudSignIn {
   userCode: string
@@ -76,6 +87,37 @@ export function selectWorkspace(id: string): void {
 
 export const signedIn = computed(() => cloudState.status === 'signed-in')
 
+/**
+ * Signed in, but the chat API has no design backend (404 on `/design/me`): sharing, comments,
+ * versions and live collaboration are shown as unavailable rather than as errors.
+ */
+export const cloudUnavailable = computed(() => cloudState.status === 'unavailable')
+
+/**
+ * The bearer for Console and the design backend: the redrob-auth access token when this
+ * computer signed in through redrob-auth, else the Console session token (the older device
+ * sign-in, kept as the fallback). Console accepts both.
+ */
+async function sessionToken(): Promise<string | null> {
+  if (await hasRedrobAuthSession()) {
+    try {
+      const token = await redrobAuthAccessToken()
+      if (token) return token
+    } catch (error) {
+      throw new ConsoleError(
+        'unreachable',
+        error instanceof Error ? error.message : 'Redrob sign-in could not be reached'
+      )
+    }
+  }
+  return appCredentialServices.resolver.resolve(CONSOLE_SESSION_REF)
+}
+
+async function hasSession(): Promise<boolean> {
+  if (await hasRedrobAuthSession()) return true
+  return (await appCredentialServices.manager.status(CONSOLE_SESSION_REF)) === 'configured'
+}
+
 /** The fetch the app reaches Console and its presigned storage links with. */
 export function appFetch(): ConsoleFetch {
   if (!isTauri()) return (url, init) => fetch(url, init)
@@ -101,7 +143,8 @@ let client: ConsoleClient | null = null
 /** The Console client every Cloud feature shares; the token is read per request. */
 export function consoleClient(): ConsoleClient {
   client ??= createConsoleClient({
-    token: () => appCredentialServices.resolver.resolve(CONSOLE_SESSION_REF),
+    token: sessionToken,
+    installationId: cloudInstallId,
     fetch: appFetch()
   })
   return client
@@ -122,8 +165,7 @@ function isAccount(value: unknown): value is ConsoleAccount {
  * features stay as they were; a rejected token signs out.
  */
 export async function refreshCloudAccount(): Promise<void> {
-  const status = await appCredentialServices.manager.status(CONSOLE_SESSION_REF)
-  if (status !== 'configured') {
+  if (!(await hasSession())) {
     cloudState.status = 'signed-out'
     cloudState.account = null
     return
@@ -137,6 +179,12 @@ export async function refreshCloudAccount(): Promise<void> {
   } catch (error) {
     if (error instanceof ConsoleError && error.kind === 'not-signed-in') {
       await signOutOfCloud()
+      return
+    }
+    if (error instanceof ConsoleError && error.kind === 'not-found') {
+      cloudState.account = null
+      cloudState.status = 'unavailable'
+      cloudState.error = null
       return
     }
     const cached = await consoleCache().get(ACCOUNT_CACHE_KEY, isAccount)
@@ -159,9 +207,33 @@ function httpsOr(url: string): string {
   }
 }
 
+/** The sign-in error text for a redrob-auth failure that is not cancel or unreachable. */
+function redrobAuthErrorText(error: unknown): string {
+  if (error instanceof RedrobAuthError && error.code === 'access_denied') return 'denied'
+  if (error instanceof RedrobAuthError && error.code === 'timeout') return 'expired'
+  return error instanceof Error ? error.message : String(error)
+}
+
+/** Records a failed redrob-auth sign-in in the cloud state. */
+function settleRedrobAuthFailure(error: unknown, cancelled: boolean): void {
+  cloudState.signIn = null
+  if (cancelled || (error instanceof RedrobAuthError && error.code === 'cancelled')) {
+    cloudState.status = 'signed-out'
+    cloudState.error = null
+  } else if (error instanceof RedrobAuthError && error.code === 'unreachable') {
+    cloudState.status = 'unreachable'
+    cloudState.error = error.message
+  } else {
+    cloudState.status = 'signed-out'
+    cloudState.error = redrobAuthErrorText(error)
+  }
+}
+
 /**
- * Signs in with Console's device flow: the person approves a short code in
- * Console, and the session token goes straight to the credential store.
+ * Signs in. With redrob-auth available (the desktop app, issuer configured) the system browser
+ * opens redrob-auth and the refresh token goes to the OS keychain. When redrob-auth cannot be used
+ * (browser build, client not registered, grant off) the Console device flow runs instead: the
+ * person approves a short code in Console, and the session token goes to the credential store.
  */
 export async function signInToCloud(
   deps: DeviceConnectDeps = appCloudDeps()
@@ -170,9 +242,28 @@ export async function signInToCloud(
   let cancelled = false
   cancelSignIn = () => {
     cancelled = true
+    cancelRedrobAuthSignIn()
   }
+  const isCancelled = (): boolean => cancelled
   cloudState.status = 'signing-in'
   cloudState.error = null
+  if (redrobAuthAvailable()) {
+    try {
+      await signInWithRedrobAuth(openExternalLink)
+      await refreshCloudAccount()
+      return cloudState.status
+    } catch (error) {
+      if (!(error instanceof RedrobAuthUnavailableError)) {
+        settleRedrobAuthFailure(error, isCancelled())
+        return cloudState.status
+      }
+      // redrob-auth is not set up for this app: fall through to the Console device sign-in.
+    }
+    if (isCancelled()) {
+      cloudState.status = 'signed-out'
+      return cloudState.status
+    }
+  }
   let authorization: DeviceAuthorization
   try {
     authorization = await startDeviceAuthorization(CLOUD_DEVICE_PRODUCT, deps, cloudInstallId())
@@ -186,7 +277,7 @@ export async function signInToCloud(
     verificationURI: httpsOr(authorization.verificationURI),
     verificationURIComplete: httpsOr(authorization.verificationURIComplete)
   }
-  const outcome = await runDeviceConnect({ authorization, deps, isCancelled: () => cancelled })
+  const outcome = await runDeviceConnect({ authorization, deps, isCancelled })
   cloudState.signIn = null
   if (outcome.status !== 'connected') {
     cloudState.status = outcome.status === 'unreachable' ? 'unreachable' : 'signed-out'
@@ -203,9 +294,10 @@ export function cancelCloudSignIn(): void {
   cancelSignIn = null
 }
 
-/** Forgets the session token and everything cached from Console. */
+/** Forgets both sessions and everything cached from Console. */
 export async function signOutOfCloud(): Promise<void> {
   cancelCloudSignIn()
+  await signOutOfRedrobAuth()
   await appCredentialServices.manager.clear(CONSOLE_SESSION_REF)
   await consoleCache().clear()
   cloudState.status = 'signed-out'

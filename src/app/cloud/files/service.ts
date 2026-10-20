@@ -152,9 +152,14 @@ export async function fileMembers(fileId: string): Promise<FileMembers> {
 export async function inviteToFile(
   fileId: string,
   email: string,
-  role: InviteRole
+  role: InviteRole,
+  fileName?: string
 ): Promise<FileMembers> {
-  await consoleClient().call('addFileMember', { params: { fileId }, body: { email, role } })
+  const name = fileName?.trim().slice(0, 200)
+  await consoleClient().call('addFileMember', {
+    params: { fileId },
+    body: name ? { email, role, fileName: name } : { email, role }
+  })
   return fileMembers(fileId)
 }
 

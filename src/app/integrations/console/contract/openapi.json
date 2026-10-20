@@ -5073,6 +5073,10 @@
                   "role": {
                     "type": "string",
                     "enum": ["viewer", "commenter", "editor"]
+                  },
+                  "fileName": {
+                    "type": "string",
+                    "maxLength": 200
                   }
                 },
                 "required": ["email", "role"],

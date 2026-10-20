@@ -1,6 +1,7 @@
 import { envelopeEpoch, open, seal } from '@/app/cloud/crypto'
 import { contentKey, type CloudFileBinding } from '@/app/cloud/files'
 import { consoleClient } from '@/app/integrations/console'
+import { relayURLFor } from '@/app/integrations/console/endpoints'
 
 import { deferredCollabRoom } from './deferred'
 import {
@@ -30,12 +31,28 @@ export function relayCipher(fileId: string, epoch: number): RelayFrameCipher {
   }
 }
 
+/**
+ * The ticket goes only to the chat API's own relay (`wss://<chat-api-host>/relay`). A ticket
+ * answer naming some other host is not followed: the ticket would leave with it.
+ */
+function relayURL(answered: string): string {
+  const expected = relayURLFor(consoleClient().designBaseURL)
+  try {
+    const url = new URL(answered)
+    const pinned = new URL(expected)
+    if (url.protocol === pinned.protocol && url.host === pinned.host) return url.toString()
+  } catch {
+    return expected
+  }
+  return expected
+}
+
 export async function fileRelayTicket(binding: CloudFileBinding): Promise<RelayTicket> {
   const { data } = await consoleClient().call('createFileRelayTicket', {
     params: { fileId: binding.fileId },
     link: binding.link ?? undefined
   })
-  return { url: data.url, ticket: data.ticket, peerId: data.peerId }
+  return { url: relayURL(data.url), ticket: data.ticket, peerId: data.peerId }
 }
 
 export interface CloudRoomHooks {

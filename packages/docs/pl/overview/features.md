@@ -90,7 +90,7 @@ Wszystkie polecenia obsługują `--json`. Instalacja: `npm install -g @redrob-de
 
 ## Współpraca w czasie rzeczywistym
 
-Połączenie równorzędne WebRTC nie wymaga centralnego serwera. Udostępnij odnośnik i edytuj dokument wspólnie z innymi osobami, korzystając z kursorów, informacji o obecności i trybu śledzenia.
+Udostępnij plik zaproszonym osobom i edytujcie go razem przez przekaźnik Redrob Cloud, z szyfrowaniem end-to-end. Wymaga zalogowania do Redrob Cloud; trybu P2P nie ma. Dostępne są kursory, informacje o obecności i tryb śledzenia.
 
 ## Wersja komputerowa i internetowa
 

@@ -93,7 +93,7 @@ Verbindungen, Auslöser, Aktionen, Animationen, Overlays, Scrollverhalten, Ablä
 
 ## Plugin API, Zusammenarbeit und Entwicklermodus
 
-`eval`, P2P-Zusammenarbeit, JSX-Codeansicht, Tailwind-Export, MCP-Server und CLI sind verfügbar. Kommentare, Code Connect, Verzweigung und vollständige Übergabespezifikationen fehlen.
+`eval`, Zusammenarbeit über das Redrob-Cloud-Relay, JSX-Codeansicht, Tailwind-Export, MCP-Server und CLI sind verfügbar. Kommentare, Code Connect, Verzweigung und vollständige Übergabespezifikationen fehlen.
 
 ## Figma Draw
 

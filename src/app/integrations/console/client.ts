@@ -1,7 +1,5 @@
 import type { z } from 'zod'
 
-import { REDROB_CONSOLE_API_BASE } from '@redrob-design/core/constants'
-
 import {
   consoleRoute,
   routePath,
@@ -10,6 +8,7 @@ import {
   type ConsoleRoute
 } from './contract/routes'
 import { errorBodySchema } from './contract/schemas'
+import { REDROB_CHAT_API_BASE, REDROB_CONSOLE_API_BASE, isDesignPath } from './endpoints'
 
 /** What went wrong, in the terms the UI acts on. */
 export type ConsoleErrorKind =
@@ -38,9 +37,17 @@ export class ConsoleError extends Error {
 export type ConsoleFetch = (input: string, init: RequestInit) => Promise<Response>
 
 export interface ConsoleClientOptions {
+  /** Console: workspaces, feeds, watches. */
   baseURL?: string
+  /** The chat API, which serves every `/design/*` route. */
+  designBaseURL?: string
   /** Resolved for every request and never kept; null when signed out. */
   token: () => Promise<string | null>
+  /**
+   * This installation's id, sent as X-Redrob-Installation on `/design/*` calls. A redrob-auth
+   * token names the person, not the computer, so the chat API tells devices apart by this header.
+   */
+  installationId?: () => string
   fetch: ConsoleFetch
   timeoutMs?: number
   maxResponseBytes?: number
@@ -141,11 +148,13 @@ function emptyData<Op extends ConsoleOperationId>(): ConsoleData<Op> {
  */
 export function createConsoleClient(options: ConsoleClientOptions) {
   const base = (options.baseURL ?? REDROB_CONSOLE_API_BASE).replace(/\/+$/, '')
+  const designBase = (options.designBaseURL ?? REDROB_CHAT_API_BASE).replace(/\/+$/, '')
   const timeoutMs = options.timeoutMs ?? CONSOLE_TIMEOUT_MS
   const limit = options.maxResponseBytes ?? CONSOLE_MAX_RESPONSE_BYTES
 
   function urlFor(route: ConsoleRoute, request: ConsoleRequest): string {
-    const url = new URL(`${base}${routePath(route, request.params)}`)
+    const root = isDesignPath(route.path) ? designBase : base
+    const url = new URL(`${root}${routePath(route, request.params)}`)
     for (const [key, value] of Object.entries(request.query ?? {})) {
       if (value !== undefined) url.searchParams.set(key, value)
     }
@@ -163,6 +172,9 @@ export function createConsoleClient(options: ConsoleClientOptions) {
       const token = await options.token()
       if (!token) throw new ConsoleError('not-signed-in', 'Sign in to Redrob Cloud first')
       headers.Authorization = `Bearer ${token}`
+    }
+    if (options.installationId && isDesignPath(route.path)) {
+      headers['X-Redrob-Installation'] = options.installationId()
     }
     if (request.body !== undefined) headers['Content-Type'] = 'application/json'
     if (request.ifMatch) headers['If-Match'] = request.ifMatch
@@ -227,7 +239,7 @@ export function createConsoleClient(options: ConsoleClientOptions) {
     return { data: checked<Op>(parsed.data), etag }
   }
 
-  return { call, baseURL: base }
+  return { call, baseURL: base, designBaseURL: designBase }
 }
 
 export type ConsoleClient = ReturnType<typeof createConsoleClient>

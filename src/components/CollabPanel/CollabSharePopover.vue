@@ -2,7 +2,9 @@
 import { computed } from 'vue'
 import { tv } from 'tailwind-variants'
 import { PopoverContent, PopoverPortal, PopoverRoot, PopoverTrigger } from 'reka-ui'
+import { useCloudMessages } from '@redrob-design/vue'
 
+import { cloudUnavailable } from '@/app/integrations/console'
 import FileAccess from '@/components/CollabPanel/FileAccess.vue'
 import OpenSharedFile from '@/components/CollabPanel/OpenSharedFile.vue'
 import { useCollabPanelContext } from '@/components/CollabPanel/context'
@@ -11,6 +13,7 @@ import { usePopoverUI } from '@/components/ui/popover'
 import collaborationTheme from '@/theme/collaboration'
 
 const collab = useCollabPanelContext()
+const cloudMessages = useCloudMessages()
 const cls = usePopoverUI({ content: 'z-50 w-80 p-3' })
 const connection = computed(() => (collab.state.connected ? 'connected' : 'idle'))
 const collaboration = tv(collaborationTheme)
@@ -61,6 +64,10 @@ const styles = computed(() => collaboration({ connection: connection.value }))
               {{ collab.messages.shareThisFile }}
             </AppButton>
           </template>
+
+          <p v-else-if="cloudUnavailable" class="text-muted" data-slot="cloud-unavailable">
+            {{ cloudMessages.unavailable }}
+          </p>
 
           <template v-else>
             <p class="text-muted">{{ collab.messages.signInToShare }}</p>
