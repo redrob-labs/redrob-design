@@ -144,6 +144,7 @@ let client: ConsoleClient | null = null
 export function consoleClient(): ConsoleClient {
   client ??= createConsoleClient({
     token: sessionToken,
+    installationId: cloudInstallId,
     fetch: appFetch()
   })
   return client

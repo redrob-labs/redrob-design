@@ -47,6 +47,11 @@ export interface ConsoleClientOptions {
   designBaseURL?: string
   /** Resolved for every request and never kept; null when signed out. */
   token: () => Promise<string | null>
+  /**
+   * This installation's id, sent as X-Redrob-Installation on `/design/*` calls. A redrob-auth
+   * token names the person, not the computer, so the chat API tells devices apart by this header.
+   */
+  installationId?: () => string
   fetch: ConsoleFetch
   timeoutMs?: number
   maxResponseBytes?: number
@@ -171,6 +176,9 @@ export function createConsoleClient(options: ConsoleClientOptions) {
       const token = await options.token()
       if (!token) throw new ConsoleError('not-signed-in', 'Sign in to Redrob Cloud first')
       headers.Authorization = `Bearer ${token}`
+    }
+    if (options.installationId && isDesignPath(route.path)) {
+      headers['X-Redrob-Installation'] = options.installationId()
     }
     if (request.body !== undefined) headers['Content-Type'] = 'application/json'
     if (request.ifMatch) headers['If-Match'] = request.ifMatch
