@@ -5,6 +5,7 @@ mod fonts;
 mod http;
 mod menu;
 mod menu_events;
+mod oauth_loopback;
 mod shared_account;
 #[cfg(target_os = "macos")]
 mod window;
@@ -19,6 +20,9 @@ use fonts::{list_system_fonts, load_system_font};
 use http::proxy_http_request;
 use menu::{install_app_menu, native_menu_checked, set_native_menu_checked};
 use menu_events::handle_menu_event;
+use oauth_loopback::{
+    oauth_loopback_cancel, oauth_loopback_start, oauth_loopback_wait, LoopbackListeners,
+};
 use shared_account::shared_account_read;
 use std::{
     path::{Path, PathBuf},
@@ -213,6 +217,7 @@ pub fn run() {
         .manage(PendingOpen(Mutex::new(Vec::new())))
         .manage(app_bridge::PendingCalls::default())
         .manage(app_bridge::BridgeHandle::default())
+        .manage(LoopbackListeners::default())
         .invoke_handler(tauri::generate_handler![
             app_bridge_reply,
             build_fig_file,
@@ -227,6 +232,9 @@ pub fn run() {
             proxy_http_request,
             set_recent_files,
             native_menu_checked,
+            oauth_loopback_cancel,
+            oauth_loopback_start,
+            oauth_loopback_wait,
             set_native_menu_checked,
             shared_account_read,
             take_pending_open,

@@ -34,6 +34,7 @@ export {
   cloudInstallId,
   cancelCloudSignIn,
   cloudState,
+  cloudUnavailable,
   consoleClient,
   refreshCloudAccount,
   selectWorkspace,
