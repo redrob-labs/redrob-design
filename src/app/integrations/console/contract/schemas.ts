@@ -327,7 +327,9 @@ export type FileMembers = z.infer<typeof fileMembersSchema>
 
 export const addFileMemberSchema = z.object({
   email: z.string().email().max(320),
-  role: z.enum(INVITE_ROLES)
+  role: z.enum(INVITE_ROLES),
+  /** Plain file name for the invite email only; the server never stores it (names are encrypted at rest). */
+  fileName: z.string().max(200).optional()
 })
 
 /** Exactly one is set: a member when the address has an account, else an invite. */

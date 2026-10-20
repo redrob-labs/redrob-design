@@ -111,7 +111,7 @@ function createCollabPanelContext() {
     const email = inviteEmail.value.trim()
     if (!current || !email) return Promise.resolve()
     return run(async () => {
-      roster.value = await inviteToFile(current.fileId, email, inviteRole.value)
+      roster.value = await inviteToFile(current.fileId, email, inviteRole.value, current.name)
       inviteEmail.value = ''
     })
   }
