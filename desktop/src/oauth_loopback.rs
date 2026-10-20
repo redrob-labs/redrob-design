@@ -36,15 +36,23 @@ pub struct LoopbackListeners {
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase", tag = "kind")]
 pub enum LoopbackCallback {
-    Code { code: String },
-    Error { error: String, description: Option<String> },
+    Code {
+        code: String,
+    },
+    Error {
+        error: String,
+        description: Option<String>,
+    },
 }
 
 /// Binds a loopback port for one sign-in; the renderer builds `http://127.0.0.1:<port>/callback`.
 #[tauri::command]
 pub fn oauth_loopback_start(state: tauri::State<LoopbackListeners>) -> Result<u16, String> {
     let listener = TcpListener::bind("127.0.0.1:0").map_err(|error| error.to_string())?;
-    let port = listener.local_addr().map_err(|error| error.to_string())?.port();
+    let port = listener
+        .local_addr()
+        .map_err(|error| error.to_string())?
+        .port();
     listener
         .set_nonblocking(true)
         .map_err(|error| error.to_string())?;
@@ -73,7 +81,8 @@ pub async fn oauth_loopback_wait(
 ) -> Result<LoopbackCallback, String> {
     let listener = {
         let mut open = state.open.lock().map_err(|_| "listener state poisoned")?;
-        open.remove(&port).ok_or("no sign-in is listening on that port")?
+        open.remove(&port)
+            .ok_or("no sign-in is listening on that port")?
     };
     let deadline = Instant::now() + LOGIN_TIMEOUT;
     loop {
@@ -108,10 +117,7 @@ fn is_cancelled(state: &LoopbackListeners, port: u16) -> bool {
 }
 
 /// One request. `None` means "not the callback, keep listening" (a favicon, a stray probe).
-fn answer(
-    mut stream: TcpStream,
-    expected_state: &str,
-) -> Option<Result<LoopbackCallback, String>> {
+fn answer(mut stream: TcpStream, expected_state: &str) -> Option<Result<LoopbackCallback, String>> {
     let _ = stream.set_nonblocking(false);
     let _ = stream.set_read_timeout(Some(READ_TIMEOUT));
     let target = request_target(&mut stream)?;
