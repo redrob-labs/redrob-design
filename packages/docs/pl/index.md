@@ -39,5 +39,5 @@ features:
     details: Konto, osobny serwer i stałe połączenie z internetem nie są potrzebne. Aplikacja komputerowa zajmuje około 7 MB; dostępna jest również wersja internetowa.
   - icon: 👥
     title: Współpraca
-    details: Połączenie WebRTC bez centralnego serwera. Wyślij odnośnik i wspólnie edytuj dokument, korzystając z kursorów uczestników oraz trybu śledzenia.
+    details: Udostępnij plik zaproszonym osobom i edytujcie go razem przez przekaźnik Redrob Cloud, z szyfrowaniem end-to-end, kursorami uczestników i trybem śledzenia.
 ---

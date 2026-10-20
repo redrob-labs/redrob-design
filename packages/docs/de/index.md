@@ -39,5 +39,5 @@ features:
     details: Kein Konto, kein Server und keine Internetverbindung erforderlich. Desktop-App mit etwa 7 MB über Homebrew oder direkt als Web-App.
   - icon: 👥
     title: Zusammenarbeit in Echtzeit
-    details: Direkte Verbindung über WebRTC ohne zentralen Server. Link teilen und gemeinsam mit Teilnehmerzeigern und Ansichtsverfolgung bearbeiten.
+    details: Eine Datei mit eingeladenen Personen teilen und gemeinsam über das Redrob-Cloud-Relay bearbeiten, Ende-zu-Ende-verschlüsselt, mit Teilnehmerzeigern und Ansichtsverfolgung.
 ---

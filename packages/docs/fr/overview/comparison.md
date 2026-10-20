@@ -205,7 +205,7 @@ Penpot propose des plugins isolés, mais pas d’API équivalente pour les scrip
 | Développement | Redrob Design | TypeScript et Vue plutôt que Clojure, Rust et Docker |
 | Application de bureau | Redrob Design | Tauri natif |
 | Disposition | Redrob Design | Yoga plutôt que deux implémentations propres |
-| Collaboration | Forces différentes | Penpot : serveur et contrôle d’accès ; Redrob Design : P2P sans hébergement |
+| Collaboration | Forces différentes | Penpot : serveur et contrôle d’accès ; Redrob Design : relais Redrob Cloud, rôles par fichier et chiffrement de bout en bout |
 | Auto-hébergement | Penpot | Déploiement Docker |
 | Maturité de l’écosystème | Penpot | Plusieurs années en production |
 

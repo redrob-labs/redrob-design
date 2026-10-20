@@ -18,7 +18,7 @@ Der integrierte Assistent kann mehr als 90 Werkzeuge ausführen. Eine Anweisung 
 
 ## Zusammenarbeit
 
-Redrob Design synchronisiert Dokumente direkt zwischen Teilnehmern über WebRTC. Ein geteilter Raumlink genügt; ein zentraler Server und ein Konto sind nicht erforderlich. Teilnehmerzeiger und Ansichtsverfolgung zeigen die anderen Personen. Yjs CRDT führt gleichzeitige Änderungen zusammen.
+Redrob Design synchronisiert geteilte Dateien über das Redrob-Cloud-Relay, Ende-zu-Ende-verschlüsselt. Dafür ist eine Anmeldung bei Redrob Cloud nötig; einen P2P-Modus gibt es nicht. Teilnehmerzeiger und Ansichtsverfolgung zeigen die anderen Personen. Yjs CRDT führt gleichzeitige Änderungen zusammen.
 
 [Zusammenarbeit →](./collaboration)
 

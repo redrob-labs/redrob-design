@@ -1,33 +1,34 @@
 ---
 title: Collaboration
-description: Édition P2P en temps réel avec WebRTC et Yjs, sans serveur central.
+description: Partagez un fichier avec les personnes que vous invitez et modifiez-le ensemble en temps réel, chiffré de bout en bout via Redrob Cloud.
 ---
 
 # Collaboration
 
-Redrob Design permet à plusieurs personnes de modifier un document en temps réel. Les changements circulent directement entre les participants par WebRTC.
+Partagez un fichier avec les personnes que vous invitez et modifiez-le ensemble en temps réel. Le partage demande une connexion à Redrob Cloud (Réglages, Cloud) ; tout le reste de Redrob Design fonctionne sans compte.
 
-## Démarrer une session
+## Partager un fichier
 
-Ouvrez le menu de collaboration, créez une salle et partagez le lien. L’identifiant est généré avec un aléa cryptographique et ne contient aucune donnée du document.
+1. Cliquez sur **Partager** en haut à droite, puis sur **Partager ce fichier**.
+2. Invitez des personnes par e-mail et choisissez ce que chacune peut faire : **Peut modifier**, **Peut commenter** ou **Peut voir**. Une personne sans compte reçoit le fichier à sa première connexion avec cette adresse.
+3. **Copier le lien** donne un lien qui s'ouvre pour les personnes qui ont accès.
 
-## Données partagées
+Les fichiers partagés avec vous sont sur l'Accueil, dans **Partagés avec vous**.
 
-- **Document :** formes, texte, propriétés et disposition ;
-- **Présence :** nom, couleur, sélection et page active ;
-- **Curseurs :** position de chaque participant ;
-- **Vue :** possibilité de suivre le cadrage d’une autre personne.
+## Liens de consultation
 
-## Architecture
+**Créer un lien de consultation** donne un lien avec lequel n'importe qui peut lire le fichier, connecté ou non. Il ne permet ni de modifier ni de commenter. Un nouveau lien désactive l'ancien, et **Désactiver** l'arrête aussitôt.
 
-Yjs maintient l’état partagé sous forme de CRDT. Trystero découvre les participants et établit les connexions WebRTC. Un serveur de signalisation aide à initier la connexion, mais ne relaie pas le document.
+## Ce qui se synchronise
 
-Aucun compte ni déploiement propre n’est nécessaire. La qualité dépend du réseau et de la possibilité d’établir WebRTC entre les participants.
+- **Les modifications du document**, aussitôt, et le fichier est enregistré dans Redrob Cloud.
+- **Les curseurs et sélections**, avec le nom et la couleur de chacun.
+- **Les commentaires et versions**, pour toutes les personnes qui ont accès.
 
-## Confidentialité
+Cliquez sur l'avatar d'un collaborateur pour suivre sa vue ; cliquez à nouveau pour arrêter.
 
-Le contenu n’est pas stocké sur un serveur Redrob Design. Chaque participant conserve une copie locale. Ne partagez le lien qu’avec des personnes de confiance.
+## Fonctionnement
 
-## Fin de session
+Chaque fichier partagé a sa propre clé de contenu, créée sur l'ordinateur qui l'a partagé. Noms, document, modifications en direct, curseurs, commentaires et versions sont chiffrés avec elle avant de quitter l'ordinateur. Redrob Cloud ne stocke et ne transmet que du texte chiffré.
 
-Lorsque la session se termine, les participants distants et leurs curseurs sont supprimés. Les changements déjà synchronisés restent dans le document local.
+Les sessions passent par le relais Redrob Cloud, un WebSocket de l'API Redrob Chat. Il n'y a ni connexion P2P ni serveur de signalisation public. L'état du document est un CRDT (Yjs) : les modifications simultanées se fusionnent sans conflit.

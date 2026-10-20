@@ -39,5 +39,5 @@ features:
     details: No requiere cuenta, servidor ni conexión a internet. Aplicación de escritorio de unos 7 MB mediante Homebrew o aplicación web.
   - icon: 👥
     title: Colaboración en tiempo real
-    details: Conexión P2P mediante WebRTC, sin servidor. Comparte un enlace y edita con cursores en directo y seguimiento de vista.
+    details: Comparte un archivo con las personas que invites y editad juntos a través del relé de Redrob Cloud, con cifrado de extremo a extremo, cursores en directo y seguimiento de vista.
 ---

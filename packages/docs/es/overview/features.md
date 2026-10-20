@@ -92,7 +92,7 @@ Todos los comandos admiten `--json`. Instalación: `npm install -g @redrob-desig
 
 ## Colaboración en tiempo real
 
-La colaboración funciona directamente entre participantes mediante WebRTC y no necesita servidor central. Basta con compartir un enlace. Incluye cursores, presencia y seguimiento de la vista de otro participante.
+Comparte un archivo con las personas que invites y editadlo juntos a través del relé de Redrob Cloud, con cifrado de extremo a extremo. Hace falta iniciar sesión en Redrob Cloud; no hay modo P2P. Incluye cursores, presencia y seguimiento de la vista de otro participante.
 
 ## Escritorio y web
 

@@ -92,7 +92,7 @@ Alle Befehle unterstützen `--json`. Installation: `npm install -g @redrob-desig
 
 ## Zusammenarbeit in Echtzeit
 
-Die Zusammenarbeit erfolgt direkt zwischen den Teilnehmern über WebRTC und benötigt keinen zentralen Server. Ein Link genügt. Verfügbar sind Zeiger der Teilnehmer, Anwesenheitsanzeigen und das Folgen der Ansicht eines anderen Teilnehmers.
+Eine Datei wird mit eingeladenen Personen geteilt und gemeinsam über das Redrob-Cloud-Relay bearbeitet, Ende-zu-Ende-verschlüsselt. Dafür ist eine Anmeldung bei Redrob Cloud nötig; einen P2P-Modus gibt es nicht. Verfügbar sind Zeiger der Teilnehmer, Anwesenheitsanzeigen und das Folgen der Ansicht eines anderen Teilnehmers.
 
 ## Desktop und Web
 

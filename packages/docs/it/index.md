@@ -39,5 +39,5 @@ features:
     details: Non richiede account, server o connessione Internet. App desktop di circa 7 MB tramite Homebrew o applicazione web.
   - icon: 👥
     title: Collaborazione in tempo reale
-    details: Connessione P2P tramite WebRTC, senza server centrale. Condividi un link, modifica insieme agli altri e segui la loro vista.
+    details: Condividi un file con le persone che inviti e modificatelo insieme tramite il relay di Redrob Cloud, con crittografia end-to-end, cursori in tempo reale e vista da seguire.
 ---
