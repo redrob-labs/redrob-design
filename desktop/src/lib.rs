@@ -40,6 +40,84 @@ struct PendingOpenFile {
 
 struct PendingOpen(Mutex<Vec<PendingOpenFile>>);
 
+/// A cloud file the launcher asked for: `--open-file <dfl_id>` and, for a view link,
+/// `--open-link <fragment>`. The frontend opens it through the same path as a pasted link.
+#[derive(Clone, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+struct PendingCloudOpenFile {
+    file_id: String,
+    link: Option<String>,
+}
+
+struct PendingCloudOpen(Mutex<Vec<PendingCloudOpenFile>>);
+
+const OPEN_FILE_FLAG: &str = "--open-file";
+const OPEN_LINK_FLAG: &str = "--open-link";
+const MAX_LINK_LEN: usize = 512;
+
+fn is_cloud_file_id(value: &str) -> bool {
+    value
+        .strip_prefix("dfl_")
+        .map(|hex| {
+            hex.len() == 32
+                && hex
+                    .bytes()
+                    .all(|byte| byte.is_ascii_digit() || (b'a'..=b'f').contains(&byte))
+        })
+        .unwrap_or(false)
+}
+
+fn is_link_fragment(value: &str) -> bool {
+    !value.is_empty()
+        && value.len() <= MAX_LINK_LEN
+        && value
+            .bytes()
+            .all(|byte| byte.is_ascii_alphanumeric() || matches!(byte, b'.' | b'_' | b'~' | b'-'))
+}
+
+/// The value following `flag`, if any.
+fn flag_value<'a>(args: &'a [String], flag: &str) -> Option<&'a str> {
+    args.iter()
+        .position(|arg| arg == flag)
+        .and_then(|index| args.get(index + 1))
+        .map(String::as_str)
+}
+
+/// `None` unless `--open-file` names a valid id. A malformed `--open-link` drops the link (the
+/// file then opens with the member's own access, or not at all) rather than the whole request.
+fn cloud_open_from_args(args: &[String]) -> Option<PendingCloudOpenFile> {
+    let file_id = flag_value(args, OPEN_FILE_FLAG).filter(|id| is_cloud_file_id(id))?;
+    let link = flag_value(args, OPEN_LINK_FLAG)
+        .filter(|link| is_link_fragment(link))
+        .map(str::to_owned);
+    Some(PendingCloudOpenFile {
+        file_id: file_id.to_owned(),
+        link,
+    })
+}
+
+#[tauri::command]
+fn take_pending_cloud_open(state: tauri::State<PendingCloudOpen>) -> Vec<PendingCloudOpenFile> {
+    state
+        .0
+        .lock()
+        .map(|mut pending| pending.drain(..).collect())
+        .unwrap_or_default()
+}
+
+fn queue_cloud_open<R: tauri::Runtime>(app: &tauri::AppHandle<R>, args: &[String]) {
+    let Some(target) = cloud_open_from_args(args) else {
+        return;
+    };
+    if let Ok(mut pending) = app.state::<PendingCloudOpen>().0.lock() {
+        pending.push(target);
+    }
+    let _ = app.emit("open-cloud-files", ());
+    if let Some(window) = app.get_webview_window("main") {
+        let _ = window.set_focus();
+    }
+}
+
 #[tauri::command]
 fn take_pending_open(state: tauri::State<PendingOpen>) -> Vec<PendingOpenFile> {
     state
@@ -88,7 +166,15 @@ fn path_from_arg(arg: String, cwd: &Path) -> Option<PathBuf> {
 }
 
 fn open_paths_from_args(args: Vec<String>, cwd: &Path) -> Vec<PathBuf> {
+    let mut skip_next = false;
     args.into_iter()
+        .filter(|arg| {
+            let skip = std::mem::replace(
+                &mut skip_next,
+                arg == OPEN_FILE_FLAG || arg == OPEN_LINK_FLAG,
+            );
+            !skip
+        })
         .filter_map(|arg| path_from_arg(arg, cwd))
         .filter_map(file_association_path)
         .collect()
@@ -205,6 +291,7 @@ pub fn run() {
     ))]
     {
         builder = builder.plugin(tauri_plugin_single_instance::init(|app, args, cwd| {
+            queue_cloud_open(app, &args);
             queue_open_paths(app, open_paths_from_args(args, Path::new(&cwd)));
         }));
     }
@@ -215,6 +302,7 @@ pub fn run() {
 
     builder
         .manage(PendingOpen(Mutex::new(Vec::new())))
+        .manage(PendingCloudOpen(Mutex::new(Vec::new())))
         .manage(app_bridge::PendingCalls::default())
         .manage(app_bridge::BridgeHandle::default())
         .manage(LoopbackListeners::default())
@@ -237,6 +325,7 @@ pub fn run() {
             oauth_loopback_wait,
             set_native_menu_checked,
             shared_account_read,
+            take_pending_cloud_open,
             take_pending_open,
             updater_available
         ])
@@ -251,6 +340,7 @@ pub fn run() {
         })
         .setup(|app| {
             queue_open_paths(app.handle(), startup_open_paths());
+            queue_cloud_open(app.handle(), &std::env::args().skip(1).collect::<Vec<_>>());
             install_app_menu(app.handle(), &[])?;
             // The main window is created from the config before setup runs; the
             // bridge starts on its own thread so a missing daemon never delays it.

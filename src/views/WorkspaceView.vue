@@ -5,6 +5,10 @@ import { useHead } from '@unhead/vue'
 import { useRoute } from 'vue-router'
 
 import { exposeCollaborationActions } from '@/app/browser-bridge'
+import { describeOpenFailure, openCloudFile, parseLaunchTarget } from '@/app/cloud/files'
+import { openSettingsDialog } from '@/app/settings/dialog'
+import { toast } from '@/app/shell/ui'
+import { useSharingMessages } from '@redrob-design/vue'
 import { appRuntimeConfig } from '@/app/runtime/config'
 import { startMCPRuntime, stopMCPRuntime } from '@/app/automation/mcp/runtime'
 import { startAppBridgeHost } from '@/app/tauri/app-bridge-host'
@@ -87,6 +91,51 @@ async function bindAssociatedFileOpen(): Promise<void> {
   await openPendingAssociatedFiles()
 }
 
+interface PendingCloudOpenFile {
+  fileId: string
+  link: string | null
+}
+
+const sharingMessages = useSharingMessages()
+const cloudOpenCleanup = ref<(() => void) | null>(null)
+
+/** Cloud files the launcher handed over (`--open-file` / `--open-link`), at startup or later. */
+async function openPendingCloudFiles(): Promise<void> {
+  const { invoke } = await import('@tauri-apps/api/core')
+  const files = await invoke<PendingCloudOpenFile[]>('take_pending_cloud_open')
+  for (const file of files) {
+    const target = parseLaunchTarget(file.fileId, file.link)
+    if (!target) {
+      toast.error(sharingMessages.value.notALink)
+      continue
+    }
+    try {
+      await openCloudFile(target)
+    } catch (error) {
+      const kind = describeOpenFailure(error)
+      if (kind === 'signed-out') openSettingsDialog('cloud')
+      toast.error(
+        kind === 'no-access'
+          ? sharingMessages.value.noAccess
+          : kind === 'pending'
+            ? sharingMessages.value.waitingForKey
+            : kind === 'signed-out'
+              ? sharingMessages.value.signInToOpen
+              : sharingMessages.value.unreachable
+      )
+    }
+  }
+}
+
+async function bindCloudFileOpen(): Promise<void> {
+  if (!isTauri()) return
+  const { listen } = await import('@tauri-apps/api/event')
+  cloudOpenCleanup.value = await listen('open-cloud-files', () => {
+    void openPendingCloudFiles().catch((error) => console.error('[Open cloud file]', error))
+  })
+  await openPendingCloudFiles()
+}
+
 onMounted(async () => {
   await startMCPRuntime(getActiveStore)
 
@@ -101,12 +150,19 @@ onMounted(async () => {
   } catch (error) {
     console.error('[Open With]', error)
   }
+
+  try {
+    await bindCloudFileOpen()
+  } catch (error) {
+    console.error('[Open cloud file]', error)
+  }
 })
 
 onUnmounted(() => {
   void stopMCPRuntime()
   appBridgeCleanup.value?.()
   fileAssociationCleanup.value?.()
+  cloudOpenCleanup.value?.()
 })
 </script>
 
