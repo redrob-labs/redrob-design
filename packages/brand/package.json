@@ -43,7 +43,7 @@
     "prepublishOnly": "bun run build"
   },
   "dependencies": {
-    "@redrob-labs/ui": "1.0.2",
+    "@redrob-labs/ui": "1.8.0",
     "yaml": "^2.8.4",
     "zod": "^4.4.3"
   },
