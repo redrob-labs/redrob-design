@@ -39,5 +39,5 @@ features:
     details: No account, no server, no internet required. ~7 MB desktop app via Homebrew, or use the web app.
   - icon: 👥
     title: Real-Time Collaboration
-    details: P2P via WebRTC — no server. Share a link, edit together with live cursors and follow mode.
+    details: Share a file with the people you invite and edit together through the Redrob Cloud relay, end-to-end encrypted, with live cursors and follow mode.
 ---

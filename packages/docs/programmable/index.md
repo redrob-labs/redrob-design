@@ -26,7 +26,7 @@ The built-in assistant has access to 90+ tools that cover the full surface of th
 
 ## Collaboration
 
-Real-time multiplayer editing over peer-to-peer WebRTC. No server, no account. Share a room link and edit together with live cursors and follow mode. Document state syncs via CRDT, so edits merge automatically even on flaky connections.
+Real-time multiplayer editing on shared files through the Redrob Cloud relay, end-to-end encrypted. Sharing needs a Redrob Cloud sign-in; there is no peer-to-peer mode. Invite people, edit together with live cursors and follow mode. Document state syncs via CRDT, so edits merge automatically even on flaky connections.
 
 [Collaboration →](./collaboration)
 

@@ -45,7 +45,7 @@ If the Redrob Code engine is not installed, the app guides you through installin
 - **Image vectorization**: convert image layers into editable vector layers with Recraft or fal.ai
 - **Design-to-code export**: export selections as JSX/Tailwind, generate token outputs, and map designs into component-oriented code workflows
 - **Vue SDK for custom editors**: headless components and composables for embedding Redrob Design into other apps or building workflow-specific editing surfaces
-- **Real-time collaboration**: P2P via WebRTC, no server, no account. Cursors, presence, follow mode. Signed in to Redrob Cloud, sessions use its relay instead
+- **Real-time collaboration**: share a file with the people you invite and edit it together through the Redrob Cloud relay, end-to-end encrypted. Cursors, presence, follow mode. Needs a Redrob Cloud sign-in; there is no peer-to-peer mode
 - **Optional Redrob Cloud**: sign in to share Design Memory, comments, version history and component libraries with a workspace; everything also works on this computer without an account, and AI keys stay yours
 - **Auto layout & CSS Grid**: flex and grid layout via Yoga WASM, with gap, padding, alignment, track sizing
 - **Compact desktop app**: Tauri v2 for macOS, Windows, Linux. Also runs in the browser as a PWA
@@ -238,12 +238,12 @@ The daemon is optional: when it is not running the app works as before and nothi
 
 ## Collaboration
 
-Share a link to co-edit in real time. No server, no account: peers connect directly via WebRTC. When you are signed in to Redrob Cloud, sessions go through its relay, which works on networks that block peer-to-peer, and fall back to WebRTC when the relay cannot be reached.
+Share a file with the people you invite and edit it together in real time. Sharing needs a Redrob Cloud sign-in (Settings, Cloud); everything else works without one. Live sessions go through the Redrob Cloud relay, a WebSocket served by the Redrob Chat API. There is no peer-to-peer connection. Every change, cursor and comment is encrypted with the file's own key before it leaves your computer, so the relay only forwards ciphertext.
 
-1. Click the share button in the top-right panel
-2. Share the generated link (`app.redrob.design/share/<room-id>`)
+1. Click **Share** in the top-right corner, then **Share this file**
+2. Invite people by email and pick a role, or copy the link for people who already have access
 3. Collaborators see your cursor, selection, and edits in real time
-4. Click a peer's avatar to follow their viewport
+4. Click a collaborator's avatar to follow their viewport
 
 ## Contributing
 
@@ -295,7 +295,7 @@ tests/            E2E, visual, engine, and integration tests
 | Layout        | Yoga WASM (flex + grid via [fork](https://github.com/open-pencil/yoga/tree/grid)) |
 | UI            | Vue 3, Reka UI, Tailwind CSS 4                                                    |
 | File format   | Kiwi binary + Zstd + ZIP                                                          |
-| Collaboration | Trystero (WebRTC P2P) + Yjs (CRDT)                                                |
+| Collaboration | Yjs (CRDT) over the Redrob Cloud relay (WebSocket), end-to-end encrypted          |
 | Desktop       | Tauri v2                                                                          |
 | AI/MCP        | Redrob Code engine (ACP + OpenAI-compatible route on the shared daemon), MCP SDK, Hono |
 

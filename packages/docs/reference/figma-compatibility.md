@@ -211,7 +211,7 @@ Feature-by-feature comparison of Figma Design capabilities with Redrob Design's 
 | Feature | Status | Notes |
 |---------|--------|-------|
 | Comments (pin, thread, resolve) | 🔲 | Not supported yet |
-| Real-time multiplayer | ✅ | P2P via Trystero + Yjs CRDT, cursors, follow mode; no server required |
+| Real-time multiplayer | ✅ | Yjs CRDT over the Redrob Cloud relay, end-to-end encrypted; cursors, follow mode; needs a Redrob Cloud sign-in |
 | Cursor chat | 🔲 | Inline chat bubbles at cursor |
 | Branching & merging | 🔲 | Version branches for design files |
 | Dev Mode (inspect) | 🟡 | Code tab shows JSX representation of selection; no CSS properties or handoff specs |

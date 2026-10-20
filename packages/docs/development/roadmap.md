@@ -61,7 +61,7 @@ Redrob Cloud is optional sign-in. Sharing files with invited people, live collab
 - Publish documented backend APIs and webhooks for workspace, document, membership, comment, version, and automation events so Cloud and self-hosted deployments integrate with existing developer workflows.
 - Add workspace organization for projects, folders, templates, search, indexing, and server-generated previews while preserving stable document identity.
 - Add version history with automatic snapshots, named checkpoints, restore, retention controls, and an auditable record of important document and membership changes.
-- Provide a durable collaboration relay for deterministic initial sync, presence, reconnects, and restricted-network environments while keeping direct local/P2P workflows available where practical.
+- Provide a durable collaboration relay for deterministic initial sync, presence, reconnects, and restricted-network environments.
 - Publish a production-ready self-hosted deployment for teams that need their own storage, identity, network boundary, data location, and retention policy.
 - Make self-hosting maintainable with guided deployment, upgrades, backups, health monitoring, observability, and documented recovery procedures.
 - Provide explicit data-governance controls for export, deletion, encryption, retention, auditability, and deployment-region or residency requirements.

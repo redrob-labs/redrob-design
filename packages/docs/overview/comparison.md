@@ -262,7 +262,7 @@ Redrob Design's approach is simpler and lower overhead. Penpot's approach is mor
 
 ## 10. What Penpot Does Better
 
-1. **Server-side collaboration** — centralized multi-user editing with WebSockets, user accounts, and access control (Redrob Design uses P2P via Trystero + Yjs — no server, but also no access control or persistence beyond the session)
+1. **Server-side collaboration** — centralized multi-user editing with WebSockets, user accounts, and access control (Redrob Design shares files through the Redrob Cloud relay with per-file roles and end-to-end encryption, but it is a hosted service, not something you self-host alongside the editor)
 2. **PDF export** — headless Chromium export service for PDF rendering (Redrob Design exports SVG but not PDF yet)
 3. **Plugin system** — full plugin API with sandboxed execution
 4. **Design tokens** — native design token support
@@ -285,8 +285,8 @@ Redrob Design ships with an [`eval` command](/programmable/cli/scripting) that p
 | **Developer onboarding** | Redrob Design | TS/Vue vs Clojure/Rust/Docker |
 | **Desktop experience** | Redrob Design | Tauri native vs browser-only |
 | **Layout engine** | Redrob Design | Yoga (proven) vs custom dual implementation |
-| **Collaboration** | Tie | Penpot: server-based with access control; Redrob Design: P2P via Trystero + Yjs, zero hosting |
+| **Collaboration** | Tie | Penpot: self-hostable server with access control; Redrob Design: Redrob Cloud relay + Yjs, per-file roles, end-to-end encrypted |
 | **Self-hosting** | Penpot | Docker-ready vs desktop-only |
 | **Ecosystem maturity** | Penpot | Years of production vs early stage |
 
-Redrob Design is architecturally leaner — a single-process CanvasKit renderer in ~26K LOC of TypeScript, Figma-compatible by design. Penpot is a full-stack platform with ~299K LOC across Clojure, ClojureScript, Rust, and SCSS, plus a Docker service fleet. Both now offer real-time collaboration (different architectures: P2P vs server). Penpot has a plugin ecosystem and server-side PDF export; Redrob Design has Figma-compatible headless scripting, **90 AI/MCP tools**, SVG export, and a native desktop app.
+Redrob Design is architecturally leaner — a single-process CanvasKit renderer in ~26K LOC of TypeScript, Figma-compatible by design. Penpot is a full-stack platform with ~299K LOC across Clojure, ClojureScript, Rust, and SCSS, plus a Docker service fleet. Both now offer real-time collaboration (different architectures: a hosted end-to-end encrypted relay vs a self-hosted server). Penpot has a plugin ecosystem and server-side PDF export; Redrob Design has Figma-compatible headless scripting, **90 AI/MCP tools**, SVG export, and a native desktop app.
