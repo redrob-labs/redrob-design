@@ -43,7 +43,11 @@ export class RedrobAuthError extends Error {
   }
 }
 
-const NOT_AVAILABLE_CODES = new Set(['invalid_client', 'unauthorized_client', 'unsupported_grant_type'])
+const NOT_AVAILABLE_CODES = new Set([
+  'invalid_client',
+  'unauthorized_client',
+  'unsupported_grant_type'
+])
 
 type Fetch = (url: string, init: RequestInit) => Promise<Response>
 
@@ -95,6 +99,10 @@ async function s256(verifier: string): Promise<string> {
   return base64url(new Uint8Array(digest))
 }
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value)
+}
+
 async function discover(fetch: Fetch): Promise<Endpoints> {
   if (endpoints) return endpoints
   let discovery: Record<string, unknown> = {}
@@ -104,7 +112,10 @@ async function discover(fetch: Fetch): Promise<Endpoints> {
       headers: { Accept: 'application/json' },
       credentials: 'omit'
     })
-    if (response.ok) discovery = (await response.json()) as Record<string, unknown>
+    if (response.ok) {
+      const body: unknown = await response.json()
+      if (isRecord(body)) discovery = body
+    }
   } catch (error) {
     throw new RedrobAuthError('unreachable', error instanceof Error ? error.message : String(error))
   }
@@ -126,7 +137,11 @@ function toError(code: string, description?: string | null): Error {
     : new RedrobAuthError(code, description ?? undefined)
 }
 
-async function postForm(fetch: Fetch, url: string, form: Record<string, string>): Promise<Response> {
+async function postForm(
+  fetch: Fetch,
+  url: string,
+  form: Record<string, string>
+): Promise<Response> {
   try {
     return await fetch(url, {
       method: 'POST',
@@ -158,18 +173,21 @@ async function requestToken(form: Record<string, string>): Promise<TokenResponse
   return body as TokenResponse
 }
 
+/** `exp` in milliseconds when the access token is a JWT that carries one. */
+function jwtExpiry(accessToken: string): number | null {
+  const part = accessToken.split('.')[1]
+  if (!part) return null
+  try {
+    const payload = JSON.parse(new TextDecoder().decode(decodeBase64(part))) as { exp?: unknown }
+    return typeof payload.exp === 'number' ? payload.exp * 1000 : null
+  } catch {
+    return null
+  }
+}
+
 /** `exp` from the access token when it is a JWT; otherwise `expires_in`. */
 function expiryOf(token: TokenResponse): number {
-  const part = token.access_token.split('.')[1]
-  if (part) {
-    try {
-      const payload = JSON.parse(new TextDecoder().decode(decodeBase64(part))) as { exp?: unknown }
-      if (typeof payload.exp === 'number') return payload.exp * 1000
-    } catch {
-      // not a JWT
-    }
-  }
-  return Date.now() + (token.expires_in ?? 3600) * 1000
+  return jwtExpiry(token.access_token) ?? Date.now() + (token.expires_in ?? 3600) * 1000
 }
 
 async function keep(token: TokenResponse): Promise<string> {
@@ -291,8 +309,9 @@ export async function signOutOfRedrobAuth(): Promise<void> {
         token: stored,
         token_type_hint: 'refresh_token'
       })
-    } catch {
-      // best effort; the token is forgotten either way
+    } catch (error) {
+      // Best effort: the token is forgotten either way.
+      console.warn('[redrob-auth] Could not revoke the refresh token', error)
     }
   }
   await appCredentialServices.manager.clear(REDROB_AUTH_REFRESH_REF)

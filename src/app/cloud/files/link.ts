@@ -70,7 +70,7 @@ export function parseViewFragment(fragment: string): CloudLinkView | null | unde
     if (parts.length !== 3) return null
     token = parts[0]
     keyText = parts[2]
-    epoch = /^\d+$/.test(parts[1]) ? Number(parts[1]) : NaN
+    epoch = /^\d+$/.test(parts[1]) ? Number(parts[1]) : Number.NaN
     if (!BASE64URL.test(token) || !BASE64URL.test(keyText)) return null
   }
   if (!token || !keyText || !Number.isInteger(epoch) || epoch < 1) return null

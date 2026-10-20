@@ -1,11 +1,6 @@
 import type { z } from 'zod'
 
 import {
-  REDROB_CHAT_API_BASE,
-  REDROB_CONSOLE_API_BASE,
-  isDesignPath
-} from './endpoints'
-import {
   consoleRoute,
   routePath,
   type CONSOLE_ROUTES,
@@ -13,6 +8,7 @@ import {
   type ConsoleRoute
 } from './contract/routes'
 import { errorBodySchema } from './contract/schemas'
+import { REDROB_CHAT_API_BASE, REDROB_CONSOLE_API_BASE, isDesignPath } from './endpoints'
 
 /** What went wrong, in the terms the UI acts on. */
 export type ConsoleErrorKind =

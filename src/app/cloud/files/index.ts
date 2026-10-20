@@ -21,13 +21,7 @@ export {
 export { grantPendingDevices } from './grants'
 export { applyGraphState, encodeGraphState } from './graph-state'
 export { CloudKeyPendingError, contentKey, forgetSessionKeys, rawContentKey } from './keyring'
-export {
-  memberLink,
-  newCloudFileId,
-  parseCloudLink,
-  parseLaunchTarget,
-  viewLink
-} from './link'
+export { memberLink, newCloudFileId, parseCloudLink, parseLaunchTarget, viewLink } from './link'
 export type { ParsedCloudLink } from './link'
 export { openText, sealText } from './sealed'
 export {

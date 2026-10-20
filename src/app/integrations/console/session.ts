@@ -9,9 +9,6 @@ import {
   type DeviceAuthorization,
   type DeviceConnectDeps
 } from '@/app/ai/connect/device-connect'
-import { appCredentialServices } from '@/app/settings/credentials/app'
-import { credentialRef } from '@/app/settings/credentials/reference'
-import { isTauri } from '@/app/tauri/env'
 import {
   RedrobAuthError,
   RedrobAuthUnavailableError,
@@ -22,7 +19,10 @@ import {
   signInWithRedrobAuth,
   signOutOfRedrobAuth
 } from '@/app/integrations/redrob-auth/login'
+import { appCredentialServices } from '@/app/settings/credentials/app'
+import { credentialRef } from '@/app/settings/credentials/reference'
 import { openExternalLink } from '@/app/shell/ui'
+import { isTauri } from '@/app/tauri/env'
 
 import { consoleCache } from './cache'
 import { ConsoleError, createConsoleClient, type ConsoleClient, type ConsoleFetch } from './client'
@@ -207,6 +207,28 @@ function httpsOr(url: string): string {
   }
 }
 
+/** The sign-in error text for a redrob-auth failure that is not cancel or unreachable. */
+function redrobAuthErrorText(error: unknown): string {
+  if (error instanceof RedrobAuthError && error.code === 'access_denied') return 'denied'
+  if (error instanceof RedrobAuthError && error.code === 'timeout') return 'expired'
+  return error instanceof Error ? error.message : String(error)
+}
+
+/** Records a failed redrob-auth sign-in in the cloud state. */
+function settleRedrobAuthFailure(error: unknown, cancelled: boolean): void {
+  cloudState.signIn = null
+  if (cancelled || (error instanceof RedrobAuthError && error.code === 'cancelled')) {
+    cloudState.status = 'signed-out'
+    cloudState.error = null
+  } else if (error instanceof RedrobAuthError && error.code === 'unreachable') {
+    cloudState.status = 'unreachable'
+    cloudState.error = error.message
+  } else {
+    cloudState.status = 'signed-out'
+    cloudState.error = redrobAuthErrorText(error)
+  }
+}
+
 /**
  * Signs in. With redrob-auth available (the desktop app, issuer configured) the system browser
  * opens redrob-auth and the refresh token goes to the OS keychain. When redrob-auth cannot be used
@@ -232,24 +254,7 @@ export async function signInToCloud(
       return cloudState.status
     } catch (error) {
       if (!(error instanceof RedrobAuthUnavailableError)) {
-        cloudState.signIn = null
-        if (isCancelled() || (error instanceof RedrobAuthError && error.code === 'cancelled')) {
-          cloudState.status = 'signed-out'
-          cloudState.error = null
-        } else if (error instanceof RedrobAuthError && error.code === 'unreachable') {
-          cloudState.status = 'unreachable'
-          cloudState.error = error.message
-        } else {
-          cloudState.status = 'signed-out'
-          cloudState.error =
-            error instanceof RedrobAuthError && error.code === 'access_denied'
-              ? 'denied'
-              : error instanceof RedrobAuthError && error.code === 'timeout'
-                ? 'expired'
-                : error instanceof Error
-                  ? error.message
-                  : String(error)
-        }
+        settleRedrobAuthFailure(error, isCancelled())
         return cloudState.status
       }
       // redrob-auth is not set up for this app: fall through to the Console device sign-in.

@@ -42,7 +42,7 @@ function relayURL(answered: string): string {
     const pinned = new URL(expected)
     if (url.protocol === pinned.protocol && url.host === pinned.host) return url.toString()
   } catch {
-    // fall through to the pinned address
+    return expected
   }
   return expected
 }

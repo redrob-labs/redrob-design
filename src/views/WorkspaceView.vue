@@ -114,15 +114,13 @@ async function openPendingCloudFiles(): Promise<void> {
     } catch (error) {
       const kind = describeOpenFailure(error)
       if (kind === 'signed-out') openSettingsDialog('cloud')
-      toast.error(
-        kind === 'no-access'
-          ? sharingMessages.value.noAccess
-          : kind === 'pending'
-            ? sharingMessages.value.waitingForKey
-            : kind === 'signed-out'
-              ? sharingMessages.value.signInToOpen
-              : sharingMessages.value.unreachable
-      )
+      const failureMessages = {
+        'no-access': sharingMessages.value.noAccess,
+        pending: sharingMessages.value.waitingForKey,
+        'signed-out': sharingMessages.value.signInToOpen,
+        unreachable: sharingMessages.value.unreachable
+      }
+      toast.error(failureMessages[kind])
     }
   }
 }
