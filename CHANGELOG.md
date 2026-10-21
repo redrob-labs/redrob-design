@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.18.1 — 2026-10-21
+
 ### Changed
 
 - Pull request CI compiles instead of running tests: `Engine tests` builds the engine (Core) and runs no tests. Tests stay in the repository and run locally.
