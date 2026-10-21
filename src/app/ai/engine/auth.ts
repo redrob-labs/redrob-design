@@ -42,7 +42,7 @@ export function deriveEngineAccountStatus(providerList: unknown): EngineAccountS
   }
 }
 
-async function engineFetch(
+export async function engineFetch(
   path: string,
   init: RequestInit = {},
   fetcher: typeof fetch = fetch

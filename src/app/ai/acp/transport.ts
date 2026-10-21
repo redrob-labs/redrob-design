@@ -2,14 +2,17 @@ import { ClientSideConnection, ndJsonStream, PROTOCOL_VERSION } from '@agentclie
 import type {
   Client,
   Agent,
+  ContentBlock,
   SessionNotification,
   RequestPermissionRequest,
   RequestPermissionResponse
 } from '@agentclientprotocol/sdk'
 import type { ChatTransport, UIMessage, UIMessageChunk } from 'ai'
 
+import { encodeBase64 } from '@redrob-design/core/bytes'
 import { redrobCodeMissingMessage, type ACPAgentDef } from '@redrob-design/core/constants'
 
+import { takeMessageImages } from '@/app/ai/attachment/image/outbox'
 import { formatUnknownError } from '@/app/ai/chat/failure'
 import SYSTEM_PROMPT from '@/app/ai/chat/system-prompt.md?raw'
 import { withTurnContext } from '@/app/assistant/turn/context'
@@ -34,6 +37,8 @@ interface ACPSession {
   child: TauriChild
   onUpdate: ((params: SessionNotification) => void) | null
   dead: boolean
+  /** The agent said in `initialize` that it takes image blocks in a prompt. */
+  acceptsImages: boolean
 }
 
 const MAX_LOG_AGE_MS = 5 * 60 * 1000
@@ -168,6 +173,14 @@ export class ACPChatTransport implements ChatTransport<UIMessage> {
 
     const { connection, sessionId } = this.session
     const session = this.session
+    // Attached images go to the agent as ACP image blocks, after the text that names them.
+    const images = lastUserMessage ? takeMessageImages(lastUserMessage.id) : []
+    const prompt: ContentBlock[] = [{ type: 'text', text: promptText }]
+    if (session.acceptsImages) {
+      for (const image of images) {
+        prompt.push({ type: 'image', mimeType: image.mediaType, data: encodeBase64(image.data) })
+      }
+    }
 
     return new ReadableStream<UIMessageChunk>({
       start: (controller) => {
@@ -213,7 +226,7 @@ export class ACPChatTransport implements ChatTransport<UIMessage> {
         connection
           .prompt({
             sessionId,
-            prompt: [{ type: 'text', text: promptText }]
+            prompt
           })
           .then(() => {
             // ACP prompt resolution is the turn boundary: close the chat stream so
@@ -290,11 +303,13 @@ export class ACPChatTransport implements ChatTransport<UIMessage> {
       includeBuiltInMCP = false
     }
 
+    let acceptsImages = false
     try {
-      await connection.initialize({
+      const initialized = await connection.initialize({
         protocolVersion: PROTOCOL_VERSION,
         clientCapabilities: {}
       })
+      acceptsImages = initialized.agentCapabilities?.promptCapabilities?.image === true
     } catch (e) {
       await child.kill().catch(() => undefined)
       throw startupError(e, this.agentDef)
@@ -335,6 +350,7 @@ export class ACPChatTransport implements ChatTransport<UIMessage> {
       sessionId: sessionResult.sessionId,
       child,
       dead: false,
+      acceptsImages,
       get onUpdate() {
         return onUpdate
       },
