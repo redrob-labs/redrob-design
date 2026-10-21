@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+## 0.18.1 — 2026-10-21
+
+### Changed
+
+- Pull request CI compiles instead of running tests: `Engine tests` builds the engine (Core) and runs no tests. Tests stay in the repository and run locally.
+
+### Fixed
+
+- Open the desktop window centred, and shrink it to fit above the taskbar on small screens (a 1366x768 laptop no longer gets a window taller than the work area).
+- Images attached in the chat now reach Redrob Code itself as images, alongside the Vision model's notes; before, the agent only got the text and could answer that no image was attached.
+- When Redrob Code asks a question, the chat shows the question with its choices and a free answer, and sends the answer back to the engine; before, the call sat at "Running…" with no way to answer.
+- A running tool shows how long it has been running ("Running · 2m 13s"), updated every second.
+
 ## 0.18.0 — 2026-10-20
 
 ### Added

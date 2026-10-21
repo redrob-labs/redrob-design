@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { refAutoReset, useClipboard } from '@vueuse/core'
+import { computed, ref, watch } from 'vue'
+import { refAutoReset, useClipboard, useIntervalFn } from '@vueuse/core'
 import { isReasoningUIPart, isTextUIPart, isToolUIPart, getToolName } from 'ai'
 import { CollapsibleContent, CollapsibleRoot, CollapsibleTrigger } from 'reka-ui'
 import { useI18n, useThreadMessages, vTestId } from '@redrob-design/vue'
 
+import { engineQuestions, isEngineQuestionTool } from '@/app/ai/acp/question'
 import { attachmentsForMessage } from '@/app/ai/attachment/presentation/store'
 import { visibleUserMessageText } from '@/app/ai/chat/presentation'
 import AttachmentList from '@/components/chat/attachment/AttachmentList.vue'
@@ -16,6 +17,7 @@ import { isCrossCheckData, type CrossCheckData } from '@/app/assistant/cross-che
 import { crossChecksRunning } from '@/app/assistant/cross-check/session'
 import { isShipData, type ShipData } from '@/app/ship/ship'
 import DirectionsPart from '@/components/chat/plan/DirectionsPart.vue'
+import EngineQuestionPart from '@/components/chat/plan/EngineQuestionPart.vue'
 import PlanQuestionsPart from '@/components/chat/plan/PlanQuestionsPart.vue'
 import { isReviewData, type ReviewData } from '@/app/review/findings'
 import ChatMarkdown from '@/components/chat/ChatMarkdown.vue'
@@ -104,6 +106,41 @@ function toolState(part: ToolPart): 'pending' | 'done' | 'error' {
     state: part.state,
     output: part.output
   })
+}
+
+/** Redrob Code's `question` tool waiting for the person, which renders as its question card. */
+function isWaitingEngineQuestion(part: UIMessagePart<UIDataTypes, UITools>): part is ToolPart {
+  return (
+    isToolUIPart(part) &&
+    isEngineQuestionTool(getToolName(part)) &&
+    part.state === 'input-available' &&
+    engineQuestions(part.input).length > 0
+  )
+}
+
+// How long each running tool has been running, so a long call reads as working, not stuck.
+const toolStartedAt = new Map<string, number>()
+const now = ref(Date.now())
+const hasRunningTool = computed(() =>
+  message.parts.some((part) => isToolUIPart(part) && toolState(part) === 'pending')
+)
+const ticker = useIntervalFn(() => (now.value = Date.now()), 1000, { immediate: false })
+watch(hasRunningTool, (running) => (running ? ticker.resume() : ticker.pause()), {
+  immediate: true
+})
+
+function runningLabel(part: ToolPart): string {
+  let started = toolStartedAt.get(part.toolCallId)
+  if (started === undefined) {
+    started = Date.now()
+    toolStartedAt.set(part.toolCallId, started)
+  }
+  const seconds = Math.max(0, Math.floor((now.value - started) / 1000))
+  const time =
+    seconds < 60
+      ? ai.value.elapsedSeconds({ seconds })
+      : ai.value.elapsedMinutes({ minutes: Math.floor(seconds / 60), seconds: seconds % 60 })
+  return ai.value.toolRunningFor({ time })
 }
 
 /** A finished call to one of Plan's tools, which render as cards rather than a tool row. */
@@ -202,6 +239,11 @@ function partKey(part: UIMessagePart<UIDataTypes, UITools>, index: number): stri
             v-else-if="isPlanTool(part, 'create_directions')"
             :output="'output' in part ? part.output : null"
           />
+          <EngineQuestionPart
+            v-else-if="isWaitingEngineQuestion(part)"
+            :input="part.input"
+            :tool-call-id="part.toolCallId"
+          />
           <div v-else-if="isToolUIPart(part)" class="rounded-lg border border-ai-border bg-ai p-2">
             <CollapsibleRoot>
               <CollapsibleTrigger
@@ -228,7 +270,7 @@ function partKey(part: UIMessagePart<UIDataTypes, UITools>, index: number): stri
                 <span class="text-[10px] text-muted">
                   {{
                     toolState(part) === 'pending'
-                      ? ai.toolRunning
+                      ? runningLabel(part)
                       : toolState(part) === 'done'
                         ? ai.toolFinished
                         : ai.toolError
