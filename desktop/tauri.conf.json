@@ -15,6 +15,7 @@
         "title": "Redrob Design",
         "width": 1280,
         "height": 800,
+        "center": true,
         "dragDropEnabled": false
       }
     ],

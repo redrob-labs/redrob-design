@@ -15,6 +15,7 @@ ja:ai.connectionTestMissingModel
 ja:ai.connectionTestModelNotFound
 ja:ai.connectionTestNetworkFailed
 ja:ai.connectProvider
+ja:ai.engineQuestionLabel
 ja:ai.customModelID
 ja:ai.getProviderAPIKey
 ja:ai.modelID
@@ -183,6 +184,7 @@ zh-cn:ai.connectionTestMissingBaseURL
 zh-cn:ai.connectionTestMissingModel
 zh-cn:ai.connectionTestModelNotFound
 zh-cn:ai.connectionTestNetworkFailed
+zh-cn:ai.engineQuestionLabel
 zh-cn:ai.connectProvider
 zh-cn:ai.customModelID
 zh-cn:ai.getProviderAPIKey
