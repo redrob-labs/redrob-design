@@ -66,7 +66,10 @@ export function mapUpdate(update: SessionUpdate, textId: string, textStarted: bo
       break
     }
     case 'tool_call_update': {
-      if (update.status === 'completed') {
+      const inputChunk = toolInputUpdate(update)
+      if (inputChunk) {
+        chunks.push(inputChunk)
+      } else if (update.status === 'completed') {
         chunks.push({
           type: 'tool-output-available',
           toolCallId: update.toolCallId,
@@ -86,6 +89,26 @@ export function mapUpdate(update: SessionUpdate, textId: string, textStarted: bo
   }
 
   return { chunks, textStarted }
+}
+
+type ToolCallUpdate = Extract<SessionUpdate, { sessionUpdate: 'tool_call_update' }>
+
+/**
+ * The first tool_call often carries an empty input (it is still streaming); the full input
+ * arrives with the in_progress update. The engine's `question` tool needs it to show what it asks.
+ */
+function toolInputUpdate(update: ToolCallUpdate): UIMessageChunk | null {
+  const input = update.rawInput
+  if (update.status !== 'in_progress' || !update.title) return null
+  if (typeof input !== 'object' || input === null || Object.keys(input).length === 0) return null
+  return {
+    type: 'tool-input-available',
+    toolCallId: update.toolCallId,
+    toolName: update.title,
+    input,
+    providerExecuted: true,
+    title: update.title
+  }
 }
 
 export function textFromContent(content: JSONObject[] | undefined): string | undefined {

@@ -7,6 +7,7 @@ import {
   designMessageWithImageFindings,
   VisionModelUnavailableError
 } from '@/app/ai/attachment/image/analyze'
+import { holdMessageImages } from '@/app/ai/attachment/image/outbox'
 import { prepareImageAttachment, revokeImagePreviewURL } from '@/app/ai/attachment/image/prepare'
 import {
   imageDraftPresentations,
@@ -87,6 +88,8 @@ export function useChatSubmission(options: SubmissionOptions) {
       preparedImages
     )
     setMessageAttachments(messageId, [...nodeAttachments, ...normalizedImages])
+    // The agent sees the images themselves, not only the Vision model's notes about them.
+    holdMessageImages(messageId, preparedImages)
     await currentChat
       .sendMessage({
         messageId,
