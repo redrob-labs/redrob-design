@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Fixed
+
+- Open the desktop window centred, and shrink it to fit above the taskbar on small screens (a 1366x768 laptop no longer gets a window taller than the work area).
+
 ## 0.18.0 — 2026-10-20
 
 ### Added

@@ -7,7 +7,6 @@ mod menu;
 mod menu_events;
 mod oauth_loopback;
 mod shared_account;
-#[cfg(target_os = "macos")]
 mod window;
 
 use app_bridge::app_bridge_reply;
@@ -30,6 +29,7 @@ use std::{
 };
 use tauri::{Emitter, Manager};
 use tauri_plugin_fs::FsExt;
+use window::fit_main_window_to_work_area;
 #[cfg(target_os = "macos")]
 use window::show_main_window;
 
@@ -342,6 +342,7 @@ pub fn run() {
             queue_open_paths(app.handle(), startup_open_paths());
             queue_cloud_open(app.handle(), &std::env::args().skip(1).collect::<Vec<_>>());
             install_app_menu(app.handle(), &[])?;
+            fit_main_window_to_work_area(app.handle());
             // The main window is created from the config before setup runs; the
             // bridge starts on its own thread so a missing daemon never delays it.
             app_bridge::start(app.handle());
